@@ -79,21 +79,22 @@ def decode_audio(data, meta=False):
     return text
 
 # Function to decode file, either as a whole or by each utterance identified
-def ds_decode_file(file_metadata, utt_list=None):
+def ds_decode_file(file_metadata, pad=200, utt_list=None):
     # Load metadata
     zone, date, file = file_metadata
     file_name = '/'.join([zone,date,file])
     file_path = 'data/'+file_name
     # Load .mp3 file
     audio = pydub.AudioSegment.from_mp3(file_path)
-    audio_16khz = audio.set_frame_rate(16000)  
+    audio_16khz = audio.set_frame_rate(16000)
+    num_samples = len(audio_16khz)
     if utt_list is not None:
         # Decode utterances in .mp3 file
         text_dict = {}
         for utt in utt_list:
             start, end = utt
-            start = int(start*1000)
-            end = int(end*1000)
+            start = max(int(start*1000)-pad,0)
+            end = min(int(end*1000)+pad, num_samples) 
             audio_slice = audio_16khz[start:end]
             samples_array = audio_slice.get_array_of_samples()
             data = np.frombuffer(samples_array, np.int16)
