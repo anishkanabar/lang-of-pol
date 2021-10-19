@@ -6,6 +6,6 @@ This repository exists for collaborative development of code associated with the
 
 The `docs` and `notebooks` folders have been created to facilitate documentation and development, respectively. For now, feel free to treat these as scratch spaces, though be sure to define variables like working directories early in the code. 
 
-## Pipeline(s)
+## Project workflow
 
-To be added
+![Error loading graphic](./NIH_P2Rconceptmap2021_10_19.svg)
