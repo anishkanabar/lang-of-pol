@@ -9,10 +9,8 @@ from tensorflow.keras.mixed_precision import experimental as mixed_precision
 def get_deepasrnetwork1(input_dim=None, output_dim=29,
                         is_mixed_precision=True, random_state=1) -> keras.Model:
     """
-
     input_dim: int i wielokrotność 4
     output_dim: licba liter w słowniku
-
     """
     if is_mixed_precision:
         policy = mixed_precision.Policy('float32')
