@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#
+# USAGE:
+# From the terminal, run:
+# sbatch run-tensorflow.job
+#
+
+#
+#OPIONS FOR JOB ID:
+#SBATCH --job-name=train-asr
+#
+#OPTIONS FOR EMAIL:
+#SBATCH --mail-user=%u@uchicago.edu
+#SBATCH --mail-type=ALL
+#SBATCH --output=/project/graziul/ra/%u/slurm_output/%j.%N.stdout
+#SBATCH --error=/project/graziul/ra/%u/slurm_output/%j.%N.stderr
+#
+#OPTIONS FOR PARTITION:
+#SBATCH --account=pi-graziul
+#
+#OPTIONS FOR JOB SIZE:
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --partition=gpu
+#SBATCH --gpus-per-task=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=10000
+#SBATCH --time=01:00:00
+#
+
+ENV_DIR='/project/graziul/ra/team_asr/environments/'
+echo "Activating conda"
+source $ENV_DIR'conda_bashrc'
+conda activate $ENV_DIR'tensorflow_env'
+
+#echo "Running model"
+python train_deepspeech.py

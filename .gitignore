@@ -1,3 +1,7 @@
 "Assess RA transcriber productivity.ipynb"
 "Assess RA transcriber WER.ipynb"
 "Generate RA server activity report.ipynb"
+
+# Python artifacts
+*.pyc
+*__pycache__*

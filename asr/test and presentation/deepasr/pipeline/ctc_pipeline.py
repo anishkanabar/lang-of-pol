@@ -101,6 +101,16 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
+        if 'offset' in train_dataset.columns:
+            offsets = train_dataset['offset'].to_list()
+        else:
+            offsets = None
+
+        if 'duration' in train_dataset.columns:
+            durations = train_dataset['duration'].to_list()
+        else:
+            durations = None
+
         train_len_ = len(transcripts)
 
         self.label_len = labels.shape[1]
@@ -118,9 +128,14 @@ class CTCPipeline(Pipeline):
 
             y_trans = [transcripts[i] for i in train_index]
 
+            offset_train = [offsets[i] for i in train_index]
+
+            duration_train = [durations[i] for i in train_index]
+
             train_inputs = self.wrap_preprocess(x_train,
                                                 y_train,
-                                                y_trans, augmentation, prepared_features)
+                                                y_trans, augmentation, prepared_features,
+                                                offset_train, duration_train)
 
             outputs = {'ctc': np.zeros([batch_size])}
 
@@ -255,14 +270,22 @@ class CTCPipeline(Pipeline):
         return generator()
 
     def wrap_preprocess(self, audios: List[str], the_labels: List[np.array], transcripts: List[str],
-                        augmentation: Augmentation = None,
-                        prepared_features: bool = False):
+                        augmentation: Augmentation = None, prepared_features: bool = False,
+                        offsets: List[float] = None, durations: List[float] = None):
         """ Build training data """
         # the_input = np.array(the_input) / 100
         # the_input = x3/np.max(the_input)
 
-        mid_features = [read_audio(audio, sample_rate=self.sample_rate, mono=self.mono) for audio in audios]
+        if not offsets:
+            offsets = [0]*len(audios)
+        if not durations:
+            durations = [0]*len(audios)
 
+        mid_features = []
+        for (audio, offset, duration) in zip(audios, offsets, durations):
+            mid_features.append(read_audio(audio, sample_rate=self.sample_rate, 
+                                         mono=self.mono, offset=offset, duration=duration))
+            
         the_input = self.preprocess(mid_features, prepared_features, augmentation)
 
         the_labels = np.array(the_labels)
