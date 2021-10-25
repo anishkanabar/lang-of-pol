@@ -22,8 +22,8 @@
 #OPTIONS FOR JOB SIZE:
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#NOTSBATCH --partition=gpu
-#NOTSBATCH --gpus-per-task=1
+#SBATCH --partition=gpu
+#SBATCH --gpus-per-task=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=10000
 #SBATCH --time=01:00:00

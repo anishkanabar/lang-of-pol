@@ -279,7 +279,7 @@ class CTCPipeline(Pipeline):
         if not offsets:
             offsets = [0]*len(audios)
         if not durations:
-            durations = [0]*len(durations)
+            durations = [0]*len(audios)
 
         mid_features = []
         for (audio, offset, duration) in zip(audios, offsets, durations):

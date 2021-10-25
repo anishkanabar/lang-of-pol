@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -53,6 +54,26 @@ def get_audio_trans_police(transcripts_dir, audio_type='.flac'):
     This function is to get audios and transcripts needed for training
     @transcripts_dir: the path of the dicteory
     """
+    df = match_police_audio_transcripts(transcripts_dir, audio_type)
+    clean_df = clean_transcripts(df)
+    return clean_df
+
+def clean_transcripts(df, remove_uncertain=True):
+    """
+    Strips transcripts of transcriber notation not supported by deepspeech alphabet
+    """
+    # TODO: Some transcripts contain number. Need to replace using number -> word library.
+    if remove_uncertain:
+        has_x = df['transcripts'].str.contains('<x>') or df['transcripts'].str.contains('<X>')
+        df = df.loc[not has_x]
+    # NOTE: ctc_pipeline.py already ignores non-alphabet characters so we dont need to strip them.
+    return df
+    
+
+def match_police_audio_transcripts(transcripts_dir, audio_type='.flac'):
+    """
+    Matches ~second-long transcripts to ~30minute source audio file.
+    """
     audio_dir = os.path.join('/','project','graziul','data')
     files = os.listdir(transcripts_dir)
     pattern = "transcripts\d{4}_\d{2}_\d{2}.csv"
@@ -63,13 +84,15 @@ def get_audio_trans_police(transcripts_dir, audio_type='.flac'):
         # Reconstructing filepath
         root = pd.Series([audio_dir]*len(df))
         ext = pd.Series([".mp3"]*len(df))
-        fmt_month = df['month'].str.pad(2, 'left', '0')
-        fmt_day = df['day'].str.pad(2, 'left', '0')
-        date_path = df['year'].str.cat([fmt_month, fmt_day], sep="_")
-        aud_name = df['file'].str.extract("\d+-\d+-d+").str.cat(ext)
-        aud_fp = root.str.cat([df['zone'], date_path, aud_name], sep=os.pathsep)
+        fmt_month = df['month'].astype(str).str.pad(2, 'left', '0')
+        fmt_day = df['day'].astype(str).str.pad(2, 'left', '0')
+        date_path = df['year'].astype(str).str.cat([fmt_month, fmt_day], sep="_")
+        aud_name = df['file'].str.extract("(\d+-\d+-\d+)", expand=False).str.cat(ext)
+        aud_fp = root.str.cat([df['zone'], date_path, aud_name], sep=os.sep)
+        zero_date = datetime(1900, 1, 1)
+        start_offset = pd.to_datetime(df['start_dt']) - zero_date
         records = pd.DataFrame({'path': aud_fp, 
-                                'offset': df['start'], 
+                                'offset': start_offset.dt.seconds, 
                                 'duration': df['length'], 
                                 'transcripts': df['transcription']})
         audio_dfs.append(records)
@@ -121,9 +144,10 @@ def get_config(feature_type = 'spectrogram', multi_gpu = False):
 if __name__ == "__main__":
     #audio_trans = get_audio_trans_librispeech('audio data/LibriSpeech/train-clean-100/')
     audio_trans = get_audio_trans_police('/project/graziul/transcripts')
-    print(audio_trans)
-    #train_data = audio_trans[audio_trans['transcripts'].str.len() < 100]
-    #pipeline = get_config(feature_type='fbank', multi_gpu=False)
+    train_data = audio_trans[audio_trans['transcripts'].str.len() < 100]
+    train_data = train_data.head()
+    pipeline = get_config(feature_type='fbank', multi_gpu=False)
     #history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
-    #project_path = '/project/graziul/ra/shiyanglai/experiment1/'
-    #pipeline.save(project_path + 'checkpoints')
+    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[csv_logger])
+    project_path = '/project/graziul/ra/shiyanglai/experiment1'
+    pipeline.save(project_path + 'checkpoints')
