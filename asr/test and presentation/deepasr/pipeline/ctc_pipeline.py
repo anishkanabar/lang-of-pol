@@ -181,6 +181,16 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
+        if 'offset' in train_dataset.columns:
+            offsets = train_dataset['offset'].to_list()
+        else:
+            offsets = None
+
+        if 'duration' in train_dataset.columns:
+            durations = train_dataset['duration'].to_list()
+        else:
+            durations = None
+
         self.label_len = labels.shape[1]
 
         if not self._model.optimizer:  # a loss function and an optimizer
@@ -190,7 +200,8 @@ class CTCPipeline(Pipeline):
         print("Feature Extraction in progress...")
         train_inputs = self.wrap_preprocess(audios,
                                             list(labels),
-                                            transcripts, augmentation, prepared_features)
+                                            transcripts, augmentation, prepared_features,
+                                            offsets, durations)
 
         outputs = {'ctc': np.zeros([len(audios)])}
 

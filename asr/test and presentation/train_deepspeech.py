@@ -49,12 +49,12 @@ def get_audio_trans_librispeech(filepath, audio_type='.flac'):
     return pd.DataFrame({"path": audio_name, "transcripts": audio_trans})
 
 
-def get_audio_trans_police(transcripts_dir, audio_type='.flac'):
+def get_audio_trans_police(transcripts_dir):
     """
     This function is to get audios and transcripts needed for training
     @transcripts_dir: the path of the dicteory
     """
-    df = match_police_audio_transcripts(transcripts_dir, audio_type)
+    df = match_police_audio_transcripts(transcripts_dir)
     clean_df = clean_transcripts(df)
     return clean_df
 
@@ -64,13 +64,13 @@ def clean_transcripts(df, remove_uncertain=True):
     """
     # TODO: Some transcripts contain number. Need to replace using number -> word library.
     if remove_uncertain:
-        has_x = df['transcripts'].str.contains('<x>') or df['transcripts'].str.contains('<X>')
-        df = df.loc[not has_x]
+        has_x = df['transcripts'].str.contains('<x>') | df['transcripts'].str.contains('<X>')
+        df = df.loc[~ has_x]
     # NOTE: ctc_pipeline.py already ignores non-alphabet characters so we dont need to strip them.
     return df
     
 
-def match_police_audio_transcripts(transcripts_dir, audio_type='.flac'):
+def match_police_audio_transcripts(transcripts_dir):
     """
     Matches ~second-long transcripts to ~30minute source audio file.
     """
