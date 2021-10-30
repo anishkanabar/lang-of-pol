@@ -2,23 +2,32 @@
 # BRIEF:
 # Sets up a shared environment and dispatches a neural net training task to the cluster.
 # USAGE:
-# sh run-training.sh
+# sh run-training.sh <path_to_conda_env>
 # Run this from the current repo directory:
 
-this_dir=$(pwd)
-env_dir='/project/graziul/ra/team_asr/environments'
-bashrc='conda_bashrc'
-reqs='requirements.txt'
-create='create_env.sh'
+env_dir="$1"
+env_parent=$(dirname "$env_dir")
 
-cp --no-clobber $bashrc "$env_dir/$bashrc"
-cp --no-clobber $reqs "$env_dir/$reqs" 
-cp --no-clobber $create "$env_dir/$create"
+if [ -z "$env_parent" ]; then
+    echo "Missing argument. Usage:"
+    echo "sh run-training.sh <path_to_conda_env>"
+    exit 1
+elif [ ! -e "$env_parent" ]; then
+    echo "Environment directory not found. Create?"
+    echo "\t$env_dir"
+    echo "Type 1 for Yes. 2 for No"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes) mkdir -p "$env_parent"; break;;
+            No) exit 0;;
+        esac
+    done
+fi
 
-cd $env_dir
-
-sh $create
-
-cd $this_dir
-
-sbatch run-training.job
+sh create_env.sh "$env_dir"
+if [ $? -eq 0 ]; then
+    sbatch run-training.job "$env_dir"
+else
+    echo "Failed to create conda env. Exiting."
+    exit 1
+fi
