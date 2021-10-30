@@ -5,3 +5,6 @@
 # Python artifacts
 *.pyc
 *__pycache__*
+
+# Vim artifacts
+*.swp

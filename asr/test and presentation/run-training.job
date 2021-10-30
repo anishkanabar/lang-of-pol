@@ -3,7 +3,7 @@
 #
 # USAGE:
 # From the terminal, run:
-# sbatch run-tensorflow.job
+# sbatch run-training.job
 #
 
 #

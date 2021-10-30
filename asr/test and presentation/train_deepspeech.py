@@ -15,9 +15,15 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 import logging
 from keras.callbacks import CSVLogger
 
-log = "general.log"
-logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
-csv_logger = CSVLogger('model_log.csv', append=True, separator=';')
+def configure_logging(log_dir):
+    logging.basicConfig(filename=os.path.join(log_dir, 'general.log')
+                        level=logging.DEBUG,
+                        format='%(asctime)s %(message)s', 
+                        datefmt='%d/%m/%Y %H:%M:%S')
+    csv_logger =  CSVLogger(filename=os.path.join(log_dir, 'model_log.csv'),
+                            append=True, 
+                            separator=';')
+    return csv_logger
 
 def get_audio_trans_librispeech(filepath, audio_type='.flac'):
     """
@@ -179,13 +185,14 @@ def get_config(feature_type = 'spectrogram', multi_gpu = False):
 
 
 if __name__ == "__main__":
+    #project_path = '/project/graziul/ra/shiyanglai/experiment1'
+    project_path = '/project/graziul/ra/echandler/experiment1'
     #audio_trans = get_audio_trans_librispeech('audio data/LibriSpeech/train-clean-100/')
     audio_trans = get_audio_trans_police('/project/graziul/transcripts')
     train_data = audio_trans[audio_trans['transcripts'].str.len() < 100]
     train_data = train_data.head()
+    csv_logger = configure_logging(project_path)
     pipeline = get_config(feature_type='fbank', multi_gpu=False)
     #history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
     history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[csv_logger])
-    #project_path = '/project/graziul/ra/shiyanglai/experiment1'
-    project_path = '/project/graziul/ra/echandler/experiment1'
-    pipeline.save(project_path + 'checkpoints')
+    pipeline.save(os.path.join(project_path, 'checkpoints'))
