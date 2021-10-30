@@ -52,52 +52,89 @@ def get_audio_trans_librispeech(filepath, audio_type='.flac'):
 def get_audio_trans_police(transcripts_dir):
     """
     This function is to get audios and transcripts needed for training
-    @transcripts_dir: the path of the dicteory
+    Params:
+        @transcripts_dir: path to directory with transcripts csvs
     """
-    df = match_police_audio_transcripts(transcripts_dir)
-    clean_df = clean_transcripts(df)
-    return clean_df
+    df = _match_police_audio_transcripts(transcripts_dir)
+    df = _clean_transcripts(df)
+    df = _clean_audiofiles(df)
+    return df
 
-def clean_transcripts(df, remove_uncertain=True):
+def _clean_transcripts(df, remove_uncertain=True):
     """
-    Strips transcripts of transcriber notation not supported by deepspeech alphabet
+    Filters out transcripts with marked uncertain passages
+    Params:
+        @df: data frame of transcribed utterances
     """
     # TODO: Some transcripts contain number. Need to replace using number -> word library.
     if remove_uncertain:
         has_x = df['transcripts'].str.contains('<x>') | df['transcripts'].str.contains('<X>')
+        print(f'Discarding {has_x.sum()} uncertain transcripts.')
         df = df.loc[~ has_x]
     # NOTE: ctc_pipeline.py already ignores non-alphabet characters so we dont need to strip them.
     return df
-    
 
-def match_police_audio_transcripts(transcripts_dir):
+
+def _clean_audiofiles(df):
+    """
+    Filters out non-existent and corrupted mp3's
+    Params:
+        @df: data frame of mp3 filepaths
+    """
+    mp3_exists = df['path'].transform(os.path.exists)
+    print(f'Discarding {len(mp3_exists)-mp3_exists.sum()} missing mp3s')
+    df = df.loc[mp3_exists]
+    mp3_paths = df['path'].unique()
+    valid_paths = set()
+    for mp3 in mp3_paths:
+        try:
+            _ = librosa.core.load(mp3)
+            valid_paths.add(mp3)
+        except:
+            pass
+    mp3_isvalid = df['path'].transform(lambda x: x in valid_paths)
+    print(f'Discarding {len(mp3_isvalid) - mp3_exists.sum()} corrupted mp3s')
+    df = df.loc[mp3_isvalid]
+    return df
+
+
+def _match_police_audio_transcripts(ts_dir):
     """
     Matches ~second-long transcripts to ~30minute source audio file.
+    Params:
+        @ts_dir: Location of folder with transcripts csvs
     """
-    audio_dir = os.path.join('/','project','graziul','data')
-    files = os.listdir(transcripts_dir)
+    ts_dir_files = os.listdir(ts_dir)
     pattern = "transcripts\d{4}_\d{2}_\d{2}.csv"
-    ts_names = [fp for fp in files if re.match(pattern, fp)]
-    audio_dfs = []
-    for ts_name in ts_names:
-        df = pd.read_csv(os.path.join(transcripts_dir, ts_name))
-        # Reconstructing filepath
-        root = pd.Series([audio_dir]*len(df))
-        ext = pd.Series([".mp3"]*len(df))
-        fmt_month = df['month'].astype(str).str.pad(2, 'left', '0')
-        fmt_day = df['day'].astype(str).str.pad(2, 'left', '0')
-        date_path = df['year'].astype(str).str.cat([fmt_month, fmt_day], sep="_")
-        aud_name = df['file'].str.extract("(\d+-\d+-\d+)", expand=False).str.cat(ext)
-        aud_fp = root.str.cat([df['zone'], date_path, aud_name], sep=os.sep)
-        zero_date = datetime(1900, 1, 1)
-        start_offset = pd.to_datetime(df['start_dt']) - zero_date
-        records = pd.DataFrame({'path': aud_fp, 
-                                'offset': start_offset.dt.seconds, 
-                                'duration': df['length'], 
-                                'transcripts': df['transcription']})
-        audio_dfs.append(records)
+    ts_names = [name for name in ts_dir_files if re.match(pattern, name)]
+    ts_paths = [os.path.join(ts_dir, name) for name in ts_names]
+    audio_dfs = [_match_utterance_to_audio(ts_path) for ts_path in ts_paths]
     return pd.concat(audio_dfs, ignore_index=True)
 
+
+def _match_utterance_to_audio(ts_path):
+    """
+    Extracts mp3 path, utterance timestamp, and duration from transcript metadata
+    Params:
+        @ts_path: Location of transcript csv
+    """
+    df = pd.read_csv(ts_path)
+    audio_dir = '/project/graziul/data'
+    root = pd.Series([audio_dir]*len(df))
+    ext = pd.Series([".mp3"]*len(df))
+    fmt_month = df['month'].astype(str).str.pad(2, 'left', '0')
+    fmt_day = df['day'].astype(str).str.pad(2, 'left', '0')
+    fmt_year = df['year'].astype(str)
+    fmt_date = fmt_year.str.cat([fmt_month, fmt_day], sep="_")
+    aud_name = df['file'].str.extract("(\d+-\d+-\d+)", expand=False).str.cat(ext)
+    aud_fp = root.str.cat([df['zone'], fmt_date, aud_name], sep=os.sep)
+    zero_date = datetime(1900, 1, 1)
+    start_offset = pd.to_datetime(df['start_dt']) - zero_date
+    return pd.DataFrame({'path': aud_fp, 
+                         'offset': start_offset.dt.seconds, 
+                         'duration': df['length'], 
+                         'transcripts': df['transcription']})
+  
 
 def get_config(feature_type = 'spectrogram', multi_gpu = False):
     """
@@ -149,5 +186,6 @@ if __name__ == "__main__":
     pipeline = get_config(feature_type='fbank', multi_gpu=False)
     #history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
     history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[csv_logger])
-    project_path = '/project/graziul/ra/shiyanglai/experiment1'
+    #project_path = '/project/graziul/ra/shiyanglai/experiment1'
+    project_path = '/project/graziul/ra/echandler/experiment1'
     pipeline.save(project_path + 'checkpoints')
