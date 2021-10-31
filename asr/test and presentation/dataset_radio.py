@@ -25,17 +25,26 @@ def load_transcripts(transcripts_dir):
     return df
 
 
-def _clean_transcripts(df, remove_uncertain=True):
+def _clean_transcripts(df, drop_uncertain=True, drop_numeric=True):
     """
     Filters out transcripts with marked uncertain passages
     Params:
         @df: data frame of transcribed utterances
     """
-    # TODO: Some transcripts contain numeric numbers. Need to replace with phoenetic spelling.
-    if remove_uncertain:
-        has_x = df['transcripts'].str.contains('<x>') | df['transcripts'].str.contains('<X>')
+    missing = df['transcripts'].isna()
+    print(f'Discarding {missing.sum()} missing transcripts.')
+    df = df.loc[~ missing]
+
+    if drop_uncertain:
+        has_x = df['transcripts'].str.contains('<x>', case=False)
         print(f'Discarding {has_x.sum()} uncertain transcripts.')
         df = df.loc[~ has_x]
+
+    if drop_numeric:
+        has_numeric = df['transcripts'].str.contains("[0-9]")
+        print(f'Discarding {has_numeric.sum()} transcripts with numbers.')
+        df = df.loc[~ has_numeric]
+        
     return df
 
 
@@ -45,8 +54,8 @@ def _clean_audiofiles(df):
     Params:
         @df: data frame of mp3 filepaths
     """
-    unique_paths = df['path'].unique()
-    path_exists = unique_paths.transcorm(os.path.exists)
+    unique_paths = pd.Series(df['path'].unique())
+    path_exists = unique_paths.transform(os.path.exists)
     exists_map = {x:y for x,y in zip(unique_paths, path_exists)}
 
     mp3_exists = df['path'].transform(lambda p: exists_map[p])
@@ -68,7 +77,7 @@ def _is_corrupted(mp3_path):
     Tests if library can load mp3.
     """
     try:
-        _ = librosa.core.load(mp3)
+        _ = librosa.core.load(mp3_path)
         return False
     except:
         return True
@@ -98,7 +107,7 @@ def _match_utterance_to_audio(ts_path):
     return pd.DataFrame({'path': _extract_mp3_path(df),
                          'offset': _extract_offset(df),
                          'duration': _extract_duration(df),
-                         'transcripts': df['transcription']}
+                         'transcripts': df['transcription']})
 
 
 def _extract_mp3_path(df):
