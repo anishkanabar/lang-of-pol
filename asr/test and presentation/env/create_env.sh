@@ -16,6 +16,7 @@ else
     echo "Copying env config into shared location"
     env_parent=$(dirname "$env_dir")
     cp --no-clobber 'requirements.txt' "$env_parent/requirements.txt"
+    cp --no-clobber 'ENV_README.txt' "$env_parent/README.txt"
     echo "Creating conda env"
     conda create -y -c conda-forge -p "$env_dir" --file requirements.txt
 fi

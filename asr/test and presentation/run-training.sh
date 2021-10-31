@@ -24,7 +24,7 @@ elif [ ! -e "$env_parent" ]; then
     done
 fi
 
-sh create_env.sh "$env_dir"
+sh env/create_env.sh "$env_dir"
 if [ $? -eq 0 ]; then
     sbatch run-training.job "$env_dir"
 else

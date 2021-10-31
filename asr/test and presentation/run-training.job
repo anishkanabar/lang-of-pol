@@ -38,7 +38,7 @@ then
 fi
 
 echo "Activating conda"
-source 'conda_bashrc'
+source 'env/conda_bashrc'
 conda activate "$env_dir"
 
 echo "Running model"
