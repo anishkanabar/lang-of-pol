@@ -333,7 +333,11 @@ class CTCPipeline(Pipeline):
         """ Save each component of the CTC pipeline. """
         self.temp_model.save(os.path.join(directory, 'network.h5'))
         self._model.save_weights(os.path.join(directory, 'model_weights.h5'))
-        save_data(self._optimizer, os.path.join(directory, 'optimizer.bin'))
+        # XXX: UNCOMMENT! when find workaround for pickling keras objects
+        # Due to error: AttributeError: Can't pickle local object 'make_gradient_clipnorm_fn.<locals>.<lambda>'
+        # Relevant threads: https://github.com/NREL/phygnn/issues/16
+        #   https://github.com/tensorflow/tensorflow/issues/34697
+        #save_data(self._optimizer, os.path.join(directory, 'optimizer.bin'))
         save_data(self._alphabet, os.path.join(directory, 'alphabet.bin'))
         save_data(self._decoder, os.path.join(directory, 'decoder.bin'))
         save_data(self.multi_gpu, os.path.join(directory, 'multi_gpu_flag.bin'))
