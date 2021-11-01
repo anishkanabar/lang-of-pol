@@ -12,6 +12,21 @@ import pandas as pd
 import librosa
 
 MP3_DIR = '/project/graziul/data/'
+BAD_WORDS = ["[UNCERTAIN]", "<X>", "INAUDIBLE"]
+
+def describe(data, name):
+    """
+    Prints helpful statistics about dataset.
+    Params
+        @data: Fully loaded transcripts dataframe
+    """
+    print(f"{name} dataset stats:")
+    print(f"\tRow count = {data.shape[0]}")
+    print(f"\tMin duration = {data['duration'].min():.2f}")
+    print(f"\tMax duration = {data['duration'].max():.2f}")
+    print(f"\tMean duration = {data['duration'].mean():.2f}")
+    print(f"\tStdev duration = {data['duration'].std():.2f}")
+
 
 def load_transcripts(transcripts_dir):
     """
@@ -20,29 +35,39 @@ def load_transcripts(transcripts_dir):
         @transcripts_dir: path to directory with transcripts csvs
     """
     df = _match_police_audio_transcripts(transcripts_dir)
+    print(f"Original dataset has {df.shape[0]} rows.")
     df = _clean_transcripts(df)
     df = _clean_audiofiles(df)
+    describe(df, "Loaded")
     return df
 
 
-def _clean_transcripts(df, drop_uncertain=True, drop_numeric=True):
+def _clean_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
     """
     Filters out transcripts with marked uncertain passages
     Params:
         @df: data frame of transcribed utterances
+        @drop_inaudible: filter out utterances that the transcriber couldnt understand
+        @drop_uncertain: filter out utterances that the transcriber was guessing
+        @drop_numeric: filter out utterances transcribed with 0-9 instead of pronunciation
     """
     missing = df['transcripts'].isna()
     print(f'Discarding {missing.sum()} missing transcripts.')
     df = df.loc[~ missing]
 
-    if drop_uncertain:
-        has_x = df['transcripts'].str.contains('<x>', case=False)
-        print(f'Discarding {has_x.sum()} uncertain transcripts.')
+    if drop_unknown:
+        has_x = df['transcripts'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
+        print(f'Discarding {has_x.sum()} inaudible transcripts.')
         df = df.loc[~ has_x]
 
+    if drop_uncertain:
+        has_brackets = df['transcripts'].str.contains('\[.+\]', regex=True)
+        print(f'Discarding {has_brackets.sum()} uncertain transcripts.')
+        df = df.loc[~ has_brackets]
+
     if drop_numeric:
-        has_numeric = df['transcripts'].str.contains("[0-9]")
-        print(f'Discarding {has_numeric.sum()} transcripts with numbers.')
+        has_numeric = df['transcripts'].str.contains("[0-9]+", regex=True)
+        print(f'Discarding {has_numeric.sum()} transcripts with numerals.')
         df = df.loc[~ has_numeric]
         
     return df

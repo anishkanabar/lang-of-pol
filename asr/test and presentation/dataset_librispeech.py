@@ -6,6 +6,16 @@ Brief: Loaders for librispeech transcripts and audio.
 import os
 import pandas as pd
 
+def describe(data, name):
+    """
+    Prints helpful statistics about dataset.
+    Params
+        @data: Fully loaded transcripts dataframe
+    """
+    print(f"{name} dataset stats:")
+    print(f"\tRow count = {data.shape[0]}")
+
+
 def load_transcripts(filepath, audio_type='.flac'):
     """
     This function is to get audios and transcripts needed for training

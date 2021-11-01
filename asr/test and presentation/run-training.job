@@ -42,4 +42,8 @@ source 'env/conda_bashrc'
 conda activate "$env_dir"
 
 echo "Running model"
-python train_deepspeech.py
+dataset='radio'
+output_dir='/project/graziul/ra/echandler/experiment1'
+radio_dir='/project/graziul/transcripts'
+libri_dir='/project/graziul/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100/'
+python train_deepspeech.py "$dataset" "$radio_dir" "$output_dir"

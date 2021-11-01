@@ -1,17 +1,20 @@
+"""
+File: train_deepspeech.py
+Brief: Trains deepspeech 2 model on a dataset
+Usage: python -m train_deepspeech <out_dir>
+"""
 import os
-import re
-from datetime import datetime
+import logging
+import argparse
+import pathlib
 import numpy as np
-import pandas as pd
-import tensorflow as tf
-import librosa
 import warnings
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-# log document
-import logging
 from keras.callbacks import CSVLogger
+import tensorflow as tf
+import librosa
 
 import deepasr as asr
 import dataset_librispeech as libri_data
@@ -32,7 +35,7 @@ def configure_logging(log_dir):
     return csv_logger
 
 
-def get_config(feature_type = 'spectrogram', multi_gpu = False):
+def define_model(feature_type = 'spectrogram', multi_gpu = False):
     """
     Get the CTC pipeline
     @feature_type: the format of our dataset
@@ -73,18 +76,30 @@ def get_config(feature_type = 'spectrogram', multi_gpu = False):
     )
     return pipeline
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dataset', choices=['librispeech', 'radio'])
+    parser.add_argument('dataset_dir', type=pathlib.Path)
+    parser.add_argument('output_dir', type=pathlib.Path)
+    return parser.parse_args()
+
 
 if __name__ == "__main__":
-    #project_path = '/project/graziul/ra/shiyanglai/experiment1'
-    project_path = '/project/graziul/ra/echandler/experiment1'
-    libri_dir = '/project/graziul/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100/'
-    #audio_trans = libri_data.load_transcripts(libri_dir)
-    audio_trans = radio_data.load_transcripts('/project/graziul/transcripts')
-    train_data = audio_trans[audio_trans['transcripts'].str.len() < 100]
-    train_data = train_data.head()
-    print(train_data[['offset','duration']])
-    #csv_logger = configure_logging(project_path)
-    #pipeline = get_config(feature_type='fbank', multi_gpu=False)
-    #history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
-    #history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[csv_logger])
-    #pipeline.save(os.path.join(project_path, 'checkpoints'))
+    args = parse_args()
+
+    if args.dataset == 'librispeech':
+        audio_trans = libri_data.load_transcripts(args.dataset_dir)
+    else:
+        audio_trans = radio_data.load_transcripts(args.dataset_dir)
+
+    train_data = audio_trans.sample(frac=0.8, random_state=1234)    
+
+    if args.dataset == 'librispeech':
+        libri_data.describe(train_data, "Training")
+    else:
+        radio_data.describe(train_data, "Training")
+ 
+    csv_logger = configure_logging(args.output_dir)
+    pipeline = define_model(feature_type='spectrogram', multi_gpu=False)
+    history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
+    pipeline.save(os.path.join(args.output_dir, 'checkpoints'))

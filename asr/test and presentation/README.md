@@ -12,6 +12,6 @@ Start with 'run-training.sh'. This script creates the necessary environments and
 - train_deepspeech.py: loads the training dataset and trains the model
 - deepasr: implementation of neural net models
 ### Environment Management:
-- requirements.txt: lists the python packages needed to run this model
-- create_env.sh: creates a conda environment in a shared location
-- conda_bashrc: sources the shared environment and other necessary modules
+- env/requirements.txt: lists the python packages needed to run this model
+- env/create_env.sh: creates a conda environment in a shared location
+- env/conda_bashrc: sources the shared environment and other necessary modules
