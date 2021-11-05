@@ -17,8 +17,11 @@ import tensorflow as tf
 import librosa
 
 import deepasr as asr
-import dataset_librispeech as libri_data
-import dataset_radio as radio_data
+from dataset_librispeech import LibriSpeechDataset
+from dataset_radio import RadioDataset
+
+SAMPLE_RATE = 16000   # Hz
+
 
 def configure_logging(log_dir):
     """
@@ -43,7 +46,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     """
     # audio feature extractor, this is build on asr built-in methods
     features_extractor = asr.features.preprocess(feature_type=feature_type, features_num=161,
-                                                 samplerate=16000,
+                                                 samplerate=SAMPLE_RATE,
                                                  winlen=0.02,
                                                  winstep=0.025,
                                                  winfunc=np.hanning)
@@ -72,7 +75,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     # CTC Pipeline
     pipeline = asr.pipeline.ctc_pipeline.CTCPipeline(
         alphabet=alphabet_en, features_extractor=features_extractor, model=model, optimizer=optimizer, decoder=decoder,
-        sample_rate=16000, mono=True, multi_gpu=multi_gpu
+        sample_rate=SAMPLE_RATE, mono=True, multi_gpu=multi_gpu
     )
     return pipeline
 
@@ -88,18 +91,16 @@ if __name__ == "__main__":
     args = parse_args()
 
     if args.dataset == 'librispeech':
-        audio_trans = libri_data.load_transcripts(args.dataset_dir)
+        dataset_loader = LibriSpeechDataset()
     else:
-        audio_trans = radio_data.load_transcripts(args.dataset_dir)
+        dataset_loader = RadioDataset()
 
+    dataset = dataset_loader.load_transcripts(args.dataset_dir)
     train_data = audio_trans.sample(frac=0.8, random_state=1234)    
-
-    if args.dataset == 'librispeech':
-        libri_data.describe(train_data, "Training")
-    else:
-        radio_data.describe(train_data, "Training")
+    train_data = train_data.head() # XXX: Testing!
+    dataset_loader.describe(train_data, "Training")
  
     csv_logger = configure_logging(args.output_dir)
-    pipeline = define_model(feature_type='spectrogram', multi_gpu=False)
+    pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
     history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
     pipeline.save(os.path.join(args.output_dir, 'checkpoints'))

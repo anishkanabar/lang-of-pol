@@ -11,8 +11,6 @@
 #SBATCH --job-name=train-asr
 #
 #OPTIONS FOR EMAIL:
-#SBATCH --mail-user=%u@uchicago.edu
-#SBATCH --mail-type=ALL
 #SBATCH --output=/project/graziul/ra/%u/slurm_output/%j.%N.stdout
 #SBATCH --error=/project/graziul/ra/%u/slurm_output/%j.%N.stderr
 #
@@ -20,13 +18,11 @@
 #SBATCH --account=pi-graziul
 #
 #OPTIONS FOR JOB SIZE:
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks=1
 #SBATCH --partition=gpu
-#SBATCH --gpus-per-task=1
-#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=10000
-#SBATCH --time=01:00:00
+#SBATCH --time=06:00:00
 #
 
 env_dir="$1"
@@ -42,6 +38,7 @@ source 'env/conda_bashrc'
 conda activate "$env_dir"
 
 echo "Running model"
+# TODO: make these command line args
 dataset='radio'
 output_dir='/project/graziul/ra/echandler/experiment1'
 radio_dir='/project/graziul/transcripts'

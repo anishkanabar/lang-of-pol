@@ -7,41 +7,30 @@ Authors: Eric Chandler <echandler@uchicago.edu>
 import os
 import re
 import datetime
-import numpy as np
 import pandas as pd
-import librosa
+from dataset import AudioClipDataset
 
 MP3_DIR = '/project/graziul/data/'
-BAD_WORDS = ["[UNCERTAIN]", "<X>", "INAUDIBLE"]
+BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
+SAMPLE_RATE = 16000  # Hz
 
-def describe(data, name):
-    """
-    Prints helpful statistics about dataset.
-    Params
-        @data: Fully loaded transcripts dataframe
-    """
-    print(f"{name} dataset stats:")
-    print(f"\tRow count = {data.shape[0]}")
-    print(f"\tMin duration = {data['duration'].min():.2f}")
-    print(f"\tMax duration = {data['duration'].max():.2f}")
-    print(f"\tMean duration = {data['duration'].mean():.2f}")
-    print(f"\tStdev duration = {data['duration'].std():.2f}")
-
-
-def load_transcripts(transcripts_dir):
-    """
-    This function is to get audios and transcripts needed for training
-    Params:
-        @transcripts_dir: path to directory with transcripts csvs
-    """
-    df = _match_police_audio_transcripts(transcripts_dir)
-    print(f"Original dataset has {df.shape[0]} rows.")
-    df = _clean_transcripts(df)
-    df = _clean_audiofiles(df)
-    describe(df, "Loaded")
-    return df
-
-
+class RadioDataset(AudioClipDataset):
+    
+    @classmethod
+    def load_transcripts(cls, transcripts_dir, sample_rate=SAMPLE_RATE):
+        """
+        This function is to get audios and transcripts needed for training
+        Params:
+            @transcripts_dir: path to directory with transcripts csvs
+        """
+        df = _match_police_audio_transcripts(transcripts_dir)
+        print(f"Original dataset has {df.shape[0]} rows.")
+        df = _clean_transcripts(df)
+        df = cls.filter_audiofiles(df, sample_rate)
+        cls.describe(df, "Loaded")
+        return df
+    
+    
 def _clean_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
     """
     Filters out transcripts with marked uncertain passages
@@ -55,7 +44,7 @@ def _clean_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeri
     print(f'Discarding {missing.sum()} missing transcripts.')
     df = df.loc[~ missing]
 
-    if drop_unknown:
+    if drop_inaudible:
         has_x = df['transcripts'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
         print(f'Discarding {has_x.sum()} inaudible transcripts.')
         df = df.loc[~ has_x]
@@ -71,41 +60,6 @@ def _clean_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeri
         df = df.loc[~ has_numeric]
         
     return df
-
-
-def _clean_audiofiles(df):
-    """
-    Filters out non-existent and corrupted mp3's
-    Params:
-        @df: data frame of mp3 filepaths
-    """
-    unique_paths = pd.Series(df['path'].unique())
-    path_exists = unique_paths.transform(os.path.exists)
-    exists_map = {x:y for x,y in zip(unique_paths, path_exists)}
-
-    mp3_exists = df['path'].transform(lambda p: exists_map[p])
-    n_missing = mp3_exists.count() - mp3_exists.sum()
-    
-    validator = lambda p: exists_map[p] and not _is_corrupted(p)
-    path_isvalid = unique_paths.transform(validator)
-    valid_map = {x:y for x,y in zip(unique_paths, path_isvalid)}
-
-    mp3_isvalid = df['path'].transform(lambda p: valid_map[p])
-    n_corrupted = mp3_isvalid.count() - mp3_isvalid.sum() - n_missing
-    print(f'Discarding {n_missing} missing mp3s')
-    print(f'Discarding {n_corrupted} corrupted mp3s')
-    df = df.loc[mp3_exists & mp3_isvalid]
-    return df
-
-def _is_corrupted(mp3_path):
-    """
-    Tests if library can load mp3.
-    """
-    try:
-        _ = librosa.core.load(mp3_path)
-        return False
-    except:
-        return True
 
 
 def _match_police_audio_transcripts(ts_dir):
@@ -133,7 +87,6 @@ def _match_utterance_to_audio(ts_path):
                          'offset': _extract_offset(df),
                          'duration': _extract_duration(df),
                          'transcripts': df['transcription']})
-
 
 def _extract_mp3_path(df):
     """
