@@ -17,21 +17,27 @@ SAMPLE_RATE = 16000  # Hz
 class RadioDataset(AudioClipDataset):
     
     @classmethod
-    def load_transcripts(cls, transcripts_dir, sample_rate=SAMPLE_RATE):
+    def load_transcripts(cls, transcripts_dir, sample_rate=SAMPLE_RATE, drop_bad_audio=True, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
         """
         This function is to get audios and transcripts needed for training
         Params:
             @transcripts_dir: path to directory with transcripts csvs
+            @sample_rate: Resample all audio to this rate (Hz)
+            @drop_bad_audio: Filter out missing/corrupted/too-short audio files
+            @drop_inaudible: Filter out utterances that the transcriber couldnt understand
+            @drop_uncertain: Filter out utterances that the transcriber was guessing
+            @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
         df = _match_police_audio_transcripts(transcripts_dir)
         print(f"Original dataset has {df.shape[0]} rows.")
-        df = _clean_transcripts(df)
-        df = cls.filter_audiofiles(df, sample_rate)
+        df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
+        if check_audio:
+            df = cls.filter_audiofiles(df, sample_rate)
         cls.describe(df, "Loaded")
         return df
     
     
-def _clean_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
+def _filter_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
     """
     Filters out transcripts with marked uncertain passages
     Params:

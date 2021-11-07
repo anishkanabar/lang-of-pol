@@ -6,6 +6,7 @@ Authors: Eric Chandler <echandler@uchicago.edu>
 
 import os
 import abc
+import warnings
 import pandas as pd
 import librosa
 
@@ -89,7 +90,9 @@ class AudioClipDataset(Dataset):
         Tests if library can load mp3.
         """
         try:
-            _ = librosa.core.load(mp3_path)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                _ = librosa.core.load(mp3_path)
             return False
         except:
             return True

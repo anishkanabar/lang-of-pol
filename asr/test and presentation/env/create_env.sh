@@ -24,7 +24,9 @@ else
         cp --no-clobber 'requirements.txt' "$env_parent/requirements.txt"
         conda install -y -c conda-forge -p "$env_dir" --file requirements.txt
     else
-        conda install -y -c conda-forge -p "$env_dir" tensorflow keras librosa pandas numpy
+        # numpy version is specified for compatability with deepspeech2 + tensorflow-gpu
+        conda install -y -p "$env_dir" "tensorflow-gpu==2.4.1" keras-gpu pandas "numpy==1.19.2"
+        conda install -y -c conda-forge -p "$env_dir" librosa 
     fi
 fi
 

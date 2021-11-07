@@ -14,7 +14,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 from keras.callbacks import CSVLogger
 import tensorflow as tf
-import librosa
 
 import deepasr as asr
 from dataset_librispeech import LibriSpeechDataset
@@ -96,11 +95,11 @@ if __name__ == "__main__":
         dataset_loader = RadioDataset()
 
     dataset = dataset_loader.load_transcripts(args.dataset_dir)
-    train_data = audio_trans.sample(frac=0.8, random_state=1234)    
-    train_data = train_data.head() # XXX: Testing!
+    train_data = dataset.sample(frac=0.8, random_state=1234)    
     dataset_loader.describe(train_data, "Training")
  
     csv_logger = configure_logging(args.output_dir)
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
-    history = pipeline.fit(train_dataset=train_data, batch_size=128, epochs=500, callbacks=[csv_logger])
+    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[csv_logger])
     pipeline.save(os.path.join(args.output_dir, 'checkpoints'))
+
