@@ -14,6 +14,8 @@ today = today.replace('-','_')
 today
 
 os.chdir('/project/graziul/')
+model_path = 'code/deepspeech/deepspeech-0.9.3-models.pbmm'
+scorer_path = 'code/deepspeech/deepspeech-0.9.3-models.scorer'
 
 #beam = 250
 #alpha = 0.3
@@ -62,9 +64,6 @@ def get_asr_vars(df):
     df = dt_to_seconds(df) 
     return df[['zone','date','time','file','start','end','transcriber','transcription']].copy()
 
-model_path = 'code/deepspeech/deepspeech-0.9.3-models.pbmm'
-scorer_path = 'code/deepspeech/deepspeech-0.9.3-models.scorer'
-
 ds = Model(model_path) 
 ds.enableExternalScorer(scorer_path)
 ds.setBeamWidth(beam)
@@ -79,7 +78,7 @@ def decode_audio(data, meta=False):
     return text
 
 # Function to decode file, either as a whole or by each utterance identified
-def ds_decode_file(file_metadata, pad=200, utt_list=None):
+def ds_decode_file(file_metadata, utt_list=None, pad=200):
     # Load metadata
     zone, date, file = file_metadata
     file_name = '/'.join([zone,date,file])
