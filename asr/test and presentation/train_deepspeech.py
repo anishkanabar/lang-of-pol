@@ -85,9 +85,18 @@ def parse_args():
     parser.add_argument('output_dir', type=pathlib.Path)
     return parser.parse_args()
 
+def _flag(fp, msg):
+    """ Write a message to a log """
+    with open(fp, 'a') as f:
+        f.write(msg + "\n")
 
 if __name__ == "__main__":
     args = parse_args()
+    if 'SLURM_JOB_ID' not in os.environ:
+        raise RuntimeError("No job id found. Are you running in a SLURM context?")
+    output_dir = os.path.join(args.output_dir, 'job_' + os.environ['SLURM_JOB_ID'])
+    flag_file = os.path.join(output_dir, 'flag.txt')
+    os.makedirs(output_dir, exist_ok=True)
 
     if args.dataset == 'librispeech':
         dataset_loader = LibriSpeechDataset()
@@ -96,10 +105,17 @@ if __name__ == "__main__":
 
     dataset = dataset_loader.load_transcripts(args.dataset_dir)
     train_data = dataset.sample(frac=0.8, random_state=1234)    
+    train_data = train_data.head()
     dataset_loader.describe(train_data, "Training")
- 
-    csv_logger = configure_logging(args.output_dir)
+    _flag(flag_file, "Dataset load success.")
+
+    csv_logger = configure_logging(output_dir)
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
+    _flag(flag_file, "Model compile success.")
+
     history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[csv_logger])
-    pipeline.save(os.path.join(args.output_dir, 'checkpoints'))
+    _flag(flag_file, "Model train success.")
+
+    pipeline.save(os.path.j in(output_dir, 'checkpoints'))
+    _flag(flag_file, "Model save success.")
 

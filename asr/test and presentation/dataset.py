@@ -65,13 +65,14 @@ class AudioClipDataset(Dataset):
         df = df.loc[mp3_exists]
         print(f'Discarding {n_missing} missing mp3s')
     
-        unique_paths = pd.Series(df['path'].unique())
-        path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
-        corrupt_map = dict(zip(unique_paths, path_notcorrupt))
-        mp3_notcorrupt = df['path'].transform(lambda p: corrupt_map[p])
-        n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
-        print(f'Discarding {n_corrupted} corrupted mp3s')
-        df = df.loc[mp3_notcorrupt]
+        ## Commented because none of the files are corrupt and the check takes ~5 minutes.
+        #unique_paths = pd.Series(df['path'].unique())
+        #path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
+        #corrupt_map = dict(zip(unique_paths, path_notcorrupt))
+        #mp3_notcorrupt = df['path'].transform(lambda p: corrupt_map[p])
+        #n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
+        #print(f'Discarding {n_corrupted} corrupted mp3s')
+        #df = df.loc[mp3_notcorrupt]
     
         unique_paths = pd.Series(df['path'].unique())
         sample_rates = unique_paths.transform(lambda p: librosa.core.get_samplerate(p))

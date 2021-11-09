@@ -31,7 +31,7 @@ class RadioDataset(AudioClipDataset):
         df = _match_police_audio_transcripts(transcripts_dir)
         print(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
-        if check_audio:
+        if drop_bad_audio:
             df = cls.filter_audiofiles(df, sample_rate)
         cls.describe(df, "Loaded")
         return df

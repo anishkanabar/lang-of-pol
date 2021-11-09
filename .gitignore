@@ -5,6 +5,7 @@
 # Python artifacts
 *.pyc
 *__pycache__*
+.ipynb_checkpoints
 
 # Vim artifacts
 *.swp
