@@ -8,6 +8,7 @@ import os
 import re
 import datetime
 import pandas as pd
+import logging
 from dataset import AudioClipDataset
 
 MP3_DIR = '/project/graziul/data/'
@@ -29,7 +30,7 @@ class RadioDataset(AudioClipDataset):
             @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
         df = _match_police_audio_transcripts(transcripts_dir)
-        print(f"Original dataset has {df.shape[0]} rows.")
+        logging.info(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
         if drop_bad_audio:
             df = cls.filter_audiofiles(df, sample_rate)
@@ -47,22 +48,22 @@ def _filter_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numer
         @drop_numeric: filter out utterances transcribed with 0-9 instead of pronunciation
     """
     missing = df['transcripts'].isna()
-    print(f'Discarding {missing.sum()} missing transcripts.')
+    logging.info(f'Discarding {missing.sum()} missing transcripts.')
     df = df.loc[~ missing]
 
     if drop_inaudible:
         has_x = df['transcripts'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
-        print(f'Discarding {has_x.sum()} inaudible transcripts.')
+        logging.info(f'Discarding {has_x.sum()} inaudible transcripts.')
         df = df.loc[~ has_x]
 
     if drop_uncertain:
         has_brackets = df['transcripts'].str.contains('\[.+\]', regex=True)
-        print(f'Discarding {has_brackets.sum()} uncertain transcripts.')
+        logging.info(f'Discarding {has_brackets.sum()} uncertain transcripts.')
         df = df.loc[~ has_brackets]
 
     if drop_numeric:
         has_numeric = df['transcripts'].str.contains("[0-9]+", regex=True)
-        print(f'Discarding {has_numeric.sum()} transcripts with numerals.')
+        logging.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
         df = df.loc[~ has_numeric]
         
     return df

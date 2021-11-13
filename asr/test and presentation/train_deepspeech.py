@@ -7,6 +7,7 @@ import os
 import logging
 import argparse
 import pathlib
+import datetime as dt
 import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
@@ -21,7 +22,6 @@ from dataset_radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
 
-
 def configure_logging(log_dir):
     """
     Create loggers to record training progress.
@@ -29,12 +29,14 @@ def configure_logging(log_dir):
     """
     logging.basicConfig(filename=os.path.join(log_dir, 'general.log'),
                         level=logging.DEBUG,
-                        format='%(asctime)s %(message)s', 
+                        format='%(asctime)s %(levelname)s %(name)s %(message)s', 
                         datefmt='%d/%m/%Y %H:%M:%S')
-    csv_logger =  CSVLogger(filename=os.path.join(log_dir, 'model_log.csv'),
+
+    global app_logger, model_logger
+    model_logger =  CSVLogger(filename=os.path.join(log_dir, 'model_log.csv'),
                             append=True, 
                             separator=';')
-    return csv_logger
+    app_logger = logging.getLogger('main.train')
 
 
 def define_model(feature_type = 'spectrogram', multi_gpu = False):
@@ -49,6 +51,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
                                                  winlen=0.02,
                                                  winstep=0.025,
                                                  winfunc=np.hanning)
+    app_logger.info('Feature extractor configured.')
     
     # input label encoder
     alphabet_en = asr.vocab.Alphabet(lang='en')
@@ -59,6 +62,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
         output_dim=29,
         is_mixed_precision=True
     )
+    app_logger.info('Model configured.')
     
     # model optimizer
     optimizer = tf.keras.optimizers.Adam(
@@ -67,9 +71,11 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
         beta_2=0.999,
         epsilon=1e-4
     )
-    
+    app_logger.info('Optimizer configured.')
+
     # output label deocder
     decoder = asr.decoder.GreedyDecoder()
+    app_logger.info('Decoder configured.')
     
     # CTC Pipeline
     pipeline = asr.pipeline.ctc_pipeline.CTCPipeline(
@@ -78,6 +84,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     )
     return pipeline
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('dataset', choices=['librispeech', 'radio'])
@@ -85,18 +92,18 @@ def parse_args():
     parser.add_argument('output_dir', type=pathlib.Path)
     return parser.parse_args()
 
-def _flag(fp, msg):
-    """ Write a message to a log """
-    with open(fp, 'a') as f:
-        f.write(msg + "\n")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = parse_args()
     if 'SLURM_JOB_ID' not in os.environ:
         raise RuntimeError("No job id found. Are you running in a SLURM context?")
     output_dir = os.path.join(args.output_dir, 'job_' + os.environ['SLURM_JOB_ID'])
     flag_file = os.path.join(output_dir, 'flag.txt')
     os.makedirs(output_dir, exist_ok=True)
+    configure_logging(output_dir)
+
+    start = dt.datetime.now()
+    app_logger.info(f'Start time: {start}')
 
     if args.dataset == 'librispeech':
         dataset_loader = LibriSpeechDataset()
@@ -105,17 +112,19 @@ if __name__ == "__main__":
 
     dataset = dataset_loader.load_transcripts(args.dataset_dir)
     train_data = dataset.sample(frac=0.8, random_state=1234)    
-    train_data = train_data.head()
+    train_data = train_data[0:4000]
     dataset_loader.describe(train_data, "Training")
-    _flag(flag_file, "Dataset load success.")
+    app_logger.info("Dataset load success.")
 
-    csv_logger = configure_logging(output_dir)
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
-    _flag(flag_file, "Model compile success.")
+    app_logger.info("Pipeline model configured.")
 
-    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[csv_logger])
-    _flag(flag_file, "Model train success.")
+    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[model_logger])
+    app_logger.info("Model train success.")
 
-    pipeline.save(os.path.j in(output_dir, 'checkpoints'))
-    _flag(flag_file, "Model save success.")
-
+    pipeline.save(os.path.join(output_dir, 'checkpoints'))
+    app_logger.info("Model save success.")
+    
+    end = dt.datetime.now()
+    app_logger.info(f"Elapsed: {end - start}")
+    

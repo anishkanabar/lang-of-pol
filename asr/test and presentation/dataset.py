@@ -8,9 +8,12 @@ import os
 import abc
 import warnings
 import pandas as pd
+import logging
 import librosa
 
 SAMPLE_RATE = 16000  # Hz
+
+logger = logging.getLogger('dataset')
 
 class Dataset(abc.ABC):
         
@@ -21,8 +24,9 @@ class Dataset(abc.ABC):
         Params
             @data: Fully loaded transcripts dataframe
         """
-        print(f"{name} dataset stats:")
-        print(f"\tRow count = {data.shape[0]}")
+        msgs = [f"{name} dataset stats:",
+                f"\tRow count = {data.shape[0]}"]
+        logger.info("\n".join(msgs))
     
     @classmethod
     @abc.abstractmethod
@@ -44,11 +48,12 @@ class AudioClipDataset(Dataset):
             @data: Fully loaded transcripts dataframe
         """
         super().describe(data, name)
-        print(f"\tMin duration = {data['duration'].min():.2f}")
-        print(f"\tMax duration = {data['duration'].max():.2f}")
-        print(f"\tMean duration = {data['duration'].mean():.2f}")
-        print(f"\tStdev duration = {data['duration'].std():.2f}") 
-
+        msgs = [f"\tMin duration = {data['duration'].min():.2f}",
+            f"\tMax duration = {data['duration'].max():.2f}",
+            f"\tMean duration = {data['duration'].mean():.2f}",
+            f"\tStdev duration = {data['duration'].std():.2f}", 
+            f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}"] 
+        logger.info("\n".join(msgs))
 
     @classmethod
     def filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE):

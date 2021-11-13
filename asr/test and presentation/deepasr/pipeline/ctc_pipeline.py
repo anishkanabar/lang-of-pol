@@ -1,5 +1,6 @@
 import os
 import logging
+import datetime as dt
 from typing import List
 import numpy as np
 import random
@@ -75,8 +76,10 @@ class CTCPipeline(Pipeline):
         """ Preprocess batch data to format understandable to a model. """
 
         if is_extracted:  # then just align features
+            logger.debug('Aligning features')
             features = FeaturesExtractor.align(data)
         else:
+            logger.debug('Extracting features')
             features = self._features_extractor(data)
         features = augmentation(features) if augmentation else features
         # labels = self._alphabet.get_batch_labels(transcripts)
@@ -178,6 +181,7 @@ class CTCPipeline(Pipeline):
         audios = train_dataset['path'].to_list()
 
         labels = self._alphabet.get_batch_labels(train_dataset['transcripts'].to_list())
+        logger.debug('Labels created')
 
         transcripts = train_dataset['transcripts'].to_list()
 
@@ -194,7 +198,9 @@ class CTCPipeline(Pipeline):
         self.label_len = labels.shape[1]
 
         if not self._model.optimizer:  # a loss function and an optimizer
+            logger.debug('Compiling model.')
             self._model = compile_model(self._model, self._optimizer)  # have to be set before the training
+            logger.debug('Model compiled.')
         self._model.summary()
 
         print("Feature Extraction in progress...")
@@ -202,6 +208,7 @@ class CTCPipeline(Pipeline):
                                             list(labels),
                                             transcripts, augmentation, prepared_features,
                                             offsets, durations)
+        logger.info('Data preprocessed')
 
         outputs = {'ctc': np.zeros([len(audios)])}
 
@@ -211,11 +218,14 @@ class CTCPipeline(Pipeline):
         print("input labels: ", train_inputs['the_labels'].shape)
 
         print("Model training initiated...")
-
+        logger.info('Begin training...')
+        start = dt.datetime.now()
         history = self._model.fit(train_inputs, outputs,
                                   batch_size=batch_size,
                                   epochs=epochs,
                                   verbose=1, **kwargs)
+        stop = dt.datetime.now()
+        logger.info(f"Training took {stop - start}")
 
         return history
 
@@ -292,12 +302,21 @@ class CTCPipeline(Pipeline):
         if not durations:
             durations = [0]*len(audios)
 
+        logger.info('Reading audio files')
+        start = dt.datetime.now()
         mid_features = []
         for (audio, offset, duration) in zip(audios, offsets, durations):
+            logger.debug(f"Reading {duration} sec from audio file {os.path.basename(audio)}.")
             mid_features.append(read_audio(audio, sample_rate=self.sample_rate, 
                                          mono=self.mono, offset=offset, duration=duration))
-            
+        stop = dt.datetime.now()
+        logger.info(f"Reading audio took {stop - start}")    
+
+        logger.info('Preparing features from audio')
+        start = dt.datetime.now()
         the_input = self.preprocess(mid_features, prepared_features, augmentation)
+        stop = dt.datetime.now()
+        logger.info(f"Preparing features took {stop - start}")    
 
         the_labels = np.array(the_labels)
 
