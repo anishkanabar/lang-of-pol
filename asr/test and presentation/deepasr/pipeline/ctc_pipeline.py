@@ -6,6 +6,7 @@ import numpy as np
 import random
 import tensorflow as tf
 from tensorflow import keras
+import librosa
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, wait
 # from tensorflow.keras.layers import *
@@ -18,7 +19,7 @@ from deepasr.augmentation import Augmentation
 from deepasr.decoder import Decoder
 from deepasr.features import FeaturesExtractor
 from deepasr.vocab import Alphabet
-from deepasr.utils import read_audio, save_data
+from deepasr.utils import read_audio, save_data, slice_audio
 from deepasr.model import compile_model
 
 logger = logging.getLogger('asr.pipeline')
@@ -290,7 +291,7 @@ class CTCPipeline(Pipeline):
 
         return generator()
 
-    def wrap_preprocess(self, audios: List[str], the_labels: List[np.array], transcripts: List[str],
+    def wrap_preprocess(self, audio_paths: List[str], the_labels: List[np.array], transcripts: List[str],
                         augmentation: Augmentation = None, prepared_features: bool = False,
                         offsets: List[float] = None, durations: List[float] = None):
         """ Build training data """
@@ -298,23 +299,30 @@ class CTCPipeline(Pipeline):
         # the_input = x3/np.max(the_input)
 
         if not offsets:
-            offsets = [0]*len(audios)
+            offsets = [0]*len(audio_paths)
         if not durations:
-            durations = [0]*len(audios)
+            durations = [0]*len(audio_paths)
 
         logger.info('Reading audio files')
         start = dt.datetime.now()
-        mid_features = []
-        for (audio, offset, duration) in zip(audios, offsets, durations):
-            logger.debug(f"Reading {duration} sec from audio file {os.path.basename(audio)}.")
-            mid_features.append(read_audio(audio, sample_rate=self.sample_rate, 
-                                         mono=self.mono, offset=offset, duration=duration))
+        audio_arrays = []
+        for audio_path in set(audio_paths):
+            # Read 30m audio file
+            audio_array = read_audio(audio_path, sample_rate=None, mono=self.mono)
+            sample_rate = librosa.get_samplerate(audio_path)
+            for (audio_path2, offset, duration) in zip(audio_paths, offsets, durations):
+                if audio_path2 != audio_path:
+                    continue
+                # Extract utterance
+                utterance_arr = slice_audio(audio_array, sample_rate, offset, duration)
+                # Copying allows garbage collecting the 30m array
+                audio_arrays.append(utterance_arr.copy()) 
         stop = dt.datetime.now()
         logger.info(f"Reading audio took {stop - start}")    
 
         logger.info('Preparing features from audio')
         start = dt.datetime.now()
-        the_input = self.preprocess(mid_features, prepared_features, augmentation)
+        the_input = self.preprocess(audio_arrays, prepared_features, augmentation)
         stop = dt.datetime.now()
         logger.info(f"Preparing features took {stop - start}")    
 

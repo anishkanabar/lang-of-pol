@@ -53,9 +53,15 @@ def read_audio(file_path: str, sample_rate: int, mono: bool,
     # XXX: Default resampling method is very slow. Trying faster ones.
     # kaiser_fast doesn't load faster but it trains much faster!?
     audio = librosa.core.load(file_path, sr=sample_rate, mono=mono,
-            offset=offset, duration=duration, res_type='polyphase')[0]
+            offset=offset, duration=duration)[0]
     return audio
 
+def slice_audio(series: np.ndarray, sample_rate: int,
+                offset: float = 0, duration: float = 0) -> np.ndarray:
+    offset_idx = librosa.time_to_samples(offset, sr=sample_rate)
+    duration_idx = librosa.time_to_samples(offset + duration, sr=sample_rate)
+    duration_idx = min(duration_idx, len(series) - 1) # Takes whole audio if dur==0
+    return series[offset_idx : duration_idx]
 
 def calculate_units(model: keras.Model) -> int:
     """ Calculate number of the model parameters. """

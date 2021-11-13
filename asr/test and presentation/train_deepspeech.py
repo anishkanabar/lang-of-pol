@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
     dataset = dataset_loader.load_transcripts(args.dataset_dir)
     train_data = dataset.sample(frac=0.8, random_state=1234)    
-    train_data = train_data[0:4000]
+    train_data = train_data[0:16384]
     dataset_loader.describe(train_data, "Training")
     app_logger.info("Dataset load success.")
 
