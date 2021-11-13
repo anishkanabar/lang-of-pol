@@ -50,8 +50,10 @@ def read_audio(file_path: str, sample_rate: int, mono: bool,
     # fs, audio = wavfile.read(file_path)
     if duration == 0:
         duration = librosa.core.get_duration(filename=file_path)
+    # XXX: Default resampling method is very slow. Trying faster ones.
+    # kaiser_fast doesn't load faster but it trains much faster!?
     audio = librosa.core.load(file_path, sr=sample_rate, mono=mono,
-            offset=offset, duration=duration)[0]
+            offset=offset, duration=duration, res_type='polyphase')[0]
     return audio
 
 
