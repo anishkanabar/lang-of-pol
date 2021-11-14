@@ -44,24 +44,11 @@ def save_data(data: Any, file_path: str):
 #     download_from_bucket(bucket_name, remote_path, local_path)
 
 
-def read_audio(file_path: str, sample_rate: int, mono: bool, 
-        offset: float = 0, duration: float = 0) -> np.ndarray:
+def read_audio(file_path: str, sample_rate: int, mono: bool) -> np.ndarray:
     """ Read already prepared features from the store. """
     # fs, audio = wavfile.read(file_path)
-    if duration == 0:
-        duration = librosa.core.get_duration(filename=file_path)
-    # XXX: Default resampling method is very slow. Trying faster ones.
-    # kaiser_fast doesn't load faster but it trains much faster!?
-    audio = librosa.core.load(file_path, sr=sample_rate, mono=mono,
-            offset=offset, duration=duration)[0]
+    audio = librosa.core.load(file_path, sr=sample_rate, mono=mono)[0]
     return audio
-
-def slice_audio(series: np.ndarray, sample_rate: int,
-                offset: float = 0, duration: float = 0) -> np.ndarray:
-    offset_idx = librosa.time_to_samples(offset, sr=sample_rate)
-    duration_idx = librosa.time_to_samples(offset + duration, sr=sample_rate)
-    duration_idx = min(duration_idx, len(series) - 1) # Takes whole audio if dur==0
-    return series[offset_idx : duration_idx]
 
 def calculate_units(model: keras.Model) -> int:
     """ Calculate number of the model parameters. """

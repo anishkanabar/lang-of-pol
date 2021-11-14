@@ -30,6 +30,7 @@ class RadioDataset(AudioClipDataset):
             @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
         df = _match_police_audio_transcripts(transcripts_dir)
+        df = _add_clip_paths(df)
         logging.info(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
         if drop_bad_audio:
@@ -82,6 +83,22 @@ def _match_police_audio_transcripts(ts_dir):
     audio_dfs = [_match_utterance_to_audio(x) for x in ts_paths]
     return pd.concat(audio_dfs, ignore_index=True)
 
+
+def _add_clip_paths(data):
+    """
+    Add column with path to audio clip.
+    Params:
+        @data: expects columns {path, offset, duration, transcripts}
+    """
+    msPerSec = 1000
+    off_fmt = (data['offset'] * msPerSec).astype('int32').astype('str')
+    end_fmt = ((data['offset'] + data['duration']) * msPerSec).astype('int32').astype('str')
+    ext_fmt = pd.Series(['.flac']*len(data))
+    clip_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
+    clip_paths = data['path'].str.replace('data','data/utterances') \
+                .str.replace('.mp3', '').str.cat(clip_names, '/')
+    return data.assign(clip_path=clip_paths)
+    
 
 def _match_utterance_to_audio(ts_path):
     """

@@ -19,7 +19,7 @@ from deepasr.augmentation import Augmentation
 from deepasr.decoder import Decoder
 from deepasr.features import FeaturesExtractor
 from deepasr.vocab import Alphabet
-from deepasr.utils import read_audio, save_data, slice_audio
+from deepasr.utils import read_audio, save_data
 from deepasr.model import compile_model
 
 logger = logging.getLogger('asr.pipeline')
@@ -306,17 +306,8 @@ class CTCPipeline(Pipeline):
         logger.info('Reading audio files')
         start = dt.datetime.now()
         audio_arrays = []
-        for audio_path in set(audio_paths):
-            # Read 30m audio file
-            audio_array = read_audio(audio_path, sample_rate=None, mono=self.mono)
-            sample_rate = librosa.get_samplerate(audio_path)
-            for (audio_path2, offset, duration) in zip(audio_paths, offsets, durations):
-                if audio_path2 != audio_path:
-                    continue
-                # Extract utterance
-                utterance_arr = slice_audio(audio_array, sample_rate, offset, duration)
-                # Copying allows garbage collecting the 30m array
-                audio_arrays.append(utterance_arr.copy()) 
+        for audio_path in audio_paths:
+            audio_arrays.append(read_audio(audio_path, sample_rate=None, mono=self.mono))
         stop = dt.datetime.now()
         logger.info(f"Reading audio took {stop - start}")    
 
