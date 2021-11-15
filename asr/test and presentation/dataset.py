@@ -42,7 +42,7 @@ class Dataset(abc.ABC):
 class AudioClipDataset(Dataset):
 
     @classmethod
-    def _audio_slicer(cls, offset: float, duration: float, sample_rate: int) -> slice:
+    def audio_slicer(cls, offset: float, duration: float, sample_rate: int) -> slice:
         offset_idx = librosa.time_to_samples(offset, sr=sample_rate)
         duration_idx = librosa.time_to_samples(offset + duration, sr=sample_rate)
         return slice(offset_idx, duration_idx)
@@ -61,14 +61,14 @@ class AudioClipDataset(Dataset):
             audio_array, sample_rate = librosa.load(audio_path, sr=None)
             clips = data.loc[data['path'] == audio_path]
             for clip in clips.itertuples():
-                slicer = cls._audio_slicer(clip.offset, clip.duration, sample_rate)
-                clip_array = audio_array[slicer]
                 if os.path.exists(clip.clip_path):
-                    logger.debug(f"File {clip.clip_path} exists. Not overwriting.") 
-                else:
-                    if not os.path.exists(os.path.dirname(clip.clip_path)):
-                        os.makedirs(os.path.dirname(clip.clip_path), exist_ok=True)
-                    soundfile.write(clip.clip_path, clip_array, sample_rate, format='flac')
+                    #logger.debug(f"File {clip.clip_path} exists. Not overwriting.") 
+                    continue
+                if not os.path.exists(os.path.dirname(clip.clip_path)):
+                    os.makedirs(os.path.dirname(clip.clip_path), exist_ok=True)
+                slicer = cls.audio_slicer(clip.offset, clip.duration, sample_rate)
+                clip_array = audio_array[slicer]
+                soundfile.write(clip.clip_path, clip_array, sample_rate, format='flac')
         # Mutate original df!
         data['original_path'] = data['path']
         data['path'] = data['clip_path'] 

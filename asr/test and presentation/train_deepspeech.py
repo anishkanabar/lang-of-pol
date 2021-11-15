@@ -111,17 +111,17 @@ if __name__ == '__main__':
         dataset_loader = RadioDataset()
 
     dataset = dataset_loader.load_transcripts(args.dataset_dir)
-    train_data = dataset.sample(frac=0.8, random_state=1234)    
-    train_data = train_data[0:16]
+    #train_data = dataset.sample(frac=0.8, random_state=1234)    
+    train_data = dataset.sample(n=4096, random_state=1234)    
     dataset_loader.describe(train_data, "Training")
     dataset_loader.write_clips(train_data)
-    
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
     app_logger.info("Pipeline model configured.")
 
-    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[model_logger])
+    history = pipeline.fit_generator(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[model_logger])
+    #history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[model_logger])
     app_logger.info("Model train success.")
 
     pipeline.save(os.path.join(output_dir, 'checkpoints'))

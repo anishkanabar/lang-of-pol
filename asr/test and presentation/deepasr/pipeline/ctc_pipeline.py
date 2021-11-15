@@ -337,7 +337,7 @@ class CTCPipeline(Pipeline):
         """ Get ready features, and make a prediction. """
         # get audio features
         features = self.features_extractor.make_features(
-            read_audio(audio, sample_rate=self.sample_rate, mono=self.mono))
+            read_audio(audio, sample_rate=None, mono=self.mono))
         in_features = self.features_extractor.align([features], self.features_extractor.features_shape)
 
         pred_model = Model(inputs=self._model.get_layer('the_input').output,
