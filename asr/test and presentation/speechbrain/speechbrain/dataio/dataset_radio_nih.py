@@ -95,6 +95,7 @@ def _match_utterance_to_audio(ts_path):
                          'duration': _extract_duration(df),
                          'transcripts': df['transcription']})
 
+
 def _extract_mp3_path(df):
     """
     Parse mp3 file path for utterance in transcription csv
@@ -114,6 +115,7 @@ def _extract_offset(df):
     origin = datetime.datetime(1900, 1, 1)
     offset = pd.to_datetime(df['start_dt']) - origin
     return offset.dt.total_seconds()
+
 
 def _extract_duration(df):
     """
