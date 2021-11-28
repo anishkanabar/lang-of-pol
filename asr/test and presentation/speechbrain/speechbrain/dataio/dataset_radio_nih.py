@@ -8,7 +8,7 @@ import os
 import re
 import datetime
 import pandas as pd
-from dataset_nih import AudioClipDataset
+from speechbrain.dataio.dataset_nih import AudioClipDataset
 
 MP3_DIR = '/project/graziul/data/'
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped

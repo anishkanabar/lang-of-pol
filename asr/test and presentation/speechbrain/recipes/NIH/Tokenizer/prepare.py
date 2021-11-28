@@ -1,6 +1,8 @@
 import os
+import shutil
 import logging
-from speechbrain.dataio.dataset_radio_nih import RadioDataset
+from speechbrain.dataio.dataio import read_audio
+import glob
 
 try:
     import pandas as pd
@@ -27,14 +29,23 @@ def prepare_nih(data_folder, save_folder, skip_prep=False):
     if skip_prep:
         return
 
-    # This section used to download and extract a tar file of the dataset.
-    # Since the NIH dataset isn't a public benchmark dataset,
-    # and since it already exists on our servers, we can skip to the next step.
+    # If the data folders do not exist, we need to extract the data
+    if not os.path.isdir(os.path.join(data_folder, "data_nih/wav")):
+        # Check for zip file and download if it doesn't exist
+        zip_location = os.path.join(data_folder, "data_nih.tgz")
+        logger.info("Extracting data_nih.tgz...")
+        shutil.unpack_archive(zip_location, data_folder)
+        wav_dir = os.path.join(data_folder, "data_nih/wav")
+        tgz_list = glob.glob(wav_dir + "/*.tar.gz")
+        for tgz in tgz_list:
+            shutil.unpack_archive(tgz, wav_dir)
+            os.remove(tgz)
 
+    # this is the process of creating train, dev, and test samples.
     split_nih(save_folder, data_folder)
 
 
-def split_nih(save_folder, data_folder):
+def split_nih(save_folder, data_folder): # this function needs to be rewritten
     """"
     This function generate train, dev, test data set.
     Following the structure of other recipes
@@ -42,38 +53,69 @@ def split_nih(save_folder, data_folder):
         save_folder : path where to store the manifest csv files.
         data_folder : path to NIH dataset.
     """
-    # TODO: Refactor path column dependency out of write_clips ad move this block to prepare_nih()
-    data_loader = RadioDataset()
-    metadata = data_loader.load_transcripts(data_folder)
-    metadata = metadata.sample(n=1024, random_state=1234)  # XXX: For Testing!
-    data_loader.describe(metadata, 'XXX Small Dev Set')
-    data_loader.write_clips(metadata)
-
-    splits = ["train", "val", "test"]
-    test_metadata = metadata.sample(frac=.2, random_state=1234)
-    trainval_metadata = metadata.iloc[metadata.index.difference(test_metadata.index)]
-    val_metadata = trainval_metadata.sample(frac=.25, random_state=1234)
-    train_metadata = trainval_metadata.iloc[trainval_metadata.index.difference(val_metadata.index)]
-    split_metadata = {'train': train_metadata, 'val': val_metadata, 'test': test_metadata}
-
+    # Create filename-to-transcript dictionary (this part need to be rewritten)
+    filename2transcript = {}
+    with open(
+            os.path.join(
+                data_folder, "data_niih/transcript/nih_transcript_v0.1.txt"
+            ),
+            "r",
+    ) as f:
+        lines = f.readlines()
+    for line in lines:
+        key = line.split()[0]
+    value = " ".join(line.split()[1:])
+    filename2transcript[key] = value
+    splits = ["train", "dev", "test"]
     ID_start = 0  # needed to have a unique ID for each audio
     for split in splits:
-        manifest_path = os.path.join(save_folder, split) + ".csv"
-        if os.path.exists(manifest_path):
+        new_filename = os.path.join(save_folder, split) + ".csv"
+        if os.path.exists(new_filename):
             continue
-        logger.info("Preparing %s..." % manifest_path)
+        logger.info("Preparing %s..." % new_filename)
 
-        data = split_metadata[split]
+        ID = []
+        duration = []
+
+        wav = []
+        wav_format = []
+        wav_opts = []
 
         # spk_id = []
-        ID = list(range(ID_start, len(data)))
-        ID_start += len(data)
-        wav = data['path']
-        transcript = data['transcript']
-        sec2frame = lambda x, y: data_loader.audio_slicer(x, y, 22050)
-        sec2dur = lambda x, y: sec2frame(x, y).end - sec2frame(x, y).start
-        duration_func = lambda x: sec2dur(x.offset, x.duration)
-        duration = data.transform(duration_func)
+        # spk_id_format = []
+        # spk_id_opts = []
+
+        transcript = []
+        transcript_format = []
+        transcript_opts = []
+
+        all_wavs = glob.glob(
+            os.path.join(data_folder, "data_nih/wav")
+            + "/"
+            + split
+            + "/*/*.wav"
+        )
+        for i in range(len(all_wavs)):
+            filename = all_wavs[i].split("/")[-1].split(".wav")[0]
+            if filename not in filename2transcript:
+                continue
+            transcript_ = filename2transcript[filename]
+            transcript.append(transcript_)
+            transcript_format.append("string")
+            transcript_opts.append(None)
+
+            ID.append(ID_start + i)
+
+            signal = read_audio(all_wavs[i])
+            duration.append(signal.shape[0] / 16000)
+
+            wav.append(all_wavs[i])
+            wav_format.append("wav")
+            wav_opts.append(None)
+
+            # spk_id.append(df.speakerId[i])
+            # spk_id_format.append("string")
+            # spk_id_opts.append(None)
 
         new_df = pd.DataFrame(
             {
@@ -83,4 +125,5 @@ def split_nih(save_folder, data_folder):
                 "transcript": transcript,
             }
         )
-        new_df.to_csv(manifest_path, index=False)
+        new_df.to_csv(new_filename, index=False)
+        ID_start += len(all_wavs)

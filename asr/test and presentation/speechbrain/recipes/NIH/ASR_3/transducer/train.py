@@ -30,14 +30,15 @@ Authors
  * Peter Plantinga 2020
 """
 
-import os
 import sys
 import torch
 import logging
 import speechbrain as sb
+import torchaudio
 from speechbrain.utils.distributed import run_on_main
+from speechbrain.utils.data_utils import undo_padding
+from speechbrain.tokenizers.SentencePiece import SentencePiece
 from hyperpyyaml import load_hyperpyyaml
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -52,26 +53,15 @@ class ASR(sb.Brain):
         tokens_with_bos, token_with_bos_lens = batch.tokens_bos
         # wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
 
-        # Add augmentation if specified
-        if stage == sb.Stage.TRAIN:
-            if hasattr(self.modules, "env_corrupt"):
-                wavs_noise = self.modules.env_corrupt(wavs, wav_lens)
-                wavs = torch.cat([wavs, wavs_noise], dim=0)
-                wav_lens = torch.cat([wav_lens, wav_lens])
-                batch.sig = wavs, wav_lens
-                tokens_with_bos = torch.cat(
-                    [tokens_with_bos, tokens_with_bos], dim=0
-                )
-                token_with_bos_lens = torch.cat(
-                    [token_with_bos_lens, token_with_bos_lens]
-                )
-                batch.tokens_bos = tokens_with_bos, token_with_bos_lens
-            if hasattr(self.modules, "augmentation"):
-                wavs = self.modules.augmentation(wavs, wav_lens)
-
         # Forward pass
         feats = self.hparams.compute_features(wavs)
         feats = self.modules.normalize(feats, wav_lens)
+
+        # Add augmentation if specified
+        if stage == sb.Stage.TRAIN:
+            if hasattr(self.modules, "augmentation"):
+                wavs = self.modules.augmentation(feats)
+
         x = self.modules.enc(feats.detach())
         e_in = self.modules.emb(tokens_with_bos)
         h, _ = self.modules.dec(e_in)
@@ -115,7 +105,7 @@ class ASR(sb.Brain):
                 return p_transducer, wav_lens
 
         elif stage == sb.Stage.VALID:
-            best_hyps, scores, _, _ = self.hparams.Greedysearcher(x)
+            best_hyps, scores, _, _ = self.hparams.beam_searcher(x)
             return p_transducer, wav_lens, best_hyps
         else:
             (
@@ -123,7 +113,7 @@ class ASR(sb.Brain):
                 best_scores,
                 nbest_hyps,
                 nbest_scores,
-            ) = self.hparams.Beamsearcher(x)
+            ) = self.hparams.beam_searcher(x)
             return p_transducer, wav_lens, best_hyps
 
     def compute_objectives(self, predictions, batch, stage):
@@ -133,11 +123,6 @@ class ASR(sb.Brain):
         current_epoch = self.hparams.epoch_counter.current
         tokens, token_lens = batch.tokens
         tokens_eos, token_eos_lens = batch.tokens_eos
-        if hasattr(self.modules, "env_corrupt") and stage == sb.Stage.TRAIN:
-            tokens_eos = torch.cat([tokens_eos, tokens_eos], dim=0)
-            token_eos_lens = torch.cat([token_eos_lens, token_eos_lens], dim=0)
-            tokens = torch.cat([tokens, tokens], dim=0)
-            token_lens = torch.cat([token_lens, token_lens], dim=0)
 
         if stage == sb.Stage.TRAIN:
             if len(predictions) == 4:
@@ -202,12 +187,16 @@ class ASR(sb.Brain):
             )
 
         if stage != sb.Stage.TRAIN:
+
             # Decode token terms to words
-            predicted_words = [
-                self.tokenizer.decode_ids(utt_seq).split(" ")
-                for utt_seq in predicted_tokens
-            ]
-            target_words = [wrd.split(" ") for wrd in batch.wrd]
+            predicted_words = self.tokenizer(
+                predicted_tokens, task="decode_from_list"
+            )
+
+            # Convert indices to words
+            target_words = undo_padding(tokens, token_lens)
+            target_words = self.tokenizer(target_words, task="decode_from_list")
+
             self.wer_metric.append(ids, predicted_words, target_words)
             self.cer_metric.append(ids, predicted_words, target_words)
 
@@ -248,7 +237,7 @@ class ASR(sb.Brain):
 
         # Perform end-of-iteration things, like annealing, logging, etc.
         if stage == sb.Stage.VALID:
-            old_lr, new_lr = self.hparams.lr_annealing(stage_stats["WER"])
+            old_lr, new_lr = self.hparams.lr_annealing(stage_stats["loss"])
             sb.nnet.schedulers.update_learning_rate(self.optimizer, new_lr)
 
             self.hparams.train_logger.log_stats(
@@ -268,9 +257,12 @@ class ASR(sb.Brain):
                 self.wer_metric.write_stats(w)
 
 
-def dataio_prepare(hparams):
+# Define custom data procedure
+def dataio_prepare(hparams, tokenizer):
     """This function prepares the datasets to be used in the brain class.
     It also defines the data processing pipeline through user-defined functions."""
+
+    # 1. Define datasets
     data_folder = hparams["data_folder"]
 
     train_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
@@ -279,13 +271,18 @@ def dataio_prepare(hparams):
 
     if hparams["sorting"] == "ascending":
         # we sort training data to speed up training and get better results.
-        train_data = train_data.filtered_sorted(sort_key="duration")
+        train_data = train_data.filtered_sorted(
+            sort_key="duration",
+            key_max_value={"duration": hparams["avoid_if_longer_than"]},
+        )
         # when sorting do not shuffle in dataloader ! otherwise is pointless
         hparams["train_dataloader_opts"]["shuffle"] = False
 
     elif hparams["sorting"] == "descending":
         train_data = train_data.filtered_sorted(
-            sort_key="duration", reverse=True
+            sort_key="duration",
+            reverse=True,
+            key_max_value={"duration": hparams["avoid_if_longer_than"]},
         )
         # when sorting do not shuffle in dataloader ! otherwise is pointless
         hparams["train_dataloader_opts"]["shuffle"] = False
@@ -301,31 +298,28 @@ def dataio_prepare(hparams):
     valid_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
         csv_path=hparams["valid_csv"], replacements={"data_root": data_folder},
     )
+    # We also sort the validation data so it is faster to validate
     valid_data = valid_data.filtered_sorted(sort_key="duration")
 
-    # test is separate
-    test_datasets = {}
-    for csv_file in hparams["test_csv"]:
-        name = Path(csv_file).stem
-        test_datasets[name] = sb.dataio.dataset.DynamicItemDataset.from_csv(
-            csv_path=csv_file, replacements={"data_root": data_folder}
-        )
-        test_datasets[name] = test_datasets[name].filtered_sorted(
-            sort_key="duration"
-        )
+    test_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
+        csv_path=hparams["test_csv"], replacements={"data_root": data_folder},
+    )
 
-    datasets = [train_data, valid_data] + [i for k, i in test_datasets.items()]
+    # We also sort the validation data so it is faster to validate
+    test_data = test_data.filtered_sorted(sort_key="duration")
 
-    # Defining tokenizer and loading it
-    # To avoid mismatch, we have to use the same tokenizer used for LM training
-    tokenizer = hparams["tokenizer"]
+    datasets = [train_data, valid_data, test_data]
 
     # 2. Define audio pipeline:
     @sb.utils.data_pipeline.takes("wav")
     @sb.utils.data_pipeline.provides("sig")
     def audio_pipeline(wav):
+        info = torchaudio.info(wav)
         sig = sb.dataio.dataio.read_audio(wav)
-        return sig
+        resampled = torchaudio.transforms.Resample(
+            info.sample_rate, hparams["sample_rate"],
+        )(sig)
+        return resampled
 
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
 
@@ -336,7 +330,7 @@ def dataio_prepare(hparams):
     )
     def text_pipeline(wrd):
         yield wrd
-        tokens_list = tokenizer.encode_as_ids(wrd)
+        tokens_list = tokenizer.sp.encode_as_ids(wrd)
         yield tokens_list
         tokens_bos = torch.LongTensor([hparams["blank_index"]] + (tokens_list))
         yield tokens_bos
@@ -349,22 +343,24 @@ def dataio_prepare(hparams):
 
     # 4. Set output:
     sb.dataio.dataset.set_output_keys(
-        datasets, ["id", "sig", "wrd", "tokens_bos", "tokens_eos", "tokens"],
+        datasets, ["id", "sig", "tokens_bos", "tokens_eos", "tokens"],
     )
-    return train_data, valid_data, test_datasets
+    return train_data, valid_data, test_data
 
 
 if __name__ == "__main__":
 
     # CLI:
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])
+    with open(hparams_file) as fin:
+        hparams = load_hyperpyyaml(fin, overrides)
 
     # If distributed_launch=True then
     # create ddp_group with the right communication protocol
     sb.utils.distributed.ddp_init_group(run_opts)
 
-    with open(hparams_file) as fin:
-        hparams = load_hyperpyyaml(fin, overrides)
+    # Dataset preparation (parsing CommonVoice)
+    from prepare import prepare_nih  # noqa
 
     # Create experiment directory
     sb.create_experiment_directory(
@@ -373,10 +369,7 @@ if __name__ == "__main__":
         overrides=overrides,
     )
 
-    # 1.  # Dataset prep (parsing Librispeech)
-    from prepare import prepare_nih  # noqa
-
-    # multi-gpu (ddp) save data preparation
+    # Due to DDP, we do the preparation ONLY on the main python process
     run_on_main(
         prepare_nih,
         kwargs={
@@ -386,14 +379,18 @@ if __name__ == "__main__":
         },
     )
 
-    # here we create the datasets objects as well as tokenization and encoding
-    train_data, valid_data, test_datasets = dataio_prepare(hparams)
+    # Defining tokenizer and loading it
+    tokenizer = SentencePiece(
+        model_dir=hparams["save_folder"],
+        vocab_size=hparams["output_neurons"],
+        annotation_train=hparams["train_csv"],
+        annotation_read="wrd",
+        model_type=hparams["token_type"],
+        character_coverage=hparams["character_coverage"],
+    )
 
-    # We download the pretrained LM and the tokenizer from HuggingFace (or elsewhere
-    # depending on the path given in the YAML file). The tokenizer is loaded at
-    # the same time.
-    run_on_main(hparams["pretrainer"].collect_files)
-    hparams["pretrainer"].load_collected(device=run_opts["device"])
+    # here we create the datasets objects as well as tokenization and encoding
+    train_data, valid_data, test_data = dataio_prepare(hparams, tokenizer)
 
     # Trainer initialization
     asr_brain = ASR(
@@ -404,9 +401,8 @@ if __name__ == "__main__":
         checkpointer=hparams["checkpointer"],
     )
 
-    # We dynamicaly add the tokenizer to our brain class.
-    # NB: This tokenizer corresponds to the one used for the LM!!
-    asr_brain.tokenizer = hparams["tokenizer"]
+    # adding objects to trainer:
+    asr_brain.tokenizer = tokenizer
 
     # Training
     asr_brain.fit(
@@ -417,11 +413,10 @@ if __name__ == "__main__":
         valid_loader_kwargs=hparams["valid_dataloader_opts"],
     )
 
-    # Testing
-    for k in test_datasets.keys():  # keys are test_clean, test_other etc
-        asr_brain.hparams.wer_file = os.path.join(
-            hparams["output_folder"], "wer_{}.txt".format(k)
-        )
-        asr_brain.evaluate(
-            test_datasets[k], test_loader_kwargs=hparams["test_dataloader_opts"]
-        )
+    # Test
+    asr_brain.hparams.wer_file = hparams["output_folder"] + "/wer_test.txt"
+    asr_brain.evaluate(
+        test_data,
+        min_key="WER",
+        test_loader_kwargs=hparams["test_dataloader_opts"],
+    )
