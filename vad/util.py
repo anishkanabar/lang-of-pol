@@ -20,6 +20,26 @@ from glob import glob
 torch.manual_seed(1)
 
 def load_data(pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
+    file = open(pkl_path,'rb')
+    vad_dict = pickle.load(file)
+    file.close()
+    input_list = []
+    labels_list = []
+
+    for idx,key in enumerate(vad_dict):
+        print(idx)
+        a = audio_file(key)
+        a.get_slices(vad_dict)
+        input_list.append(a.get_split_mfcc()) 
+        a.get_split_frames()
+        labels_list.append(a.get_split_labels()) 
+        #a.get_plots()
+    input_list = torch.cat(input_list)
+    input_list = torch.transpose(input_list,1,2)
+    labels_list = torch.from_numpy(np.concatenate(labels_list,axis = 0)).float()
+    return input_list, labels_list
+
+def load_data_for_cross_validation(k=20,pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
     #pkl_path = '/project/graziul/data/Zone1/2018_08_04/2018_08_04vad_dict.pkl'
     file = open(pkl_path,'rb')
     vad_dict = pickle.load(file)
@@ -29,7 +49,7 @@ def load_data(pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
 
     for idx,key in enumerate(vad_dict):
         print(idx)
-        if(idx == 20):
+        if(idx == k):
             break
         a = audio_file(key)
         a.get_slices(vad_dict)
@@ -253,3 +273,58 @@ class audio_file():
             self.plot_waveform_with_labels(i,clip_size)
         return
     
+def plot_outputs(input_list, labels_list, output_hat, sample_rate = 22050):
+    num_samples = input_list.size()[0]
+    diff_labels = labels_list - output_hat
+    for i in range(num_samples):
+        print(i)
+        plt.figure(figsize=(14,5))
+        fig,(ax1,ax2) = plt.subplots(2,1)
+        librosa.display.waveshow(input_list[i].numpy(),sample_rate,ax = ax1)
+        ax2.plot(diff_labels[i].numpy())
+        plt.show()
+    return    
+    
+def get_predictions(input_list, labels_list):
+    output_list = []
+    idx = 0
+    num_samples = labels_list.size()[0]//batch_size
+    print(num_samples)
+    with torch.no_grad():
+        while(idx < num_samples):
+            print(idx)
+            input_batch = input_list[idx*batch_size:(idx+1)*batch_size]
+            labels_batch = labels_list[idx*batch_size:(idx+1)*batch_size]
+            idx = idx+1
+            output_hat = model(input_batch)
+            #print(output_hat)
+            #for param in model.parameters():
+            #    print(param.grad)
+            output_list.append(output_hat)
+        output_list = torch.cat(output_list, dim = 0)
+        return output_list
+
+def get_frame_error_rate(output_hat, labels):
+    num_samples = labels.size()[0]
+    fer_arr = []
+    for i in range(num_samples):
+        curr_output = output_hat[i]
+        curr_label = labels[i]
+        fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
+    return fer_arr
+
+def test_frame_error_rate(output_hat, labels):
+    num_samples = labels.size()[0]
+    s_length = labels.size()[1]
+    fer_arr = []
+    sum = 0
+    for i in range(num_samples):
+        curr_output = output_hat[i]
+        curr_label = labels[i]
+        for j in range(s_length):
+            if curr_output[j] == curr_label[j]:
+                pass
+            else:
+                sum = sum+1
+        fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2)*100)
+    return sum
