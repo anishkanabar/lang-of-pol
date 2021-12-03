@@ -7,11 +7,15 @@ Authors: Eric Chandler <echandler@uchicago.edu>
 import os
 import abc
 import warnings
+import datetime as dt
 import pandas as pd
+import logging
 import librosa
+import soundfile
 
 SAMPLE_RATE = 16000  # Hz
 
+logger = logging.getLogger('dataset')
 
 class Dataset(abc.ABC):
         
@@ -22,8 +26,8 @@ class Dataset(abc.ABC):
         Params
             @data: Fully loaded transcripts dataframe
         """
-        print(f"{name} dataset stats:")
-        print(f"\tRow count = {data.shape[0]}")
+        logger.info(f"{name} dataset stats:")
+        logger.info(f"\tRow count = {data.shape[0]}")
     
     @classmethod
     @abc.abstractmethod
@@ -34,9 +38,43 @@ class Dataset(abc.ABC):
             @transcripts_dir: path to directory with transcripts csvs
         """
         pass
-
-
+    
 class AudioClipDataset(Dataset):
+
+    @classmethod
+    def audio_slicer(cls, offset: float, duration: float, sample_rate: int) -> slice:
+        offset_idx = librosa.time_to_samples(offset, sr=sample_rate)
+        duration_idx = librosa.time_to_samples(offset + duration, sr=sample_rate)
+        return slice(offset_idx, duration_idx)
+    
+    @classmethod
+    def write_clips(cls, data: pd.DataFrame):
+        """ 
+        Extract small audio clips from original file and write them to disk.
+        Params:
+            @data: expects columns {path, clip_path, offset, duration, transcripts}
+        """
+        logger.info('Writing audio clips.')
+        start = dt.datetime.now()
+        audio_paths = set(data['path'])
+        for audio_path in audio_paths:
+            audio_array, sample_rate = librosa.load(audio_path, sr=None)
+            clips = data.loc[data['path'] == audio_path]
+            for clip in clips.itertuples():
+                if os.path.exists(clip.clip_path):
+                    #logger.debug(f"File {clip.clip_path} exists. Not overwriting.") 
+                    continue
+                if not os.path.exists(os.path.dirname(clip.clip_path)):
+                    os.makedirs(os.path.dirname(clip.clip_path), exist_ok=True)
+                slicer = cls.audio_slicer(clip.offset, clip.duration, sample_rate)
+                clip_array = audio_array[slicer]
+                soundfile.write(clip.clip_path, clip_array, sample_rate, format='flac')
+        # Mutate original df!
+        data['original_path'] = data['path']
+        data['path'] = data['clip_path'] 
+        data.drop('clip_path', axis=1, inplace=True)
+        stop = dt.datetime.now()
+        logger.info(f"Writing audio took {stop - start}.")
     
     @classmethod
     def describe(cls, data, name):
@@ -46,11 +84,11 @@ class AudioClipDataset(Dataset):
             @data: Fully loaded transcripts dataframe
         """
         super().describe(data, name)
-        print(f"\tMin duration = {data['duration'].min():.2f}")
-        print(f"\tMax duration = {data['duration'].max():.2f}")
-        print(f"\tMean duration = {data['duration'].mean():.2f}")
-        print(f"\tStdev duration = {data['duration'].std():.2f}") 
-
+        logger.info(f"\tMin duration = {data['duration'].min():.2f}")
+        logger.info(f"\tMax duration = {data['duration'].max():.2f}")
+        logger.info(f"\tMean duration = {data['duration'].mean():.2f}")
+        logger.info(f"\tStdev duration = {data['duration'].std():.2f}") 
+        logger.info(f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}") 
 
     @classmethod
     def filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE):

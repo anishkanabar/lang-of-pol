@@ -2,7 +2,7 @@ import os
 import shutil
 import logging
 from speechbrain.dataio.dataio import read_audio
-from speechbrain.dataio.dataset_radio_nih import RadioDataset
+from speechbrain.dataio.dataset_nih_radio import RadioDataset
 import glob
 
 try:
@@ -45,9 +45,10 @@ def split_nih(save_folder, data_folder):
         save_folder : path where to store the manifest csv files.
         data_folder : path to NIH dataset.
     """
+    transcripts_folder = "/project/graziul/transcripts"
     # TODO: Refactor path column dependency out of write_clips ad move this block to prepare_nih()
     data_loader = RadioDataset()
-    metadata = data_loader.load_transcripts(data_folder)
+    metadata = data_loader.load_transcripts(transcripts_folder)
     metadata = metadata.sample(n=1024, random_state=1234)  # XXX: For Testing!
     data_loader.describe(metadata, 'XXX Small Dev Set')
     data_loader.write_clips(metadata)

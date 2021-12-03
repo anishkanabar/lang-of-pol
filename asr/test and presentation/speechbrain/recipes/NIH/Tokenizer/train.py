@@ -37,8 +37,8 @@ if __name__ == "__main__":
     run_on_main(
         prepare_nih,
         kwargs={
-            "data_folder": hparams["data_folder"],
             "save_folder": hparams["output_folder"],
+            "subset": hparams["subset"]
         },
     )
 

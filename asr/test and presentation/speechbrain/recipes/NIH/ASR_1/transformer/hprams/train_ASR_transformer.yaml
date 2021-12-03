@@ -15,7 +15,7 @@ save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
-data_folder: !PLACEHOLDER # e,g./path/to/nih
+data_folder: /project/graziul/data/utterances
 # noise/ris dataset will automatically be downloaded
 data_folder_rirs: !ref <data_folder> # Change this is needed
 skip_prep: False

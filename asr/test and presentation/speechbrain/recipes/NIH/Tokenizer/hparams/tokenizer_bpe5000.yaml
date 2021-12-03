@@ -7,9 +7,9 @@ output_folder: !ref results/tokenizer_bpe5000/
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
-data_folder: !PLACEHOLDER
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
+subset: !PLACEHOLDER
 
 
 # Training parameters

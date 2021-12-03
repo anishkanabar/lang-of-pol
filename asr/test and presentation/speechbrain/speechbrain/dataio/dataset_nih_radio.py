@@ -1,5 +1,5 @@
 '''
-File: dataset_radio_nih.py
+File: dataset_nih_radio.py
 Brief: Loader for police radio transcripts and audio files.
 Authors: Eric Chandler <echandler@uchicago.edu>
 '''
@@ -8,12 +8,12 @@ import os
 import re
 import datetime
 import pandas as pd
-from speechbrain.dataio.dataset_nih import AudioClipDataset
+import logging
+from dataset import AudioClipDataset
 
 MP3_DIR = '/project/graziul/data/'
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz
-
 
 class RadioDataset(AudioClipDataset):
     
@@ -30,7 +30,8 @@ class RadioDataset(AudioClipDataset):
             @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
         df = _match_police_audio_transcripts(transcripts_dir)
-        print(f"Original dataset has {df.shape[0]} rows.")
+        df = _add_clip_paths(df)
+        logging.info(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
         if drop_bad_audio:
             df = cls.filter_audiofiles(df, sample_rate)
@@ -48,22 +49,22 @@ def _filter_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numer
         @drop_numeric: filter out utterances transcribed with 0-9 instead of pronunciation
     """
     missing = df['transcripts'].isna()
-    print(f'Discarding {missing.sum()} missing transcripts.')
+    logging.info(f'Discarding {missing.sum()} missing transcripts.')
     df = df.loc[~ missing]
 
     if drop_inaudible:
         has_x = df['transcripts'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
-        print(f'Discarding {has_x.sum()} inaudible transcripts.')
+        logging.info(f'Discarding {has_x.sum()} inaudible transcripts.')
         df = df.loc[~ has_x]
 
     if drop_uncertain:
         has_brackets = df['transcripts'].str.contains('\[.+\]', regex=True)
-        print(f'Discarding {has_brackets.sum()} uncertain transcripts.')
+        logging.info(f'Discarding {has_brackets.sum()} uncertain transcripts.')
         df = df.loc[~ has_brackets]
 
     if drop_numeric:
         has_numeric = df['transcripts'].str.contains("[0-9]+", regex=True)
-        print(f'Discarding {has_numeric.sum()} transcripts with numerals.')
+        logging.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
         df = df.loc[~ has_numeric]
         
     return df
@@ -83,6 +84,22 @@ def _match_police_audio_transcripts(ts_dir):
     return pd.concat(audio_dfs, ignore_index=True)
 
 
+def _add_clip_paths(data):
+    """
+    Add column with path to audio clip.
+    Params:
+        @data: expects columns {path, offset, duration, transcripts}
+    """
+    msPerSec = 1000
+    off_fmt = (data['offset'] * msPerSec).astype('int32').astype('str')
+    end_fmt = ((data['offset'] + data['duration']) * msPerSec).astype('int32').astype('str')
+    ext_fmt = pd.Series(['.flac']*len(data))
+    clip_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
+    clip_paths = data['path'].str.replace('data','data/utterances') \
+                .str.replace('.mp3', '').str.cat(clip_names, '/')
+    return data.assign(clip_path=clip_paths)
+    
+
 def _match_utterance_to_audio(ts_path):
     """
     Extracts mp3 path, utterance timestamp, and duration from transcript metadata
@@ -94,7 +111,6 @@ def _match_utterance_to_audio(ts_path):
                          'offset': _extract_offset(df),
                          'duration': _extract_duration(df),
                          'transcripts': df['transcription']})
-
 
 def _extract_mp3_path(df):
     """
@@ -115,7 +131,6 @@ def _extract_offset(df):
     origin = datetime.datetime(1900, 1, 1)
     offset = pd.to_datetime(df['start_dt']) - origin
     return offset.dt.total_seconds()
-
 
 def _extract_duration(df):
     """

@@ -2,7 +2,7 @@ import os
 import shutil
 import logging
 from speechbrain.dataio.dataio import read_audio
-from speechbrain.dataio.dataset_radio_nih import RadioDataset
+from speechbrain.dataio.dataset_nih_radio import RadioDataset
 import glob
 
 try:

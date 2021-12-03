@@ -1,0 +1,57 @@
+#!/bin/bash
+
+#
+# USAGE:
+# From the terminal, run:
+# sbatch run-training-speechbrain.job <path_to_conda_env>
+#
+
+#
+#OPIONS FOR JOB ID:
+#SBATCH --job-name=train-asr
+#
+#OPTIONS FOR EMAIL:
+#SBATCH --output=/project/graziul/ra/%u/slurm_output/%j.%N.stdout
+#SBATCH --error=/project/graziul/ra/%u/slurm_output/%j.%N.stderr
+#
+#OPTIONS FOR PARTITION:
+#SBATCH --account=pi-graziul
+#
+#OPTIONS FOR JOB SIZE:
+#SBATCH --partition=gpu
+# Always set ntasks==gpus and ntasks-per-gpu=1
+#SBATCH --nodes=1
+#SBATCH --gpus=1
+#SBATCH --ntasks=1
+#SBATCH --ntasks-per-gpu=1
+#SBATCH --mem-per-cpu=10000
+#SBATCH --time=18:00:00
+#
+
+env_dir="$1"
+
+if [ ! -e "$env_dir" ];
+then
+    echo "pip environment not found. See 'env/create_env_speechbrain.sh'. Exiting."
+    exit 1
+fi
+
+echo "Activating pip"
+source "$env_dir/bin/activate"
+
+echo "Listing gpu nodes"
+sh show_cuda_devices.sh
+python tf_devices.py
+
+echo "Running model"
+start_sec=$(date +%s)
+start_time=$(date +%T)
+echo "Start time : $start_time"
+sb_dir="speechbrain/recipes/NIH/Tokenizer"
+python "$sb_dir/train.py" "$sb_dir/hparams/tokenizer_bpe5000.yaml"
+end_time=$(date +%T)
+end_sec=$(date +%s)
+echo "End time : $end_time"
+elapsed=$(($end_sec - $start_sec))
+echo "Elapsed : $elapsed seconds = $(($elapsed/60)) minutes = $(($elapsed/3600)) hours"
+
