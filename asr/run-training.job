@@ -3,7 +3,7 @@
 #
 # USAGE:
 # From the terminal, run:
-# sbatch run-training.job <path_to_conda_env> 
+# sbatch run-training.job <path_to_conda_env>
 #
 
 #
@@ -38,6 +38,12 @@ if [ ! -e "$env_dir" ];
 then
     echo "Conda environment not found. See 'create_env.sh'. Exiting."
     exit 1
+fi
+
+if [ "$local_flag" == "cluster" ]; then
+    echo "Activating conda"
+    source 'env/conda_bashrc'
+    conda activate "$env_dir"
 fi
 
 echo "Listing gpu nodes"

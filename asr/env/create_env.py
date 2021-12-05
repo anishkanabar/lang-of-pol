@@ -28,13 +28,12 @@ def main(env_dir:pathlib.Path, scale:str):
             return 1
     
     print("Creating conda environment.")
-    cmd = f'conda create -y -c conda-forge -p {env_dir}'
+    cmd = f'conda create -y -c conda-forge -p "{env_dir}"'
     subprocess.run(cmd.split(), check=True)
     
-    readme_src = os.path.join(os.path.dirname(__file__), "ENV_README.txt")
-    readme_dest = os.path.join(env_parent, "README.txt")
-    if not os.path.exists(readme_dest):
-        shutil.copy(readme_src, readme_dest) 
+    readme_path = os.path.join(env_parent, "README.txt")
+    if not os.path.exists(readme_path):
+        shutil.copy("ENV_README.txt", readme_path) 
     
     reqs_src = os.path.join(os.path.dirname(__file__), "requirements.txt")
     reqs_dest = os.path.join(env_parent, "requirements.txt")
