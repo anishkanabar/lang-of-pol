@@ -9,6 +9,7 @@ import re
 import datetime
 import pandas as pd
 import logging
+import pathlib
 from dataset import AudioClipDataset
 
 MP3_DIR = '/project/graziul/data/'
@@ -20,7 +21,7 @@ WINDOW_LEN = .02 # Sec
 class RadioDataset(AudioClipDataset):
     
     @classmethod
-    def load_transcripts(cls, transcripts_dir, 
+    def load_transcripts(cls, transcripts_dir:pathlib.Path, 
                               sample_rate=SAMPLE_RATE, 
                               window_len=WINDOW_LEN,
                               drop_bad_audio=True, 
@@ -85,7 +86,7 @@ def _match_police_audio_transcripts(ts_dir):
     Params:
         @ts_dir: Location of folder with transcripts csvs
     """
-    ts_dir_files = os.listdir(ts_dir)
+    ts_dir_files = pathlib.iterdir(ts_dir)
     pattern = "transcripts\d{4}_\d{2}_\d{2}.csv"
     ts_names = [x for x in ts_dir_files if re.match(pattern, x)]
     ts_paths = [os.path.join(ts_dir, x) for x in ts_names]

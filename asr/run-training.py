@@ -23,11 +23,11 @@ elif args.scale == 'local':
     cmd = f'sh run-training.job local {args.dataset} {args.env_dir} {dataset_dir} {logs_dir}'
     subprocess.run(cmd.split()) 
 else:
+    logs_dir='/project/graziul/ra/echandler'
     if args.dataset == 'radio':
-        logs_dir='/project/graziul/ra/echandler'
         dataset_dir='/project/graziul/transcripts'
     else:
-        logs_dir='/project/
+        dataset_dir='/project/graziul/ra/shiyanglai/experiment1/audio-data/LibriSpeech/train-clean-100/'
     cmd = f'sbatch run-training.job cluster {args.dataset} {args.env_dir} {dataset_dir} {logs_dir}'
     subprocess.run(cmd.split())
 
