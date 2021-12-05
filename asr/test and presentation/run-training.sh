@@ -7,10 +7,23 @@
 
 env_dir="$1"
 env_parent=$(dirname "$env_dir")
+local_flag=false
+
+print_usage() {
+  echo "Usage: sh run-training.sh [-l] <path_to_conda_env>"
+}
+
+while getopts 'l' flag; do
+  case "${flag}" in
+    l) local_flag=true;;
+    *) print_usage
+       exit 1 ;;
+  esac
+done
 
 if [ -z "$env_parent" ]; then
-    echo "Missing argument. Usage:"
-    echo "sh run-training.sh <path_to_conda_env>"
+    echo "Missing argument."
+    print_usage
     exit 1
 elif [ ! -e "$env_parent" ]; then
     echo "Environment directory not found. Create?"
@@ -27,7 +40,11 @@ fi
 sh env/create_env.sh "$env_dir"
 
 if [ $? -eq 0 ]; then
-    sbatch run-training.job "$env_dir"
+    if [ $local_flag ]; then
+        sh run-training.job "$env_dir" 
+    else
+        sbatch run-training.job "$env_dir"
+    fi
 else
     echo "Failed to create conda env. Exiting."
     exit 1
