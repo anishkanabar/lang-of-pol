@@ -11,8 +11,8 @@ import pandas as pd
 import logging
 from dataset import AudioClipDataset
 
-#MP3_DIR = '/project/graziul/data/'
-MP3_DIR = '/Users/eric/Documents/Work/PoliceBroadcasts/FakeData/'
+MP3_DIR = '/project/graziul/data/'
+#MP3_DIR = '/Users/eric/Documents/Work/PoliceBroadcasts/FakeData/'
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz
 
