@@ -18,9 +18,13 @@ if rtn != 0:
     print("Failed to create conda env.")
     sys.exit(1)
 elif args.local:
-    cmd = f'sh run-training.job {args.env_dir}'
-    subprocess.run(cmd.split())
+    logs_dir='/Users/eric/Documents/Work/PoliceBroadcasts/output_logs'
+    dataset_dir='/Users/eric/Documents/Work/PoliceBroadcasts/FakeData'
+    cmd = f'sh run-training.job local {args.env_dir} {dataset_dir} {logs_dir}'
+    subprocess.run(cmd.split()) 
 else:
-    cmd = f'sbatch run-training.job {args.env_dir} {args.local}'
+    logs_dir='/project/graziul/ra/echandler'
+    dataset_dir='/project/graziul/transcripts'
+    cmd = f'sbatch run-training.job cluster {args.env_dir} {dataset_dir} {logs_dir}'
     subprocess.run(cmd.split())
 

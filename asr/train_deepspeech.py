@@ -87,20 +87,23 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('local', choices=['local','cluster'])
     parser.add_argument('dataset', choices=['librispeech', 'radio'])
     parser.add_argument('dataset_dir', type=pathlib.Path)
-    parser.add_argument('output_dir', type=pathlib.Path)
+    parser.add_argument('logs_dir', type=pathlib.Path)
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_args()
-    if 'SLURM_JOB_ID' not in os.environ:
+    if args.local == 'local':
+        os.environ['SLURM_JOB_ID'] = '111111'
+    elif 'SLURM_JOB_ID' not in os.environ:
         raise RuntimeError("No job id found. Are you running in a SLURM context?")
-    output_dir = os.path.join(args.output_dir, 'job_' + os.environ['SLURM_JOB_ID'])
-    flag_file = os.path.join(output_dir, 'flag.txt')
-    os.makedirs(output_dir, exist_ok=True)
-    configure_logging(output_dir)
+    logs_dir = os.path.join(args.logs_dir, 'job_' + os.environ['SLURM_JOB_ID'])
+    flag_file = os.path.join(logs_dir, 'flag.txt')
+    os.makedirs(logs_dir, exist_ok=True)
+    configure_logging(logs_dir)
 
     start = dt.datetime.now()
     app_logger.info(f'Start time: {start}')
@@ -124,7 +127,7 @@ if __name__ == '__main__':
     #history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[model_logger])
     app_logger.info("Model train success.")
 
-    pipeline.save(os.path.join(output_dir, 'checkpoints'))
+    pipeline.save(os.path.join(logs_dir, 'checkpoints'))
     app_logger.info("Model save success.")
     
     end = dt.datetime.now()

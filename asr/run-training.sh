@@ -41,9 +41,13 @@ sh env/create_env.sh "$env_dir"
 
 if [ $? -eq 0 ]; then
     if [ $local_flag ]; then
-        sh run-training.job "$env_dir" 
+        logs_dir='/Users/eric/Documents/Work/PoliceBroadcasts/output_logs'
+        dataset_dir='/Users/eric/Documents/Work/PoliceBroadcasts'
+        sh run-training.job "local" "$env_dir" "$dataset_dir" "$logs_dir"
     else
-        sbatch run-training.job "$env_dir"
+        logs_dir='/project/graziul/ra/echandler'
+        dataset_dir='/project/graziul/transcripts'
+        sbatch run-training.job "cluster" "$env_dir" "$dataset_dir" "$logs_dir"
     fi
 else
     echo "Failed to create conda env. Exiting."

@@ -29,7 +29,10 @@
 #
 
 cd "$(dirname "$0")"
-env_dir="$1"
+local_flag="$1"
+env_dir="$2"
+dataset_dir="$3"
+logs_dir="$4"
 
 if [ ! -e "$env_dir" ];
 then
@@ -39,13 +42,9 @@ fi
 
 echo "Listing gpu nodes"
 sh show_cuda_devices.sh
-
 conda run -p "$env_dir" python tf_devices.py
+
 echo "Running model"
-# TODO: make these command line args
 dataset='radio'
-output_dir='/project/graziul/ra/echandler'
-radio_dir='/project/graziul/transcripts'
-libri_dir='/project/graziul/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100/'
-conda run -p "$env_dir" python train_deepspeech.py "$dataset" "$radio_dir" "$output_dir"
+conda run -p "$env_dir" python train_deepspeech.py "$local_flag" "$dataset" "$dataset_dir" "$logs_dir"
 
