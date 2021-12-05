@@ -120,7 +120,7 @@ if __name__ == '__main__':
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
     app_logger.info("Pipeline model configured.")
 
-    history = pipeline.fit_generator(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[model_logger])
+    history = pipeline.fit_generator(train_dataset=train_data, batch_size=64, epochs=10, callbacks=[model_logger])
     #history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[model_logger])
     app_logger.info("Model train success.")
 

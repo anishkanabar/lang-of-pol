@@ -309,12 +309,14 @@ class CTCPipeline(Pipeline):
         for audio_path in audio_paths:
             audio_arrays.append(read_audio(audio_path, sample_rate=None, mono=self.mono))
         stop = dt.datetime.now()
+        logger.info(f"Audio wave size is {sum(map(len, audio_arrays))*4/1e6}MB")
         logger.info(f"Reading audio took {stop - start}")    
 
         logger.info('Preparing features from audio')
         start = dt.datetime.now()
         the_input = self.preprocess(audio_arrays, prepared_features, augmentation)
         stop = dt.datetime.now()
+        logger.info(f"Audio features size is {sum(lambda m: sum(map(len, m), audio_arrays))*4/1e6}MB")
         logger.info(f"Preparing features took {stop - start}")    
 
         the_labels = np.array(the_labels)
