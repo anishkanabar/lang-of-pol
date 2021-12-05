@@ -105,16 +105,6 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
-        if 'offset' in train_dataset.columns:
-            offsets = train_dataset['offset'].to_list()
-        else:
-            offsets = None
-
-        if 'duration' in train_dataset.columns:
-            durations = train_dataset['duration'].to_list()
-        else:
-            durations = None
-
         train_len_ = len(transcripts)
 
         self.label_len = labels.shape[1]
@@ -132,15 +122,9 @@ class CTCPipeline(Pipeline):
 
             y_trans = [transcripts[i] for i in train_index]
 
-            offset_train = [offsets[i] for i in train_index]
-
-            duration_train = [durations[i] for i in train_index]
-
             train_inputs = self.wrap_preprocess(x_train,
                                                 y_train,
                                                 y_trans, 
-                                                offset_train, 
-                                                duration_train,
                                                 augmentation, 
                                                 prepared_features)
 
@@ -189,16 +173,6 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
-        if 'offset' in train_dataset.columns:
-            offsets = train_dataset['offset'].to_list()
-        else:
-            offsets = None
-
-        if 'duration' in train_dataset.columns:
-            durations = train_dataset['duration'].to_list()
-        else:
-            durations = None
-
         self.label_len = labels.shape[1]
 
         if not self._model.optimizer:  # a loss function and an optimizer
@@ -211,8 +185,6 @@ class CTCPipeline(Pipeline):
         train_inputs = self.wrap_preprocess(audios,
                                             list(labels),
                                             transcripts, 
-                                            offsets, 
-                                            durations,
                                             augmentation, 
                                             prepared_features)
         logger.info('Data preprocessed')
@@ -254,16 +226,6 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
-        if 'offset' in train_dataset.columns:
-            offsets = train_dataset['offset'].to_list()
-        else:
-            offsets = None
-
-        if 'duration' in train_dataset.columns:
-            durations = train_dataset['duration'].to_list()
-        else:
-            durations = None
-
         train_len_ = len(transcripts)
 
         self.label_len = labels.shape[1]
@@ -275,7 +237,6 @@ class CTCPipeline(Pipeline):
         self._model.summary()
 
         train_gen = self.get_generator(audios, labels, transcripts,
-                                       offsets, durations, 
                                        batch_size, shuffle, augmentation, prepared_features)
 
         logger.info('Begin training...')
@@ -294,8 +255,6 @@ class CTCPipeline(Pipeline):
                       audio_paths: List[str], 
                       texts: np.array, 
                       transcripts: List[str],
-                      offsets: List[float],
-                      durations: List[float],
                       batch_size: int = 32,
                       shuffle: bool = True, 
                       augmentation: Augmentation = None,
@@ -305,12 +264,12 @@ class CTCPipeline(Pipeline):
         def generator():
             num_samples = len(audio_paths)
             rnd = random.Random(123)
-            temp = list(zip(audio_paths, texts, transcripts, offsets, durations))
+            temp = list(zip(audio_paths, texts, transcripts))
             while True:
                 logger.debug('Generator outer loop')
                 if shuffle:
                     rnd.shuffle(temp)
-                audio_gen, text_gen, tran_gen, off_gen, dur_gen = list(zip(*temp))
+                audio_gen, text_gen, tran_gen = list(zip(*temp))
 
                 pool = ThreadPoolExecutor(1)  # Run a single I/O thread in parallel
 
@@ -320,8 +279,6 @@ class CTCPipeline(Pipeline):
                                      audio_gen[offset:offset+batch_size],
                                      text_gen[offset:offset+batch_size], 
                                      tran_gen[offset:offset+batch_size], 
-                                     off_gen[offset:offset+batch_size],
-                                     dur_gen[offset:offset+batch_size],
                                      augmentation, 
                                      prepared_features)
                     wait([future])
@@ -335,18 +292,11 @@ class CTCPipeline(Pipeline):
                         audio_paths: List[str], 
                         the_labels: List[np.array], 
                         transcripts: List[str],
-                        offsets: List[float] = None, 
-                        durations: List[float] = None,
                         augmentation: Augmentation = None, 
                         prepared_features: bool = False):
         """ Build training data """
         # the_input = np.array(the_input) / 100
         # the_input = x3/np.max(the_input)
-
-        if not offsets:
-            offsets = [0]*len(audio_paths)
-        if not durations:
-            durations = [0]*len(audio_paths)
 
         logger.info('Reading audio files')
         start = dt.datetime.now()
