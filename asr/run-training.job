@@ -33,7 +33,7 @@ env_dir="$2"
 dataset_dir="$3"
 logs_dir="$4"
 
-if [ -z "$local_flag" ]  || [ -z "$env_dir" ] || [ -z "$dataset_dir" ] || [-z "$logs_dir" ]; then
+if [ -z "$local_flag" ]  || [ -z "$env_dir" ] || [ -z "$dataset_dir" ] || [ -z "$logs_dir" ]; then
     echo "Usage: sbatch run-training.job "
          "<local|cluster> <path_to_env> <path_to_data> <path_to_logs>"
     exit 1

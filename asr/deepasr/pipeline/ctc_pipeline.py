@@ -276,7 +276,7 @@ class CTCPipeline(Pipeline):
 
         train_gen = self.get_generator(audios, labels, transcripts,
                                        offsets, durations, 
-                                       batch_size, augmentation, prepared_features)
+                                       batch_size, shuffle, augmentation, prepared_features)
 
         logger.info('Begin training...')
         start = dt.datetime.now()
@@ -315,7 +315,7 @@ class CTCPipeline(Pipeline):
                 pool = ThreadPoolExecutor(1)  # Run a single I/O thread in parallel
 
                 for offset in range(0, num_samples, batch_size):
-                    logger.debug('Batch feature extraction ...')
+                    logger.debug(f'Batch nbr {offset//batch_size} feature extraction ...')
                     future = pool.submit(self.wrap_preprocess,
                                      audio_gen[offset:offset+batch_size],
                                      text_gen[offset:offset+batch_size], 
@@ -354,7 +354,7 @@ class CTCPipeline(Pipeline):
         for audio_path in audio_paths:
             audio_arrays.append(read_audio(audio_path, sample_rate=None, mono=self.mono))
         stop = dt.datetime.now()
-        logger.info(f"Audio wave size is {sum(map(len, audio_arrays))*4/1e6}MB")
+        logger.info(f"Audio wave size is {sum(map(len, audio_arrays))*4/1e6:.1f}MB")
         logger.info(f"Reading audio took {stop - start}")    
 
         logger.info('Preparing features from audio')
@@ -364,7 +364,7 @@ class CTCPipeline(Pipeline):
         freq_size = lambda v: len(v)
         spec_size = lambda m: sum(map(freq_size, m))
         feature_size = sum(map(spec_size, the_input))
-        logger.info(f"Audio features size is {feature_size*4/1e6}MB")
+        logger.info(f"Audio features size is {feature_size*4/1e6:.1f}MB")
         logger.info(f"Preparing features took {stop - start}")    
 
         the_labels = np.array(the_labels)

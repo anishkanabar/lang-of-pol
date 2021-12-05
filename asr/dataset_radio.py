@@ -15,16 +15,24 @@ MP3_DIR = '/project/graziul/data/'
 #MP3_DIR = '/Users/eric/Documents/Work/PoliceBroadcasts/FakeData/'
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz
+WINDOW_LEN = .02 # Sec
 
 class RadioDataset(AudioClipDataset):
     
     @classmethod
-    def load_transcripts(cls, transcripts_dir, sample_rate=SAMPLE_RATE, drop_bad_audio=True, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
+    def load_transcripts(cls, transcripts_dir, 
+                              sample_rate=SAMPLE_RATE, 
+                              window_len=WINDOW_LEN,
+                              drop_bad_audio=True, 
+                              drop_inaudible=True, 
+                              drop_uncertain=True, 
+                              drop_numeric=True):
         """
         This function is to get audios and transcripts needed for training
         Params:
             @transcripts_dir: path to directory with transcripts csvs
             @sample_rate: Resample all audio to this rate (Hz)
+            @window_len: Effective minimum audio length (sec)
             @drop_bad_audio: Filter out missing/corrupted/too-short audio files
             @drop_inaudible: Filter out utterances that the transcriber couldnt understand
             @drop_uncertain: Filter out utterances that the transcriber was guessing
@@ -35,7 +43,7 @@ class RadioDataset(AudioClipDataset):
         logging.info(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
         if drop_bad_audio:
-            df = cls.filter_audiofiles(df, sample_rate)
+            df = cls.filter_audiofiles(df, sample_rate, window_len)
         cls.describe(df, "Loaded")
         return df
     

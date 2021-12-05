@@ -1,10 +1,5 @@
 # .bashrc
 
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
-
 # Load python distro
 module load python/anaconda-2021.05
 
@@ -22,3 +17,4 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+

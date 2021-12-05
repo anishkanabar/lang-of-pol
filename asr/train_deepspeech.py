@@ -10,6 +10,7 @@ import pathlib
 import datetime as dt
 import numpy as np
 import warnings
+import sys
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -21,6 +22,7 @@ from dataset_librispeech import LibriSpeechDataset
 from dataset_radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
+WIN_LEN = .02 # sec
 
 def configure_logging(log_dir):
     """
@@ -48,7 +50,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     # audio feature extractor, this is build on asr built-in methods
     features_extractor = asr.features.preprocess(feature_type=feature_type, features_num=161,
                                                  samplerate=SAMPLE_RATE,
-                                                 winlen=0.02,
+                                                 winlen=WIN_LEN,
                                                  winstep=0.025,
                                                  winfunc=np.hanning)
     app_logger.info('Feature extractor configured.')
@@ -113,11 +115,14 @@ if __name__ == '__main__':
     else:
         dataset_loader = RadioDataset()
 
-    dataset = dataset_loader.load_transcripts(args.dataset_dir)
+    dataset = dataset_loader.load_transcripts(args.dataset_dir, window_len=WIN_LEN)
     #train_data = dataset.sample(frac=0.8, random_state=1234)    
     train_data = dataset.sample(n=4096, random_state=1234)    
     dataset_loader.describe(train_data, "Training")
     dataset_loader.write_clips(train_data)
+    print(train_data.columns)
+    print(train_data.head())
+    sys.exit(0)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
