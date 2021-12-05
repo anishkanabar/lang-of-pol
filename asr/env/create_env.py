@@ -5,7 +5,7 @@ import shutil
 import sys
 import pathlib
 
-def main(env_dir:pathlib.Path):
+def main(env_dir:pathlib.Path, local:bool):
     if os.path.exists(env_dir):
         print("Using existing env.")
         return 0
@@ -28,22 +28,29 @@ def main(env_dir:pathlib.Path):
             return 1
     
     print("Creating conda environment.")
-    cmd = f'conda create -y -c conda-forge -p "{env_dir}"'
+    cmd = f'conda create -y -c conda-forge -p {env_dir}'
     subprocess.run(cmd.split(), check=True)
     
-    readme_path = os.path.join(env_parent, "README.txt")
-    if not os.path.exists(readme_path):
-        shutil.copy("ENV_README.txt", readme_path) 
+    readme_src = os.path.join(os.path.dirname(__file__), "ENV_README.txt")
+    readme_dest = os.path.join(env_parent, "README.txt")
+    if not os.path.exists(readme_dest):
+        shutil.copy(readme_src, readme_dest) 
     
-    reqs_path = os.path.join(env_parent, "requirements.txt")
-    if os.path.exists("requirements.txt"):
-        if not os.path.exists(reqs_path):
-            shutil.copy("requirements.txt", reqs_path)
-        cmd = f'conda install -y -c conda-forge -p "{env_dir}" --file requirements.txt'
-        subprocess.run(cmd.split())
+    reqs_src = os.path.join(os.path.dirname(__file__), "requirements.txt")
+    reqs_dest = os.path.join(env_parent, "requirements.txt")
+    if os.path.exists(reqs_src) and not local:
+        if not os.path.exists(reqs_dest):
+            shutil.copy(reqs_src, reqs_dest)
+        cmd = f'conda install -y -c conda-forge -p {env_dir} --file {reqs_dest}'
+        subprocess.run(cmd.split(), check=True)
     else:
-        cmd = 'conda install -y -p "{env_dir}" "tensorflow-gpu==2.4.1" keras-gpu pandas "numpy==1.19.2"'
-        subprocess.run(cmd.split())
-        cmd = 'conda install -y -c conda-forge -p "{env_dir}" librosa'
-        subprocess.run(cmd.split())
+        tf_pkg = "tensorflow" if local else "tensorflow-gpu==2.4.1"
+        np_pkg = "numpy" if local else "numpy==1.19.2"
+        keras_pkg = "keras" if local else "keras_gpu"
+        cmd = f'conda install -y -p {env_dir} "{tf_pkg}" {keras_pkg} pandas "{np_pkg}"'
+        subprocess.run(cmd.split(), check=True)
+        cmd = f'conda install -y -c conda-forge -p {env_dir} librosa'
+        subprocess.run(cmd.split(), check=True)
+    
+    return 0
 

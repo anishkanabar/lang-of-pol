@@ -3,7 +3,7 @@
 #
 # USAGE:
 # From the terminal, run:
-# sbatch run-training.job <path_to_conda_env>
+# sbatch run-training.job <path_to_conda_env> 
 #
 
 #
@@ -28,6 +28,7 @@
 #SBATCH --time=06:00:00
 #
 
+cd "$(dirname "$0")"
 env_dir="$1"
 
 if [ ! -e "$env_dir" ];
@@ -36,19 +37,15 @@ then
     exit 1
 fi
 
-echo "Activating conda"
-source 'env/conda_bashrc'
-conda activate "$env_dir"
-
 echo "Listing gpu nodes"
 sh show_cuda_devices.sh
 
-python tf_devices.py
+conda run -p "$env_dir" python tf_devices.py
 echo "Running model"
 # TODO: make these command line args
 dataset='radio'
 output_dir='/project/graziul/ra/echandler'
 radio_dir='/project/graziul/transcripts'
 libri_dir='/project/graziul/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100/'
-python train_deepspeech.py "$dataset" "$radio_dir" "$output_dir"
+conda run -p "$env_dir" python train_deepspeech.py "$dataset" "$radio_dir" "$output_dir"
 
