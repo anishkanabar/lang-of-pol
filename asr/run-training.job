@@ -29,13 +29,24 @@
 #
 
 local_flag="$1"
-env_dir="$2"
-dataset_dir="$3"
-logs_dir="$4"
+dataset="$2"
+env_dir="$3"
+dataset_dir="$4"
+logs_dir="$5"
 
-if [ -z "$local_flag" ]  || [ -z "$env_dir" ] || [ -z "$dataset_dir" ] || [ -z "$logs_dir" ]; then
+if [ -z "$local_flag" ]  || [ -z "$dataset" ]; then
     echo "Usage: sbatch run-training.job "
-         "<local|cluster> <path_to_env> <path_to_data> <path_to_logs>"
+         "{local|cluster} {radio|librispeech} <path_to_env} <path_to_data> <path_to_logs>"
+    exit 1
+
+elif [ "$datset" != "radio" ] && [ "$dataset" != "librispeech" ]; then
+    echo "Usage: sbatch run-training.job "
+         "{local|cluster} {radio|librispeech} <path_to_env} <path_to_data> <path_to_logs>"
+    exit 1
+
+elif [ -z "$env_dir" ] || [ -z "$dataset_dir" ] || [ -z "$logs_dir" ]; then
+    echo "Usage: sbatch run-training.job "
+         "{local|cluster} {radio|librispeech} <path_to_env> <path_to_data> <path_to_logs>"
     exit 1
 
 elif [ ! -e "$env_dir" ]; then
@@ -57,6 +68,5 @@ sh show_cuda_devices.sh
 conda run -p "$env_dir" python tf_devices.py
 
 echo "Running training script"
-dataset='radio'
 conda run -p "$env_dir" python train_deepspeech.py "$local_flag" "$dataset" "$dataset_dir" "$logs_dir"
 

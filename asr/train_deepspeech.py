@@ -116,10 +116,13 @@ if __name__ == '__main__':
         dataset_loader = RadioDataset()
 
     dataset = dataset_loader.load_transcripts(args.dataset_dir, window_len=WIN_LEN)
+    print(dataset.columns)
+    print(dataset.head())
     #train_data = dataset.sample(frac=0.8, random_state=1234)    
     train_data = dataset.sample(n=4096, random_state=1234)    
     dataset_loader.describe(train_data, "Training")
-    dataset_loader.write_clips(train_data)
+    if args.dataset == 'radio':
+        dataset_loader.write_clips(train_data)
     print(train_data.columns)
     print(train_data.head())
     sys.exit(0)

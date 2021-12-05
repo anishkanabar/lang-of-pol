@@ -6,17 +6,15 @@
 # Run this from the current repo directory:
 
 scale_flag="$1"
-env_dir="$2"
+dataset="$2"
+env_dir="$3"
 env_parent=$(dirname "$env_dir")
 
 print_usage() {
   echo "Usage: sh run-training.sh <local|cluster> <path_to_conda_env>"
 }
 
-if [ -z "$scale_flag" ]; then
-    print_usage
-    exit 1
-elif [ -z "$env_dir" ]; then
+if [ -z "$scale_flag" ] || [ -z "$env_dir" ] || [ -z "$dataset" ]; then
     print_usage
     exit 1
 fi
@@ -27,11 +25,11 @@ if [ $? -eq 0 ]; then
     if [ "$scale_flag" == "local" ]; then
         logs_dir='/Users/eric/Documents/Work/PoliceBroadcasts/output_logs'
         dataset_dir='/Users/eric/Documents/Work/PoliceBroadcasts/FakeData'
-        sh run-training.job "local" "$env_dir" "$dataset_dir" "$logs_dir"
+        sh run-training.job "local" "$dataset" "$env_dir" "$dataset_dir" "$logs_dir"
     else
         logs_dir='/project/graziul/ra/echandler'
         dataset_dir='/project/graziul/transcripts'
-        sbatch run-training.job "cluster" "$env_dir" "$dataset_dir" "$logs_dir"
+        sbatch run-training.job "cluster" "$datset" "$env_dir" "$dataset_dir" "$logs_dir"
     fi
 else
     echo "Failed to create conda env. Exiting."
