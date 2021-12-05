@@ -44,7 +44,7 @@ echo "Listing gpu nodes"
 sh show_cuda_devices.sh
 conda run -p "$env_dir" python tf_devices.py
 
-echo "Running model"
+echo "Running training script"
 dataset='radio'
 conda run -p "$env_dir" python train_deepspeech.py "$local_flag" "$dataset" "$dataset_dir" "$logs_dir"
 

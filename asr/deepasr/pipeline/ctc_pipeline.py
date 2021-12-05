@@ -138,8 +138,11 @@ class CTCPipeline(Pipeline):
 
             train_inputs = self.wrap_preprocess(x_train,
                                                 y_train,
-                                                y_trans, augmentation, prepared_features,
-                                                offset_train, duration_train)
+                                                y_trans, 
+                                                offset_train, 
+                                                duration_train,
+                                                augmentation, 
+                                                prepared_features)
 
             outputs = {'ctc': np.zeros([batch_size])}
 
@@ -207,8 +210,11 @@ class CTCPipeline(Pipeline):
         print("Feature Extraction in progress...")
         train_inputs = self.wrap_preprocess(audios,
                                             list(labels),
-                                            transcripts, augmentation, prepared_features,
-                                            offsets, durations)
+                                            transcripts, 
+                                            offsets, 
+                                            durations,
+                                            augmentation, 
+                                            prepared_features)
         logger.info('Data preprocessed')
 
         outputs = {'ctc': np.zeros([len(audios)])}
@@ -244,56 +250,95 @@ class CTCPipeline(Pipeline):
         audios = train_dataset['path'].to_list()
 
         labels = self._alphabet.get_batch_labels(train_dataset['transcripts'].to_list())
+        logger.debug('Labels created')
 
         transcripts = train_dataset['transcripts'].to_list()
+
+        if 'offset' in train_dataset.columns:
+            offsets = train_dataset['offset'].to_list()
+        else:
+            offsets = None
+
+        if 'duration' in train_dataset.columns:
+            durations = train_dataset['duration'].to_list()
+        else:
+            durations = None
 
         train_len_ = len(transcripts)
 
         self.label_len = labels.shape[1]
 
         if not self._model.optimizer:  # a loss function and an optimizer
+            logger.debug('Compiling model.')
             self._model = compile_model(self._model, self._optimizer)  # have to be set before the training
+            logger.debug('Model compiled.')
         self._model.summary()
 
         train_gen = self.get_generator(audios, labels, transcripts,
-                                       batch_size, shuffle, augmentation, prepared_features)
+                                       offsets, durations, 
+                                       batch_size, augmentation, prepared_features)
 
-        return self._model.fit(train_gen, epochs=epochs,
-                               steps_per_epoch=train_len_ // batch_size, verbose=verbose, **kwargs)
+        logger.info('Begin training...')
+        start = dt.datetime.now()
+        history = self._model.fit(train_gen, 
+                                  epochs=epochs,
+                                  steps_per_epoch=train_len_ // batch_size, 
+                                  verbose=verbose, 
+                                  **kwargs)
+        stop = dt.datetime.now()
+        logger.info(f"Training took {stop - start}")
 
-    def get_generator(self, audio_paths: List[str], texts: np.array, transcripts: List[str], batch_size: int = 32,
-                      shuffle: bool = True, augmentation: Augmentation = None,
+        return history
+
+    def get_generator(self, 
+                      audio_paths: List[str], 
+                      texts: np.array, 
+                      transcripts: List[str],
+                      offsets: List[float],
+                      durations: List[float],
+                      batch_size: int = 32,
+                      shuffle: bool = True, 
+                      augmentation: Augmentation = None,
                       prepared_features: bool = False):
         """ Data Generator """
 
         def generator():
             num_samples = len(audio_paths)
+            rnd = random.Random(123)
+            temp = list(zip(audio_paths, texts, transcripts, offsets, durations))
             while True:
-                x = list()
-                y = list()
+                logger.debug('Generator outer loop')
                 if shuffle:
-                    temp = list(zip(audio_paths, texts))
-                    random.Random(123).shuffle(temp)
-                    x, y = list(zip(*temp))
+                    rnd.shuffle(temp)
+                audio_gen, text_gen, tran_gen, off_gen, dur_gen = list(zip(*temp))
 
                 pool = ThreadPoolExecutor(1)  # Run a single I/O thread in parallel
-                future = pool.submit(self.wrap_preprocess,
-                                     x[:batch_size],
-                                     y[:batch_size], transcripts[:batch_size], augmentation, prepared_features)
-                for offset in range(batch_size, num_samples, batch_size):
-                    wait([future])
-                    batch = future.result()
+
+                for offset in range(0, num_samples, batch_size):
+                    logger.debug('Batch feature extraction ...')
                     future = pool.submit(self.wrap_preprocess,
-                                         x[offset: offset + batch_size],
-                                         y[offset: offset + batch_size], transcripts[offset:offset + batch_size],
-                                         augmentation, prepared_features)
+                                     audio_gen[offset:offset+batch_size],
+                                     text_gen[offset:offset+batch_size], 
+                                     tran_gen[offset:offset+batch_size], 
+                                     off_gen[offset:offset+batch_size],
+                                     dur_gen[offset:offset+batch_size],
+                                     augmentation, 
+                                     prepared_features)
+                    wait([future])
+                    logger.debug('Batch features extracted.')
+                    batch = future.result()
                     yield batch, {'ctc': np.zeros([batch_size])}
 
         return generator()
 
-    def wrap_preprocess(self, audio_paths: List[str], the_labels: List[np.array], transcripts: List[str],
-                        augmentation: Augmentation = None, prepared_features: bool = False,
-                        offsets: List[float] = None, durations: List[float] = None):
+    def wrap_preprocess(self, 
+                        audio_paths: List[str], 
+                        the_labels: List[np.array], 
+                        transcripts: List[str],
+                        offsets: List[float] = None, 
+                        durations: List[float] = None,
+                        augmentation: Augmentation = None, 
+                        prepared_features: bool = False):
         """ Build training data """
         # the_input = np.array(the_input) / 100
         # the_input = x3/np.max(the_input)
@@ -316,7 +361,10 @@ class CTCPipeline(Pipeline):
         start = dt.datetime.now()
         the_input = self.preprocess(audio_arrays, prepared_features, augmentation)
         stop = dt.datetime.now()
-        logger.info(f"Audio features size is {sum(lambda m: sum(map(len, m), audio_arrays))*4/1e6}MB")
+        freq_size = lambda v: len(v)
+        spec_size = lambda m: sum(map(freq_size, m))
+        feature_size = sum(map(spec_size, the_input))
+        logger.info(f"Audio features size is {feature_size*4/1e6}MB")
         logger.info(f"Preparing features took {stop - start}")    
 
         the_labels = np.array(the_labels)
