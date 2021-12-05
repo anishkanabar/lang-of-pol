@@ -5,44 +5,28 @@
 # sh run-training.sh <path_to_conda_env>
 # Run this from the current repo directory:
 
-env_dir="$1"
+scale_flag="$1"
+env_dir="$2"
 env_parent=$(dirname "$env_dir")
-local_flag=false
 
 print_usage() {
-  echo "Usage: sh run-training.sh [-l] <path_to_conda_env>"
+  echo "Usage: sh run-training.sh <local|cluster> <path_to_conda_env>"
 }
 
-while getopts 'l' flag; do
-  case "${flag}" in
-    l) local_flag=true;;
-    *) print_usage
-       exit 1 ;;
-  esac
-done
-
-if [ -z "$env_parent" ]; then
-    echo "Missing argument."
+if [ -z "$scale_flag" ]; then
     print_usage
     exit 1
-elif [ ! -e "$env_parent" ]; then
-    echo "Environment directory not found. Create?"
-    echo "\t$env_dir"
-    echo "Type 1 for Yes. 2 for No"
-    select yn in "Yes" "No"; do
-        case $yn in
-            Yes) mkdir -p "$env_parent"; break;;
-            No) exit 0;;
-        esac
-    done
+elif [ -z "$env_dir" ]; then
+    print_usage
+    exit 1
 fi
 
-sh env/create_env.sh "$env_dir"
+sh env/create_env.sh "$env_dir" "$scale_flag"
 
 if [ $? -eq 0 ]; then
-    if [ $local_flag ]; then
+    if [ "$scale_flag" == "local" ]; then
         logs_dir='/Users/eric/Documents/Work/PoliceBroadcasts/output_logs'
-        dataset_dir='/Users/eric/Documents/Work/PoliceBroadcasts'
+        dataset_dir='/Users/eric/Documents/Work/PoliceBroadcasts/FakeData'
         sh run-training.job "local" "$env_dir" "$dataset_dir" "$logs_dir"
     else
         logs_dir='/project/graziul/ra/echandler'

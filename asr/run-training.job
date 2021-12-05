@@ -28,14 +28,17 @@
 #SBATCH --time=06:00:00
 #
 
-cd "$(dirname "$0")"
 local_flag="$1"
 env_dir="$2"
 dataset_dir="$3"
 logs_dir="$4"
 
-if [ ! -e "$env_dir" ];
-then
+if [ -z "$local_flag" ]  || [ -z "$env_dir" ] || [ -z "$dataset_dir" ] || [-z "$logs_dir" ]; then
+    echo "Usage: sbatch run-training.job "
+         "<local|cluster> <path_to_env> <path_to_data> <path_to_logs>"
+    exit 1
+
+elif [ ! -e "$env_dir" ]; then
     echo "Conda environment not found. See 'create_env.sh'. Exiting."
     exit 1
 fi
@@ -44,6 +47,9 @@ if [ "$local_flag" == "cluster" ]; then
     echo "Activating conda"
     source 'env/conda_bashrc'
     conda activate "$env_dir"
+else
+    # XXX: might only be necessary if calling from python subprocess, not from shell script?
+    cd "$(dirname "$0")"
 fi
 
 echo "Listing gpu nodes"

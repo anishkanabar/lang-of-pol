@@ -2,6 +2,7 @@ import os
 import argparse
 import pathlib
 import sys
+import subprocess
 from env.create_env import main as create_env
 
 parser = argparse.ArgumentParser(description='Train asr model.')
