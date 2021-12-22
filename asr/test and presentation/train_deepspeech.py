@@ -14,7 +14,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 from keras.callbacks import CSVLogger
 import tensorflow as tf
-
 import deepasr as asr
 from dataset_librispeech import LibriSpeechDataset
 from dataset_radio import RadioDataset
@@ -61,12 +60,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     )
     
     # model optimizer
-    optimizer = tf.keras.optimizers.Adam(
-        learning_rate=1e-2,
-        beta_1=0.9,
-        beta_2=0.999,
-        epsilon=1e-4
-    )
+    optimizer = 'RMSprop'
     
     # output label deocder
     decoder = asr.decoder.GreedyDecoder()
@@ -116,6 +110,6 @@ if __name__ == "__main__":
     history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[csv_logger])
     _flag(flag_file, "Model train success.")
 
-    pipeline.save(os.path.j in(output_dir, 'checkpoints'))
+    pipeline.save(os.path.join(output_dir, 'checkpoints'))
     _flag(flag_file, "Model save success.")
 

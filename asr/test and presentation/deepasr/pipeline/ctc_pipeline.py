@@ -337,7 +337,7 @@ class CTCPipeline(Pipeline):
         # Due to error: AttributeError: Can't pickle local object 'make_gradient_clipnorm_fn.<locals>.<lambda>'
         # Relevant threads: https://github.com/NREL/phygnn/issues/16
         #   https://github.com/tensorflow/tensorflow/issues/34697
-        #save_data(self._optimizer, os.path.join(directory, 'optimizer.bin'))
+        save_data(self._optimizer, os.path.join(directory, 'optimizer.bin'))
         save_data(self._alphabet, os.path.join(directory, 'alphabet.bin'))
         save_data(self._decoder, os.path.join(directory, 'decoder.bin'))
         save_data(self.multi_gpu, os.path.join(directory, 'multi_gpu_flag.bin'))
@@ -346,16 +346,6 @@ class CTCPipeline(Pipeline):
         save_data(self.label_len, os.path.join(directory, 'label_len.bin'))
         save_data(self._features_extractor,
                   os.path.join(directory, 'feature_extractor.bin'))
-
-    # def load(self, directory: str):
-    #     """ Load each component of the CTC pipeline. """
-    #     # model = keras.models.load_model(os.path.join(directory, 'model.h5'),
-    #     #                                 custom_objects={'clipped_relu': cls.clipped_relu})
-    #     self._model.load_weights(os.path.join(directory, 'model_weights.h5'))
-    #     self._alphabet = load_data(os.path.join(directory, 'alphabet.bin'))
-    #     self._decoder = load_data(os.path.join(directory, 'decoder.bin'))
-    #     self._features_extractor = load_data(
-    #         os.path.join(directory, 'feature_extractor.bin'))
 
     @staticmethod
     def distribute_model(model: keras.Model) -> keras.Model:
