@@ -31,11 +31,9 @@ class Dataset(abc.ABC):
     
     @classmethod
     @abc.abstractmethod
-    def load_transcripts(cls, transcripts_dir):
+    def load_transcripts(cls):
         """
         This function is to get audios and transcripts needed for training
-        Params:
-            @transcripts_dir: path to directory with transcripts csvs
         """
         pass
     

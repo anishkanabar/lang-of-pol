@@ -10,26 +10,27 @@ import datetime
 import pandas as pd
 import logging
 from dataset import AudioClipDataset
+from dataset_locations import DATASET_DIRS
 
 MP3_DIR = '/project/graziul/data/'
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz
+DATASET_DIR = DATASET_DIRS['radio']
 
 class RadioDataset(AudioClipDataset):
     
     @classmethod
-    def load_transcripts(cls, transcripts_dir, sample_rate=SAMPLE_RATE, drop_bad_audio=True, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
+    def load_transcripts(cls, sample_rate=SAMPLE_RATE, drop_bad_audio=True, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
         """
         This function is to get audios and transcripts needed for training
         Params:
-            @transcripts_dir: path to directory with transcripts csvs
             @sample_rate: Resample all audio to this rate (Hz)
             @drop_bad_audio: Filter out missing/corrupted/too-short audio files
             @drop_inaudible: Filter out utterances that the transcriber couldnt understand
             @drop_uncertain: Filter out utterances that the transcriber was guessing
             @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
-        df = _match_police_audio_transcripts(transcripts_dir)
+        df = _match_police_audio_transcripts(DATASET_DIR)
         df = _add_clip_paths(df)
         logging.info(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)

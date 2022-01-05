@@ -6,20 +6,22 @@ Brief: Loaders for librispeech transcripts and audio.
 import os
 import pandas as pd
 from dataset import Dataset
+from dataset_locations import DATASET_DIRS
+
+DATASET_DIR = DATASET_DIRS['librispeech']
 
 class LibriSpeechDataset(Dataset):
 
     @classmethod
-    def load_transcripts(cls, filepath, audio_type='.flac'):
+    def load_transcripts(cls, audio_type='.flac'):
         """
         This function is to get audios and transcripts needed for training
-        @filepath: the path of the dicteory
         """
         count, k, inp = 0, 0, []
         audio_name, audio_trans = [], []
-        for dir1 in os.listdir(filepath):
+        for dir1 in os.listdir(DATASET_DIR):
             if dir1 == '.DS_Store': continue
-            dir2_path = filepath + dir1 + '/'
+            dir2_path = DATASET_DIR + dir1 + '/'
             for dir2 in os.listdir(dir2_path):
                 if dir2 == '.DS_Store': continue
                 dir3_path = dir2_path + dir2 + '/'

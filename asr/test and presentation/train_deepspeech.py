@@ -84,7 +84,6 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('dataset', choices=['librispeech', 'radio'])
-    parser.add_argument('dataset_dir', type=pathlib.Path)
     parser.add_argument('output_dir', type=pathlib.Path)
     return parser.parse_args()
 
@@ -104,9 +103,9 @@ if __name__ == "__main__":
     else:
         dataset_loader = RadioDataset()
 
-    dataset = dataset_loader.load_transcripts(args.dataset_dir)
+    dataset = dataset_loader.load_transcripts()
     train_data = dataset.sample(frac=0.8, random_state=1234)    
-    train_data = train_data.head()
+    train_data = train_data.head(1000)
     dataset_loader.describe(train_data, "Training")
     app_logger.info("Dataset load success.")
 
