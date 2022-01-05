@@ -45,18 +45,10 @@ sh show_cuda_devices.sh
 
 python tf_devices.py
 echo "Running model"
-start_sec=$(date +%s)
-start_time=$(date +%T)
-echo "Start time : $start_time"
 # TODO: make these command line args
 dataset='radio'
 output_dir='/project/graziul/ra/echandler'
 radio_dir='/project/graziul/transcripts'
 libri_dir='/project/graziul/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100/'
 python train_deepspeech.py "$dataset" "$radio_dir" "$output_dir"
-end_time=$(date +%T)
-end_sec=$(date +%s)
-echo "End time : $end_time"
-elapsed=$(($end_sec - $start_sec))
-echo "Elapsed : $elapsed seconds = $(($elapsed/60)) minutes = $(($elapsed/3600)) hours"
 
