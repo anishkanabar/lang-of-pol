@@ -51,7 +51,7 @@ def read_audio(file_path: str, sample_rate: int, mono: bool,
     if duration == 0:
         duration = librosa.core.get_duration(filename=file_path)
     audio = librosa.core.load(file_path, sr=sample_rate, mono=mono,
-            offset=offset, duration=duration, res_type='polyphase')[0]
+            offset=offset, duration=duration)[0]
     return audio
 
 
