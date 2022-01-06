@@ -107,6 +107,8 @@ if __name__ == "__main__":
     train_data = dataset.sample(frac=0.8, random_state=1234)    
     train_data = train_data.head(1000)
     dataset_loader.describe(train_data, "Training")
+    if args.dataset == 'radio':
+        dataset_loader.write_clips(train_data)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
