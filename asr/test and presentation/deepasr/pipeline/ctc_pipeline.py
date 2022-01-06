@@ -245,6 +245,7 @@ class CTCPipeline(Pipeline):
         self._model.summary()
 
         train_gen = self.get_generator(audios, labels, transcripts,
+                                       offsets, durations,
                                        batch_size, shuffle, augmentation, prepared_features)
 
         return self._model.fit(train_gen, epochs=epochs,
@@ -272,6 +273,7 @@ class CTCPipeline(Pipeline):
                 for offset in range(batch_size, num_samples, batch_size):
                     wait([future])
                     batch = future.result()
+                    logger.debug(f'Feature extraction batch nbr {offset//batch_size}.') 
                     future = pool.submit(self.wrap_preprocess,
                                          x[offset: offset + batch_size],
                                          y[offset: offset + batch_size], transcripts[offset:offset + batch_size],
@@ -297,7 +299,12 @@ class CTCPipeline(Pipeline):
             mid_features.append(read_audio(audio, sample_rate=self.sample_rate, 
                                          mono=self.mono, offset=offset, duration=duration))
             
+        logger.info(f'Audio size is {sum(map(len, mid_features))*4/1e6:.1f}MB')
         the_input = self.preprocess(mid_features, prepared_features, augmentation)
+        freq_size = lambda v: len(v)
+        spec_size = lambda m: sum(map(freq_size, m))
+        feature_size = sum(map(spec_size, the_input))
+        logger.info(f'Spectrogram size is {feature_size*4/1e6:.1f}MB')
 
         the_labels = np.array(the_labels)
 

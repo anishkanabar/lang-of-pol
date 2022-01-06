@@ -20,6 +20,7 @@ from dataset_librispeech import LibriSpeechDataset
 from dataset_radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
+WINDOW_LEN = .02 # Sec
 
 app_logger = logging.getLogger('main.train')
 
@@ -47,7 +48,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     features_extractor = asr.features.preprocess(feature_type=feature_type, 
                                                  features_num=161,
                                                  samplerate=SAMPLE_RATE,
-                                                 winlen=0.02,
+                                                 winlen=WINDOW_LEN,
                                                  winstep=0.025,
                                                  winfunc=np.hanning)
 
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     else:
         dataset_loader = RadioDataset()
 
-    dataset = dataset_loader.load_transcripts()
+    dataset = dataset_loader.load_transcripts(window_len=WINDOW_LEN)
     train_data = dataset.sample(frac=0.8, random_state=1234)    
     train_data = train_data.head(1000)
     dataset_loader.describe(train_data, "Training")

@@ -9,11 +9,12 @@ from dataset import Dataset
 from dataset_locations import DATASET_DIRS
 
 DATASET_DIR = DATASET_DIRS['librispeech']
+WINDOW_LEN = .02 # Sec
 
 class LibriSpeechDataset(Dataset):
 
     @classmethod
-    def load_transcripts(cls, audio_type='.flac'):
+    def load_transcripts(cls, audio_type='.flac', window_len=WINDOW_LEN):
         """
         This function is to get audios and transcripts needed for training
         """

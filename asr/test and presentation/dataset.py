@@ -14,6 +14,7 @@ import librosa
 import soundfile
 
 SAMPLE_RATE = 16000  # Hz
+WINDOW_LEN = .02 # sec
 
 logger = logging.getLogger('dataset')
 
@@ -89,7 +90,7 @@ class AudioClipDataset(Dataset):
         logger.info(f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}") 
 
     @classmethod
-    def filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE):
+    def filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE, window_len=WINDOW_LEN):
         """
         Filters out non-existent and corrupted mp3's
         Params:
@@ -113,9 +114,7 @@ class AudioClipDataset(Dataset):
         #df = df.loc[mp3_notcorrupt]
     
         unique_paths = pd.Series(df['path'].unique())
-        sample_rates = unique_paths.transform(lambda p: librosa.core.get_samplerate(p))
-        sr_map = dict(zip(unique_paths, sample_rates))
-        empty_check = lambda x: x.duration * float(new_sample_rate) / sr_map[x.path] >= 1
+        empty_check = lambda x: x.duration >= window_len and x.duration * new_sample_rate >= 1
         mp3_notempty = df.apply(lambda x: empty_check(x), axis=1)
         n_empty = mp3_notempty.count() - mp3_notempty.sum()
         print(f'Discarding {n_empty} too-short mp3s')
