@@ -99,7 +99,7 @@ if __name__ == "__main__":
     if args.dataset == 'librispeech':
         dataset_loader = LibriSpeechDataset(1000, window_len=WINDOW_LEN)
     else:
-        dataset_loader = RadioDataset(4096, window_len=WINDOW_LEN)
+        dataset_loader = RadioDataset(16384, window_len=WINDOW_LEN)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     history = pipeline.fit(train_dataset=dataset_loader.data,
                            batch_size=64, 
-                           epochs=10, 
+                           epochs=500, 
                            callbacks=[model_logger])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()

@@ -57,6 +57,10 @@ class AudioClipDataset(Dataset):
                  window_len=WINDOW_LEN):
         super().__init__(name, nrow)
         self.write_clips(self.data)
+        # must re-filter in case new mp3 clips are bad
+        self.data = self._filter_corrupt_audio(self.data)
+        self.describe(self.data, name)
+        
 
     @classmethod
     def audio_slicer(cls, offset: float, duration: float, sample_rate: int) -> slice:
@@ -121,22 +125,25 @@ class AudioClipDataset(Dataset):
         n_missing = mp3_exists.count() - mp3_exists.sum()
         df = df.loc[mp3_exists]
         logger.info(f'Discarding {n_missing} missing mp3s.')
+        
+        df = cls._filter_corrupt_audio(df)
 
-        ## Commented because none of the files are corrupt and the check takes ~5 minutes.
-        #unique_paths = pd.Series(df['path'].unique())
-        #path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
-        #corrupt_map = dict(zip(unique_paths, path_notcorrupt))
-        #mp3_notcorrupt = df['path'].transform(lambda p: corrupt_map[p])
-        #n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
-        #print(f'Discarding {n_corrupted} corrupted mp3s')
-        #df = df.loc[mp3_notcorrupt]
-    
         not_empty_check = lambda x: x.duration >= window_len or x.duration * new_sample_rate >= 1
         mp3_notempty = df.apply(lambda x: not_empty_check(x), axis=1)
         num_empty = mp3_notempty.count() - mp3_notempty.sum()
         logger.info(f'Discarding {num_empty} too_short mp3s.')
         df = df.loc[mp3_notempty]
-    
+        return df
+
+    @classmethod
+    def _filter_corrupt_audio(cls, df):
+        unique_paths = pd.Series(df['path'].unique())
+        path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
+        corrupt_map = dict(zip(unique_paths, path_notcorrupt))
+        mp3_notcorrupt = df['path'].transform(lambda p: corrupt_map[p])
+        n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
+        logger.info(f'Discarding {n_corrupted} corrupted mp3s')
+        df = df.loc[mp3_notcorrupt]
         return df
     
     @classmethod
