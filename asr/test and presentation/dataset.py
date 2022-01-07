@@ -120,8 +120,8 @@ class AudioClipDataset(Dataset):
         mp3_exists = df['path'].transform(lambda p: exists_map[p])
         n_missing = mp3_exists.count() - mp3_exists.sum()
         df = df.loc[mp3_exists]
-        print(f'Discarding {n_missing} missing mp3s')
-    
+        logger.info(f'Discarding {n_missing} missing mp3s.')
+
         ## Commented because none of the files are corrupt and the check takes ~5 minutes.
         #unique_paths = pd.Series(df['path'].unique())
         #path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
@@ -131,10 +131,10 @@ class AudioClipDataset(Dataset):
         #print(f'Discarding {n_corrupted} corrupted mp3s')
         #df = df.loc[mp3_notcorrupt]
     
-        empty_check = lambda x: x.duration < window_len or x.duration * new_sample_rate < 1
-        mp3_notempty = df.apply(lambda x: empty_check(x), axis=1)
-        n_empty = mp3_notempty.count() - mp3_notempty.sum()
-        print(f'Discarding {n_empty} too-short mp3s')
+        not_empty_check = lambda x: x.duration >= window_len or x.duration * new_sample_rate >= 1
+        mp3_notempty = df.apply(lambda x: not_empty_check(x), axis=1)
+        num_empty = mp3_notempty.count() - mp3_notempty.sum()
+        logger.info(f'Discarding {num_empty} too_short mp3s.')
         df = df.loc[mp3_notempty]
     
         return df

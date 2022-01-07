@@ -275,8 +275,9 @@ class CTCPipeline(Pipeline):
         for audio in audios:
             audio_arrays.append(read_audio(audio, sample_rate=self.sample_rate, mono=self.mono))
             
-        logger.info(f'Audio size is {sum(map(len, mid_features))*4/1e6:.1f}MB')
-        the_input = self.preprocess(mid_features, prepared_features, augmentation)
+        logger.info(f'Audio size is {sum(map(len, audio_arrays))*4/1e6:.1f}MB')
+        logger.info(f'Min audio size is {min(map(len, audio_arrays))} samples')
+        the_input = self.preprocess(audio_arrays, prepared_features, augmentation)
         freq_size = lambda v: len(v)
         spec_size = lambda m: sum(map(freq_size, m))
         feature_size = sum(map(spec_size, the_input))
