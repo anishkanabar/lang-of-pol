@@ -174,7 +174,7 @@ class CTCPipeline(Pipeline):
             self._model = compile_model(self._model, self._optimizer)  # have to be set before the training
         self._model.summary()
 
-        print("Feature Extraction in progress...")
+        logger.info("Feature Extraction in progress...")
         train_inputs = self.wrap_preprocess(audios,
                                             list(labels),
                                             transcripts, 
@@ -183,12 +183,12 @@ class CTCPipeline(Pipeline):
 
         outputs = {'ctc': np.zeros([len(audios)])}
 
-        print("Feature Extraction completed.")
+        logger.info("Feature Extraction completed.")
 
-        print("input features: ", train_inputs['the_input'].shape)
-        print("input labels: ", train_inputs['the_labels'].shape)
+        logger.info(f"input features: {train_inputs['the_input'].shape}")
+        logger.info(f"input labels: {train_inputs['the_labels'].shape}")
 
-        print("Model training initiated...")
+        logger.info("Model training initiated...")
 
         history = self._model.fit(train_inputs, outputs,
                                   batch_size=batch_size,
@@ -338,7 +338,6 @@ class CTCPipeline(Pipeline):
             strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
             with strategy.scope():
                 dist_model = model
-            print("Training using multiple GPUs")
             logger.info("Training using multiple GPUs")
         except ValueError:
             dist_model = model

@@ -99,7 +99,7 @@ if __name__ == "__main__":
     if args.dataset == 'librispeech':
         dataset_loader = LibriSpeechDataset(1000, window_len=WINDOW_LEN)
     else:
-        dataset_loader = RadioDataset(2048, window_len=WINDOW_LEN)
+        dataset_loader = RadioDataset(4096, window_len=WINDOW_LEN)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
