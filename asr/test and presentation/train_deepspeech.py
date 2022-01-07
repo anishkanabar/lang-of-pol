@@ -21,6 +21,7 @@ from dataset_radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
 WINDOW_LEN = .02 # Sec
+NUM_TRAIN = 16384
 
 app_logger = logging.getLogger('main.train')
 
@@ -97,9 +98,9 @@ if __name__ == "__main__":
 
     tick = dt.datetime.now()
     if args.dataset == 'librispeech':
-        dataset_loader = LibriSpeechDataset(1000, window_len=WINDOW_LEN)
+        dataset_loader = LibriSpeechDataset(NUM_TRAIN, window_len=WINDOW_LEN)
     else:
-        dataset_loader = RadioDataset(16384, window_len=WINDOW_LEN)
+        dataset_loader = RadioDataset(NUM_TRAIN, window_len=WINDOW_LEN)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
@@ -107,7 +108,7 @@ if __name__ == "__main__":
 
     history = pipeline.fit(train_dataset=dataset_loader.data,
                            batch_size=64, 
-                           epochs=500, 
+                           epochs=250, 
                            callbacks=[model_logger])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()
