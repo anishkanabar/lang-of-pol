@@ -19,12 +19,15 @@ WINDOW_LEN = .02 # Sec
 DATASET_DIR = DATASET_DIRS['radio']
 
 class RadioDataset(AudioClipDataset):
+
+    def __init__(self, nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+        super().__init__('radio', nrow, frac, window_len)
     
     @classmethod
     def load_transcripts(cls, 
                         sample_rate=SAMPLE_RATE, 
                         window_len=WINDOW_LEN,
-                        drop_bad_audio=True, 
+                        drop_bad_audio=True,
                         drop_inaudible=True, 
                         drop_uncertain=True, 
                         drop_numeric=True):
@@ -33,18 +36,19 @@ class RadioDataset(AudioClipDataset):
         Params:
             @sample_rate: Resample all audio to this rate (Hz)
             @window_len: Minimum meaningful audio length (sec)
-            @drop_bad_audio: Filter out missing/corrupted/too-short audio files
+            @drop_bad_audio: Filter out missing or corrupted or too short audio
             @drop_inaudible: Filter out utterances that the transcriber couldnt understand
             @drop_uncertain: Filter out utterances that the transcriber was guessing
             @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
         df = _match_police_audio_transcripts(DATASET_DIR)
         df = _add_clip_paths(df)
-        logging.info(f"Original dataset has {df.shape[0]} rows.")
+        logging.debug(f"Original dataset has {df.shape[0]} rows.")
         df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
+        logging.debug(f"Dataset after transcript filtering has {df.shape[0]} rows.")
         if drop_bad_audio:
             df = cls.filter_audiofiles(df, sample_rate, window_len)
-        cls.describe(df, "Loaded")
+            logging.debug(f"Dataset after audio filtering has {df.shape[0]} rows.")
         return df
     
     

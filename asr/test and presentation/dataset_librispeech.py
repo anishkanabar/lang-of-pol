@@ -12,6 +12,9 @@ DATASET_DIR = DATASET_DIRS['librispeech']
 WINDOW_LEN = .02 # Sec
 
 class LibriSpeechDataset(Dataset):
+    
+    def __init__(self, nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+        super().__init__('librispeech', nrow, frac, window_len)
 
     @classmethod
     def load_transcripts(cls, audio_type='.flac', window_len=WINDOW_LEN):

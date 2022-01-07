@@ -19,6 +19,16 @@ WINDOW_LEN = .02 # sec
 logger = logging.getLogger('dataset')
 
 class Dataset(abc.ABC):
+
+    def __init__(self, name: str, nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+        data = self.load_transcripts(window_len)
+        if nrow is not None:
+            self.data = data.head(nrow)
+        elif frac is not None:
+            self.data = data.sample(frac=frac, random_state=1234)
+        else:
+            self.data = data
+        self.describe(self.data, name)
         
     @classmethod
     def describe(cls, data: pd.DataFrame, name: str):
@@ -32,13 +42,21 @@ class Dataset(abc.ABC):
     
     @classmethod
     @abc.abstractmethod
-    def load_transcripts(cls):
+    def load_transcripts(cls, window_len):
         """
         This function is to get audios and transcripts needed for training
         """
         pass
     
 class AudioClipDataset(Dataset):
+
+    def __init__(self, 
+                 name: str, 
+                 nrow: int=None, 
+                 new_sample_rate=SAMPLE_RATE,
+                 window_len=WINDOW_LEN):
+        super().__init__(name, nrow)
+        self.write_clips(self.data)
 
     @classmethod
     def audio_slicer(cls, offset: float, duration: float, sample_rate: int) -> slice:
@@ -113,8 +131,7 @@ class AudioClipDataset(Dataset):
         #print(f'Discarding {n_corrupted} corrupted mp3s')
         #df = df.loc[mp3_notcorrupt]
     
-        unique_paths = pd.Series(df['path'].unique())
-        empty_check = lambda x: x.duration >= window_len and x.duration * new_sample_rate >= 1
+        empty_check = lambda x: x.duration < window_len or x.duration * new_sample_rate < 1
         mp3_notempty = df.apply(lambda x: empty_check(x), axis=1)
         n_empty = mp3_notempty.count() - mp3_notempty.sum()
         print(f'Discarding {n_empty} too-short mp3s')

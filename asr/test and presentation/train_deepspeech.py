@@ -91,35 +91,27 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    if 'SLURM_JOB_ID' not in os.environ:
-        raise RuntimeError("No job id found. Are you running in a SLURM context?")
-    output_dir = os.path.join(args.output_dir, 'job_' + os.environ['SLURM_JOB_ID'])
-    flag_file = os.path.join(output_dir, 'flag.txt')
+    output_dir = os.path.join(args.output_dir, 'job_' + os.environ.get('SLURM_JOB_ID','0'))
     os.makedirs(output_dir, exist_ok=True)
     model_logger = configure_logging(output_dir)
 
     tick = dt.datetime.now()
     if args.dataset == 'librispeech':
-        dataset_loader = LibriSpeechDataset()
+        dataset_loader = LibriSpeechDataset(1000, window_len=WINDOW_LEN)
     else:
-        dataset_loader = RadioDataset()
-
-    dataset = dataset_loader.load_transcripts(window_len=WINDOW_LEN)
-    train_data = dataset.sample(frac=0.8, random_state=1234)    
-    train_data = train_data.head(1000)
-    dataset_loader.describe(train_data, "Training")
-    if args.dataset == 'radio':
-        dataset_loader.write_clips(train_data)
+        dataset_loader = RadioDataset(1000, window_len=WINDOW_LEN)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
     app_logger.info("Pipeline model configured.")
 
-    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[model_logger])
-    app_logger.info("Model train success.")
-
-    pipeline.save(os.path.join(output_dir, 'checkpoints'))
-    app_logger.info("Model save success.")
+    history = pipeline.fit(train_dataset=dataset_loader.data,
+                           batch_size=64, 
+                           epochs=500, 
+                           callbacks=[model_logger])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()
     app_logger.info(f"Elapsed: {tock - tick}")
+
+    pipeline.save(os.path.join(output_dir, 'checkpoints'))
+    app_logger.info("Model save success.")
