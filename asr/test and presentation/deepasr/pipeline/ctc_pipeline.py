@@ -101,16 +101,6 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
-        if 'offset' in train_dataset.columns:
-            offsets = train_dataset['offset'].to_list()
-        else:
-            offsets = None
-
-        if 'duration' in train_dataset.columns:
-            durations = train_dataset['duration'].to_list()
-        else:
-            durations = None
-
         train_len_ = len(transcripts)
 
         self.label_len = labels.shape[1]
@@ -128,14 +118,11 @@ class CTCPipeline(Pipeline):
 
             y_trans = [transcripts[i] for i in train_index]
 
-            offset_train = [offsets[i] for i in train_index]
-
-            duration_train = [durations[i] for i in train_index]
-
             train_inputs = self.wrap_preprocess(x_train,
                                                 y_train,
-                                                y_trans, augmentation, prepared_features,
-                                                offset_train, duration_train)
+                                                y_trans, 
+                                                augmentation, 
+                                                prepared_features)
 
             outputs = {'ctc': np.zeros([batch_size])}
 
@@ -181,16 +168,6 @@ class CTCPipeline(Pipeline):
 
         transcripts = train_dataset['transcripts'].to_list()
 
-        if 'offset' in train_dataset.columns:
-            offsets = train_dataset['offset'].to_list()
-        else:
-            offsets = None
-
-        if 'duration' in train_dataset.columns:
-            durations = train_dataset['duration'].to_list()
-        else:
-            durations = None
-
         self.label_len = labels.shape[1]
 
         if not self._model.optimizer:  # a loss function and an optimizer
@@ -200,8 +177,9 @@ class CTCPipeline(Pipeline):
         print("Feature Extraction in progress...")
         train_inputs = self.wrap_preprocess(audios,
                                             list(labels),
-                                            transcripts, augmentation, prepared_features,
-                                            offsets, durations)
+                                            transcripts, 
+                                            augmentation, 
+                                            prepared_features)
 
         outputs = {'ctc': np.zeros([len(audios)])}
 
@@ -245,59 +223,57 @@ class CTCPipeline(Pipeline):
         self._model.summary()
 
         train_gen = self.get_generator(audios, labels, transcripts,
-                                       offsets, durations,
                                        batch_size, shuffle, augmentation, prepared_features)
 
         return self._model.fit(train_gen, epochs=epochs,
                                steps_per_epoch=train_len_ // batch_size, verbose=verbose, **kwargs)
 
-    def get_generator(self, audio_paths: List[str], texts: np.array, transcripts: List[str], batch_size: int = 32,
-                      shuffle: bool = True, augmentation: Augmentation = None,
+    def get_generator(self, 
+                      audio_paths: List[str], 
+                      texts: np.array, 
+                      transcripts: List[str], 
+                      batch_size: int = 32,
+                      shuffle: bool = True, 
+                      augmentation: Augmentation = None,
                       prepared_features: bool = False):
         """ Data Generator """
 
         def generator():
             num_samples = len(audio_paths)
             while True:
-                x = list()
-                y = list()
+                temp = list(zip(audio_paths, texts, transcripts))
                 if shuffle:
-                    temp = list(zip(audio_paths, texts))
                     random.Random(123).shuffle(temp)
-                    x, y = list(zip(*temp))
+                x, y, z = list(zip(*temp))
 
                 pool = ThreadPoolExecutor(1)  # Run a single I/O thread in parallel
-                future = pool.submit(self.wrap_preprocess,
-                                     x[:batch_size],
-                                     y[:batch_size], transcripts[:batch_size], augmentation, prepared_features)
-                for offset in range(batch_size, num_samples, batch_size):
-                    wait([future])
-                    batch = future.result()
+                for offset in range(0, num_samples, batch_size):
                     logger.debug(f'Feature extraction batch nbr {offset//batch_size}.') 
                     future = pool.submit(self.wrap_preprocess,
                                          x[offset: offset + batch_size],
-                                         y[offset: offset + batch_size], transcripts[offset:offset + batch_size],
-                                         augmentation, prepared_features)
+                                         y[offset: offset + batch_size], 
+                                         z[offset:offset + batch_size],
+                                         augmentation, 
+                                         prepared_features)
+                    wait([future])
+                    batch = future.result()
                     yield batch, {'ctc': np.zeros([batch_size])}
 
         return generator()
 
-    def wrap_preprocess(self, audios: List[str], the_labels: List[np.array], transcripts: List[str],
-                        augmentation: Augmentation = None, prepared_features: bool = False,
-                        offsets: List[float] = None, durations: List[float] = None):
+    def wrap_preprocess(self, 
+                        audios: List[str], 
+                        the_labels: List[np.array], 
+                        transcripts: List[str],
+                        augmentation: Augmentation = None, 
+                        prepared_features: bool = False):
         """ Build training data """
         # the_input = np.array(the_input) / 100
         # the_input = x3/np.max(the_input)
 
-        if not offsets:
-            offsets = [0]*len(audios)
-        if not durations:
-            durations = [0]*len(audios)
-
-        mid_features = []
-        for (audio, offset, duration) in zip(audios, offsets, durations):
-            mid_features.append(read_audio(audio, sample_rate=self.sample_rate, 
-                                         mono=self.mono, offset=offset, duration=duration))
+        audio_arrays = []
+        for audio in audios:
+            audio_arrays.append(read_audio(audio, sample_rate=self.sample_rate, mono=self.mono))
             
         logger.info(f'Audio size is {sum(map(len, mid_features))*4/1e6:.1f}MB')
         the_input = self.preprocess(mid_features, prepared_features, augmentation)
