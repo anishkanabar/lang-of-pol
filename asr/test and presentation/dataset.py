@@ -79,8 +79,12 @@ class AudioClipDataset(Dataset):
         start = dt.datetime.now()
         audio_paths = set(data['path'])
         for audio_path in audio_paths:
-            audio_array, sample_rate = librosa.load(audio_path, sr=None)
             clips = data.loc[data['path'] == audio_path]
+            # loading audio is expensive. check if we can skip this group of clips.
+            all_exist = clips['clip_path'].apply(os.path.exists).all()
+            if all_exist:
+                continue
+            audio_array, sample_rate = librosa.load(audio_path, sr=None)
             for clip in clips.itertuples():
                 if os.path.exists(clip.clip_path):
                     #logger.debug(f"File {clip.clip_path} exists. Not overwriting.") 
