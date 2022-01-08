@@ -13,7 +13,7 @@ import warnings
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-from keras.callbacks import CSVLogger
+from keras.callbacks import CSVLogger, ModelCheckpoint
 import tensorflow as tf
 import deepasr as asr
 from dataset_librispeech import LibriSpeechDataset
@@ -80,12 +80,14 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
         mono=True, 
         multi_gpu=multi_gpu
     )
+
     return pipeline
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('dataset', choices=['librispeech', 'radio'])
+    parser.add_argument('cluster', choices=['rcc', 'ai'])
     parser.add_argument('output_dir', type=pathlib.Path)
     return parser.parse_args()
 
@@ -98,18 +100,28 @@ if __name__ == "__main__":
 
     tick = dt.datetime.now()
     if args.dataset == 'librispeech':
-        dataset_loader = LibriSpeechDataset(NUM_TRAIN, window_len=WINDOW_LEN)
+        dataset_loader = LibriSpeechDataset(args.cluster, nrow=NUM_TRAIN, window_len=WINDOW_LEN)
     else:
-        dataset_loader = RadioDataset(NUM_TRAIN, window_len=WINDOW_LEN)
+        dataset_loader = RadioDataset(args.cluster, nrow=NUM_TRAIN, window_len=WINDOW_LEN)
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
+
+    model_checkpoint = ModelCheckpoint(
+        filepath=os.path.join(output_dir, 'checkpoints'), 
+        save_weights_only=True,
+        save_freq='epoch',
+        period=10,
+        monitor='loss',
+        mode='max',
+        save_best_only=True)
+
     app_logger.info("Pipeline model configured.")
 
     history = pipeline.fit(train_dataset=dataset_loader.data,
                            batch_size=64, 
                            epochs=250, 
-                           callbacks=[model_logger])
+                           callbacks=[model_logger, model_checkpoint])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()
     app_logger.info(f"Elapsed: {tock - tick}")

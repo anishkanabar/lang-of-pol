@@ -20,8 +20,11 @@ logger = logging.getLogger('dataset')
 
 class Dataset(abc.ABC):
 
-    def __init__(self, name: str, nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
-        data = self.load_transcripts(window_len)
+    def __init__(self, name: str, 
+                       nrow: int=None, 
+                       frac: float=None, 
+                       window_len=WINDOW_LEN):
+        data = self._load_transcripts(window_len=WINDOW_LEN)
         if nrow is not None:
             self.data = data.head(nrow)
         elif frac is not None:
@@ -40,9 +43,8 @@ class Dataset(abc.ABC):
         logger.info(f"{name} dataset stats:")
         logger.info(f"\tRow count = {data.shape[0]}")
     
-    @classmethod
     @abc.abstractmethod
-    def load_transcripts(cls, window_len):
+    def _load_transcripts(self, window_len:float):
         """
         This function is to get audios and transcripts needed for training
         """
@@ -53,9 +55,8 @@ class AudioClipDataset(Dataset):
     def __init__(self, 
                  name: str, 
                  nrow: int=None, 
-                 new_sample_rate=SAMPLE_RATE,
                  window_len=WINDOW_LEN):
-        super().__init__(name, nrow)
+        super().__init__(name, nrow=nrow, window_len=window_len)
         self.write_clips(self.data)
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_corrupt_audio(self.data)
