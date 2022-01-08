@@ -21,7 +21,7 @@ from dataset_radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
 WINDOW_LEN = .02 # Sec
-NUM_TRAIN = 16384
+NUM_TRAIN = 2048 #16384
 
 app_logger = logging.getLogger('main.train')
 
@@ -107,24 +107,25 @@ if __name__ == "__main__":
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
 
+    epoch_checkpoint_dir = os.path.join(output_dir, 'epoch_checkpoints') 
+    os.makedirs(epoch_checkpoint_dir, exist_ok=True)
     model_checkpoint = ModelCheckpoint(
-        filepath=os.path.join(output_dir, 'checkpoints'), 
-        save_weights_only=True,
+        filepath=os.path.join(epoch_checkpoint_dir, 'checkpoint-epoch-{epoch:02d}.hdf5'),
+        save_weights_only=False,
         save_freq='epoch',
-        period=10,
         monitor='loss',
-        mode='max',
+        mode='auto',
         save_best_only=True)
 
     app_logger.info("Pipeline model configured.")
 
     history = pipeline.fit(train_dataset=dataset_loader.data,
                            batch_size=64, 
-                           epochs=250, 
+                           epochs=20, 
                            callbacks=[model_logger, model_checkpoint])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()
     app_logger.info(f"Elapsed: {tock - tick}")
 
-    pipeline.save(os.path.join(output_dir, 'checkpoints'))
+    pipeline.save(os.path.join(output_dir, 'final_checkpoint'))
     app_logger.info("Model save success.")
