@@ -41,17 +41,17 @@ class RadioDataset(AudioClipDataset):
             @drop_numeric: Filter out utterances transcribed with 0-9 instead of pronunciation
         """
         df = self._match_police_audio_transcripts(self.transcripts_dir)
-        df = _add_clip_paths(df)
+        df = self._add_clip_paths(df)
         logging.debug(f"Original dataset has {df.shape[0]} rows.")
-        df = _filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
+        df = self._filter_transcripts(df, drop_inaudible, drop_uncertain, drop_numeric)
         logging.debug(f"Dataset after transcript filtering has {df.shape[0]} rows.")
         if drop_bad_audio:
-            df = self.filter_audiofiles(df, sample_rate, window_len)
+            df = self._filter_audiofiles(df, sample_rate, window_len)
             logging.debug(f"Dataset after audio filtering has {df.shape[0]} rows.")
         return df
     
     
-    def _filter_transcripts(df, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
+    def _filter_transcripts(self, df, drop_inaudible=True, drop_uncertain=True, drop_numeric=True):
         """
         Filters out transcripts with marked uncertain passages
         Params:
@@ -96,7 +96,7 @@ class RadioDataset(AudioClipDataset):
         return pd.concat(audio_dfs, ignore_index=True)
     
     
-    def _add_clip_paths(data):
+    def _add_clip_paths(self, data):
         """
         Add column with path to audio clip.
         Params:
@@ -120,8 +120,8 @@ class RadioDataset(AudioClipDataset):
         """
         df = pd.read_csv(ts_path)
         return pd.DataFrame({'path': self._extract_mp3_path(df),
-                             'offset': _extract_offset(df),
-                             'duration': _extract_duration(df),
+                             'offset': self._extract_offset(df),
+                             'duration': self._extract_duration(df),
                              'transcripts': df['transcription']})
     
     def _extract_mp3_path(self, df):
@@ -133,10 +133,11 @@ class RadioDataset(AudioClipDataset):
         day = df['file'].str.extract("\d{6}(\d{2})", expand=False)
         date = year.str.cat([month, day], sep="_")
         name = df['file'].str.extract("(\d+-\d+-\d+)", expand=False) + ".mp3"
-        return os.path.join(self.mp3s_dir, df['zone'], date, name)
+        # Don't use os.path.join here since some components are pandas series
+        return self.mp3s_dir + os.sep + df['zone'] + os.sep + date + os.sep + name
         
     
-    def _extract_offset(df):
+    def _extract_offset(self, df):
         """
         Parses the utterance start time from transcription csv
         """
@@ -144,7 +145,7 @@ class RadioDataset(AudioClipDataset):
         offset = pd.to_datetime(df['start_dt']) - origin
         return offset.dt.total_seconds()
     
-    def _extract_duration(df):
+    def _extract_duration(self, df):
         """
         Parses utterance duration from the transcription csv. Handles inconsisent column formatting
         """

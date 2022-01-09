@@ -118,7 +118,7 @@ class AudioClipDataset(ASRDataset):
         logger.info(f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}") 
 
     @classmethod
-    def filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE, window_len=WINDOW_LEN):
+    def _filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE, window_len=WINDOW_LEN):
         """
         Filters out non-existent and corrupted mp3's
         Params:

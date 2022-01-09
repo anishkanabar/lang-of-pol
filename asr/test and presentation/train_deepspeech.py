@@ -109,19 +109,20 @@ if __name__ == "__main__":
 
     epoch_checkpoint_dir = os.path.join(output_dir, 'epoch_checkpoints') 
     os.makedirs(epoch_checkpoint_dir, exist_ok=True)
+    # TODO: Monitor loss instead of accuracy once we start getting non-infinite loss
     model_checkpoint = ModelCheckpoint(
         filepath=os.path.join(epoch_checkpoint_dir, 'checkpoint-epoch-{epoch:02d}.hdf5'),
         save_weights_only=False,
         save_freq='epoch',
-        monitor='loss',
-        mode='auto',
+        monitor='accuracy',
+        mode='max',
         save_best_only=True)
 
     app_logger.info("Pipeline model configured.")
 
     history = pipeline.fit(train_dataset=dataset_loader.data,
                            batch_size=64, 
-                           epochs=500, 
+                           epochs=1, 
                            callbacks=[model_logger, model_checkpoint])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()
