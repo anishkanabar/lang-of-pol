@@ -95,6 +95,9 @@ class AudioClipDataset(ASRDataset):
                     os.makedirs(os.path.dirname(clip.clip_path), exist_ok=True)
                 slicer = cls.audio_slicer(clip.offset, clip.duration, sample_rate)
                 clip_array = audio_array[slicer]
+                # XXX: Throwing system error on AI cluster.
+                #      Stacktrace shows RuntimeError error opening path to flac: System error:
+                #      in soundfile.py: lines 314 -> 629 -> 1183 -> 1357
                 soundfile.write(clip.clip_path, clip_array, sample_rate, format='flac')
         # Mutate original df!
         data['original_path'] = data['path']
