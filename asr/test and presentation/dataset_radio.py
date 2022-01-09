@@ -9,8 +9,8 @@ import re
 import datetime
 import pandas as pd
 import logging
-from dataset import AudioClipDataset
-from dataset_locations import DATASET_DIRS
+from asr_dataset import AudioClipDataset
+from asr_dataset_locations import DATASET_DIRS
 
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz

@@ -5,12 +5,12 @@ Brief: Loaders for librispeech transcripts and audio.
 
 import os
 import pandas as pd
-from dataset import Dataset
-from dataset_locations import DATASET_DIRS
+from asr_dataset import ASRDataset
+from asr_dataset_locations import DATASET_DIRS
 
 WINDOW_LEN = .02 # Sec
 
-class LibriSpeechDataset(Dataset):
+class LibriSpeechDataset(ASRDataset):
     
     def __init__(self, cluster: str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
         self.dataset_path = DATASET_DIRS[cluster]['librispeech']

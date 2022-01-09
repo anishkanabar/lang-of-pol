@@ -1,5 +1,5 @@
 '''
-File: dataset.py
+File: asr_dataset.py
 Brief: Abstract base class for ASR dataset loaders
 Authors: Eric Chandler <echandler@uchicago.edu>
 '''
@@ -16,9 +16,9 @@ import soundfile
 SAMPLE_RATE = 16000  # Hz
 WINDOW_LEN = .02 # sec
 
-logger = logging.getLogger('dataset')
+logger = logging.getLogger('asr.dataset')
 
-class Dataset(abc.ABC):
+class ASRDataset(abc.ABC):
 
     def __init__(self, name: str, 
                        nrow: int=None, 
@@ -50,7 +50,7 @@ class Dataset(abc.ABC):
         """
         pass
     
-class AudioClipDataset(Dataset):
+class AudioClipDataset(ASRDataset):
 
     def __init__(self, 
                  name: str, 
