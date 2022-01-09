@@ -28,11 +28,17 @@
 6. `pip install -r requirements.txt`
 7. `pip install -e .`
 
-## How to Run Deepspeech 2:
+## Training Deepspeech 2:
 ### On Midway Cluster:
 `sbatch run-training-rcc.job`
 ### On AI Cluster:
 `sh run-training-ai.sh`
+
+## Predicting with Deepspeech2:
+1. Locate a saved model file. e.g. in /project/graziul/ra/echandler/job_XXXXX/final_checkpoint
+2. Identify number of samples used to train model. e.g. grep "Row count" /path/to/job/general.log
+3. Activate conda env for deepspeech2 as directed above
+4. `python predict_deepspeech.py --checkpoint /path/to/checkpoint-folder --ntrain XX --npred YY`
 
 ## Files:
 ### Dependencies:
@@ -43,6 +49,7 @@
 - tf_devices.py: sanity checks to print the available GPU devices
 ### Model:
 - train_deepspeech.py: loads the training dataset and trains the model
+- predict_deepspeech.py: loads new examples from training datset and transcribes them with model
 - deepasr: implementation of neural net models
 - speechbrain: implementation of neural net models
 - espnet: implementation of neural net models
