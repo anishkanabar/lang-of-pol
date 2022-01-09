@@ -1,5 +1,5 @@
 '''
-File: dataset_radio.py
+File: radio.py
 Brief: Loader for police radio transcripts and audio files.
 Authors: Eric Chandler <echandler@uchicago.edu>
 '''
@@ -9,8 +9,8 @@ import re
 import datetime
 import pandas as pd
 import logging
-from asr_dataset import AudioClipDataset
-from asr_dataset_locations import DATASET_DIRS
+from asr_dataset.dataset import AudioClipDataset
+from asr_dataset.datasets.constants import DATASET_DIRS
 
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz

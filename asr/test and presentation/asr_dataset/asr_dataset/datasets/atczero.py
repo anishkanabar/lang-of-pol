@@ -1,6 +1,6 @@
 '''
-File: dataset_radio.py
-Brief: Loader for police radio transcripts and audio files.
+File: atczero.py
+Brief: Loader for ATC0 corpus.
 Authors: Eric Chandler <echandler@uchicago.edu>
 '''
 
@@ -10,7 +10,7 @@ import datetime
 import pandas as pd
 from dataset import AudioClipDataset
 
-class TrafficDataset(AudioClipDataset):
+class ATCZeroDataset(AudioClipDataset):
 
     @classmethod
     def load_transcripts(cls, transcripts_dir, sample_rate=SAMPLE_RATE):

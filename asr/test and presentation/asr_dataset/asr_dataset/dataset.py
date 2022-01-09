@@ -1,5 +1,5 @@
 '''
-File: asr_dataset.py
+File: dataset.py
 Brief: Abstract base class for ASR dataset loaders
 Authors: Eric Chandler <echandler@uchicago.edu>
 '''
@@ -55,8 +55,9 @@ class AudioClipDataset(ASRDataset):
     def __init__(self, 
                  name: str, 
                  nrow: int=None, 
+                 frac: float=None,
                  window_len=WINDOW_LEN):
-        super().__init__(name, nrow=nrow, window_len=window_len)
+        super().__init__(name, nrow=nrow, frac=frac, window_len=window_len)
         self.write_clips(self.data)
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_corrupt_audio(self.data)

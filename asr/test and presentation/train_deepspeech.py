@@ -16,12 +16,12 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 from keras.callbacks import CSVLogger, ModelCheckpoint
 import tensorflow as tf
 import deepasr as asr
-from dataset_librispeech import LibriSpeechDataset
-from dataset_radio import RadioDataset
+from asr_dataset.datasets.librispeech import LibriSpeechDataset
+from asr_dataset.datasets.radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
 WINDOW_LEN = .02 # Sec
-NUM_TRAIN = 2048 #16384
+NUM_TRAIN = 512 #16384
 
 app_logger = logging.getLogger('main.train')
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
     history = pipeline.fit(train_dataset=dataset_loader.data,
                            batch_size=64, 
-                           epochs=20, 
+                           epochs=500, 
                            callbacks=[model_logger, model_checkpoint])
     app_logger.info("Finished training.")
     tock = dt.datetime.now()

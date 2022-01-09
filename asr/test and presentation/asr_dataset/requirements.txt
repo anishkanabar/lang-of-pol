@@ -1,0 +1,7 @@
+# necessary dependencies listed in setup.py
+# see http://caremad.io/posts/2013/07/setup-vs-requirement/
+
+--index-url https://pypi.python.org/simple/
+
+-e .
+
