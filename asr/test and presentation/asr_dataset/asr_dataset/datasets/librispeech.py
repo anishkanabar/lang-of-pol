@@ -15,6 +15,8 @@ class LibriSpeechDataset(ASRDataset):
     def __init__(self, cluster: str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
         self.dataset_path = DATASET_DIRS[cluster]['librispeech']
         super().__init__('librispeech', nrow, frac, window_len)
+        self.data = self.add_duration(self.data)
+        self.data = self.add_sample_count(self.data)
 
     def _load_transcripts(self, audio_type='.flac', window_len=WINDOW_LEN):
         """

@@ -19,9 +19,14 @@ WINDOW_LEN = .02 # Sec
 class RadioDataset(AudioClipDataset):
 
     def __init__(self, cluster:str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+        """
+            Returns a RadioDataset with a data attribute which is a data frame of:
+                path, offset, duration, transcript
+        """                
         self.transcripts_dir = DATASET_DIRS[cluster]['radio_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['radio_mp3s']
         super().__init__('radio', nrow, frac, window_len)
+        self.data = self.add_sample_count(self.data)
     
     def _load_transcripts(self, 
                         sample_rate=SAMPLE_RATE, 
@@ -107,7 +112,7 @@ class RadioDataset(AudioClipDataset):
         end_fmt = ((data['offset'] + data['duration']) * msPerSec).astype('int32').astype('str')
         ext_fmt = pd.Series(['.flac']*len(data))
         clip_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
-        clip_paths = data['path'].str.replace('data','data/utterances') \
+        clip_paths = data['path'].str.replace('data','data/utterances', regex=False) \
                     .str.replace('.mp3', '').str.cat(clip_names, '/')
         return data.assign(clip_path=clip_paths)
         
