@@ -44,14 +44,10 @@ def save_data(data: Any, file_path: str):
 #     download_from_bucket(bucket_name, remote_path, local_path)
 
 
-def read_audio(file_path: str, sample_rate: int, mono: bool, 
-        offset: float = 0, duration: float = 0) -> np.ndarray:
+def read_audio(file_path: str, sample_rate: int, mono: bool) -> np.ndarray:
     """ Read already prepared features from the store. """
     # fs, audio = wavfile.read(file_path)
-    if duration == 0:
-        duration = librosa.core.get_duration(filename=file_path)
-    audio = librosa.core.load(file_path, sr=sample_rate, mono=mono,
-            offset=offset, duration=duration)[0]
+    audio = librosa.core.load(file_path, sr=sample_rate, mono=mono)[0]
     return audio
 
 

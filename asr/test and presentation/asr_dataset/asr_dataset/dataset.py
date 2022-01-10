@@ -14,10 +14,24 @@ import librosa
 import soundfile
 
 SAMPLE_RATE = 16000  # Hz
+WINDOW_LEN = .02 # sec
 
-logger = logging.getLogger('dataset')
+logger = logging.getLogger('asr.dataset')
 
-class Dataset(abc.ABC):
+class ASRDataset(abc.ABC):
+
+    def __init__(self, name: str, 
+                       nrow: int=None, 
+                       frac: float=None, 
+                       window_len=WINDOW_LEN):
+        data = self._load_transcripts(window_len=WINDOW_LEN)
+        if nrow is not None:
+            self.data = data.head(nrow)
+        elif frac is not None:
+            self.data = data.sample(frac=frac, random_state=1234)
+        else:
+            self.data = data
+        self.describe(self.data, name)
         
     @classmethod
     def describe(cls, data: pd.DataFrame, name: str):
@@ -29,17 +43,26 @@ class Dataset(abc.ABC):
         logger.info(f"{name} dataset stats:")
         logger.info(f"\tRow count = {data.shape[0]}")
     
-    @classmethod
     @abc.abstractmethod
-    def load_transcripts(cls, transcripts_dir):
+    def _load_transcripts(self, window_len:float):
         """
         This function is to get audios and transcripts needed for training
-        Params:
-            @transcripts_dir: path to directory with transcripts csvs
         """
         pass
     
-class AudioClipDataset(Dataset):
+class AudioClipDataset(ASRDataset):
+
+    def __init__(self, 
+                 name: str, 
+                 nrow: int=None, 
+                 frac: float=None,
+                 window_len=WINDOW_LEN):
+        super().__init__(name, nrow=nrow, frac=frac, window_len=window_len)
+        self.write_clips(self.data)
+        # must re-filter in case new mp3 clips are bad
+        self.data = self._filter_corrupt_audio(self.data)
+        self.describe(self.data, name)
+        
 
     @classmethod
     def audio_slicer(cls, offset: float, duration: float, sample_rate: int) -> slice:
@@ -58,8 +81,12 @@ class AudioClipDataset(Dataset):
         start = dt.datetime.now()
         audio_paths = set(data['path'])
         for audio_path in audio_paths:
-            audio_array, sample_rate = librosa.load(audio_path, sr=None)
             clips = data.loc[data['path'] == audio_path]
+            # loading audio is expensive. check if we can skip this group of clips.
+            all_exist = clips['clip_path'].apply(os.path.exists).all()
+            if all_exist:
+                continue
+            audio_array, sample_rate = librosa.load(audio_path, sr=None)
             for clip in clips.itertuples():
                 if os.path.exists(clip.clip_path):
                     #logger.debug(f"File {clip.clip_path} exists. Not overwriting.") 
@@ -68,6 +95,9 @@ class AudioClipDataset(Dataset):
                     os.makedirs(os.path.dirname(clip.clip_path), exist_ok=True)
                 slicer = cls.audio_slicer(clip.offset, clip.duration, sample_rate)
                 clip_array = audio_array[slicer]
+                # XXX: Throwing system error on AI cluster.
+                #      Stacktrace shows RuntimeError error opening path to flac: System error:
+                #      in soundfile.py: lines 314 -> 629 -> 1183 -> 1357
                 soundfile.write(clip.clip_path, clip_array, sample_rate, format='flac')
         # Mutate original df!
         data['original_path'] = data['path']
@@ -91,7 +121,7 @@ class AudioClipDataset(Dataset):
         logger.info(f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}") 
 
     @classmethod
-    def filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE):
+    def _filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE, window_len=WINDOW_LEN):
         """
         Filters out non-existent and corrupted mp3's
         Params:
@@ -103,26 +133,26 @@ class AudioClipDataset(Dataset):
         mp3_exists = df['path'].transform(lambda p: exists_map[p])
         n_missing = mp3_exists.count() - mp3_exists.sum()
         df = df.loc[mp3_exists]
-        print(f'Discarding {n_missing} missing mp3s')
-    
-        ## Commented because none of the files are corrupt and the check takes ~5 minutes.
-        #unique_paths = pd.Series(df['path'].unique())
-        #path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
-        #corrupt_map = dict(zip(unique_paths, path_notcorrupt))
-        #mp3_notcorrupt = df['path'].transform(lambda p: corrupt_map[p])
-        #n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
-        #print(f'Discarding {n_corrupted} corrupted mp3s')
-        #df = df.loc[mp3_notcorrupt]
-    
-        unique_paths = pd.Series(df['path'].unique())
-        sample_rates = unique_paths.transform(lambda p: librosa.core.get_samplerate(p))
-        sr_map = dict(zip(unique_paths, sample_rates))
-        empty_check = lambda x: x.duration * float(new_sample_rate) / sr_map[x.path] >= 1
-        mp3_notempty = df.apply(lambda x: empty_check(x), axis=1)
-        n_empty = mp3_notempty.count() - mp3_notempty.sum()
-        print(f'Discarding {n_empty} too-short mp3s')
+        logger.info(f'Discarding {n_missing} missing mp3s.')
+        
+        df = cls._filter_corrupt_audio(df)
+
+        not_empty_check = lambda x: x.duration >= window_len or x.duration * new_sample_rate >= 1
+        mp3_notempty = df.apply(lambda x: not_empty_check(x), axis=1)
+        num_empty = mp3_notempty.count() - mp3_notempty.sum()
+        logger.info(f'Discarding {num_empty} too_short mp3s.')
         df = df.loc[mp3_notempty]
-    
+        return df
+
+    @classmethod
+    def _filter_corrupt_audio(cls, df):
+        unique_paths = pd.Series(df['path'].unique())
+        path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
+        corrupt_map = dict(zip(unique_paths, path_notcorrupt))
+        mp3_notcorrupt = df['path'].transform(lambda p: corrupt_map[p])
+        n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
+        logger.info(f'Discarding {n_corrupted} corrupted mp3s')
+        df = df.loc[mp3_notcorrupt]
         return df
     
     @classmethod

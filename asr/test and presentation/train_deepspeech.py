@@ -7,19 +7,23 @@ import os
 import logging
 import argparse
 import pathlib
+import datetime as dt
 import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-from keras.callbacks import CSVLogger
+from keras.callbacks import CSVLogger, ModelCheckpoint
 import tensorflow as tf
 import deepasr as asr
-from dataset_librispeech import LibriSpeechDataset
-from dataset_radio import RadioDataset
+from asr_dataset.datasets.librispeech import LibriSpeechDataset
+from asr_dataset.datasets.radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
+WINDOW_LEN = .02 # Sec
+NUM_TRAIN = 512 #16384
 
+app_logger = logging.getLogger('main.train')
 
 def configure_logging(log_dir):
     """
@@ -28,12 +32,11 @@ def configure_logging(log_dir):
     """
     logging.basicConfig(filename=os.path.join(log_dir, 'general.log'),
                         level=logging.DEBUG,
-                        format='%(asctime)s %(message)s', 
+                        format='%(asctime)s %(levelname)s %(name)s %(message)s', 
                         datefmt='%d/%m/%Y %H:%M:%S')
-    csv_logger =  CSVLogger(filename=os.path.join(log_dir, 'model_log.csv'),
+    return CSVLogger(filename=os.path.join(log_dir, 'model_log.csv'),
                             append=True, 
                             separator=';')
-    return csv_logger
 
 
 def define_model(feature_type = 'spectrogram', multi_gpu = False):
@@ -43,12 +46,13 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     @multi_gpu: whether using multiple GPU
     """
     # audio feature extractor, this is build on asr built-in methods
-    features_extractor = asr.features.preprocess(feature_type=feature_type, features_num=161,
+    features_extractor = asr.features.preprocess(feature_type=feature_type, 
+                                                 features_num=161,
                                                  samplerate=SAMPLE_RATE,
-                                                 winlen=0.02,
+                                                 winlen=WINDOW_LEN,
                                                  winstep=0.025,
                                                  winfunc=np.hanning)
-    
+
     # input label encoder
     alphabet_en = asr.vocab.Alphabet(lang='en')
     
@@ -67,49 +71,62 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
     
     # CTC Pipeline
     pipeline = asr.pipeline.ctc_pipeline.CTCPipeline(
-        alphabet=alphabet_en, features_extractor=features_extractor, model=model, optimizer=optimizer, decoder=decoder,
-        sample_rate=SAMPLE_RATE, mono=True, multi_gpu=multi_gpu
+        alphabet=alphabet_en,
+        features_extractor=features_extractor, 
+        model=model, 
+        optimizer=optimizer, 
+        decoder=decoder,
+        sample_rate=SAMPLE_RATE, 
+        mono=True, 
+        multi_gpu=multi_gpu
     )
+
     return pipeline
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('dataset', choices=['librispeech', 'radio'])
-    parser.add_argument('dataset_dir', type=pathlib.Path)
+    parser.add_argument('cluster', choices=['rcc', 'ai'])
     parser.add_argument('output_dir', type=pathlib.Path)
     return parser.parse_args()
 
-def _flag(fp, msg):
-    """ Write a message to a log """
-    with open(fp, 'a') as f:
-        f.write(msg + "\n")
 
 if __name__ == "__main__":
     args = parse_args()
-    if 'SLURM_JOB_ID' not in os.environ:
-        raise RuntimeError("No job id found. Are you running in a SLURM context?")
-    output_dir = os.path.join(args.output_dir, 'job_' + os.environ['SLURM_JOB_ID'])
-    flag_file = os.path.join(output_dir, 'flag.txt')
+    output_dir = os.path.join(args.output_dir, 'job_' + os.environ.get('SLURM_JOB_ID','0'))
     os.makedirs(output_dir, exist_ok=True)
+    model_logger = configure_logging(output_dir)
 
+    tick = dt.datetime.now()
     if args.dataset == 'librispeech':
-        dataset_loader = LibriSpeechDataset()
+        dataset_loader = LibriSpeechDataset(args.cluster, nrow=NUM_TRAIN, window_len=WINDOW_LEN)
     else:
-        dataset_loader = RadioDataset()
+        dataset_loader = RadioDataset(args.cluster, nrow=NUM_TRAIN, window_len=WINDOW_LEN)
+    app_logger.info("Dataset load success.")
 
-    dataset = dataset_loader.load_transcripts(args.dataset_dir)
-    train_data = dataset.sample(frac=0.8, random_state=1234)    
-    train_data = train_data.head()
-    dataset_loader.describe(train_data, "Training")
-    _flag(flag_file, "Dataset load success.")
-
-    csv_logger = configure_logging(output_dir)
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
-    _flag(flag_file, "Model compile success.")
 
-    history = pipeline.fit(train_dataset=train_data, batch_size=64, epochs=500, callbacks=[csv_logger])
-    _flag(flag_file, "Model train success.")
+    epoch_checkpoint_dir = os.path.join(output_dir, 'epoch_checkpoints') 
+    os.makedirs(epoch_checkpoint_dir, exist_ok=True)
+    # TODO: Monitor loss instead of accuracy once we start getting non-infinite loss
+    model_checkpoint = ModelCheckpoint(
+        filepath=os.path.join(epoch_checkpoint_dir, 'checkpoint-epoch-{epoch:02d}.hdf5'),
+        save_weights_only=False,
+        save_freq='epoch',
+        monitor='accuracy',
+        mode='max',
+        save_best_only=True)
 
-    pipeline.save(os.path.join(output_dir, 'checkpoints'))
-    _flag(flag_file, "Model save success.")
+    app_logger.info("Pipeline model configured.")
 
+    history = pipeline.fit(train_dataset=dataset_loader.data,
+                           batch_size=64, 
+                           epochs=1, 
+                           callbacks=[model_logger, model_checkpoint])
+    app_logger.info("Finished training.")
+    tock = dt.datetime.now()
+    app_logger.info(f"Elapsed: {tock - tick}")
+
+    pipeline.save(os.path.join(output_dir, 'final_checkpoint'))
+    app_logger.info("Model save success.")
