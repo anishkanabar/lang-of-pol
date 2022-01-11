@@ -7,7 +7,12 @@ output_folder: !ref results/tokenizer_bpe5000/
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
-data_folder: !PLACEHOLDER
+cluster: rcc
+dataset_name: radio
+num_train: 1024
+split_ratios:
+    train: .8
+    def: .2
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 

@@ -8,7 +8,7 @@
 
 #
 #OPIONS FOR JOB ID:
-#SBATCH --job-name=train-asr
+#SBATCH --job-name=train-sb
 #
 #OPTIONS FOR EMAIL:
 #SBATCH --output=/project/graziul/ra/%u/slurm_output/%j.%N.stdout
@@ -28,9 +28,4 @@
 #SBATCH --time=18:00:00
 #
 
-# Listing gpu devices for sanity check
-python tf_devices.py
-# Run DeepSpeech2
-output_dir="/project/graziul/ra/`whoami`"
-python train_deepspeech.py 'radio' 'rcc' "$output_dir"
-
+python Tokenizer/train.py Tokenizer/hparams/tokenizer_bpe5000.yaml
