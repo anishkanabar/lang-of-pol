@@ -46,10 +46,30 @@ class ASRDataset(abc.ABC):
     @abc.abstractmethod
     def _load_transcripts(self, window_len:float):
         """
-        This function is to get audios and transcripts needed for training
+            This function is to get audios and transcripts needed for training
+            Returns: Dataframe of at least path, transcripts
         """
         pass
+
+    @classmethod
+    def add_duration(cls, data):
+        if 'duration' in data.columns:
+            return data
+        else:
+            duration_func = lambda x: librosa.get_duration(filename=x)
+            return data.assign(duration=data['path'].apply(duration_func))
+
+    @classmethod
+    def add_sample_count(cls, data):
+        if 'nsamples' in data.columns:
+            return data
+        else:
+            data_ = data.assign(sr=data['path'].apply(librosa.get_samplerate))
+            count_func = lambda row: librosa.time_to_samples(row['duration'], row['sr'])
+            sample_count = data_.apply(lambda row: count_func(row), axis=1)
+            return data.assign(nsamples=sample_count)
     
+            
 class AudioClipDataset(ASRDataset):
 
     def __init__(self, 
@@ -70,6 +90,7 @@ class AudioClipDataset(ASRDataset):
         duration_idx = librosa.time_to_samples(offset + duration, sr=sample_rate)
         return slice(offset_idx, duration_idx)
     
+    # TODO: Either use new_sample_rate here or get rid of it.
     @classmethod
     def write_clips(cls, data: pd.DataFrame):
         """ 
@@ -98,6 +119,7 @@ class AudioClipDataset(ASRDataset):
                 # XXX: Throwing system error on AI cluster.
                 #      Stacktrace shows RuntimeError error opening path to flac: System error:
                 #      in soundfile.py: lines 314 -> 629 -> 1183 -> 1357
+                #      But the issue doesn't seem to exist in Midway3
                 soundfile.write(clip.clip_path, clip_array, sample_rate, format='flac')
         # Mutate original df!
         data['original_path'] = data['path']
@@ -135,7 +157,8 @@ class AudioClipDataset(ASRDataset):
         df = df.loc[mp3_exists]
         logger.info(f'Discarding {n_missing} missing mp3s.')
         
-        df = cls._filter_corrupt_audio(df)
+        # Commented out because not needed on main dataset. Only needed on clips.
+        #df = cls._filter_corrupt_audio(df)
 
         not_empty_check = lambda x: x.duration >= window_len or x.duration * new_sample_rate >= 1
         mp3_notempty = df.apply(lambda x: not_empty_check(x), axis=1)
