@@ -34,9 +34,12 @@ def prepare_nih(cluster: str,
     # Split into hparams-defined splits
     splits = {}
     other_splits = data
+    other_frac = 1
     for split, frac in split_ratios.items():
-        current_split = other_splits.sample(frac=frac, random_state=1234)
+        current_frac = max(0., min(1., frac / other_frac))
+        current_split = other_splits.sample(frac=current_frac, random_state=1234)
         other_splits = other_splits.iloc[other_splits.index.difference(current_split.index)]
+        other_frac = max(0., min(1., other_frac - frac))
         splits[split] = current_split
         
     #test_data = data.sample(frac=.2, random_state=1234)
@@ -56,7 +59,7 @@ def prepare_nih(cluster: str,
                 "ID": splitdata.index.to_series(),
                 "duration": splitdata['nsamples'],
                 "wav": splitdata['path'],
-                "transcript": splitdata['transcript']
+                "transcript": splitdata['transcripts']
             }
         )
         new_df.to_csv(manifest_path, index=False)
