@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import matplotlib.pyplot as plt
 import torchaudio
+import sys
 import torch
 import numpy as np
 import pandas as pd
@@ -26,17 +27,29 @@ from Toy_Model import ToyModel
 import time
 torch.manual_seed(1)
 
+my_dataset = sys.argv[1]
+my_model = sys.argv[2]
+
 n_samples = 40
 train_split = 4*n_samples//5
 test_samples = n_samples - train_split
-input_list, labels_list = process_atc0_files()
+if my_dataset == "ATC0":
+    input_list, labels_list = process_atc0_files()
+    
+elif my_dataset == "BPC":
+    input_list, labels_list = load_data()
+    
 test_input_list = input_list[30*train_split:]
 test_labels_list = labels_list[30*train_split:]
 input_list = input_list[:train_split*30]
 labels_list = labels_list[:train_split*30]
 
-
-model = Attention_LSTM()
+if my_model == "Attention_LSTM":
+    model = Attention_LSTM()
+    save_filepath = '/project/graziul/ra/ajays/LSTM_model_predictions.txt'
+elif my_model = "Vanilla_LSTM":
+    model = Toy_Model()
+    save_filepath = '/project/graziul/ra/ajays/toy_model_predictions.txt'
 loss_fn = FocalLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
 fer_list = []
@@ -83,12 +96,15 @@ val_size = 30
 plt.plot(list(range(training_steps//num_segments)),fer_list)
 plt.savefig('LSTM_model_training.png')
 '''
-preds_file = open('/project/graziul/ra/ajays/toy_model_predictions.txt','w')
+preds_file = open(save_filepath,'w')
 preds_file.truncate(0)
 for val_index in range(num_samples):
     #model = StackedLSTM()
     #model = Attention_LSTM()
-    model = ToyModel()
+    if my_model == "Attention_LSTM":
+        model = Attention_LSTM():
+    elif my_model == "Vanilla_LSTM":
+        model = ToyModel()
     #model = nn.DataParallel(model)
     loss_fn = FocalLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
