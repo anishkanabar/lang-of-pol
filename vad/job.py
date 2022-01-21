@@ -29,6 +29,7 @@ torch.manual_seed(1)
 
 my_dataset = sys.argv[1]
 my_model = sys.argv[2]
+verbose = int(sys.argv[3])
 
 n_samples = 40
 train_split = 4*n_samples//5
@@ -131,9 +132,14 @@ for val_index in range(num_samples):
             optimizer.step()
         idx = (idx+1)%num_samples
     with torch.no_grad():
-        preds = get_predictions(model,test_data, test_labels, batch_size)
-        fer = str(get_frame_error_rate(torch.round(preds),test_labels)) + "\n"
+        preds = get_predictions(model,test_data, test_labels, batch_size)  
+        fer_value = get_frame_error_rate(torch.round(preds),test_labels, verbose)
+        if verbose == 0:
+            fer = str(fer_value) + "\n"
+        else:
+            fer = "FER = " + str(fer_value[0]) + ", False_Positives = " + str(fer_value[1]) + ", False Negatives = " + str(fer_value[3]) + "\n"
         print(fer)
-        preds_file.write(fer)
+        if verbose == 0:
+            preds_file.write(fer)
 preds_file.close()
 
