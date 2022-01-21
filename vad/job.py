@@ -47,7 +47,7 @@ labels_list = labels_list[:train_split*30]
 if my_model == "Attention_LSTM":
     model = Attention_LSTM()
     save_filepath = '/project/graziul/ra/ajays/LSTM_model_predictions.txt'
-elif my_model = "Vanilla_LSTM":
+elif my_model == "Vanilla_LSTM":
     model = Toy_Model()
     save_filepath = '/project/graziul/ra/ajays/toy_model_predictions.txt'
 loss_fn = FocalLoss()
@@ -102,7 +102,7 @@ for val_index in range(num_samples):
     #model = StackedLSTM()
     #model = Attention_LSTM()
     if my_model == "Attention_LSTM":
-        model = Attention_LSTM():
+        model = Attention_LSTM()
     elif my_model == "Vanilla_LSTM":
         model = ToyModel()
     #model = nn.DataParallel(model)
