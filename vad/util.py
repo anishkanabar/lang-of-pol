@@ -549,18 +549,42 @@ def get_frame_error_rate(output_hat, labels, verbose = 0):
                 false_negatives[i] = 1
         return fer_arr,false_positives, false_negatives
 
-def test_frame_error_rate(output_hat, labels):
-    num_samples = labels.size()[0]
-    s_length = labels.size()[1]
-    fer_arr = []
-    sum = 0
-    for i in range(num_samples):
-        curr_output = output_hat[i]
-        curr_label = labels[i]
-        for j in range(s_length):
-            if curr_output[j] == curr_label[j]:
-                pass
-            else:
-                sum = sum+1
-        fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2)*100)
-    return sum
+def test_frame_error_rate(output_hat, labels, verbose = 0):
+    if verbose == 0:
+        num_samples = labels.size()[0]
+        s_length = labels.size()[1]
+        fer_arr = []
+        sum = 0
+        for i in range(num_samples):
+            curr_output = output_hat[i]
+            curr_label = labels[i]
+            for j in range(s_length):
+                if curr_output[j] == curr_label[j]:
+                    pass
+                else:
+                    sum = sum+1
+            fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2)*100)
+        return sum
+    else:
+        num_samples = labels.size()[0]
+        s_length = labels.size()[1]
+        fer_arr = []
+        false_positives = []
+        false_negatives = []
+        sum = 0
+        for i in range(num_samples):
+            false_positives[i] = 0
+            false_negatives[i] = 0
+            curr_output = output_hat[i]
+            curr_label = labels[i]
+            for j in range(s_length):
+                if curr_output[j] == curr_label[j]:
+                    pass
+                else:
+                    sum = sum+1
+                if curr_output[j] == 1 and curr_label[j] == 0:
+                    false_positives[i] = false_positives[i] + 1
+                elif curr_output[j] == 0 and curr_label[j] == 1:
+                    false_negatives[i] = false_negatives[i] + 1
+            fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2)*100)
+        return sum
