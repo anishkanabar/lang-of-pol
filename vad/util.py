@@ -39,7 +39,7 @@ class atc_audio_file():
         self.frames = None
         self.frames_labels = None
         self.mfcc = None
-        self.n_clips = 30
+        self.n_clips = 100
         self.flag = new_flag
         self.labels_path = labels_path
         self.audio_path = audio_path
@@ -167,12 +167,13 @@ class atc_audio_file():
             file_name = self.name
         else:
             file_name = self.audio_path
-        self.waveform, self.sample_rate = torchaudio.load(file_name)
-        print(self.waveform.shape, self.sample_rate, self.waveform.shape[1]//self.sample_rate)
+        waveform, sample_rate = torchaudio.load(file_name)
+        effects = [['rate', '22050']]
+        self.waveform, self.sample_rate = torchaudio.sox_effects.apply_effects_tensor(waveform, sample_rate, effects)
         pad_array = torch.zeros((1,10000*self.sample_rate))
         pad_array[:,:self.waveform.shape[1]] = self.waveform
         self.waveform = pad_array
-        self.waveform = self.waveform[:,:9000*self.sample_rate]
+        self.waveform = self.waveform[:,:4000*self.sample_rate]
         clip_size = math.floor(self.waveform.shape[1]/self.n_clips)
         n_clips = self.n_clips
         mfcc_list = []
@@ -217,13 +218,14 @@ def process_file_atc0(filename,audio_path, labels_path):
     audio_file.get_slices()
     mfcc = audio_file.get_split_mfcc()
     frames = audio_file.get_split_frames()
-    print(mfcc.shape, frames.shape)
+    print(filename)
     return mfcc, frames
 
 def process_atc0_files():
     input_list = []
     labels_list = []
-    paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dca/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dfw/data/audio/']
+    #paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dca/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dfw/data/audio/']
+    paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/']
     for path in paths:
         for fpath in glob(path + '*.sph'):
             filename = fpath[-12:-4]
@@ -231,6 +233,9 @@ def process_atc0_files():
             x,y = process_file_atc0(filename, fpath, label_file)
             input_list.append(x)
             labels_list.append(y)
+    input_list = torch.cat(input_list)
+    input_list = torch.transpose(input_list,1,2)
+    labels_list = torch.from_numpy(np.concatenate(labels_list,axis = 0)).float()
     return input_list, labels_list
 
 def load_data(pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
@@ -518,14 +523,31 @@ def get_predictions(model,input_list, labels_list, batch_size):
         output_list = torch.cat(output_list, dim = 0)
         return output_list
 
-def get_frame_error_rate(output_hat, labels):
-    num_samples = labels.size()[0]
-    fer_arr = []
-    for i in range(num_samples):
-        curr_output = output_hat[i]
-        curr_label = labels[i]
-        fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
-    return fer_arr
+def get_frame_error_rate(output_hat, labels, verbose = 0):
+    if verbose == 0:
+        num_samples = labels.size()[0]
+        fer_arr = []
+        for i in range(num_samples):
+            curr_output = output_hat[i]
+            curr_label = labels[i]
+            fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
+        return fer_arr
+    if verbose == 1:
+        num_samples = labels.size()[0]
+        fer_arr = []
+        false_negatives = []
+        false_positives = []
+        for i in range(num_samples):
+            false_positives[i] = 0
+            false_negatives[i] = 0
+            curr_output = output_hat[i]
+            curr_label = labels[i]
+            fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
+            if (curr_output == 1 and curr_label == 0):
+                false_positives[i] = 1
+            if (curr_output == 0 and curr_label == 1):
+                false_negatives[i] = 1
+        return fer_arr,false_positives, false_negatives
 
 def test_frame_error_rate(output_hat, labels):
     num_samples = labels.size()[0]
