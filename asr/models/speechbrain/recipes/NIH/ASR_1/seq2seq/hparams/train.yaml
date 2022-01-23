@@ -23,7 +23,8 @@ split_ratios:
     train: .8
     dev: .1
     test: .1
-data_folder_rirs: /net/projects/uri/ra/echandler/scratch #downloaded if not here
+# rirs data downloaded here if needed
+data_folder_rirs: !ref <environ[scratch_dir]>
 skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 train_data: !ref <output_folder>/train.csv

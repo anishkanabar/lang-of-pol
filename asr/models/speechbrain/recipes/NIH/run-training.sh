@@ -49,6 +49,13 @@ if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
 fi
 
+# Link to libsndfile, which isnt available on rcc compute nodes
+if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
+    # XXX: Make user-independent
+    LN_PATH=/home/echandler/.conda/envs/soundfile/lib
+    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
+fi
+
 if [ "$CLUSTER" = "rcc" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \

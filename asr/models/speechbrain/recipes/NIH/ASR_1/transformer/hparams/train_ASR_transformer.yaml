@@ -23,7 +23,7 @@ cluster: !ref <environ[cluster]>
 dataset_name: !ref <environ[dataset_name]>
 num_train: !ref <environ[num_train]>
 # noise/ris dataset will automatically be downloaded
-data_folder_rirs: /net/projects/uri/ra/echandler/scratch
+data_folder_rirs: !ref <environ[scratch_dir]>
 skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 split_ratios:
