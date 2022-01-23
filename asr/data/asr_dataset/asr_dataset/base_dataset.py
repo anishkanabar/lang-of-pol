@@ -23,9 +23,13 @@ class ASRDataset(abc.ABC):
     def __init__(self, name: str, 
                        nrow: int=None, 
                        frac: float=None, 
+                       nsecs: float=None,
                        window_len=WINDOW_LEN):
         data = self._load_transcripts(window_len=WINDOW_LEN)
-        if nrow is not None:
+        if nsecs is not None:
+            idx = data['duration'].cumsum().searchsorted(nsecs)
+            self.data = data.head(idx)
+        elif nrow is not None:
             self.data = data.head(nrow)
         elif frac is not None:
             self.data = data.sample(frac=frac, random_state=1234)
@@ -42,6 +46,11 @@ class ASRDataset(abc.ABC):
         """
         logger.info(f"{name} dataset stats:")
         logger.info(f"\tRow count = {data.shape[0]}")
+        logger.info(f"\tMin duration = {data['duration'].min():.2f} (sec)")
+        logger.info(f"\tMax duration = {data['duration'].max():.2f} (sec)")
+        logger.info(f"\tMean duration = {data['duration'].mean():.2f} (sec)")
+        logger.info(f"\tStdev duration = {data['duration'].std():.2f} (sec)") 
+        logger.info(f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}") 
     
     @abc.abstractmethod
     def _load_transcripts(self, window_len:float):
@@ -76,8 +85,13 @@ class AudioClipDataset(ASRDataset):
                  name: str, 
                  nrow: int=None, 
                  frac: float=None,
+                 nsecs: float=None,
                  window_len=WINDOW_LEN):
-        super().__init__(name, nrow=nrow, frac=frac, window_len=window_len)
+        super().__init__(name, 
+                         nrow=nrow, 
+                         frac=frac, 
+                         nsecs=nsecs,
+                         window_len=window_len)
         self.write_clips(self.data)
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_corrupt_audio(self.data)
@@ -128,19 +142,6 @@ class AudioClipDataset(ASRDataset):
         stop = dt.datetime.now()
         logger.info(f"Writing audio took {stop - start}.")
     
-    @classmethod
-    def describe(cls, data, name):
-        """
-        Prints helpful statistics about dataset.
-        Params
-            @data: Fully loaded transcripts dataframe
-        """
-        super().describe(data, name)
-        logger.info(f"\tMin duration = {data['duration'].min():.2f}")
-        logger.info(f"\tMax duration = {data['duration'].max():.2f}")
-        logger.info(f"\tMean duration = {data['duration'].mean():.2f}")
-        logger.info(f"\tStdev duration = {data['duration'].std():.2f}") 
-        logger.info(f"\tTotal duration = {pd.Timedelta(data['duration'].sum(),'sec')}") 
 
     @classmethod
     def _filter_audiofiles(cls, df, new_sample_rate=SAMPLE_RATE, window_len=WINDOW_LEN):

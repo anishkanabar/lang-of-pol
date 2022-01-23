@@ -18,14 +18,19 @@ WINDOW_LEN = .02 # Sec
 
 class RadioDataset(AudioClipDataset):
 
-    def __init__(self, cluster:str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+    def __init__(self, 
+                 cluster:str='rcc', 
+                 nrow: int=None, 
+                 frac: float=None, 
+                 nsecs: float=None,
+                 window_len=WINDOW_LEN):
         """
             Returns a RadioDataset with a data attribute which is a data frame of:
                 path, offset, duration, transcript
         """                
         self.transcripts_dir = DATASET_DIRS[cluster]['radio_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['radio_mp3s']
-        super().__init__('radio', nrow, frac, window_len)
+        super().__init__('radio', nrow, frac, nsecs, window_len)
         self.data = self.add_sample_count(self.data)
     
     def _load_transcripts(self, 
