@@ -49,13 +49,14 @@ if my_model == "Attention_LSTM":
     model = Attention_LSTM()
     save_filepath = '/project/graziul/ra/ajays/LSTM_model_predictions.txt'
 elif my_model == "Vanilla_LSTM":
-    model = Toy_Model()
+    model = ToyModel()
     save_filepath = '/project/graziul/ra/ajays/toy_model_predictions.txt'
 loss_fn = FocalLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
 fer_list = []
 train_loss_list = []
 test_loss_list = []
+sample_size = 30
 batch_size = model.batch_size
 num_samples = input_list.size()[0]//batch_size
 training_steps = 1000
