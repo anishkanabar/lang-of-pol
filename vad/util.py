@@ -247,6 +247,8 @@ def load_data(pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
 
     for idx,key in enumerate(vad_dict):
         print(idx)
+        if idx > 30:
+            break
         a = audio_file(key)
         a.get_slices(vad_dict)
         input_list.append(a.get_split_mfcc()) 
@@ -538,8 +540,8 @@ def get_frame_error_rate(output_hat, labels, verbose = 0):
         false_negatives = []
         false_positives = []
         for i in range(num_samples):
-            false_positives[i] = 0
-            false_negatives[i] = 0
+            false_positives.append(0)
+            false_negatives.append(0)
             curr_output = output_hat[i]
             curr_label = labels[i]
             fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
