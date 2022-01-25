@@ -2,7 +2,7 @@
 # Environmental and Experiment parameters
 # ############################################################################
 
-cluster: ai  # 'ai' or 'rcc'
-dataset_name: librispeech  # 'librispeech' or 'radio' or 'atczero'
-num_train: 1024
+cluster: rcc  # 'ai' or 'rcc'
+dataset_name: atc0  # 'librispeech' or 'radio' or 'atczero'
+num_train: 1028
 
