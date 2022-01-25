@@ -28,6 +28,8 @@ def prepare_nih(cluster: str,
         data = RadioDataset(cluster, nrow=num_train).data
     elif dataset_name == 'librispeech':
         data = LibriSpeechDataset(cluster, nrow=num_train).data
+    elif dataset_name == 'atczero'
+        data = ATCZeroDataset(cluster, nrow=num_train).data
     else:
         raise NotImplementedError('dataset ' + dataset_name)
     
