@@ -9,7 +9,8 @@
 
 seed: 1
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-output_folder: !ref results/seq2seq/<seed>
+trial: 1
+output_folder: !ref results/seq2seq/trial_<trial>/<seed>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
@@ -31,7 +32,7 @@ ckpt_interval_minutes: 15 # save checkpoint every N min
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: results/tokenizer_bpe3459/3459_unigram.model
+tokenizer_file: results/tokenizer/bpe1894/1894_unigram.model
 
 # Training parameters
 number_of_epochs: 40
@@ -83,7 +84,7 @@ dnn_blocks: 2
 dnn_neurons: 256
 emb_size: 64
 dec_neurons: 512
-output_neurons: 3459  # Number of tokens
+output_neurons: 1894  # Number of tokens
 blank_index: 0
 bos_index: 0
 eos_index: 0

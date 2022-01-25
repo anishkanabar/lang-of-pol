@@ -4,17 +4,18 @@
 # Decoder: Transformer Decoder + (CTC/ATT joint) beamsearch
 # Tokens: BPE with unigram
 # losses: CTC + KLdiv (Label Smoothing loss)
-# Training: AISHELL-1
-# Authors:  Jianyuan Zhong, Titouan Parcollet
+# Training: NIH
 # ############################################################################
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 8886
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 1
-output_folder: !ref results/transformer/trial_<trial>/<seed>
+output_folder: !ref results/transformer/<seed>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
+
+# URL for small-ish english wav3vec2 model
+wav2vec2_hub: facebook/wav2vec2-base-100h
 
 # Data files
 environ: !include:../../../hparams/params.yaml
@@ -33,7 +34,7 @@ split_ratios:
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: results/tokenizer/bpe1894/1894_unigram.model
+tokenizer_file: results/tokenizer_bpe3459/3459_unigram.model
 
 # Training parameters
 number_of_epochs: 50
@@ -43,6 +44,7 @@ gradient_accumulation: 4
 gradient_clipping: 5.0
 loss_reduction: 'batchmean'
 sorting: random
+lr_wav2vec: 0.0001
 
 # stages related parameters
 stage_one_epochs: 40
@@ -74,8 +76,9 @@ num_decoder_layers: 6
 d_ffn: 2048
 transformer_dropout: 0.1
 activation: !name:torch.nn.GELU
-output_neurons: 1894
-vocab_size: 1894
+output_neurons: 5000
+vocab_size: 5000
+freeze_wav2vec: True
 
 # Outputs
 blank_index: 0
@@ -135,6 +138,7 @@ env_corrupt: !new:speechbrain.lobes.augment.EnvCorrupt
     noise_snr_high: 15
 
 modules:
+    wav2vec2: !ref <wav2vec2>
     CNN: !ref <CNN>
     Transformer: !ref <Transformer>
     seq_lin: !ref <seq_lin>
@@ -155,6 +159,8 @@ SGD: !name:torch.optim.SGD
     momentum: 0.99
     nesterov: True
 
+wav2vec_opt_class: !name:torch.optim.Adam
+   lr: !ref <lr_wav2vec>
 
 valid_search: !new:speechbrain.decoders.S2STransformerBeamSearch
     modules: [!ref <Transformer>, !ref <seq_lin>, !ref <ctc_lin>]
@@ -196,11 +202,19 @@ noam_annealing: !new:speechbrain.nnet.schedulers.NoamScheduler
     n_warmup_steps: 25000
     model_size: !ref <d_model>
 
+lr_annealing_wav2vec: !new:speechbrain.nnet.schedulers.NewBobScheduler
+   initial_value: !ref <lr_wav2vec>
+   improvement_threshold: 0.0025
+   annealing_factor: 0.9
+   patient: 0
+
 checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
     checkpoints_dir: !ref <save_folder>
     recoverables:
+        wav2vec2: !ref <wav2vec2>
         model: !ref <model>
         noam_scheduler: !ref <noam_annealing>
+        scheduler_wav2vec: !ref <lr_annealing_wav2vec>
         normalizer: !ref <normalize>
         counter: !ref <epoch_counter>
 
@@ -223,6 +237,12 @@ augmentation: !new:speechbrain.lobes.augment.SpecAugment
     freq_mask_width: 30
     time_mask_width: 40
 
+wav2vec2: !new:speechbrain.lobes.models.huggingface_wav2vec.HuggingFaceWav2Vec2
+   source: !ref <wav2vec2_hub>
+   output_norm: True
+   freeze: !ref <freeze_wav2vec>
+   save_path: !ref <save_folder>/wav2vec2_checkpoint
+
 compute_features: !new:speechbrain.lobes.features.Fbank
     sample_rate: !ref <sample_rate>
     n_fft: !ref <n_fft>
@@ -231,12 +251,7 @@ compute_features: !new:speechbrain.lobes.features.Fbank
 train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
     save_file: !ref <train_log>
 
-# AISHELL-1 has spaces between words in the transcripts,
-# which Chinese writing normally does not do.
-# If remove_spaces, spaces are removed
-# from the transcript before computing CER.
-# (e.g., 祝 可爱 的 你 —> 祝可爱的你)
-remove_spaces: True
+remove_spaces: False
 split_tokens: !apply:operator.not_ [!ref <remove_spaces>]
 
 cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
