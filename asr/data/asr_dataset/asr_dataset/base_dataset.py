@@ -14,7 +14,7 @@ import librosa
 import soundfile
 
 SAMPLE_RATE = 16000  # Hz
-WINDOW_LEN = .02 # sec
+WINDOW_LEN = .04 # sec
 
 logger = logging.getLogger('asr.dataset')
 
@@ -161,7 +161,7 @@ class AudioClipDataset(ASRDataset):
         # Commented out because not needed on main dataset. Only needed on clips.
         #df = cls._filter_corrupt_audio(df)
 
-        not_empty_check = lambda x: x.duration >= window_len or x.duration * new_sample_rate >= 1
+        not_empty_check = lambda x: x.duration >= window_len and x.duration * new_sample_rate >= 1
         mp3_notempty = df.apply(lambda x: not_empty_check(x), axis=1)
         num_empty = mp3_notempty.count() - mp3_notempty.sum()
         logger.info(f'Discarding {num_empty} too_short mp3s.')

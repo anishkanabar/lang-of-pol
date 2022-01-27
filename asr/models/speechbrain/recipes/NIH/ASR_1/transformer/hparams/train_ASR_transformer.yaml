@@ -11,7 +11,7 @@
 seed: 8886
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 trial: 1
-output_folder: !ref results/transformer/trial_<trial>/<seed>
+output_folder: !ref results/transformer/trial_<trial>/seed_<seed>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt

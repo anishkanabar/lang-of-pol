@@ -14,7 +14,7 @@ from asr_dataset.constants import DATASET_DIRS
 
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz
-WINDOW_LEN = .02 # Sec
+WINDOW_LEN = .04 # Sec
 
 class RadioDataset(AudioClipDataset):
 
