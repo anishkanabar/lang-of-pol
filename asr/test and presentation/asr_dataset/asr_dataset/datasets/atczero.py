@@ -23,12 +23,8 @@ class ATCZeroDataset(AudioClipDataset):
         self.transcripts_dir = DATASET_DIRS[cluster]['atc0']
         
         super().__init__('atczero', nrow, frac, window_len)
-        #self.data = self.add_duration(self.data)
 
         self.data = self.add_sample_count(self.data)
-
-    def check_number(x):
-        return x.replace('.', '', 1).isdigit()
 
     def _load_transcripts(self, sample_rate=SAMPLE_RATE, window_len = WINDOW_LEN):
         """
