@@ -54,6 +54,8 @@ class ATCZeroDataset(AudioClipDataset):
         loaded_df['offset'] = loaded_df['start'].astype(float)
 
         loaded_df['path'] = loaded_df['filePath'].str.replace('atc0', self.transcripts_dir + '/atc0')
+        loaded_df.drop(['start', 'end', 'filePath'], axis = 1, inplace = True)
+
         loaded_df = self._add_clip_paths(loaded_df)
 
         return loaded_df
