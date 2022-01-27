@@ -2,7 +2,6 @@
 ### This dictionary is for debug and presentation use. In this document, we will present the detail of our coding logic, splitting each of our achievements to units. In this case, this document is a good stating point for everyone to approach our works💡
 
 ## Installation:
-### Building Deepspeech
 1. Activate conda env
 
 #### Building on Midway
@@ -19,22 +18,13 @@
 2. `python setup.py build`
 3. `pip install -e .`
 
-### Building SpeechBrain
-1. Activate virtual environmenrt or conda env
-2. `cd asr_dataset`
-3. `python setup.py build`
-4. `pip install -e .`
-5. `cd speechbrain`
-6. `pip install -r requirements.txt`
-7. `pip install -e .`
-
-## Training Deepspeech 2:
+## Training:
 ### On Midway Cluster:
 `sbatch run-training-rcc.job`
 ### On AI Cluster:
 `sh run-training-ai.sh`
 
-## Predicting with Deepspeech2:
+## Predicting:
 1. Locate a saved model file. e.g. in /project/graziul/ra/echandler/job_XXXXX/final_checkpoint
 2. Identify number of samples used to train model. e.g. grep "Row count" /path/to/job/general.log
 3. Activate conda env for deepspeech2 as directed above
@@ -42,15 +32,12 @@
 
 ## Files:
 ### Dependencies:
-- asr_dataset: library to load datasets into asr-usable format
+- asr_dataset: library to load datasets into asr-usable format (found in PROJECT/asr/data)
 - requirements.txt: conda requirements
 ### Cluster:
 - run-training.job: configures the slurm job to train the model on a gpu
 - tf_devices.py: sanity checks to print the available GPU devices
 ### Model:
-- train_deepspeech.py: loads the training dataset and trains the model
-- predict_deepspeech.py: loads new examples from training datset and transcribes them with model
-- deepasr: implementation of neural net models
-- speechbrain: implementation of neural net models
-- espnet: implementation of neural net models
+- train.py: loads the training dataset and trains the model
+- predict.py: loads new examples from training datset and transcribes them with model
 

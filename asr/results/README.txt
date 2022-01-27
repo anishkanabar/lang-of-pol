@@ -1,0 +1,1 @@
+Results worth source-controlling. Recommend keeping nominal results in an external folder. This could even just point to interesting external files. For reproducibility, results should indicate how they were created.
