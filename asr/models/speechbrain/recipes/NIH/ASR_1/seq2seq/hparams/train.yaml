@@ -19,12 +19,11 @@ environ: !include:../../../hparams/params.yaml
 cluster: !ref <environ[cluster]>
 dataset_name: !ref <environ[dataset_name]>
 num_train: !ref <environ[num_train]>
-data_folder: REQUIRED_BUT_NOT_USED
 split_ratios:
     train: .8
     dev: .1
     test: .1
-data_folder_rirs: /net/projects/uri/ra/echandler/scratch
+data_folder_rirs: /net/projects/uri/ra/echandler/scratch #downloaded if not here
 skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 train_data: !ref <output_folder>/train.csv

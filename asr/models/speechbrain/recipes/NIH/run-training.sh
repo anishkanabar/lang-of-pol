@@ -43,7 +43,7 @@ NODES="1"
 GPUS="1"
 NTASKS="1"
 GPU_TASKS="1"
-MEM_PER_CPU="24G" 
+MEM_PER_CPU="48G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"

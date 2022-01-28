@@ -186,10 +186,9 @@ def dataio_prepare(hparams):
     This function prepares the datasets to be used in the brain class.
     It also defines the data processing pipeline through user-defined functions.
     """
-    data_folder = hparams["data_folder"]
 
     train_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["train_data"], replacements={"data_root": data_folder},
+        csv_path=hparams["train_data"]
     )
 
     if hparams["sorting"] == "ascending":
@@ -214,12 +213,12 @@ def dataio_prepare(hparams):
         )
 
     valid_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["valid_data"], replacements={"data_root": data_folder},
+        csv_path=hparams["valid_data"]
     )
     valid_data = valid_data.filtered_sorted(sort_key="duration")
 
     test_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["test_data"], replacements={"data_root": data_folder},
+        csv_path=hparams["test_data"]
     )
     test_data = test_data.filtered_sorted(sort_key="duration")
 

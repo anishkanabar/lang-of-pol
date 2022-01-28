@@ -313,10 +313,8 @@ def dataio_prepare(hparams):
     This function prepares the datasets to be used in the brain class.
     It also defines the data processing pipeline through user-defined functions.
     """
-    data_folder = hparams["data_folder"]
-
     train_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["train_data"], replacements={"data_root": data_folder},
+        csv_path=hparams["train_data"]
     )
 
     if hparams["sorting"] == "ascending":
@@ -341,12 +339,12 @@ def dataio_prepare(hparams):
         )
 
     valid_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["valid_data"], replacements={"data_root": data_folder},
+        csv_path=hparams["valid_data"]
     )
     valid_data = valid_data.filtered_sorted(sort_key="duration")
 
     test_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["test_data"], replacements={"data_root": data_folder},
+        csv_path=hparams["test_data"]
     )
     test_data = test_data.filtered_sorted(sort_key="duration")
 
@@ -408,13 +406,16 @@ if __name__ == "__main__":
     )
 
     # 1.  # Dataset prep (parsing Librispeech)
-    from prepare import prepare_nih  # noqa
+    from nih_prepare import prepare_nih  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
         prepare_nih,
         kwargs={
-            "data_folder": hparams["data_folder"],
+            "cluster": hparams["cluster"],
+            "dataset_name": hparams['dataset_name'],
+            "num_train": hparams["num_train"],
+            "split_ratios": hparams["split_ratios"],
             "save_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
         },
