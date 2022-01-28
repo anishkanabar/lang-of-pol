@@ -1,17 +1,17 @@
 # ############################################################################
-# Tokenizer: subword BPE with unigram 5000
+# Tokenizer: subword BPE with unigram 3459 
 # Training: NIH
 # ############################################################################
 
-output_folder: !ref results/tokenizer_bpe5000/
+output_folder: !ref results/tokenizer_bpe3459
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
 environ: !include:../../hparams/params.yaml
 cluster: !ref <environ[cluster]>
 dataset_name: !ref <environ[dataset_name]>
-num_train: !ref <environ[num_train]>
 num_sec: !ref <environ[num_sec]>
+num_train: !ref <environ[num_train]>
 split_ratios:
     train: .8
     dev: .2
@@ -21,7 +21,8 @@ valid_csv: !ref <output_folder>/dev.csv
 
 # Training parameters
 token_type: unigram  # ["unigram", "bpe", "char"]
-token_output: 5000  # index(blank/eos/bos/unk) = 0
+# RCC cluster requires vocabulary size <= 3459
+token_output: 3459  # index(blank/eos/bos/unk) = 0
 character_coverage: 1.0
 csv_read: transcript
 

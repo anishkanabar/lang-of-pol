@@ -22,6 +22,7 @@ environ: !include:../../../hparams/params.yaml
 cluster: !ref <environ[cluster]>
 dataset_name: !ref <environ[dataset_name]>
 num_train: !ref <environ[num_train]>
+num_sec : !ref <environ[num_sec]>
 # noise/ris dataset will automatically be downloaded
 data_folder_rirs: !ref <environ[scratch_dir]>
 skip_prep: False
@@ -33,7 +34,7 @@ split_ratios:
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: results/tokenizer_bpe5000/3755_unigram.model
+tokenizer_file: results/tokenizer_bpe3459/3459_unigram.model
 
 # Training parameters
 number_of_epochs: 50

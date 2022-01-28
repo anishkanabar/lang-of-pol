@@ -1,5 +1,8 @@
 # Recipes for training on police language dataset
 
+## Installation
+1. See instructions in the root asr project folder for environment setup.
+
 ## Training
 1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.
     (Optional if passed into script below)
