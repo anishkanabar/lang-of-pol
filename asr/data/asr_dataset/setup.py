@@ -7,6 +7,6 @@ setuptools.setup(
     url='#',
     author='Eric Chandler',
     author_email='echandler@uchicago.edu',
-    install_requires=['pandas','librosa','soundfile'],
+    install_requires=['pandas','librosa','soundfile','numpy<1.22'],
     packages=setuptools.find_packages(),
     zip_safe=False)

@@ -1,9 +1,10 @@
 # Recipes for training on police language dataset
 
 ## Training
-1. Edit run-training.sh, specifically the CMD variable to run a different recipe component.
-2. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts
-3. Run via `sh run-training.sh <rcc|ai>`
+1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.
+    (Optional if passed into script below)
+2. Run via `sh run-training.sh <rcc|ai>`<path to train.py> <path to hparams.yaml> [--cluster C] [--d
+ataset_name D] [--num_train N]`
 
 ## Development
 ### param.yaml files

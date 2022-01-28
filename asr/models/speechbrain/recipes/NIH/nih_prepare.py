@@ -41,7 +41,7 @@ def prepare_nih(cluster: str,
     for split, frac in split_ratios.items():
         current_frac = max(0., min(1., frac / other_frac))
         current_split = other_splits.sample(frac=current_frac, random_state=1234)
-        other_splits = other_splits.iloc[other_splits.index.difference(current_split.index)]
+        other_splits = other_splits.loc[other_splits.index.difference(current_split.index)]
         other_frac = max(0., min(1., other_frac - frac))
         splits[split] = current_split
         

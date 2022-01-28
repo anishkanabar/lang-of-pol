@@ -13,7 +13,7 @@ dataset_name: !ref <environ[dataset_name]>
 num_train: !ref <environ[num_train]>
 split_ratios:
     train: .8
-    def: .2
+    dev: .2
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 

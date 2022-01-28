@@ -1,14 +1,22 @@
 #!/bin/bash
 
 # Retrieve command line args
+all_args=("$@")
 CLUSTER=$1
+TRAINPY=$2
+HPARAMS=$3
+OVERRIDES=("${all_args[@]:3}")
 
 # Validate command line args
 usage() {
     echo "Usage:" >&2
-    echo "sh run-training.sh <rcc|ai>" >&2
+    echo "sh run-training.sh <rcc|ai> <path/to/train.py> <path/to/params.yaml> [overrides...]" >&2
+    echo "Overrides are named args matching a hparam key" >&2
 }
 if [ "$CLUSTER" != "rcc" ] && [ "$CLUSTER" != "ai" ]; then
+    usage
+    exit 1
+elif [ ! -f "$TRAINPY" ] || [ ! -f "$HPARAMS" ]; then
     usage
     exit 1
 fi
@@ -35,10 +43,7 @@ NODES="1"
 GPUS="1"
 NTASKS="1"
 GPU_TASKS="1"
-MEM_PER_CPU="24G"
-
-# Edit this to train different model component!
-CMD="python Tokenizer/train.py Tokenizer/hparams/tokenizer_bpe5000.yaml"
+MEM_PER_CPU="24G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
@@ -58,7 +63,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            "$CMD"
+            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
@@ -72,6 +77,6 @@ elif [ "$CLUSTER" = "ai" ]; then
             --gpus-per-task $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
-            "$CMD"
+            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 fi
      

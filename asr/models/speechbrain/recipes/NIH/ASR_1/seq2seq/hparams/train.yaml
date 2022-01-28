@@ -9,21 +9,28 @@
 
 seed: 1
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-output_folder: !ref results/base/<seed>
+output_folder: !ref results/seq2seq/<seed>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
-data_folder: !PLACEHOLDER
-# noise/ris dataset will automatically be downloaded
-data_folder_rirs: !ref <data_folder> # Change this is needed
+environ: !include:../../../hparams/params.yaml
+cluster: !ref <environ[cluster]>
+dataset_name: !ref <environ[dataset_name]>
+num_train: !ref <environ[num_train]>
+data_folder: REQUIRED_BUT_NOT_USED
+split_ratios:
+    train: .8
+    dev: .1
+    test: .1
+data_folder_rirs: /net/projects/uri/ra/echandler/scratch
 skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: speechbrain/asr-transformer-nih/tokenizer.ckpt
+tokenizer_file: results/tokenizer_bpe5000/3755_unigram.model
 
 # Training parameters
 number_of_epochs: 40
@@ -75,7 +82,7 @@ dnn_blocks: 2
 dnn_neurons: 512
 emb_size: 128
 dec_neurons: 1024
-output_neurons: 5000  # Number of tokens
+output_neurons: 3755  # Number of tokens
 blank_index: 0
 bos_index: 0
 eos_index: 0
@@ -226,6 +233,9 @@ checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
 
 train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
    save_file: !ref <train_log>
+
+remove_spaces: False
+split_tokens: !apply:operator.not_ [!ref <remove_spaces>]
 
 cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
    split_tokens: !ref <split_tokens>
