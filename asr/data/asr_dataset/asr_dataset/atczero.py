@@ -10,8 +10,8 @@ SAMPLE_RATE = 8000
 import datetime
 import pandas as pd
 import logging
-from asr_dataset.dataset import AudioClipDataset
-from asr_dataset.datasets.constants import DATASET_DIRS
+from asr_dataset.base_dataset import AudioClipDataset
+from asr_dataset.constants import DATASET_DIRS
 
 class ATCZeroDataset(AudioClipDataset):
 

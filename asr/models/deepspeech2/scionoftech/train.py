@@ -16,8 +16,8 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 from keras.callbacks import CSVLogger, ModelCheckpoint
 import tensorflow as tf
 import deepasr as asr
-from asr_dataset.datasets.librispeech import LibriSpeechDataset
-from asr_dataset.datasets.radio import RadioDataset
+from asr_dataset.librispeech import LibriSpeechDataset
+from asr_dataset.radio import RadioDataset
 
 SAMPLE_RATE = 16000   # Hz
 WINDOW_LEN = .02 # Sec

@@ -5,8 +5,8 @@ Brief: Loaders for librispeech transcripts and audio.
 
 import os
 import pandas as pd
-from asr_dataset.dataset import ASRDataset
-from asr_dataset.datasets.constants import DATASET_DIRS
+from asr_dataset.base_dataset import ASRDataset
+from asr_dataset.constants import DATASET_DIRS
 
 WINDOW_LEN = .02 # Sec
 

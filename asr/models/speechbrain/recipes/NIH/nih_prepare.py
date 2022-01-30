@@ -1,8 +1,8 @@
 import os
 import logging
-from asr_dataset.datasets.radio import RadioDataset
-from asr_dataset.datasets.librispeech import LibriSpeechDataset
-from asr_dataset.datasets.atczero import ATCZeroDataset
+from asr_dataset.radio import RadioDataset
+from asr_dataset.librispeech import LibriSpeechDataset
+from asr_dataset.atczero import ATCZeroDataset
 import pandas as pd
 
 logger = logging.getLogger(__name__)
