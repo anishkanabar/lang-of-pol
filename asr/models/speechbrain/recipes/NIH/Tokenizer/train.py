@@ -40,6 +40,7 @@ if __name__ == "__main__":
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],
             "num_train": hparams["num_train"],
+            "num_sec": hparams["num_sec"],
             "split_ratios": hparams["split_ratios"],
             "save_folder": hparams["output_folder"],
         },

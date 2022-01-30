@@ -9,23 +9,28 @@ import re
 import datetime
 import pandas as pd
 import logging
-from asr_dataset.dataset import AudioClipDataset
-from asr_dataset.datasets.constants import DATASET_DIRS
+from asr_dataset.base_dataset import AudioClipDataset
+from asr_dataset.constants import DATASET_DIRS
 
 BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
 SAMPLE_RATE = 16000  # Hz
-WINDOW_LEN = .02 # Sec
+WINDOW_LEN = .04 # Sec
 
 class RadioDataset(AudioClipDataset):
 
-    def __init__(self, cluster:str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+    def __init__(self, 
+                 cluster:str='rcc', 
+                 nrow: int=None, 
+                 frac: float=None, 
+                 nsecs: float=None,
+                 window_len=WINDOW_LEN):
         """
             Returns a RadioDataset with a data attribute which is a data frame of:
                 path, offset, duration, transcript
         """                
         self.transcripts_dir = DATASET_DIRS[cluster]['radio_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['radio_mp3s']
-        super().__init__('radio', nrow, frac, window_len)
+        super().__init__('radio', nrow, frac, nsecs, window_len)
         self.data = self.add_sample_count(self.data)
     
     def _load_transcripts(self, 

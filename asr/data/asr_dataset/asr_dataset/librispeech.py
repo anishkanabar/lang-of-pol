@@ -5,18 +5,21 @@ Brief: Loaders for librispeech transcripts and audio.
 
 import os
 import pandas as pd
-from asr_dataset.dataset import ASRDataset
-from asr_dataset.datasets.constants import DATASET_DIRS
+from asr_dataset.base_dataset import ASRDataset
+from asr_dataset.constants import DATASET_DIRS
 
-WINDOW_LEN = .02 # Sec
+WINDOW_LEN = .04 # Sec
 
 class LibriSpeechDataset(ASRDataset):
     
-    def __init__(self, cluster: str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+    def __init__(self, 
+                 cluster: str='rcc', 
+                 nrow: int=None, 
+                 frac: float=None, 
+                 nsecs: float=None,
+                 window_len=WINDOW_LEN):
         self.dataset_path = DATASET_DIRS[cluster]['librispeech']
-        super().__init__('librispeech', nrow, frac, window_len)
-        self.data = self.add_duration(self.data)
-        self.data = self.add_sample_count(self.data)
+        super().__init__('librispeech', nrow, frac, nsecs, window_len)
 
     def _load_transcripts(self, audio_type='.flac', window_len=WINDOW_LEN):
         """
@@ -43,5 +46,7 @@ class LibriSpeechDataset(ASRDataset):
                                 text = item.split()[1:]
                                 text = ' '.join(text)
                                 audio_trans.append(text)
-        return pd.DataFrame({"path": audio_name, "transcripts": audio_trans})
-    
+        data = pd.DataFrame({"path": audio_name, "transcripts": audio_trans})
+        data = self.add_duration(data)
+        data = self.add_sample_count(data)
+        return data

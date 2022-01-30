@@ -1,7 +1,8 @@
 #!/usr/bin/env/python3
 """
-NIH transformer model recipe.
-It is designed to work with wav2vec2 pre-training.
+
+AISHELL-1 transformer model recipe. (Adapted from the LibriSpeech recipe.)
+
 """
 
 import sys
@@ -17,9 +18,7 @@ logger = logging.getLogger(__name__)
 # Define training procedure
 class ASR(sb.core.Brain):
     def compute_forward(self, batch, stage):
-        """
-        Forward computations from the waveform batches to the output probabilities.
-        """
+        """Forward computations from the waveform batches to the output probabilities."""
         batch = batch.to(self.device)
         wavs, wav_lens = batch.sig
         tokens_bos, _ = batch.tokens_bos
@@ -33,24 +32,26 @@ class ASR(sb.core.Brain):
                 tokens_bos = torch.cat([tokens_bos, tokens_bos], dim=0)
 
         # compute features
-        feats = self.modules.wav2vec2(wavs)
+        feats = self.hparams.compute_features(wavs)
         current_epoch = self.hparams.epoch_counter.current
+        feats = self.hparams.normalize(feats, wav_lens, epoch=current_epoch)
 
         if stage == sb.Stage.TRAIN:
             if hasattr(self.hparams, "augmentation"):
                 feats = self.hparams.augmentation(feats)
 
         # forward modules
-        enc_out, pred = self.hparams.Transformer(
-            feats, tokens_bos, wav_lens, pad_idx=self.hparams.pad_index
+        src = self.modules.CNN(feats)
+        enc_out, pred = self.modules.Transformer(
+            src, tokens_bos, wav_lens, pad_idx=self.hparams.pad_index
         )
 
         # output layer for ctc log-probabilities
-        logits = self.hparams.ctc_lin(enc_out)
+        logits = self.modules.ctc_lin(enc_out)
         p_ctc = self.hparams.log_softmax(logits)
 
         # output layer for seq2seq log-probabilities
-        pred = self.hparams.seq_lin(pred)
+        pred = self.modules.seq_lin(pred)
         p_seq = self.hparams.log_softmax(pred)
 
         # Compute outputs
@@ -70,9 +71,7 @@ class ASR(sb.core.Brain):
         return p_ctc, p_seq, wav_lens, hyps
 
     def compute_objectives(self, predictions, batch, stage):
-        """
-        Computes the loss (CTC+NLL) given predictions and targets.
-        """
+        """Computes the loss (CTC+NLL) given predictions and targets."""
 
         (p_ctc, p_seq, wav_lens, hyps,) = predictions
 
@@ -105,9 +104,19 @@ class ASR(sb.core.Brain):
                 stage == sb.Stage.TEST
             ):
                 # Decode token terms to words
-                predicted_words = [
-                    tokenizer.decode_ids(utt_seq).split(" ") for utt_seq in hyps
-                ]
+                # DEBUGGING
+                predicted_words = []
+                for utt_seq in hyps:
+                    print(utt_seq)
+                    debug_ids = tokenizer.decode_ids(utt_seq)
+                    print(debug_ids)
+                    debug_splitted = debug_ids.split(" ")
+                    print(debug_splitted)
+                    predicted_words.append(debug_splitted)
+                # END DEBUGGING
+                #predicted_words = [
+                #    tokenizer.decode_ids(utt_seq).split(" ") for utt_seq in hyps
+                #]
                 target_words = [wrd.split(" ") for wrd in batch.wrd]
                 if self.hparams.remove_spaces:
                     predicted_words = ["".join(p) for p in predicted_words]
@@ -119,9 +128,7 @@ class ASR(sb.core.Brain):
         return loss
 
     def fit_batch(self, batch):
-        """
-        Train the parameters given a single batch in input
-        """
+        """Train the parameters given a single batch in input"""
         # check if we need to switch optimizer
         # if so change the optimizer from Adam to SGD
         self.check_and_reset_optimizer()
@@ -137,37 +144,28 @@ class ASR(sb.core.Brain):
             self.check_gradients(loss)
 
             self.optimizer.step()
-            self.optimizer_wav2vect.step()
             self.optimizer.zero_grad()
-            self.optimizer_wav2vect.zero_grad()
 
             # anneal lr every update
             self.hparams.noam_annealing(self.optimizer)
-            self.hparams.noam_annealing_wav2vect(self.optimizer_wav2vect)
 
         return loss.detach()
 
     def evaluate_batch(self, batch, stage):
-        """
-        Computations needed for validation/test batches
-        """
+        """Computations needed for validation/test batches"""
         with torch.no_grad():
             predictions = self.compute_forward(batch, stage=stage)
             loss = self.compute_objectives(predictions, batch, stage=stage)
         return loss.detach()
 
     def on_stage_start(self, stage, epoch):
-        """
-        Gets called at the beginning of each epoch
-        """
+        """Gets called at the beginning of each epoch"""
         if stage != sb.Stage.TRAIN:
             self.acc_metric = self.hparams.acc_computer()
             self.cer_metric = self.hparams.cer_computer()
 
     def on_stage_end(self, stage, stage_loss, epoch):
-        """
-        Gets called at the end of a epoch.
-        """
+        """Gets called at the end of a epoch."""
         # Compute/store important stats
         stage_stats = {"loss": stage_loss}
         if stage == sb.Stage.TRAIN:
@@ -231,9 +229,7 @@ class ASR(sb.core.Brain):
             )
 
     def check_and_reset_optimizer(self):
-        """
-        reset the optimizer if training enters stage 2
-        """
+        """reset the optimizer if training enters stage 2"""
         current_epoch = self.hparams.epoch_counter.current
         if not hasattr(self, "switched"):
             self.switched = False
@@ -252,9 +248,7 @@ class ASR(sb.core.Brain):
             self.switched = True
 
     def on_fit_start(self):
-        """
-        Initialize the right optimizer on the training start
-        """
+        """Initialize the right optimizer on the training start"""
         super().on_fit_start()
 
         # if the model is resumed from stage two, reinitialize the optimizer
@@ -277,9 +271,7 @@ class ASR(sb.core.Brain):
                 )
 
     def on_evaluate_start(self, max_key=None, min_key=None):
-        """
-        perform checkpoint average if needed
-        """
+        """perform checkpoint averge if needed"""
         super().on_evaluate_start()
 
         ckpts = self.checkpointer.find_checkpoints(
@@ -292,29 +284,13 @@ class ASR(sb.core.Brain):
         self.hparams.model.load_state_dict(ckpt, strict=True)
         self.hparams.model.eval()
 
-    def init_optimizers(self):
-        """
-        Initializes the wav2vec2 optimizer and model optimizer
-        """
-        self.optimizer_wav2vect = self.hparams.wav2vec_opt_class(
-            self.modules.wav2vec2.parameters()
-        )
-        self.optimizer = self.hparams.Adam(self.hparams.model.parameters())
-
-        if self.checkpointer is not None:
-            self.checkpointer.add_recoverable(
-                "wav2vec_opt", self.optimizer_wav2vect
-            )
-            self.checkpointer.add_recoverable("modelopt", self.optimizer)
-
 
 def dataio_prepare(hparams):
-    """
-    This function prepares the datasets to be used in the brain class.
-    It also defines the data processing pipeline through user-defined functions.
-    """
+    """This function prepares the datasets to be used in the brain class.
+    It also defines the data processing pipeline through user-defined functions."""
+
     train_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["train_data"]
+        csv_path=hparams["train_data"],
     )
 
     if hparams["sorting"] == "ascending":
@@ -339,12 +315,12 @@ def dataio_prepare(hparams):
         )
 
     valid_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["valid_data"]
+        csv_path=hparams["valid_data"],
     )
     valid_data = valid_data.filtered_sorted(sort_key="duration")
 
     test_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["test_data"]
+        csv_path=hparams["test_data"],
     )
     test_data = test_data.filtered_sorted(sort_key="duration")
 
@@ -432,6 +408,7 @@ if __name__ == "__main__":
     # Trainer initialization
     asr_brain = ASR(
         modules=hparams["modules"],
+        opt_class=hparams["Adam"],
         hparams=hparams,
         run_opts=run_opts,
         checkpointer=hparams["checkpointer"],

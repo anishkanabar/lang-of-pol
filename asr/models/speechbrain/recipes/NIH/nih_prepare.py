@@ -1,7 +1,8 @@
 import os
 import logging
-from asr_dataset.datasets.radio import RadioDataset
-from asr_dataset.datasets.librispeech import LibriSpeechDataset
+from asr_dataset.radio import RadioDataset
+from asr_dataset.librispeech import LibriSpeechDataset
+from asr_dataset.atczero import ATCZeroDataset
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -9,6 +10,7 @@ logger = logging.getLogger(__name__)
 def prepare_nih(cluster: str, 
                 dataset_name:str, 
                 num_train: int, 
+                num_sec: float,
                 split_ratios: dict,
                 save_folder: str, 
                 skip_prep=False):
@@ -17,6 +19,7 @@ def prepare_nih(cluster: str,
         cluster: cluster name. either ['rcc', 'ai']
         dataset_name: either ['radio', 'librispeech', 'atczero']
         num_train: number of samples to prepare from dataset
+        num_sec: total seconds of audio to retrieve from dataset
         split_ratios: dictionary of named train/val/test splits and fraction of dataset
         save_folder: path to manifest (output) folder
         skip_prep: If True, skip data preparation.
@@ -25,9 +28,11 @@ def prepare_nih(cluster: str,
         return
 
     if dataset_name == 'radio':
-        data = RadioDataset(cluster, nrow=num_train).data
+        data = RadioDataset(cluster, nrow=num_train, nsecs=num_sec).data
     elif dataset_name == 'librispeech':
-        data = LibriSpeechDataset(cluster, nrow=num_train).data
+        data = LibriSpeechDataset(cluster, nrow=num_train, nsecs=num_sec).data
+    elif dataset_name == 'atczero':
+        data = ATCZeroDataset(cluster, nrow=num_train, nsecs=num_sec).data
     else:
         raise NotImplementedError('dataset ' + dataset_name)
     
@@ -38,7 +43,7 @@ def prepare_nih(cluster: str,
     for split, frac in split_ratios.items():
         current_frac = max(0., min(1., frac / other_frac))
         current_split = other_splits.sample(frac=current_frac, random_state=1234)
-        other_splits = other_splits.iloc[other_splits.index.difference(current_split.index)]
+        other_splits = other_splits.loc[other_splits.index.difference(current_split.index)]
         other_frac = max(0., min(1., other_frac - frac))
         splits[split] = current_split
         

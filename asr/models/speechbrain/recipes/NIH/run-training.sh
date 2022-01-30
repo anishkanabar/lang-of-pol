@@ -1,14 +1,22 @@
 #!/bin/bash
 
 # Retrieve command line args
+all_args=("$@")
 CLUSTER=$1
+TRAINPY=$2
+HPARAMS=$3
+OVERRIDES=("${all_args[@]:3}")
 
 # Validate command line args
 usage() {
     echo "Usage:" >&2
-    echo "sh run-training.sh <rcc|ai>" >&2
+    echo "sh run-training.sh <rcc|ai> <path/to/train.py> <path/to/params.yaml> [overrides...]" >&2
+    echo "Overrides are named args matching a hparam key" >&2
 }
 if [ "$CLUSTER" != "rcc" ] && [ "$CLUSTER" != "ai" ]; then
+    usage
+    exit 1
+elif [ ! -f "$TRAINPY" ] || [ ! -f "$HPARAMS" ]; then
     usage
     exit 1
 fi
@@ -19,6 +27,8 @@ if [ "$CLUSTER" = "rcc" ]; then
     TIMEOUT="18:00:00"
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
+    # Trying nodes in order in case some have weird cuda BS
+    #NODELIST="midway3-0280"
 elif [ "$CLUSTER" = "ai" ]; then
     OUTPUT_DIR="/home/`whoami`/slurm_output"
     TIMEOUT="03:59:00"   # 4 hours is the maximum on AI cluster
@@ -35,13 +45,17 @@ NODES="1"
 GPUS="1"
 NTASKS="1"
 GPU_TASKS="1"
-MEM_PER_CPU="24G"
-
-# Edit this to train different model component!
-CMD="python Tokenizer/train.py Tokenizer/hparams/tokenizer_bpe5000.yaml"
+MEM_PER_CPU="24G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
+fi
+
+# Link to libsndfile, which isnt available on rcc compute nodes
+if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
+    # XXX: Make user-independent
+    LN_PATH=/home/echandler/.conda/envs/soundfile/lib
+    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
@@ -51,14 +65,14 @@ if [ "$CLUSTER" = "rcc" ]; then
             --output "$OUTPUT" \
             --error "$ERROR" \
             --partition "$PARTITION" \
-            --nodes $NODES \
+            --nodes "$NODES" \
             --gpus $GPUS \
             --ntasks $NTASKS \
             --ntasks-per-gpu $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            "$CMD"
+            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
@@ -72,6 +86,6 @@ elif [ "$CLUSTER" = "ai" ]; then
             --gpus-per-task $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
-            "$CMD"
+            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 fi
      

@@ -2,7 +2,10 @@
 # Environmental and Experiment parameters
 # ############################################################################
 
-cluster: ai  # 'ai' or 'rcc'
-dataset_name: librispeech  # 'librispeech' or 'radio' or 'atczero'
-num_train: 1024
+cluster: rcc  # 'ai' or 'rcc'
+dataset_name: radio  # 'librispeech' or 'radio' or 'atczero'
+num_train: None
+num_sec: 1800
+# XXX: Make this user-independent and somehow dependent on the cluster!
+scratch_dir: /project/graziul/ra/echandler/scratch
 

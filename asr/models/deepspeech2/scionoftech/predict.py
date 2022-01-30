@@ -1,8 +1,8 @@
 import argparse
 import logging
 import deepasr as asr
-from asr_dataset.datasets.radio import RadioDataset
-from asr_dataset.datasets.librispeech import LibriSpeechDataset
+from asr_dataset.radio import RadioDataset
+from asr_dataset.librispeech import LibriSpeechDataset
 import warnings
 import tensorflow as tf
 

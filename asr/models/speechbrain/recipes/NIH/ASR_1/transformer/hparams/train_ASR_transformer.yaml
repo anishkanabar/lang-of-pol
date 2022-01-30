@@ -4,26 +4,36 @@
 # Decoder: Transformer Decoder + (CTC/ATT joint) beamsearch
 # Tokens: BPE with unigram
 # losses: CTC + KLdiv (Label Smoothing loss)
-# Training: NIH
+# Training: AISHELL-1
+# Authors:  Jianyuan Zhong, Titouan Parcollet
 # ############################################################################
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 8886
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-output_folder: !ref results/transformer/<seed>
+trial: 1
+output_folder: !ref results/transformer/trial_<trial>/seed_<seed>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
-data_folder: !PLACEHOLDER # e,g./path/to/nih
+environ: !include:../../../hparams/params.yaml
+cluster: !ref <environ[cluster]>
+dataset_name: !ref <environ[dataset_name]>
+num_train: !ref <environ[num_train]>
+num_sec : !ref <environ[num_sec]>
 # noise/ris dataset will automatically be downloaded
-data_folder_rirs: !ref <data_folder> # Change this is needed
+data_folder_rirs: !ref <environ[scratch_dir]>
 skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
+split_ratios:
+    train: .8
+    dev: .1
+    test: .1
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: speechbrain/asr-transformer-nih/tokenizer.ckpt
+tokenizer_file: results/tokenizer/bpe1894/1894_unigram.model
 
 # Training parameters
 number_of_epochs: 50
@@ -64,8 +74,8 @@ num_decoder_layers: 6
 d_ffn: 2048
 transformer_dropout: 0.1
 activation: !name:torch.nn.GELU
-output_neurons: 5000
-vocab_size: 5000
+output_neurons: 1894
+vocab_size: 1894
 
 # Outputs
 blank_index: 0
@@ -221,7 +231,12 @@ compute_features: !new:speechbrain.lobes.features.Fbank
 train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
     save_file: !ref <train_log>
 
-remove_spaces: False
+# AISHELL-1 has spaces between words in the transcripts,
+# which Chinese writing normally does not do.
+# If remove_spaces, spaces are removed
+# from the transcript before computing CER.
+# (e.g., 祝 可爱 的 你 —> 祝可爱的你)
+remove_spaces: True
 split_tokens: !apply:operator.not_ [!ref <remove_spaces>]
 
 cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
