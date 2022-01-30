@@ -3,7 +3,7 @@
 # ############################################################################
 
 cluster: rcc  # 'ai' or 'rcc'
-dataset_name: atczero  # 'librispeech' or 'radio' or 'atczero'
+dataset_name: radio  # 'librispeech' or 'radio' or 'atczero'
 num_train: None
 num_sec: 1800
 # XXX: Make this user-independent and somehow dependent on the cluster!

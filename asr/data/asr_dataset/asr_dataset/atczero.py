@@ -15,14 +15,19 @@ from asr_dataset.constants import DATASET_DIRS
 
 class ATCZeroDataset(AudioClipDataset):
 
-    def __init__(self, cluster:str='rcc', nrow: int=None, frac: float=None, window_len=WINDOW_LEN):
+    def __init__(self, 
+        cluster:str='rcc', 
+        nrow: int=None, 
+        frac: float=None, 
+        nsecs: float=None,
+        window_len=WINDOW_LEN):
         """
         Returns a ATCZeroDataset with a data attribute which is a dataframe of:
             path to utterance audio, duration (sec), number of samples, transcript text, [other columns]
         """
         self.transcripts_dir = DATASET_DIRS[cluster]['atc0']
         
-        super().__init__('atczero', nrow, frac, window_len)
+        super().__init__('atczero', nrow, frac, nsecs, window_len)
 
         self.data = self.add_sample_count(self.data)
 
@@ -53,7 +58,10 @@ class ATCZeroDataset(AudioClipDataset):
         loaded_df.drop(['start', 'end', 'filePath'], axis = 1, inplace = True)
 
         loaded_df = self._add_clip_paths(loaded_df)
+        
 
+        logging.info(f'DEBUG ATC0 Columns: {loaded_df.columns}')
+        loaded_df = loaded_df.rename(columns={"transcription": "transcripts"})
         return loaded_df
 
 
