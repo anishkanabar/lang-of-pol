@@ -28,7 +28,7 @@ if [ "$CLUSTER" = "rcc" ]; then
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS
-    NODELIST="midway3-0280"
+    #NODELIST="midway3-0280"
 elif [ "$CLUSTER" = "ai" ]; then
     OUTPUT_DIR="/home/`whoami`/slurm_output"
     TIMEOUT="03:59:00"   # 4 hours is the maximum on AI cluster
@@ -45,7 +45,7 @@ NODES="1"
 GPUS="1"
 NTASKS="1"
 GPU_TASKS="1"
-MEM_PER_CPU="48G" 
+MEM_PER_CPU="24G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
@@ -65,7 +65,6 @@ if [ "$CLUSTER" = "rcc" ]; then
             --output "$OUTPUT" \
             --error "$ERROR" \
             --partition "$PARTITION" \
-            --nodelist "$NODELIST" \
             --nodes "$NODES" \
             --gpus $GPUS \
             --ntasks $NTASKS \
