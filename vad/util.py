@@ -226,13 +226,18 @@ def process_atc0_files():
     labels_list = []
     #paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dca/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dfw/data/audio/']
     paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/']
-    for path in paths:
+    for idx,path in enumerate(paths):
         for fpath in glob(path + '*.sph'):
+            if(idx > 6):
+                break
             filename = fpath[-12:-4]
             label_file = path[:-6] + 'transcripts/' + filename + '.txt'
             x,y = process_file_atc0(filename, fpath, label_file)
             input_list.append(x)
             labels_list.append(y)
+            idx = idx+1
+        if(idx>6):
+            break
     input_list = torch.cat(input_list)
     input_list = torch.transpose(input_list,1,2)
     labels_list = torch.from_numpy(np.concatenate(labels_list,axis = 0)).float()
@@ -247,7 +252,7 @@ def load_data(pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
 
     for idx,key in enumerate(vad_dict):
         print(idx)
-        if idx > 30:
+        if idx > 100000000:
             break
         a = audio_file(key)
         a.get_slices(vad_dict)
@@ -260,7 +265,7 @@ def load_data(pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
     labels_list = torch.from_numpy(np.concatenate(labels_list,axis = 0)).float()
     return input_list, labels_list
 
-def load_data_for_cross_validation(k=20,pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'):
+def load_data_limit(k=10000000,pkl_path = '/project/graziul/ra/ajays/whitelisted_vad_dict.pkl'): #load a subset of data
     #pkl_path = '/project/graziul/data/Zone1/2018_08_04/2018_08_04vad_dict.pkl'
     file = open(pkl_path,'rb')
     vad_dict = pickle.load(file)
@@ -294,7 +299,7 @@ class audio_file():
         self.frames = None
         self.frames_labels = None
         self.mfcc = None
-        self.n_clips = 30
+        self.n_clips = 300
         self.flag = new_flag
     
     def get_slices(self, vad_dict):
@@ -428,6 +433,9 @@ class audio_file():
         else:
             file_name = self.name
         self.waveform, self.sample_rate = torchaudio.load(file_name)
+        pad_array = torch.zeros((1,10000*self.sample_rate))
+        pad_array[:,:self.waveform.shape[1]] = self.waveform
+        self.waveform = pad_array
         self.waveform = self.waveform[:,:1800*self.sample_rate] #Clip the file at 1800s
         n_fft = 2048
         win_length = 551
@@ -455,6 +463,9 @@ class audio_file():
         else:
             file_name = '/project/graziul/data/Zone1/2018_08_04/' + self.name
         self.waveform, self.sample_rate = torchaudio.load(file_name)
+        pad_array = torch.zeros((1,10000*self.sample_rate))
+        pad_array[:,:self.waveform.shape[1]] = self.waveform
+        self.waveform = pad_array
         self.waveform = self.waveform[:,:1800*self.sample_rate] #Clip the file at 1800s
         clip_size = math.floor(self.waveform.shape[1]/self.n_clips)
         n_clips = self.n_clips
@@ -540,15 +551,18 @@ def get_frame_error_rate(output_hat, labels, verbose = 0):
         false_negatives = []
         false_positives = []
         for i in range(num_samples):
-            false_positives.append(0)
-            false_negatives.append(0)
+            false_positives.append([0])
+            false_negatives.append([0])
             curr_output = output_hat[i]
             curr_label = labels[i]
             fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
-            if (curr_output == 1 and curr_label == 0):
-                false_positives[i] = 1
-            if (curr_output == 0 and curr_label == 1):
-                false_negatives[i] = 1
+            for j in range(len(curr_output)):
+                my_curr_output = curr_output[j]
+                my_curr_label = curr_label[j]
+                if (my_curr_output == 1 and my_curr_label == 0):
+                    false_positives[i].append(1)
+                if (my_curr_output == 0 and my_curr_label == 1):
+                    false_negatives[i].append(1)
         return fer_arr,false_positives, false_negatives
 
 def test_frame_error_rate(output_hat, labels, verbose = 0):
