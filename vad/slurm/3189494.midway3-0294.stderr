@@ -1,0 +1,3 @@
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=3189494.0 cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
+srun: error: midway3-0294: task 0: Out Of Memory
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=3189494.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
