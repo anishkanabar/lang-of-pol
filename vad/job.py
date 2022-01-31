@@ -59,7 +59,7 @@ test_loss_list = []
 sample_size = 30
 batch_size = model.batch_size
 num_samples = input_list.size()[0]//batch_size
-training_steps = 1000
+training_steps = 750
 idx = 0
 flag = 0
 num_segments = 30
@@ -120,27 +120,28 @@ for val_index in range(num_samples):
         if(idx != val_index):
             input_batch = train_data[idx*batch_size:(idx+1)*batch_size]
             labels_batch = train_labels[idx*batch_size:(idx+1)*batch_size]
-            print(step)
-            optimizer.zero_grad()
-            output_hat = model(input_batch)
-            print(labels_batch)
-            print(output_hat)
-            loss = loss_fn(output_hat, labels_batch)
-            loss.backward()
-            #for param in model.parameters():
-            #    print(param.grad)
-            print(loss)
-            optimizer.step()
+            if(input_batch.size()[0] != 0):
+                print(step)
+                optimizer.zero_grad()
+                output_hat = model(input_batch)
+                print(labels_batch)
+                print(output_hat)
+                loss = loss_fn(output_hat, labels_batch)
+                loss.backward()
+                #for param in model.parameters():
+                #    print(param.grad)
+                print(loss)
+                optimizer.step()
         idx = (idx+1)%num_samples
     with torch.no_grad():
-        preds = get_predictions(model,test_data, test_labels, batch_size)  
-        fer_value = get_frame_error_rate(torch.round(preds),test_labels, verbose)
-        if verbose == 0:
-            fer = str(fer_value) + "\n"
-        else:
-            fer = "FER = " + str(fer_value[0]) + ", False_Positives = " + str(fer_value[1]) + ", False Negatives = " + str(fer_value[3]) + "\n"
-        print(fer)
-        if verbose == 0:
+        if (test_data.size()[0] != 0):
+            preds = get_predictions(model,test_data, test_labels, batch_size)  
+            fer_value = get_frame_error_rate(torch.round(preds),test_labels, verbose)
+            if verbose == 0:
+                fer = str(fer_value) + "\n"
+            else:
+                fer = "FER = " + str(fer_value[0]) + ", False_Positives = " + str(fer_value[1]) + ", False Negatives = " + str(fer_value[2]) + "\n"
+            print(fer)
             preds_file.write(fer)
 preds_file.close()
 
