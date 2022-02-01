@@ -74,8 +74,8 @@ num_decoder_layers: 6
 d_ffn: 2048
 transformer_dropout: 0.1
 activation: !name:torch.nn.GELU
-output_neurons: 1894
-vocab_size: 1894
+output_neurons: 5000
+vocab_size: 5000
 
 # Outputs
 blank_index: 0
@@ -236,7 +236,7 @@ train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
 # If remove_spaces, spaces are removed
 # from the transcript before computing CER.
 # (e.g., 祝 可爱 的 你 —> 祝可爱的你)
-remove_spaces: True
+remove_spaces: False
 split_tokens: !apply:operator.not_ [!ref <remove_spaces>]
 
 cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
