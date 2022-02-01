@@ -7,41 +7,43 @@ Authors: William Dolan <wdolan@uchicago.edu>
 WINDOW_LEN = .02 #Sec
 SAMPLE_RATE = 8000
 
+import os
 import datetime
 import pandas as pd
 import logging
-from asr_dataset.base_dataset import AudioClipDataset
+from asr_dataset.utterance_dataset import UtteranceDataset
 from asr_dataset.constants import DATASET_DIRS
 
-class ATCZeroDataset(AudioClipDataset):
+class ATCZeroDataset(UtteranceDataset):
 
     def __init__(self, 
-        cluster:str='rcc', 
-        nrow: int=None, 
-        frac: float=None, 
-        nsecs: float=None,
-        window_len=WINDOW_LEN):
-        """
-        Returns a ATCZeroDataset with a data attribute which is a dataframe of:
-            path to utterance audio, duration (sec), number of samples, transcript text, [other columns]
-        """
-        self.transcripts_dir = DATASET_DIRS[cluster]['atc0']
-        
-        super().__init__('atczero', nrow, frac, nsecs, window_len)
+                cluster:str='rcc', 
+                nrow: int=None, 
+                frac: float=None, 
+                nsecs: float=None):
+        self.transcripts_dir = DATASET_DIRS[cluster]['atczero']
+        super().__init__('atczero', nrow, frac, nsecs)
 
-        self.data = self.add_sample_count(self.data)
+    @classmethod
+    def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
+        """ Don't need to filter this dataset. Data quality is good. """
+        return data
 
-    def _load_transcripts(self, sample_rate=SAMPLE_RATE, window_len = WINDOW_LEN):
-        """
-        This function is to get audios and transcripts needed for training
-        Returns: a dataframe with columns: path to utterance audio, transcripts
-        """
-        # XXX: This function is called by the base class's init method. It's kind of a weird 
-        #       way to implement subclassing & maybe should be refactored. But for for now
-        #       this function should do most of the class-specific data loading work.
-        # XXX: This funciton is kind of weird. It is actually called by the base class's init method.
-        #       So this function should do most of the work of
 
+    def create_manifest(self) -> pd.DataFrame:
+        """
+        Collect info on audio files and transcripts.
+        Returns: DataFrame with columns:
+            path - full path to utterance audio file
+            transcripts - transcript text
+            duration - utterance audio length in seconds
+            offset - utterance offset from beginning of context audio
+            context_path - path to audio file with multiple utterances
+            location - airport identifier
+            speaker - air traffic controller id
+            recipient - airplane id
+            transcriber - transcriber id
+        """
         unloaded_df = pd.read_csv(self.transcripts_dir + '/atc0.csv')
 
         loaded_df = unloaded_df
@@ -54,29 +56,28 @@ class ATCZeroDataset(AudioClipDataset):
 
         loaded_df['offset'] = loaded_df['start'].astype(float)
 
-        loaded_df['path'] = loaded_df['filePath'].str.replace('atc0', self.transcripts_dir + '/atc0')
-        loaded_df.drop(['start', 'end', 'filePath'], axis = 1, inplace = True)
+        loaded_df['context_path'] = self.transcripts_dir + os.sep + loaded_df['filePath']
 
-        loaded_df = self._add_clip_paths(loaded_df)
-        
+        loaded_df = loaded_df.drop(['start', 'end', 'filePath'], axis = 1)
 
-        logging.info(f'DEBUG ATC0 Columns: {loaded_df.columns}')
+        loaded_df = self._add_utterance_paths(loaded_df)
+
         loaded_df = loaded_df.rename(columns={"transcription": "transcripts"})
         return loaded_df
 
 
-    def _add_clip_paths(self, data):
+    def _add_utterance_paths(self, data):
         """
-        Add column with path to audio clip.
+        Add column with path to utterance audio clip.
         Params:
-            @data: expects columns {path, offset, duration, transcripts}
+            @data: expects columns {context_path, offset, duration}
         """
         msPerSec = 1000
 
         off_fmt = (data['offset'].astype(float) * msPerSec).astype('str')
         end_fmt = ((data['offset'].astype(float) + data['duration'].astype(float)) * msPerSec).astype('str')
         ext_fmt = pd.Series(['.sph']*len(data))
-        clip_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
-        clip_paths = data['path'].str.replace('audio','audio/utterances', regex=False) \
-                    .str.replace('.sph', '').str.cat(clip_names, '/')
-        return data.assign(clip_path=clip_paths)
+        utterance_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
+        utterance_paths = data['context_path'].str.replace('audio','audio/utterances', regex=False) \
+                    .str.replace('.sph', '').str.cat(utterance_names, '/')
+        return data.assign(path=utterance_paths)
