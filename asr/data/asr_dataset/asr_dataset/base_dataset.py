@@ -19,10 +19,10 @@ class ASRDataset(abc.ABC):
                  frac: float=None, 
                  nsecs: float=None):
         data = self.create_manifest()
-        # Filtering can be expensive, so first we take subset (sample).
-        data = self._sample(data, nrow, frac, nsecs)
         data = self._add_duration(data)
-        data = self._add_sample_count(data)
+        data = self._sample(data, nrow, frac, nsecs)
+        # Filtering can be expensive, so first we take subset (sample).
+        # data = self._add_sample_count(data)
         data = self.filter_manifest(data)
         self.data = data
         self.name = name
@@ -39,10 +39,10 @@ class ASRDataset(abc.ABC):
         """
         pass
 
-    @abc.abstractmethod
     @classmethod
     def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
-        pass
+        """ Usually don't have to filter anything because data quailty is good."""
+        return data
 
     @classmethod
     def _sample(cls, 

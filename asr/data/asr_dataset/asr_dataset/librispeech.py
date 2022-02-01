@@ -18,10 +18,6 @@ class LibriSpeechDataset(ASRDataset):
         self.dataset_path = DATASET_DIRS[cluster]['librispeech']
         super().__init__('librispeech', nrow, frac, nsecs)
 
-    @classmethod
-    def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
-        """ Don't need to filter this dataset. Data quality is good. """
-        return data
 
     def create_manifest(self) -> pd.DataFrame:
         """

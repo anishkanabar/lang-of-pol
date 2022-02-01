@@ -12,6 +12,7 @@ import pandas as pd
 import logging
 import librosa
 import soundfile
+from asr_dataset.base_dataset import ASRDataset
 
 logger = logging.getLogger('asr.dataset.utterance')
 

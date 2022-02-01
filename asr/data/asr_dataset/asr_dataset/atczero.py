@@ -24,11 +24,6 @@ class ATCZeroDataset(UtteranceDataset):
         self.transcripts_dir = DATASET_DIRS[cluster]['atczero']
         super().__init__('atczero', nrow, frac, nsecs)
 
-    @classmethod
-    def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
-        """ Don't need to filter this dataset. Data quality is good. """
-        return data
-
 
     def create_manifest(self) -> pd.DataFrame:
         """

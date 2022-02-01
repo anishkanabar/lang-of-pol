@@ -9,7 +9,7 @@
 
 seed: 1
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 3
+trial: 4
 output_folder: !ref results/seq2seq/trial_<trial>/seed_<seed>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
@@ -32,7 +32,7 @@ ckpt_interval_minutes: 15 # save checkpoint every N min
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: results/tokenizer/bpe_1219/trial_1/1219_unigram.model
+tokenizer_file: results/tokenizer/bpe555/trial_5/555_unigram.model
 
 # Training parameters
 number_of_epochs: 40
@@ -72,19 +72,19 @@ test_dataloader_opts:
 activation: !name:torch.nn.LeakyReLU
 dropout: 0.15
 cnn_blocks: 2
-cnn_channels: (32, 64)
+cnn_channels: (128, 256)
 inter_layer_pooling_size: (2, 2)
 cnn_kernelsize: (3, 3)
 time_pooling_size: 4
 rnn_class: !name:speechbrain.nnet.RNN.LSTM
-rnn_layers: 2
-rnn_neurons: 256
+rnn_layers: 4
+rnn_neurons: 1024
 rnn_bidirectional: True
 dnn_blocks: 2
-dnn_neurons: 128
-emb_size: 32
-dec_neurons: 256
-output_neurons: 1219  # Number of tokens
+dnn_neurons: 512
+emb_size: 128
+dec_neurons: 1024
+output_neurons: 5000  # Number of tokens
 blank_index: 0
 bos_index: 0
 eos_index: 0
@@ -93,10 +93,10 @@ unk_index: 0
 # Decoding parameters
 min_decode_ratio: 0.0
 max_decode_ratio: 1.0
-beam_size: 20
+beam_size: 80
 eos_threshold: 1.5
 using_max_attn_shift: True
-max_attn_shift: 60
+max_attn_shift: 240
 ctc_weight_decode: 0.0
 coverage_penalty: 1.5
 temperature: 1.25
@@ -154,7 +154,7 @@ dec: !new:speechbrain.nnet.RNN.AttentionalRNNDecoder
    rnn_type: gru
    attn_type: location
    hidden_size: !ref <dec_neurons>
-   attn_dim: 256
+   attn_dim: 1024
    num_layers: 1
    scaling: 1.0
    channels: 10

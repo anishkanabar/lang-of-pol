@@ -1,6 +1,6 @@
 import os
 import logging
-from asr_dataset.radio import RadioDataset
+from asr_dataset.police import PoliceDataset
 from asr_dataset.librispeech import LibriSpeechDataset
 from asr_dataset.atczero import ATCZeroDataset
 import pandas as pd
@@ -17,7 +17,7 @@ def prepare_nih(cluster: str,
     """
     @:param
         cluster: cluster name. either ['rcc', 'ai']
-        dataset_name: either ['radio', 'librispeech', 'atczero']
+        dataset_name: either ['police', 'librispeech', 'atczero']
         num_train: number of samples to prepare from dataset
         num_sec: total seconds of audio to retrieve from dataset
         split_ratios: dictionary of named train/val/test splits and fraction of dataset
@@ -27,8 +27,8 @@ def prepare_nih(cluster: str,
     if skip_prep:
         return
 
-    if dataset_name == 'radio':
-        data = RadioDataset(cluster, nrow=num_train, nsecs=num_sec).data
+    if dataset_name == 'police':
+        data = PoliceDataset(cluster, nrow=num_train, nsecs=num_sec).data
     elif dataset_name == 'librispeech':
         data = LibriSpeechDataset(cluster, nrow=num_train, nsecs=num_sec).data
     elif dataset_name == 'atczero':
@@ -62,7 +62,7 @@ def prepare_nih(cluster: str,
         new_df = pd.DataFrame(
             {
                 "ID": splitdata.index.to_series(),
-                "duration": splitdata['nsamples'],
+                "duration": splitdata['duration'],
                 "wav": splitdata['path'],
                 "transcript": splitdata['transcripts']
             }

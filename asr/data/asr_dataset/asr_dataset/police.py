@@ -86,7 +86,7 @@ class PoliceDataset(UtteranceDataset):
         return data.assign(path=utterance_paths)
         
 
-    def _parse_manifests(self, ts_dir: str) - > pd.DataFrame:
+    def _parse_manifests(self, ts_dir: str) -> pd.DataFrame:
         """
         Matches ~second-long transcripts to ~30minute source audio file.
         Params:
