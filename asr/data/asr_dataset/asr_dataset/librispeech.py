@@ -8,22 +8,27 @@ import pandas as pd
 from asr_dataset.base_dataset import ASRDataset
 from asr_dataset.constants import DATASET_DIRS
 
-WINDOW_LEN = .04 # Sec
-
 class LibriSpeechDataset(ASRDataset):
     
     def __init__(self, 
                  cluster: str='rcc', 
                  nrow: int=None, 
-                 frac: float=None, 
-                 nsecs: float=None,
-                 window_len=WINDOW_LEN):
+                 frac: float=None,
+                 nsecs: float=None):
         self.dataset_path = DATASET_DIRS[cluster]['librispeech']
-        super().__init__('librispeech', nrow, frac, nsecs, window_len)
+        super().__init__('librispeech', nrow, frac, nsecs)
 
-    def _load_transcripts(self, audio_type='.flac', window_len=WINDOW_LEN):
+    @classmethod
+    def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
+        """ Don't need to filter this dataset. Data quality is good. """
+        return data
+
+    def create_manifest(self) -> pd.DataFrame:
         """
-        This function is to get audios and transcripts needed for training
+        Collect info on audio files and transcripts.
+        Returns: DataFrame with columns:
+            path - full path to audio file
+            transcripts - transcript text
         """
         count, k, inp = 0, 0, []
         audio_name, audio_trans = [], []
@@ -40,13 +45,11 @@ class LibriSpeechDataset(ASRDataset):
                         with open(trans_path) as f:
                             line = f.readlines()
                             for item in line:
-                                flac_path = os.path.join(dir3_path, item.split()[0]) + audio_type
+                                flac_path = os.path.join(dir3_path, item.split()[0]) + '.flac' 
                                 audio_name.append(flac_path)
     
                                 text = item.split()[1:]
                                 text = ' '.join(text)
                                 audio_trans.append(text)
         data = pd.DataFrame({"path": audio_name, "transcripts": audio_trans})
-        data = self.add_duration(data)
-        data = self.add_sample_count(data)
         return data
