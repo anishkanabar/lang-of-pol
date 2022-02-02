@@ -37,6 +37,7 @@ setup(
         "torchaudio",
         "tqdm",
         "huggingface_hub",
+        "transformers",
     ],
     python_requires=">=3.7",
     url="https://speechbrain.github.io/",
