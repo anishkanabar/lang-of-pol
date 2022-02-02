@@ -9,7 +9,7 @@
 
 seed: 1
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 9
+trial: 10
 output_folder: !ref results/seq2seq/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
