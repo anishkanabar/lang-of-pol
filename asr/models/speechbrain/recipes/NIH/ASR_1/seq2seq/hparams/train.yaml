@@ -9,7 +9,9 @@
 
 seed: 1
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 10
+trial: 12
+# Tokenizer trials are not necessarily in sync with this models trials
+tokenizer_file: results/tokenizer/bpe128/trial_11/128_unigram.model
 output_folder: !ref results/seq2seq/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 save_folder: !ref <output_folder>/save
@@ -32,7 +34,6 @@ ckpt_interval_minutes: 15 # save checkpoint every N min
 train_data: !ref <output_folder>/train.csv
 valid_data: !ref <output_folder>/dev.csv
 test_data: !ref <output_folder>/test.csv
-tokenizer_file: results/tokenizer/bpe128/trial_9/128_unigram.model
 
 # Training parameters
 number_of_epochs: 40

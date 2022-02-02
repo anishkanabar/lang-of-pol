@@ -26,10 +26,10 @@ class UtteranceDataset(ASRDataset):
                  frac: float=None,
                  nsecs: float=None):
         super().__init__(name, nrow=nrow, frac=frac, nsecs=nsecs)
-        self._write_utterance_audios()
+        # self._write_utterance_audios()
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_exists(self.data, 'path')
-        self.data = self._filter_corrupt(self.data, 'path')
+        # self.data = self._filter_corrupt(self.data, 'path')
         self.describe()
     
     @abc.abstractmethod
