@@ -1,7 +1,18 @@
 # Recipes for training on police language dataset
 
 ## Installation
-1. See instructions in the root asr project folder for environment setup.
+### Midway3
+The midway3 compute nodes do not have libsndfile. As a workaround, we download this in a conda env and link to it at runtime. 
+1. `conda create -c conda-forge -y --name soundfile librosa`
+2. Dont activate this conda env. Just stay on your base env.
+3. `python3 -m venv path/to/new/env` 
+4. `source path/to/new/env/bin/activate`
+5. `cd asr/data/asr_dataset`
+6.  `python setup.py build`
+7.  `pip install -e .`
+8.  `cd asr/models/speechbrain`
+9.  `pip install -r requirements.txt`
+10.  `pip install -e .`
 
 ## Training
 1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.
