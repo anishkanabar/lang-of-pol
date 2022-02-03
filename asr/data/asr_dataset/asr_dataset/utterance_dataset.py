@@ -26,8 +26,11 @@ class UtteranceDataset(ASRDataset):
                  frac: float=None,
                  nsecs: float=None,
                  resample: int=None):
+        self.overwrite = resample is not None
+        self.new_sample_rate = resample if self.overwrite else self.SAMPLE_RATE
         super().__init__(name, nrow=nrow, frac=frac, nsecs=nsecs)
-        self._write_utterance_audios(resample)
+        if self.overwrite:
+            self._write_utterance_audios()
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_exists(self.data, 'path')
         self.data = self._filter_corrupt(self.data, 'path')
@@ -45,25 +48,25 @@ class UtteranceDataset(ASRDataset):
         """
         pass
 
-    def _write_utterance_audios(self, resample: int=None):
+    def _write_utterance_audios(self):
         """ 
         Extract small audio clips from original file and write them to disk.
         Params:
             data: expects columns {path, transcripts, duration, context_path}
-            resample: reample and overwrite existing utterance clip
         """
         logger.info('Writing utterance audio clips.')
         start = dt.datetime.now()
         context_paths = set(self.data['context_path'])
-        for context_path in context_paths:
+        for idx, context_path in enumerate(context_paths):
+            logger.debug(f'Writing file {idx} of {len(context_paths)}')
             utterances = self.data.loc[self.data['context_path'] == context_path]
             # loading audio is expensive. check if we can skip this group of utterances.
             all_exist = utterances['path'].apply(os.path.exists).all()
-            if all_exist and not resample:
+            if all_exist and not self.overwrite:
                 continue
-            audio_array, sample_rate = librosa.load(context_path, sr=resample)
+            audio_array, sample_rate = librosa.load(context_path, sr = self.new_sample_rate)
             for utterance in utterances.itertuples():
-                if os.path.exists(utterance.path) and not resample:
+                if os.path.exists(utterance.path) and not self.overwrite:
                     #logger.debug(f"File {utterance.path} exists. Not overwriting.") 
                     continue
                 if not os.path.exists(os.path.dirname(utterance.path)):
@@ -85,20 +88,18 @@ class UtteranceDataset(ASRDataset):
         duration_idx = librosa.time_to_samples(offset + duration, sr=sample_rate)
         return slice(offset_idx, duration_idx)
 
-    @classmethod
-    def filter_manifest(cls, data: pd.DataFrame):
+    def filter_manifest(self, data: pd.DataFrame):
         """
         Filters out non-existent and too-short audios
         Params:
             data: expects columns {context_path, duration}
         """
-        data = cls._filter_exists(data, 'context_path')
-        data = cls._filter_empty(data)
+        data = self._filter_exists(data, 'context_path')
+        data = self._filter_empty(data)
         return data
 
 
-    @classmethod
-    def _filter_exists(cls, data: pd.DataFrame, path_col: str):
+    def _filter_exists(self, data: pd.DataFrame, path_col: str):
         """
         Filters out non-existent audio files
         Params:
@@ -113,15 +114,14 @@ class UtteranceDataset(ASRDataset):
         return data.loc[mp3_exists]
 
 
-    @classmethod
-    def _filter_empty(cls, data: pd.DataFrame):
+    def _filter_empty(self, data: pd.DataFrame):
         """
         Filters out non-existent audio files
         Params:
             data: expects columns {duration}
         """
-        not_empty_check = lambda x: x.duration >= cls.WINDOW_LEN and \
-                                    x.duration * cls.SAMPLE_RATE > 1
+        not_empty_check = lambda x: x.duration >= self.WINDOW_LEN and \
+                                    x.duration * self.new_sample_rate > 1
         mp3_notempty = data.apply(lambda x: not_empty_check(x), axis=1)
         num_empty = mp3_notempty.count() - mp3_notempty.sum()
         logger.info(f'Discarding {num_empty} too_short mp3s.')

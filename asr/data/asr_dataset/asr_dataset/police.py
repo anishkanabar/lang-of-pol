@@ -31,8 +31,7 @@ class PoliceDataset(UtteranceDataset):
         super().__init__('police', nrow, frac, nsecs, resample)
     
 
-    @classmethod
-    def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
+    def filter_manifest(self, data: pd.DataFrame) -> pd.DataFrame:
         """
         Filters out non-existent, too-short, and inaudible audios
         Params:

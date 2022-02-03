@@ -17,7 +17,7 @@ class ASRDataset(abc.ABC):
                  name: str, 
                  nrow: int=None, 
                  frac: float=None, 
-                 nsecs: float=None):
+                 nsecs: float=None): 
         data = self.create_manifest()
         data = self._add_duration(data)
         data = self._sample(data, nrow, frac, nsecs)
@@ -39,8 +39,7 @@ class ASRDataset(abc.ABC):
         """
         pass
 
-    @classmethod
-    def filter_manifest(cls, data: pd.DataFrame) -> pd.DataFrame:
+    def filter_manifest(self, data: pd.DataFrame) -> pd.DataFrame:
         """ Usually don't have to filter anything because data quailty is good."""
         return data
 
