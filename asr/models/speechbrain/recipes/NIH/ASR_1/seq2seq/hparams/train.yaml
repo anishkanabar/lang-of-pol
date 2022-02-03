@@ -9,7 +9,7 @@
 
 seed: 1
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 18
+trial: 25
 # Tokenizer trials are not necessarily in sync with this models trials
 tokenizer_file: results/tokenizer/bpe128/trial_11/128_unigram.model
 output_folder: !ref results/seq2seq/seed_<seed>/trial_<trial>
@@ -52,8 +52,8 @@ dynamic_batch_sampler:
    shuffle: False # if true re-creates batches at each epoch shuffling examples.
 
 # Feature parameters
-sample_rate: 22050
-n_fft: 560
+sample_rate: 8000
+n_fft: 400
 n_mels: 40
 
 opt_class: !name:torch.optim.Adam

@@ -7,7 +7,7 @@
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 1986
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 3
+trial: 4
 output_folder: !ref results/train_wav2vec2_char/seed_<seed>/trial_<trial>
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save

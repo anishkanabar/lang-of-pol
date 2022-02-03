@@ -3,7 +3,7 @@
 # Training: NIH
 # ############################################################################
 
-trial: 11
+trial: 12
 vocab_size: 128
 output_folder: !ref results/tokenizer/bpe<vocab_size>/trial_<trial>
 train_log: !ref <output_folder>/train_log.txt
