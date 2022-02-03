@@ -52,8 +52,7 @@ fi
 
 # Link to libsndfile, which isnt available on rcc compute nodes
 if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
-    # XXX: Make user-independent
-    LN_PATH=/home/echandler/.conda/envs/soundfile/lib
+    LN_PATH=/home/`whoami`/.conda/envs/soundfile/lib
     export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
 fi
 

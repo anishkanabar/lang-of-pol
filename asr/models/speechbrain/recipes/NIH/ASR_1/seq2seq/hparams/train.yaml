@@ -52,7 +52,7 @@ dynamic_batch_sampler:
    shuffle: False # if true re-creates batches at each epoch shuffling examples.
 
 # Feature parameters
-sample_rate: 8000
+sample_rate: 16000
 n_fft: 400
 n_mels: 40
 
