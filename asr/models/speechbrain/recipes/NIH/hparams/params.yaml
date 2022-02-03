@@ -3,9 +3,9 @@
 # ############################################################################
 
 cluster: rcc  # 'ai' or 'rcc'
-dataset_name: librispeech  #'librispeech' or 'police' or 'atczero'
+dataset_name: police  #'librispeech' or 'police' or 'atczero'
 num_train: null
-num_sec: 14400
+num_sec: 28800
 # XXX: Make this user-independent and somehow dependent on the cluster!
 scratch_dir: /project/graziul/ra/echandler/scratch
 
