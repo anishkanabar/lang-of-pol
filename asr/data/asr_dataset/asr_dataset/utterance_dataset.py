@@ -26,10 +26,10 @@ class UtteranceDataset(ASRDataset):
                  frac: float=None,
                  nsecs: float=None):
         super().__init__(name, nrow=nrow, frac=frac, nsecs=nsecs)
-        # self._write_utterance_audios()
+        self._write_utterance_audios()
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_exists(self.data, 'path')
-        # self.data = self._filter_corrupt(self.data, 'path')
+        self.data = self._filter_corrupt(self.data, 'path')
         self.describe()
     
     @abc.abstractmethod
@@ -120,7 +120,7 @@ class UtteranceDataset(ASRDataset):
             data: expects columns {duration}
         """
         not_empty_check = lambda x: x.duration >= cls.WINDOW_LEN and \
-                                    x.duration * cls.SAMPLE_RATE >= 1
+                                    x.duration * cls.SAMPLE_RATE > 1
         mp3_notempty = data.apply(lambda x: not_empty_check(x), axis=1)
         num_empty = mp3_notempty.count() - mp3_notempty.sum()
         logger.info(f'Discarding {num_empty} too_short mp3s.')
