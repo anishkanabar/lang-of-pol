@@ -18,6 +18,8 @@ BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escap
 
 class PoliceDataset(UtteranceDataset):
 
+    SAMPLE_RATE = 22050  # Hz
+
     def __init__(self, 
                  cluster:str='rcc', 
                  nrow: int=None, 
