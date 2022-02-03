@@ -57,14 +57,14 @@ class UtteranceDataset(ASRDataset):
             utterances = self.data.loc[self.data['context_path'] == context_path]
             # loading audio is expensive. check if we can skip this group of utterances.
             all_exist = utterances['path'].apply(os.path.exists).all()
-            if all_exist:
-                continue
+            #if all_exist:
+            #    continue
             # XXX: using native sample rate. but some models require transforming sr
-            audio_array, sample_rate = librosa.load(context_path, sr=None)
+            audio_array, sample_rate = librosa.load(context_path, sr=self.SAMPLE_RATE)
             for utterance in utterances.itertuples():
-                if os.path.exists(utterance.path):
+                #if os.path.exists(utterance.path):
                     #logger.debug(f"File {utterance.path} exists. Not overwriting.") 
-                    continue
+                #    continue
                 if not os.path.exists(os.path.dirname(utterance.path)):
                     os.makedirs(os.path.dirname(utterance.path), exist_ok=True)
                 slicer = self.audio_slicer(utterance.offset, utterance.duration, sample_rate)
@@ -73,7 +73,7 @@ class UtteranceDataset(ASRDataset):
                 #      Stacktrace shows RuntimeError error opening path to flac: System error:
                 #      in soundfile.py: lines 314 -> 629 -> 1183 -> 1357
                 #      But the issue doesn't seem to exist in Midway3
-                soundataile.write(utterance.path, utterance_array, sample_rate, format='flac')
+                soundfile.write(utterance.path, utterance_array, sample_rate, format='flac')
         stop = dt.datetime.now()
         logger.info(f"Writing audio took {stop - start}.")
     

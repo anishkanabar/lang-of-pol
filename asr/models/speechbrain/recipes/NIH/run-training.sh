@@ -55,7 +55,7 @@ fi
 if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
     # XXX: Make user-independent
     LN_PATH=/home/echandler/.conda/envs/soundfile/lib
-    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LN_PATH
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then

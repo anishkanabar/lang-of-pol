@@ -52,3 +52,12 @@ FAILED maybe because expects >1 sample per audio, not >=1 ?
 ### Trial 16
 Trained on police - 4 hours - batch size 1
 Uses Tokenizer BPE 128 Trial 11
+FAILED same as trial 15, after fixing filter to > 1
+
+### Trial 17
+Trained on police - 4 hours - batch size 1
+Uses Tokenizer BPE 128 Trial 11
+Overwrites utterances as 16000 Hz instead of 22050 Hz
+(Cant figure out how to get 22050 to work with other
+ speechbrain sizes like num fft)
+
