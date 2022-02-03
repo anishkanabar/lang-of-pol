@@ -28,7 +28,6 @@ if [ "$CLUSTER" = "rcc" ]; then
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS
-    #NODELIST="midway3-0280"
 elif [ "$CLUSTER" = "ai" ]; then
     OUTPUT_DIR="/home/`whoami`/slurm_output"
     TIMEOUT="03:59:00"   # 4 hours is the maximum on AI cluster
@@ -55,7 +54,7 @@ fi
 if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
     # XXX: Make user-independent
     LN_PATH=/home/echandler/.conda/envs/soundfile/lib
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LN_PATH
+    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
@@ -66,6 +65,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
+            --nodelist "midway3-0277" \
             --gpus $GPUS \
             --ntasks $NTASKS \
             --ntasks-per-gpu $GPU_TASKS \

@@ -28,13 +28,17 @@ def prepare_nih(cluster: str,
         return
 
     if dataset_name == 'police':
-        data = PoliceDataset(cluster, nrow=num_train, nsecs=num_sec).data
+        data = PoliceDataset(cluster, nrow=num_train, nsecs=num_sec, resample=8000).data
     elif dataset_name == 'librispeech':
         data = LibriSpeechDataset(cluster, nrow=num_train, nsecs=num_sec).data
     elif dataset_name == 'atczero':
         data = ATCZeroDataset(cluster, nrow=num_train, nsecs=num_sec).data
     else:
         raise NotImplementedError('dataset ' + dataset_name)
+
+    # Make IDs global to splits
+    data = data.reset_index()
+    data = data.assign(ID = data.index.to_series())
     
     # Split into hparams-defined splits
     splits = {}
@@ -55,13 +59,11 @@ def prepare_nih(cluster: str,
     
     for split, splitdata in splits.items():
         manifest_path = os.path.join(save_folder, split) + '.csv'
-        if os.path.exists(manifest_path):
-            continue
         logger.info("Preparing %s..." % manifest_path)
         
         new_df = pd.DataFrame(
             {
-                "ID": splitdata.index.to_series(),
+                "ID": splitdata['ID'],
                 "duration": splitdata['duration'],
                 "wav": splitdata['path'],
                 "transcript": splitdata['transcripts']

@@ -24,10 +24,11 @@ class PoliceDataset(UtteranceDataset):
                  cluster:str='rcc', 
                  nrow: int=None, 
                  frac: float=None, 
-                 nsecs: float=None):
+                 nsecs: float=None,
+                 resample: int=None):
         self.transcripts_dir = DATASET_DIRS[cluster]['police_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['police_mp3s']
-        super().__init__('police', nrow, frac, nsecs)
+        super().__init__('police', nrow, frac, nsecs, resample)
     
 
     @classmethod

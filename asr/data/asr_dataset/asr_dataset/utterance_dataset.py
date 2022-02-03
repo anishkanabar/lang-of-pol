@@ -24,9 +24,10 @@ class UtteranceDataset(ASRDataset):
                  name: str, 
                  nrow: int=None, 
                  frac: float=None,
-                 nsecs: float=None):
+                 nsecs: float=None,
+                 resample: int=None):
         super().__init__(name, nrow=nrow, frac=frac, nsecs=nsecs)
-        self._write_utterance_audios()
+        self._write_utterance_audios(resample)
         # must re-filter in case new mp3 clips are bad
         self.data = self._filter_exists(self.data, 'path')
         self.data = self._filter_corrupt(self.data, 'path')
@@ -44,11 +45,12 @@ class UtteranceDataset(ASRDataset):
         """
         pass
 
-    def _write_utterance_audios(self):
+    def _write_utterance_audios(self, resample: int=None):
         """ 
         Extract small audio clips from original file and write them to disk.
         Params:
             data: expects columns {path, transcripts, duration, context_path}
+            resample: reample and overwrite existing utterance clip
         """
         logger.info('Writing utterance audio clips.')
         start = dt.datetime.now()
@@ -57,12 +59,11 @@ class UtteranceDataset(ASRDataset):
             utterances = self.data.loc[self.data['context_path'] == context_path]
             # loading audio is expensive. check if we can skip this group of utterances.
             all_exist = utterances['path'].apply(os.path.exists).all()
-            if all_exist:
+            if all_exist and not resample:
                 continue
-            # XXX: using native sample rate. but some models require transforming sr
-            audio_array, sample_rate = librosa.load(context_path, sr=None)
+            audio_array, sample_rate = librosa.load(context_path, sr=resample)
             for utterance in utterances.itertuples():
-                if os.path.exists(utterance.path):
+                if os.path.exists(utterance.path) and not resample:
                     #logger.debug(f"File {utterance.path} exists. Not overwriting.") 
                     continue
                 if not os.path.exists(os.path.dirname(utterance.path)):
@@ -150,7 +151,7 @@ class UtteranceDataset(ASRDataset):
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                _ = librosa.core.load(mp3_path)
+                _ = librosa.core.load(mp3_path, sr=None)
             return False
         except:
             return True
