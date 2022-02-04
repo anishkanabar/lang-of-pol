@@ -18,17 +18,13 @@ The midway3 compute nodes do not have libsndfile. As a workaround, we download t
 1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.
     (Or pass as command line options in step 3)
 2. Choose a model component and parameters file. e.g. seq2seq/train.py, seq2seq/hparams/train.yaml
-3. Run via `sh run-training.sh <rcc|ai>`<path to train.py> <path to hparams.yaml> [--cluster C] [--d
-ataset_name D] [--num_train N]`
+3. Run via `bash run-training.sh <rcc|ai> <path to train.py> <path to hparams.yaml> [--cluster C] [--dataset_name D] [--num_train N]`
 
 ## Development
 ### param.yaml files
-See Tokenizer/hparams/tokenizer\_bpe5000.yaml for an example of how to set the parameters for the prepare function. 
+See Tokenizer/hparams/tokenizer\_bpe.yaml for an example of how to set the parameters for the prepare function. 
+
 ### prepare.py files
-By convention, recipes have one "parent" prepare.py file. If a recipe component does not need to modify the file, then the component links to the file instead of copying it. To do this:
+Typically, models can re-use the basic prepare.py file without any changes. In this case, the convention is to create a soft link to the original file instead of copying it. To do this:
 1. cd into the component folder
 2. create soft link. the syntax is `ln -s ORIGINALPATH LINKPATH` e.g. ln -s ../../bpc\_prepare.py bpc\_prepare.py`
-
-
-
- 
