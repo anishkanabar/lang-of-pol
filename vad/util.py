@@ -551,8 +551,8 @@ def get_frame_error_rate(output_hat, labels, verbose = 0):
         false_negatives = []
         false_positives = []
         for i in range(num_samples):
-            false_positives.append([0])
-            false_negatives.append([0])
+            false_positives.append(0)
+            false_negatives.append(0)
             curr_output = output_hat[i]
             curr_label = labels[i]
             fer_arr.append(torch.mean(torch.add(curr_output,curr_label)%2).data*100)
@@ -560,9 +560,9 @@ def get_frame_error_rate(output_hat, labels, verbose = 0):
                 my_curr_output = curr_output[j]
                 my_curr_label = curr_label[j]
                 if (my_curr_output == 1 and my_curr_label == 0):
-                    false_positives[i].append(1)
+                    false_positives[i] = false_positives[i] + 1
                 if (my_curr_output == 0 and my_curr_label == 1):
-                    false_negatives[i].append(1)
+                    false_negatives[i] = false_negatives[i] + 1
         return fer_arr,false_positives, false_negatives
 
 def test_frame_error_rate(output_hat, labels, verbose = 0):

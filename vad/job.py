@@ -31,19 +31,20 @@ my_dataset = sys.argv[1]
 my_model = sys.argv[2]
 verbose = int(sys.argv[3])
 
-n_samples = 40
-train_split = 4*n_samples//5
-test_samples = n_samples - train_split
 if my_dataset == "ATC0":
     input_list, labels_list = process_atc0_files()
     
 elif my_dataset == "BPC":
     input_list, labels_list = load_data()
+
+n_samples = input_list.size()[0]
+train_split = 4*n_samples//5
+test_samples = n_samples - train_split
     
-test_input_list = input_list[30*train_split:]
-test_labels_list = labels_list[30*train_split:]
-input_list = input_list[:train_split*30]
-labels_list = labels_list[:train_split*30]
+test_input_list = input_list[train_split:]
+test_labels_list = labels_list[train_split:]
+input_list = input_list[:train_split]
+labels_list = labels_list[:train_split]
 
 if my_model == "Attention_LSTM":
     model = Attention_LSTM()
@@ -59,11 +60,36 @@ test_loss_list = []
 sample_size = 30
 batch_size = model.batch_size
 num_samples = input_list.size()[0]//batch_size
-training_steps = 750
+training_steps = 500
 idx = 0
 flag = 0
 num_segments = 30
 val_size = 30
+
+for step in range(training_steps):
+    start_time = time.time()
+    input_batch = input_list[idx*batch_size:(idx+1)*batch_size]
+    labels_batch = labels_list[idx*batch_size:(idx+1)*batch_size]
+    idx = (idx+1)%num_samples
+    print(step)
+    optimizer.zero_grad()
+    output_hat = model(input_batch)
+    #print(output_hat)
+    print(labels_batch)
+    print(output_hat)
+    loss = loss_fn(output_hat, labels_batch)
+    loss.backward()
+    #for param in model.parameters():
+    #    print(param.grad)
+    print(loss)
+    train_loss_list.append(loss.item())
+    optimizer.step()
+    end_time = time.time()
+    step_time = end_time - start_time
+    print("Time Taken for Step = " + str(step_time))
+save_path = '/project/graziul/ra/ajays/lang-of-pol/vad/Attention_model/model_weights.pt'
+torch.save(model.state_dict(),save_path)
+    
 '''for step in range(training_steps):
     start_time = time.time()
     input_batch = input_list[idx*batch_size:(idx+1)*batch_size]
@@ -97,7 +123,7 @@ val_size = 30
 
 plt.plot(list(range(training_steps//num_segments)),fer_list)
 plt.savefig('LSTM_model_training.png')
-'''
+
 preds_file = open(save_filepath,'w')
 preds_file.truncate(0)
 for val_index in range(num_samples):
@@ -121,16 +147,16 @@ for val_index in range(num_samples):
             input_batch = train_data[idx*batch_size:(idx+1)*batch_size]
             labels_batch = train_labels[idx*batch_size:(idx+1)*batch_size]
             if(input_batch.size()[0] != 0):
-                print(step)
+                #print(step)
                 optimizer.zero_grad()
                 output_hat = model(input_batch)
-                print(labels_batch)
-                print(output_hat)
+                #print(labels_batch)
+                #print(output_hat)
                 loss = loss_fn(output_hat, labels_batch)
                 loss.backward()
                 #for param in model.parameters():
                 #    print(param.grad)
-                print(loss)
+                #print(loss)
                 optimizer.step()
         idx = (idx+1)%num_samples
     with torch.no_grad():
@@ -144,4 +170,5 @@ for val_index in range(num_samples):
             print(fer)
             preds_file.write(fer)
 preds_file.close()
+'''
 
