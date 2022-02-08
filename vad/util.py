@@ -520,7 +520,7 @@ def plot_outputs(input_list, labels_list, output_hat, sample_rate = 22050):
 def get_predictions(model,input_list, labels_list, batch_size):
     output_list = []
     idx = 0
-    num_samples = labels_list.size()[0]//batch_size
+    num_samples = input_list.size()[0]//batch_size
     print(num_samples)
     with torch.no_grad():
         while(idx < num_samples):
