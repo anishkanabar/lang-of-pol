@@ -17,8 +17,22 @@ def load_data(corpus='ami'):
     return protocol
 
 
-def reconstruct_file_structure():
+def generate_rttm():
     """
-    reformat the structure of all related files
+    according to the corpus structure to generate corresponding rttm files
+    """
+    pass
+
+
+def generate_uem():
+    """
+    according to the corpus structure to generate corresponding uem files
+    """
+    pass
+
+
+def generate_lst():
+    """
+    according to the corpus structure to generate correspinding lst files
     """
     pass
