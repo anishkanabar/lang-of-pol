@@ -52,7 +52,6 @@ class ATCZeroDataset(UtteranceDataset):
         loaded_df['offset'] = loaded_df['start'].astype(float)
 
         loaded_df['context_path'] = self.transcripts_dir + os.sep + loaded_df['filePath']
-
         loaded_df = loaded_df.drop(['start', 'end', 'filePath'], axis = 1)
 
         loaded_df = self._add_utterance_paths(loaded_df)
