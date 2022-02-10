@@ -82,6 +82,7 @@ FAILED for random cuda bs
 Trained on librispeech 4 hours
 Uses Tokenizer BPE 128 Trial 11
 Batch Size: 8
+CER: 273
 
 ### Trial 23
 Trained on librispeech 8 hours
