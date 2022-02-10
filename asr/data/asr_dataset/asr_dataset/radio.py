@@ -115,8 +115,7 @@ class RadioDataset(AudioClipDataset):
         msPerSec = 1000
         off_fmt = (data['offset'] * msPerSec).astype('int32').astype('str')
         end_fmt = ((data['offset'] + data['duration']) * msPerSec).astype('int32').astype('str')
-        ext_fmt = pd.Series(['.flac']*len(data))
-        clip_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
+        clip_names = off_fmt.str.cat(end_fmt, '_') + ".flac"
         clip_paths = data['path'].str.replace('data','data/utterances', regex=False) \
                     .str.replace('.mp3', '').str.cat(clip_names, '/')
         return data.assign(clip_path=clip_paths)

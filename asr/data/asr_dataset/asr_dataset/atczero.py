@@ -75,8 +75,8 @@ class ATCZeroDataset(AudioClipDataset):
 
         off_fmt = (data['offset'].astype(float) * msPerSec).astype('str')
         end_fmt = ((data['offset'].astype(float) + data['duration'].astype(float)) * msPerSec).astype('str')
-        ext_fmt = pd.Series(['.sph']*len(data))
-        clip_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
+        clip_names = off_fmt.str.cat(end_fmt, '_') + ".sph"
         clip_paths = data['path'].str.replace('audio','audio/utterances', regex=False) \
                     .str.replace('.sph', '').str.cat(clip_names, '/')
         return data.assign(clip_path=clip_paths)
+
