@@ -11,3 +11,8 @@ conda create -y -c conda-forge --name soundfile librosa
 ### Pyannote Dependencies
 Try installing the requirements.txt into a conda environment.
 If that doesn't work, follow instructions from [pyannote](https://github.com/pyannote/pyannote-audio) package.
+
+## Usage
+Use the bash script "run.sh" to run a python script on the cluster.
+e.g. `bash run.sh vad.py ami 1 1`
+

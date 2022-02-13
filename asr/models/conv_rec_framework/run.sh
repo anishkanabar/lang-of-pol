@@ -8,7 +8,7 @@ OTHER_ARGS=("${all_args[@]:1}")
 
 usage() {
     echo "Usage:" >&2
-    echo "bash run.sh <path/to/script.py>" >&2
+    echo "bash run.sh <path/to/script.py> [args...]" >&2
 }
 
 # Validate command line args
@@ -21,6 +21,7 @@ fi
 JOB_NAME="pyanode-$PYNAME"
 TIMEOUT="00:30:00"
 ACCOUNT="pi-graziul"
+GPUS=1
 PARTITION="gpu"
 OUTPUT_DIR="/scratch/midway3/`whoami`/slurm"
 
@@ -40,6 +41,7 @@ srun --job-name "$JOB_NAME" \
     --time "$TIMEOUT" \
     --account "$ACCOUNT" \
     --partition "$PARTITION" \
+    --gpus "$GPUS" \
     --output "$OUTPUT_DIR/%j.%N.stdout" \
     --error "$OUTPUT_DIR/%j.%N.stderr" \
     python "$PYSCRIPT" "${OTHER_ARGS[@]}"
