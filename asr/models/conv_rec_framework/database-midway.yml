@@ -1,0 +1,46 @@
+Databases:
+  AMI: /project/graziul/ra/shiyanglai/corpus/ami/database/amicorpus/*/audio/{uri}.Mix-Headset.wav
+
+Protocols:
+   AMI:
+      SpeakerDiarization:
+         MixHeadset:
+            train:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.uem
+            development:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.uem
+            test:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.uem
+         only_words:
+            train:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/train/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/train/{uri}.uem
+            development:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/dev.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/dev/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/dev/{uri}.uem
+            test:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/test.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/test/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
+         word_and_vocalsounds:
+            train:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/train/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/train/{uri}.uem
+            development:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/dev.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/dev/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/dev/{uri}.uem
+            test:
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/test.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/test/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
+

@@ -47,10 +47,10 @@ if __name__ == "__main__":
         # train the model, if gpu number is specified, then set the number of gpu, otherwise use cpu
         if args.gpus == 0:
             trainer = pl.Trainer(accelerator="cpu", max_time={"days": 2}, max_epochs=100,
-                                default_root_dir=f'/Users/shiyang/Desktop/NIH/git/asr/results/shiyang_test/vad/')
+                                default_root_dir=f'results/conv_rec/vad/')
         else:
             trainer = pl.Trainer(gpus=args.gpus, max_time={"days": 2}, max_epochs=100,
-                                default_root_dir=f'/Users/shiyang/Desktop/NIH/git/asr/results/shiyang_test/vad/')
+                                default_root_dir=f'results/conv_rec/vad/')
         trainer.fit(model)
         print("trained successfully!")
         # save checkpoint
