@@ -20,7 +20,9 @@ wav2vec2_hub: facebook/wav2vec2-large-960h-lv60-self
 data_folder:  /project/graziul/data/corpora/LibriSpeech
 # noise/ris dataset will automatically be downloaded
 data_folder_rirs: !ref <data_folder>
-train_splits: ["train-clean-100", "train-clean-360", "train-other-500"]
+# Just using 100 for the sake of time
+#train_splits: ["train-clean-100", "train-clean-360", "train-other-500"]
+train_splits: ["train-clean-100"]
 dev_splits: ["dev-clean"]
 test_splits: ["test-clean", "test-other"]
 skip_prep: False
