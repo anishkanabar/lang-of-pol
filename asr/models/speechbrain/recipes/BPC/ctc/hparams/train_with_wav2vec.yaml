@@ -7,31 +7,43 @@
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 1986
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-output_folder: !ref results/train_wav2vec2_char/<seed>
+trial: 4
+output_folder: !ref results/train_wav2vec2_char/seed_<seed>/trial_<trial>
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 
-# URL for the biggest Fairseq english wav2vec2 model.
-wav2vec2_hub: facebook/wav2vec2-large-960h-lv60-self
-
 # Data files
-#data_folder:  /project/graziul/ra/shiyanglai/experiment1/audio-data/LibriSpeech/
-data_folder:  /project/graziul/data/corpora/LibriSpeech
+environ: !include:../../../hparams/params.yaml
+cluster: !ref <environ[cluster]>
+dataset_name: !ref <environ[dataset_name]>
+num_train: !ref <environ[num_train]>
+num_sec: !ref <environ[num_sec]>
 # noise/ris dataset will automatically be downloaded
-data_folder_rirs: !ref <data_folder>
-# Just using 100 for the sake of time
-#train_splits: ["train-clean-100", "train-clean-360", "train-other-500"]
-train_splits: ["train-clean-100"]
-dev_splits: ["dev-clean"]
-test_splits: ["test-clean", "test-other"]
+data_folder_rirs: !ref <environ[scratch_dir]>/rirs
 skip_prep: False
 ckpt_interval_minutes: 25 # save checkpoint every N min
+split_ratios:
+    train: .8
+    dev: .1
+    test: .1
+train_splits: ["train"]
+dev_splits: ["dev"]
+test_splits: ["test"]
 train_csv: !ref <output_folder>/train.csv
-valid_csv: !ref <output_folder>/dev-clean.csv
-test_csv:
-   - !ref <output_folder>/test-clean.csv
-   - !ref <output_folder>/test-other.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv: 
+    - !ref <output_folder>/test.csv
+
+# URL for the biggest Fairseq english wav2vec2 model.
+# wav2vec2_hub: facebook/wav2vec2-large-960h-lv60-self
+# URL for the smallest Fairseq english wav2vec2 model.
+#
+# Using pre-downladed version because compute nodes firewalled...
+# Downloaded via huggingface_hub.snapshot_download() (see fetch_model.py for example)
+wav2vec2_name: facebook/wav2vec2-base-100h
+wav2vec2_revision: facebook--wav2vec2-base-100h.main.15af85e6c59b06d0a814e3be7699a5748e6c84e2
+wav2vec2_hub: !ref <environ[scratch_dir]>/<wav2vec2_name>/<wav2vec2_revision>
 
 # Training parameters
 number_of_epochs: 1
@@ -92,7 +104,7 @@ wav2vec2: !new:speechbrain.lobes.models.huggingface_wav2vec.HuggingFaceWav2Vec2
    source: !ref <wav2vec2_hub>
    output_norm: True
    freeze: !ref <freeze_wav2vec>
-   save_path: !ref <save_folder>/wav2vec2_checkpoint
+   save_path: !ref <wav2vec2_hub>
 
 #####
 # Uncomment this block if you prefer to use a Fairseq pretrained model instead

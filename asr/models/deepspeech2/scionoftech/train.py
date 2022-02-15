@@ -17,7 +17,8 @@ from keras.callbacks import CSVLogger, ModelCheckpoint
 import tensorflow as tf
 import deepasr as asr
 from asr_dataset.librispeech import LibriSpeechDataset
-from asr_dataset.radio import RadioDataset
+from asr_dataset.police import PoliceDataset
+from asr_dataset.atczero import ATCZeroDataset
 
 SAMPLE_RATE = 16000   # Hz
 WINDOW_LEN = .02 # Sec
@@ -86,7 +87,7 @@ def define_model(feature_type = 'spectrogram', multi_gpu = False):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('dataset', choices=['librispeech', 'radio'])
+    parser.add_argument('dataset', choices=['librispeech', 'police', 'atczero'])
     parser.add_argument('cluster', choices=['rcc', 'ai'])
     parser.add_argument('output_dir', type=pathlib.Path)
     return parser.parse_args()
@@ -100,9 +101,11 @@ if __name__ == "__main__":
 
     tick = dt.datetime.now()
     if args.dataset == 'librispeech':
-        dataset_loader = LibriSpeechDataset(args.cluster, nrow=NUM_TRAIN, window_len=WINDOW_LEN)
+        data = LibriSpeechDataset(args.cluster, nrow=NUM_TRAIN).data
+    elif args.dataset == 'police':
+        data = PoliceDataset(args.cluster, nrow=NUM_TRAIN).data
     else:
-        dataset_loader = RadioDataset(args.cluster, nrow=NUM_TRAIN, window_len=WINDOW_LEN)
+        data = ATCZeroDataset(args.cluster, nrow=NUM_TRAIN).data
     app_logger.info("Dataset load success.")
 
     pipeline = define_model(feature_type='spectrogram', multi_gpu=True)
@@ -120,7 +123,7 @@ if __name__ == "__main__":
 
     app_logger.info("Pipeline model configured.")
 
-    history = pipeline.fit(train_dataset=dataset_loader.data,
+    history = pipeline.fit(train_dataset=data,
                            batch_size=64, 
                            epochs=500, 
                            callbacks=[model_logger, model_checkpoint])
