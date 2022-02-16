@@ -19,7 +19,7 @@ The midway3 compute nodes do not have libsndfile. As a workaround, we download t
 1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.
     (Or pass as command line options in step 3)
 2. Choose a model component and parameters file. e.g. seq2seq/train.py, seq2seq/hparams/train.yaml
-3. Run via `bash run-training.sh <rcc|ai> <path to train.py> <path to hparams.yaml> [--cluster C] [--dataset_name D] [--num_train N]`
+3. Run via `bash run-training.sh <path to train.py> <path to hparams.yaml> [--cluster C] [--dataset_name D] [--num_train N]`
 
 ## Development
 ### param.yaml files

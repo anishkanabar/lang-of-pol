@@ -302,7 +302,7 @@ if __name__ == "__main__":
     )
 
     # Dataset prep (parsing Librispeech)
-    from bpc_prepare import prepare_bpc  # noqa
+    from ctc_prepare import prepare_bpc  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(

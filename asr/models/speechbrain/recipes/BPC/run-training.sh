@@ -2,21 +2,29 @@
 
 # Retrieve command line args
 all_args=("$@")
-CLUSTER=$1
-TRAINPY=$2
-HPARAMS=$3
-OVERRIDES=("${all_args[@]:3}")
+TRAINPY=$1
+HPARAMS=$2
+OVERRIDES=("${all_args[@]:2}")
 
 # Validate command line args
 usage() {
     echo "Usage:" >&2
-    echo "sh run-training.sh <rcc|ai> <path/to/train.py> <path/to/params.yaml> [overrides...]" >&2
+    echo "sh run-training.sh <path/to/train.py> <path/to/params.yaml> [overrides...]" >&2
     echo "Overrides are named args matching a hparam key" >&2
 }
-if [ "$CLUSTER" != "rcc" ] && [ "$CLUSTER" != "ai" ]; then
+
+# Validate command line args: cluster
+if [[ `hostname` == *"midway3"* ]]; then
+    CLUSTER="rcc"
+elif [[ `hostname` == *"fe"* ]]; then
+    CLUSTER="ai"
+else
     usage
     exit 1
-elif [ ! -f "$TRAINPY" ] || [ ! -f "$HPARAMS" ]; then
+fi
+
+# Validate command line args: script and param file
+if [ ! -f "$TRAINPY" ] || [ ! -f "$HPARAMS" ]; then
     usage
     exit 1
 fi
