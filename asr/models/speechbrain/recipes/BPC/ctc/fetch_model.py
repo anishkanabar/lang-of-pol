@@ -1,6 +1,6 @@
 from speechbrain.lobes.models.huggingface_wav2vec import HuggingFaceWav2Vec2
 
-model_name = "facebook/wav2vec2-base-100h"
+model_name = "facebook/wav2vec2-large-960h-lv60-self"
 revision = "main"
 save_path = "/project/graziul/ra/echandler/scratch/" + model_name
 output_norm = True
