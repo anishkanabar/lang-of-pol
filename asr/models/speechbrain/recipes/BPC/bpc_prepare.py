@@ -28,7 +28,7 @@ def prepare_bpc(cluster: str,
         return
 
     if dataset_name == 'police':
-        data = PoliceDataset(cluster, nrow=num_train, nsecs=num_sec, resample=8000).data
+        data = PoliceDataset(cluster, nrow=num_train, nsecs=num_sec, resample=16000).data
     elif dataset_name == 'librispeech':
         data = LibriSpeechDataset(cluster, nrow=num_train, nsecs=num_sec).data
     elif dataset_name == 'atczero':

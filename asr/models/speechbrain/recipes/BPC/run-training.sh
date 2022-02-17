@@ -64,6 +64,12 @@ if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
     export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
 fi
 
+# Link to ffmpeg, which isnt available on rcc compute nodes
+if [[ ! "$PATH" == *"ffmpeg"* ]]; then
+    BIN_PATH=/home/`whoami`/.conda/envs/ffmpeg/bin
+    export PATH=$BIN_PATH:$PATH
+fi
+
 if [ "$CLUSTER" = "rcc" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \

@@ -2,10 +2,11 @@
 
 ## Installation
 ### Midway3
-The midway3 compute nodes do not have libsndfile. As a workaround, we download this in a conda env and link to it at runtime. 
-1. `conda create -c conda-forge -y --name soundfile librosa`
+The midway3 compute nodes do not have libsndfile or ffmpeg. As a workaround, we download this in a conda env and link to it at runtime. 
+1. a. `conda create -c conda-forge -y --name soundfile librosa`
+1. b. `conda create -c conda-forge -y --name ffmpeg ffmpeg`
 2. Dont activate this conda env. Just stay on your base env.
-3. Create a new virtual environment for this model, activate it, and install dependencies:
+3. Create a new virtual environment for speechbrain, activate it, and install dependencies:
 4. `python3 -m venv path/to/new/env` 
 5. `source path/to/new/env/bin/activate`
 6. `cd asr/data/asr_dataset`
