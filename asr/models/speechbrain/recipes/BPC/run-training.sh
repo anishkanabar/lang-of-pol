@@ -13,7 +13,7 @@ usage() {
     echo "sh run-training.sh <rcc|ai> <path/to/train.py> <path/to/params.yaml> [overrides...]" >&2
     echo "Overrides are named args matching a hparam key" >&2
 }
-if [ "$CLUSTER" != "rcc" ] && [ "$CLUSTER" != "ai" ]; then
+if [ "$CLUSTER" != "rcc" ] && [ "$CLUSTER" != "ai" ] && [ "$CLUSTER" != "ttic" ]; then
     usage
     exit 1
 elif [ ! -f "$TRAINPY" ] || [ ! -f "$HPARAMS" ]; then
@@ -32,6 +32,10 @@ elif [ "$CLUSTER" = "ai" ]; then
     OUTPUT_DIR="/home/`whoami`/slurm_output"
     TIMEOUT="03:59:00"   # 4 hours is the maximum on AI cluster
     PARTITION="general"
+elif [ "$CLUSTER" = "ttic" ]; then
+    OUTPUT_DIR="/scratch/`whoami`/slurm"
+    TIMEOUT="01:00:00"   # 4 hours is the maximum on AI cluster
+    PARTITION="gpu"
 fi
 
 # Define regular params
@@ -47,13 +51,15 @@ GPU_TASKS="1"
 MEM_PER_CPU="24G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
-    mkdir "$OUTPUT_DIR"
+    mkdir -p "$OUTPUT_DIR"
 fi
 
 # Link to libsndfile, which isnt available on rcc compute nodes
-if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
-    LN_PATH=/home/`whoami`/.conda/envs/soundfile/lib
-    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
+if [ "$CLUSTER" = "rcc" ]; then
+    if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
+        LN_PATH=/home/`whoami`/.conda/envs/soundfile/lib
+        export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
+    fi
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
@@ -86,5 +92,19 @@ elif [ "$CLUSTER" = "ai" ]; then
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
+elif [ "$CLUSTER" = "ttic" ]; then
+    srun --job-name "$JOB_NAME" \
+            --mail-user $MAIL_USER \
+            --mail-type $MAIL_TYPE \
+            --output "$OUTPUT" \
+            --error "$ERROR" \
+            --partition "$PARTITION" \
+            --nodes $NODES \
+            --gpus $GPUS \
+            --ntasks $NTASKS \
+            --gpus-per-task $GPU_TASKS \
+            --mem-per-cpu "$MEM_PER_CPU" \
+            --time "$TIMEOUT" \
+            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 fi
-     
+

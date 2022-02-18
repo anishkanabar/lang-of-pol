@@ -1,8 +1,9 @@
 import os
 import logging
-from asr_dataset.police import PoliceDataset
-from asr_dataset.librispeech import LibriSpeechDataset
-from asr_dataset.atczero import ATCZeroDataset
+from asr_dataset.police import BpcETL
+from asr_dataset.librispeech import LibriSpeechETL
+from asr_dataset.atczero import ATCZeroETL
+from asr_dataset.constants import DataSizeUnit
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -28,13 +29,21 @@ def prepare_bpc(cluster: str,
         return
 
     if dataset_name == 'police':
-        data = PoliceDataset(cluster, nrow=num_train, nsecs=num_sec, resample=8000).data
+        etl = BpcETL(cluster)
     elif dataset_name == 'librispeech':
-        data = LibriSpeechDataset(cluster, nrow=num_train, nsecs=num_sec).data
+        etl = LibriSpeechETL(cluster)
     elif dataset_name == 'atczero':
-        data = ATCZeroDataset(cluster, nrow=num_train, nsecs=num_sec).data
+        etl = ATCZeroETL(cluster)
     else:
         raise NotImplementedError('dataset ' + dataset_name)
+
+    if num_sec is not None:
+        qty = num_sec
+        units = DataSizeUnit.SECONDS
+    else:
+        qty = num_train
+        units = DataSizeUnit.ROW_COUNT
+    data = etl.etl(qty=qty, units)
 
     # Make IDs global to splits
     data = data.reset_index()
