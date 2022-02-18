@@ -9,66 +9,113 @@ import re
 import datetime as dt
 import pandas as pd
 import logging
-from asr_dataset.utterance_dataset import UtteranceDataset
-from asr_dataset.constants import DATASET_DIRS
+from asr_dataset.base import AsrETL
+from asr_dataset.constants import DATASET_DIRS, Cluster
 
-logger = logging.getLogger('asr.dataset.police')
 
-BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
+logger = logging.getLogger('asr.etl.bpc')
 
-class PoliceDataset(UtteranceDataset):
 
+class BpcETL(AsrETL)
+    """ Data loader for broadcast police communications """
+    BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
     SAMPLE_RATE = 22050  # Hz
 
-    def __init__(self, 
-                 cluster:str='rcc', 
-                 nrow: int=None, 
-                 frac: float=None, 
-                 nsecs: float=None,
-                 resample: int=None):
+    def __init__(self, cluster: Cluster=Cluster.RCC):
+        super().__init__('police')
         self.transcripts_dir = DATASET_DIRS[cluster]['police_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['police_mp3s']
-        super().__init__('police', nrow, frac, nsecs, resample)
-    
+        
 
-    def filter_manifest(self, data: pd.DataFrame) -> pd.DataFrame:
+    def extract(self) -> pd.DataFrame:
         """
-        Filters out non-existent, too-short, and inaudible audios
-        Params:
-            data: expects columns {context_path, duration, transcripts}
-        """
-        data = super().filter_manifest(data)
+        Collect info on audio files and transcripts in their original form.
 
-        missing = data['transcripts'].isna()
-        logger.info(f'Discarding {missing.sum()} transcripts with no text.')
-        data = data.loc[~ missing]
-    
-        has_x = data['transcripts'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
-        logger.info(f'Discarding {has_x.sum()} inaudible transcripts.')
-        data = data.loc[~ has_x]
-    
-        has_brackets = data['transcripts'].str.contains('\[.+\]', regex=True)
-        logger.info(f'Discarding {has_brackets.sum()} uncertain transcripts.')
-        data = data.loc[~ has_brackets]
-    
-        has_numeric = data['transcripts'].str.contains("[0-9]+", regex=True)
-        logger.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
-        data = data.loc[~ has_numeric]
-            
+        Returns: DataFrame with columns:
+            audio - (str) full path to audio file
+            text - (str) transcript text
+            duration - (float) length of audio in seconds
+        """
+        data = self._create_manifest()
+        self.describe(data, "-extracted")
         return data
 
-    def create_manifest(self) -> pd.DataFrame:
+
+    def transform(self, data: pd.DataFrame, sample_rate: int=None) -> pd.DataFrame:
+        """
+        Writes new audio files at the utterance level.
+
+        This function is intended to run ONCE over the lifetime of the dataset,
+        but is a NO-OP if called again. To re-transform the dataset, delete the
+        output of this function.
+        """
+        sample_rate = sample_rate if sample_rate is not None else self.SAMPLE_RATE
+        # Filter out bad audio
+        unfiltered_data = data
+        data = self._filter_exists(data, "original_audio")
+        data = self._filter_empty(data, sample_rate)
+        data = self._filter_corrupt(data, "original_audio")
+        # Write new files to disk
+        self._write_utterances(data, sample_rate)
+        # Filter out bad audio again after writing
+        data = self._filter_exists(data, "audio")
+        data = self._filter_empty(data, sample_rate)
+        data = self._filter_corrupt(data, "audio")
+        # Filter out missing transcripts
+        missing = (data['text'].isna()) | (data['text'].str.len() == 0)
+        logger.info(f'Discarding {missing.sum()} transcripts with no text.')
+        data = data.loc[~ missing]
+        # Filter out inaudible transcripts
+        has_x = data['text'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
+        logger.info(f'Discarding {has_x.sum()} inaudible transcripts.')
+        data = data.loc[~ has_x]
+        # Filter out uncertain transcripts
+        has_brackets = data['text'].str.contains('\[.+\]', regex=True)
+        logger.info(f'Discarding {has_brackets.sum()} uncertain transcripts.')
+        data = data.loc[~ has_brackets]
+        # Filter out transcripts with numbers
+        has_numeric = data['text'].str.contains("[0-9]+", regex=True)
+        logger.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
+        data = data.loc[~ has_numeric]
+        self.describe(data, "-transformed")
+        # Delete bad utterance files
+        dropped_data = unfiltered_data.merge(data, how='left', left_index=True, right_index=True)
+        for dropped_row in dropped_data.itertuples():
+            if os.path.exists(dropped_row['audio']):
+                os.remove(dropped_row['audio'])
+        return data
+
+    
+    def load(self,
+            data: pd.DataFrame=None,
+            qty:Real=None,
+            units: DataSizeUnit=None) -> pd.DataFrame:
+        """
+        Collect info on the transformed audio files and transcripts.
+        Does NOT load waveforms into memory.
+
+        Returns: DataFrame with same columns as extract()
+        """
+        if data is None:
+            data = self._create_manifest()
+        data = self._filter_exists(data, "audio", log=False)
+        data = self._sample(data, qty, units)
+        self.describe(data, '-loaded')
+        return data 
+        
+
+    def _create_manifest(self) -> pd.DataFrame:
         """
         Collect info on audio files and transcripts.
         Returns: DataFrame with columns:
-            path - full path to utterance audio file
-            transcripts - transcript text
+            audio - full path to utterance audio file
+            text - transcript text
             duration - audio length in seconds
-            context_path - path to audio file with multiple utterances
+            original_audio - path to audio file with multiple utterances
         """
         data = self._parse_manifests(self.transcripts_dir)
         data = self._add_utterance_paths(data)
-        data = data.drop_duplicates('path', ignore_index=True)
+        data = data.drop_duplicates('audio', ignore_index=True)
         return data
     
     
@@ -76,16 +123,19 @@ class PoliceDataset(UtteranceDataset):
         """
         Add column with path to audio utterance.
         Params:
-            data: expects columns {context_path, offset, duration, transcripts}
+            data: expects columns {original_audio, offset, duration, text}
         """
         msPerSec = 1000
-        off_fmt = (data['offset'] * msPerSec).astype('int32').astype('str')
-        end_fmt = ((data['offset'] + data['duration']) * msPerSec).astype('int32').astype('str')
-        ext_fmt = pd.Series(['.flac']*len(data))
-        utterance_names = off_fmt.str.cat(end_fmt, '_').str.cat(ext_fmt)
-        utterance_paths = data['context_path'].str.replace('data','data/utterances', regex=False) \
-                    .str.replace('.mp3', '').str.cat(utterance_names, '/')
-        return data.assign(path=utterance_paths)
+        start_ms = data['offset'].astype(float) * msPerSec
+        duration_ms = data['duration'].astype(float) * msPerSec
+        end_ms = start_ms + duration_ms
+        start_str = start_ms.astype('str')
+        end_str = end_ms.astype('str')
+
+        audio_names = start_str.str.cat(end_str, '_') + '.flac'
+        audio_paths = data['original_path'].str.replace('data', 'data/utterances', regex=False)
+        audio_paths = audio_paths.str.replace('.mp3', '/').str.cat(audio_names)
+        return data.assign(audio=audio_paths)
         
 
     def _parse_manifests(self, ts_dir: str) -> pd.DataFrame:
@@ -109,11 +159,12 @@ class PoliceDataset(UtteranceDataset):
             ts_path: Location of transcript csv
         """
         df = pd.read_csv(ts_path)
-        return pd.DataFrame({'context_path': self._extract_mp3_path(df),
+        return pd.DataFrame({'original_audio': self._extract_mp3_path(df),
                              'offset': self._extract_offset(df),
                              'duration': self._extract_duration(df),
-                             'transcripts': df['transcription']})
+                             'text': df['transcription']})
     
+
     def _extract_mp3_path(self, df):
         """
         Parse mp3 file path for utterance in transcription csv
@@ -135,6 +186,7 @@ class PoliceDataset(UtteranceDataset):
         offset = pd.to_datetime(df['start_dt']) - origin
         return offset.dt.total_seconds()
     
+
     def _extract_duration(self, df):
         """
         Parses utterance duration from the transcription csv. Handles inconsisent column formatting

@@ -5,47 +5,73 @@ Brief: Loaders for librispeech transcripts and audio.
 
 import os
 import pandas as pd
-from asr_dataset.base_dataset import ASRDataset
-from asr_dataset.constants import DATASET_DIRS
+from asr_dataset.base import AsrETL
+from asr_dataset.constants import DATASET_DIRS, Cluster
 
-class LibriSpeechDataset(ASRDataset):
+
+class LibriSpeechETL(AsrETL):
     
-    def __init__(self, 
-                 cluster: str='rcc', 
-                 nrow: int=None, 
-                 frac: float=None,
-                 nsecs: float=None):
-        self.dataset_path = DATASET_DIRS[cluster]['librispeech']
-        super().__init__('librispeech', nrow, frac, nsecs)
+    def __init__(self, cluster: Cluster=Cluster.RCC):
+        super().__init__('librispeech')
+        self.dataset_path = DATASET_DIRS[cluster]['librispeech_data']
 
 
-    def create_manifest(self) -> pd.DataFrame:
+    def extract(self) -> pd.DataFrame:
+        """
+        Collect info on audio files and transcripts in their original form.
+
+        Returns: DataFrame with columns:
+            audio - (str) full path to audio file
+            text - (str) transcript text
+            duration - (float) length of audio in seconds
+        """
+        data = self._create_manifest()
+        data = self._add_duration(data)
+        self.describe(data)
+        return data
+
+
+    def transform(self, data: pd.DataFrame, sample_rate: int=None) -> pd.DataFrame:
+        """ Dataset already clean and in useful form """
+        return data
+        
+
+    def load(self, 
+             data: pd.DataFrame=None, 
+             qty:Real=None, 
+             units: DataSizeUnit=None) -> pd.DataFrame:
+        """
+        Collect info on the transformed audio files and transcripts.
+        Does NOT load waveforms into memory.
+
+        Returns: DataFrame with same columns as extract()
+        """
+        if data is None:
+            data = self.extract()
+        data = self._sample(data, qty, units)
+        self.describe(data)
+        return data
+        
+
+    def _create_manifest(self) -> pd.DataFrame:
         """
         Collect info on audio files and transcripts.
         Returns: DataFrame with columns:
-            path - full path to audio file
-            transcripts - transcript text
+            audio - full path to audio file
+            text - transcript text
         """
-        count, k, inp = 0, 0, []
-        audio_name, audio_trans = [], []
-        for dir1 in os.listdir(self.dataset_path):
-            if dir1 == '.DS_Store': continue
-            dir2_path = os.path.join(self.dataset_path, dir1)
-            for dir2 in os.listdir(dir2_path):
-                if dir2 == '.DS_Store': continue
-                dir3_path = os.path.join(dir2_path, dir2)
-                for audio in os.listdir(dir3_path):
-                    if audio.endswith('.txt'):
-                        k += 1
-                        trans_path = os.path.join(dir3_path, audio)
-                        with open(trans_path) as f:
-                            line = f.readlines()
-                            for item in line:
-                                flac_path = os.path.join(dir3_path, item.split()[0]) + '.flac' 
-                                audio_name.append(flac_path)
-    
-                                text = item.split()[1:]
-                                text = ' '.join(text)
-                                audio_trans.append(text)
-        data = pd.DataFrame({"path": audio_name, "transcripts": audio_trans})
+        audios, texts = [], []
+        for root, dirs, files in os.walk(self.dataset_path):
+            manifest_names = [x for x in files if x.endswith('.txt')]
+            for manifest_name in manifest_names:
+                manifest_file = os.path.join(root, manifest_name)
+                with open(manifest_file) as f:
+                    line = f.readlines()
+                    for item in line:
+                        audio_name = item.split()[0]
+                        audio_text = ' '.join(item.split()[1:])
+                        audios.append(audio_name)
+                        texts.append(audio_text)
+        data = pd.DataFrame({"audio": audios, "text": texts})
         return data
+
