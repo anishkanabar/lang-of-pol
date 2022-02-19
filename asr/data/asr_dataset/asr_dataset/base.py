@@ -148,7 +148,6 @@ class AsrETL(abc.ABC):
         original_audios = set(data['original_audio'])
         num_audios = len(original_audios)
         for idx, original_audio in enumerate(original_audios):
-            logger.debug(f'Writing file {idx} of {num_audios}')
             utterances = data.loc[data['original_audio'] == original_audio]
 
             # loading audio is expensive. check if we can skip this group of utterances.
@@ -156,6 +155,7 @@ class AsrETL(abc.ABC):
             if all_exist:
                 continue
 
+            logger.debug(f'Writing file {idx} of {num_audios}')
             waveform, sample_rate = librosa.load(original_audio, sr=sample_rate)
             for utterance in utterances.itertuples():
                 utterance = utterance._asdict()
