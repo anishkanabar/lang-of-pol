@@ -1,14 +1,37 @@
+"""
+File: constants.py
+Brief: environmet variables and common enums
+Authors: Eric Chandler <echandler@uchicago.edu>
+"""
+from enum import Enum, auto
+
+
+class DataSizeUnit(Enum):
+    SECONDS = auto()
+    ROW_COUNT = auto()
+    ROW_FRAC = auto()
+
+
+class Cluster(Enum):
+    RCC = auto()
+    AI = auto()
+    TTIC = auto()
+
+
 DATASET_DIRS = {
-    'rcc': {
+    Cluster.RCC: {
         'police_transcripts':'/project/graziul/transcripts',
         'police_mp3s':'/project/graziul/data',
-        'librispeech':'/project/graziul/ra/shiyanglai/experiment1/audio-data/LibriSpeech/train-clean-100',
-        'atczero' : '/project/graziul/ra/wdolan/atc0_comp',
+        'librispeech_data':'/project/graziul/ra/shiyanglai/experiment1/audio-data/LibriSpeech/train-clean-100',
+        'atczero_data' : '/project/graziul/ra/wdolan/atc0_comp',
     },
-    'ai': {
+    Cluster.AI: {
         'police_transcripts':'/net/projects/uri/transcripts',
         'police_mp3s':'/net/projects/uri/data',
-        'librispeech':'/net/projects/uri/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100',
-        'atczero': '/net/projects/uri/ra/wdolan/atc0_comp',
+        'librispeech_data':'/net/projects/uri/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100',
+        'atczero_data': '/net/projects/uri/ra/wdolan/atc0_comp',
+    },
+    Cluster.TTIC: {
+        'librispeech_data': '/share/data/speech/Datasets/LibriSpeech/train-clean-100'
     }
 }
