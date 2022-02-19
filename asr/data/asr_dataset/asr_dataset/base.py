@@ -4,11 +4,15 @@ Brief: Abstract base class for ASR dataset loaders
 Authors: Eric Chandler <echandler@uchicago.edu>
 '''
 
+import os
 import abc
 import logging
-from numbers import Real, Rational, Integral
+import warnings
+import datetime as dt
+from numbers import Real
 from enum import Enum, auto
 import librosa
+import soundfile
 import pandas as pd
 from asr_dataset.constants import DataSizeUnit
 
@@ -154,6 +158,7 @@ class AsrETL(abc.ABC):
 
             waveform, sample_rate = librosa.load(original_audio, sr=sample_rate)
             for utterance in utterances.itertuples():
+                utterance = utterance._asdict()
                 audio = utterance['audio']
                 audio_dir = os.path.dirname(audio)
                 if os.path.exists(audio):
@@ -194,6 +199,8 @@ class AsrETL(abc.ABC):
             data: expects columns {duration}
             sample_rate: sample rate in Hz
         """
+        if data.empty:
+            return data
         not_empty_check = lambda x: x.duration >= self.WINDOW_LEN and \
                                     x.duration * sample_rate > 1
         mp3_notempty = data.apply(lambda x: not_empty_check(x), axis=1)
@@ -210,8 +217,11 @@ class AsrETL(abc.ABC):
             data: expects columns {<path_col>}
         """
         unique_paths = pd.Series(data[path_col].unique())
-        path_notcorrupt = unique_paths.transform(lambda p: not cls._is_corrupted(p))
-        corrupt_map = dict(zip(unique_paths, path_notcorrupt))
+        # Iterating sequentially will be faster than pd.apply 
+        # since we dont want to open lots of concurrent file pointers
+        corrupt_map = {}
+        for unique_path in unique_paths:
+            corrupt_map[unique_path] = not cls._is_corrupted(unique_path)
         mp3_notcorrupt = data[path_col].transform(lambda p: corrupt_map[p])
         n_corrupted = mp3_notcorrupt.count() - mp3_notcorrupt.sum()
         logger.info(f'Discarding {n_corrupted} corrupted mp3s')

@@ -166,6 +166,8 @@ class ASR(sb.Brain):
             )
             with open(self.hparams.wer_file, "w") as w:
                 self.wer_metric.write_stats(w)
+            with open(self.hparams.cer_file, "w") as w:
+                self.cer_metric.write_stats(w)
 
     def init_optimizers(self):
         "Initializes the wav2vec2 optimizer and model optimizer"
@@ -284,23 +286,18 @@ def dataio_prepare(hparams):
 
 if __name__ == "__main__":
 
-    logger.info("DEBUG: entering main")
 
     # CLI:
-    logger.info("DEBUG: parsing args")
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])
 
-    logger.info("DEBUG: init group")
     # If distributed_launch=True then
     # create ddp_group with the right communication protocol
     sb.utils.distributed.ddp_init_group(run_opts)
 
-    logger.info("DEBUG: load hparam")
     with open(hparams_file) as fin:
         hparams = load_hyperpyyaml(fin, overrides)
 
     # Create experiment directory
-    logger.info("DEBUG: create expm")
     sb.create_experiment_directory(
         experiment_directory=hparams["output_folder"],
         hyperparams_to_save=hparams_file,
@@ -308,11 +305,9 @@ if __name__ == "__main__":
     )
 
     # Dataset prep (parsing Librispeech)
-    logger.info("DEBUG: load prepar")
     from ctc_prepare import prepare_bpc  # noqa
 
     # multi-gpu (ddp) save data preparation
-    logger.info("DEBUG: prepare dat")
     run_on_main(
         prepare_bpc,
         kwargs={
@@ -327,13 +322,11 @@ if __name__ == "__main__":
     )
 
     # here we create the datasets objects as well as tokenization and encoding
-    logger.info("DEBUG: load dataas")
     train_data, valid_data, test_datasets, label_encoder = dataio_prepare(
         hparams
     )
 
     # Trainer initialization
-    logger.info("DEBUG: make model.")
     asr_brain = ASR(
         modules=hparams["modules"],
         hparams=hparams,
@@ -346,7 +339,6 @@ if __name__ == "__main__":
     asr_brain.tokenizer = label_encoder
 
     # Training
-    logger.info("DEBUG: start train")
     asr_brain.fit(
         asr_brain.hparams.epoch_counter,
         train_data,
@@ -356,7 +348,6 @@ if __name__ == "__main__":
     )
 
     # Testing
-    logger.info("DEBUG: start test.")
     for k in test_datasets.keys():  # keys are test_clean, test_other etc
         asr_brain.hparams.wer_file = os.path.join(
             hparams["output_folder"], "wer_{}.txt".format(k)

@@ -6,10 +6,10 @@ Authors: Eric Chandler <echandler@uchicago.edu>
 
 import os
 import re
-import datetime as dt
-import pandas as pd
 import logging
-from numbers import Real, Rational, Integral
+import datetime as dt
+from numbers import Real
+import pandas as pd
 from asr_dataset.base import AsrETL
 from asr_dataset.constants import DATASET_DIRS, Cluster, DataSizeUnit
 
@@ -80,8 +80,9 @@ class BpcETL(AsrETL):
         data = data.loc[~ has_numeric]
         self.describe(data, "-transformed")
         # Delete bad utterance files
-        dropped_data = unfiltered_data.merge(data, how='left', left_index=True, right_index=True)
+        dropped_data = unfiltered_data.loc[unfiltered_data.index.difference(data.index)]
         for dropped_row in dropped_data.itertuples():
+            dropped_row = dropped_row._asdict()
             if os.path.exists(dropped_row['audio']):
                 os.remove(dropped_row['audio'])
         return data
@@ -130,12 +131,13 @@ class BpcETL(AsrETL):
         start_ms = data['offset'].astype(float) * msPerSec
         duration_ms = data['duration'].astype(float) * msPerSec
         end_ms = start_ms + duration_ms
-        start_str = start_ms.astype('str')
-        end_str = end_ms.astype('str')
+        start_str = start_ms.astype(int).astype('str')  # cast to int for cleaner filenames
+        end_str = end_ms.astype(int).astype('str')
 
         audio_names = start_str.str.cat(end_str, '_') + '.flac'
         audio_paths = data['original_path'].str.replace('data', 'data/utterances', regex=False)
-        audio_paths = audio_paths.str.replace('.mp3', '/').str.cat(audio_names)
+        audio_paths = audio_paths.str.replace('\.(mp3|wav|flac|ogg)', '/', regex=True)
+        audio_paths = audio_paths.str.cat(audio_names)
         return data.assign(audio=audio_paths)
         
 

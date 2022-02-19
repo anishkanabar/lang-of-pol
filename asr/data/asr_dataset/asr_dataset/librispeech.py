@@ -6,7 +6,7 @@ Brief: Loaders for librispeech transcripts and audio.
 import os
 import logging
 import pandas as pd
-from numbers import Real, Rational, Integral
+from numbers import Real
 from asr_dataset.base import AsrETL
 from asr_dataset.constants import DATASET_DIRS, Cluster, DataSizeUnit
 

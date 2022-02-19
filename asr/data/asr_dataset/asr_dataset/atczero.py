@@ -5,10 +5,15 @@ Authors: William Dolan <wdolan@uchicago.edu>
 '''
 
 import os
+import logging
 import pandas as pd
-from numbers import Real, Rational, Integral
+from numbers import Real
 from asr_dataset.base import AsrETL
 from asr_dataset.constants import DATASET_DIRS, Cluster, DataSizeUnit
+
+
+logger = logging.getLogger('asr.etl.atczero')
+
 
 class ATCZeroETL(AsrETL):
     
@@ -55,8 +60,9 @@ class ATCZeroETL(AsrETL):
         data = self._filter_corrupt(data, "audio")
         self.describe(data, "-transformed")
         # Delete bad utterance files
-        dropped_data = unfiltered_data.merge(data, how='left', left_index=True, right_index=True)
+        dropped_data = unfiltered_data.loc[unfiltered_data.index.difference(data.index)]
         for dropped_row in dropped_data.itertuples():
+            dropped_row = dropped_row._asdict()
             if os.path.exists(dropped_row['audio']):
                 os.remove(dropped_row['audio'])
         return data
@@ -105,12 +111,13 @@ class ATCZeroETL(AsrETL):
         msPerSec = 1000
         offset = data['start'].astype(float)
         duration = data['end'].astype(float) - offset
-        start_ms = (offset * msPerSec).astype('str')
-        end_ms = ((offset + duration) * msPerSec).astype('str')
+        start_ms = (offset * msPerSec).astype(int).astype('str')  # cast to int for cleaner filenames
+        end_ms = ((offset + duration) * msPerSec).astype(int).astype('str')
         audio_names = start_ms.str.cat(end_ms, "_") + ".sph"
         original_paths = self.transcripts_dir + os.sep + data['filePath']
         audio_paths = original_paths.str.replace('audio', 'audio/utterances', regex=False)
-        audio_paths = audio_paths.str.replace('.sph', '/').str.cat(audio_names)
+        audio_paths = audio_paths.str.replace('\.(sph|wav)', '/', regex=True)
+        audio_paths = audio_paths.str.cat(audio_names)
         data = data.assign(
             offset=offset, 
             duration=duration, 
