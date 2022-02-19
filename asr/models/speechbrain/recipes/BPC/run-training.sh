@@ -111,6 +111,7 @@ elif [ "$CLUSTER" = "ttic" ]; then
     srun -c "$GPUS" \
             --job-name "$JOB_NAME" \
             --nodes $NODES \
+            --nodelist "gpu-g3" \
             --ntasks $NTASKS \
             --time "$TIMEOUT" \
             --partition "$PARTITION" \

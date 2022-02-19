@@ -32,6 +32,6 @@ DATASET_DIRS = {
         'atczero_data': '/net/projects/uri/ra/wdolan/atc0_comp',
     },
     Cluster.TTIC: {
-        'librispeech_data': '/share/data/speech/Datasets/LibriSpeech/train-clean-100'
+        'librispeech_data': '/share/data/speech/Datasets/LibriSpeech/LibriSpeech/train-clean-100'
     }
 }

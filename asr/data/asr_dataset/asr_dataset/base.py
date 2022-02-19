@@ -106,8 +106,12 @@ class AsrETL(abc.ABC):
         if 'duration' in data.columns:
             return data
         else:
-            duration_func = lambda x: librosa.get_duration(filename=x)
-            return data.assign(duration=data['audio'].apply(duration_func))
+            # This is MUCH faster sequentially than via pd.apply
+            # because you dont want to open so many file pointers concurrently
+            durations = []
+            for audio_path in data['audio']:
+                durations.append(librosa.get_duration(filename=audio_path))
+            return data.assign(duration=durations)
     
 
     ###################################

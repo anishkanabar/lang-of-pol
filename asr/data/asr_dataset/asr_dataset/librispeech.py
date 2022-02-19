@@ -65,18 +65,17 @@ class LibriSpeechETL(AsrETL):
         """
         audios, texts = [], []
         for root, dirs, files in os.walk(self.dataset_path):
-            logger.debug('Walking {} for corpus'.format(root))
             manifest_names = [x for x in files if x.endswith('.txt')]
             for manifest_name in manifest_names:
                 manifest_file = os.path.join(root, manifest_name)
                 with open(manifest_file) as f:
                     line = f.readlines()
                     for item in line:
-                        audio_name = item.split()[0]
+                        audio_name = item.split()[0] + '.flac'
                         audio_text = ' '.join(item.split()[1:])
-                        audios.append(audio_name)
+                        audio_path = os.path.join(root, audio_name)
+                        audios.append(audio_path)
                         texts.append(audio_text)
         data = pd.DataFrame({"audio": audios, "text": texts})
-        logger.debug('Found {} corpus rows'.format(len(data)))
         return data
 
