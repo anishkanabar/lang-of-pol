@@ -21,7 +21,7 @@ fi
 JOB_NAME="pyanode-$PYNAME"
 TIMEOUT="00:30:00"
 ACCOUNT="pi-graziul"
-GPUS=4
+GPUS=1
 MEM="24G"
 PARTITION="gpu"
 OUTPUT_DIR="/scratch/midway3/`whoami`/slurm"
