@@ -4,6 +4,7 @@ author: shiyang lai
 email: shiyanglai@uchicago.edu
 """
 
+import getpass
 import argparse
 import pytorch_lightning as pl
 from pyannote.audio import Pipeline
@@ -17,7 +18,7 @@ from tunning import *
 import warnings
 warnings.filterwarnings('ignore')
 
-
+OUTPUT_DIR = "/scratch/midway3/" + getpass.getuser() + "/conv_rec/vad/"
  
 if __name__ == "__main__":
     # parse the command line
@@ -48,10 +49,10 @@ if __name__ == "__main__":
         # train the model, if gpu number is specified, then set the number of gpu, otherwise use cpu
         if args.gpus == 0:
             trainer = pl.Trainer(accelerator="cpu", max_time={"days": 2}, max_epochs=100,
-                                default_root_dir=f'/Users/shiyang/Desktop/NIH/git/asr/results/shiyang_test/vad/')
+                                default_root_dir=OUTPUT_DIR)
         else:
             trainer = pl.Trainer(gpus=args.gpus, max_time={"days": 2}, max_epochs=100,
-                                default_root_dir=f'/Users/shiyang/Desktop/NIH/git/asr/results/shiyang_test/vad/')
+                                default_root_dir=OUTPUT_DIR)
         trainer.fit(model)
         print("trained successfully!")
         # save checkpoint
