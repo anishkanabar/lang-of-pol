@@ -31,5 +31,5 @@
 python tf_devices.py
 
 output_dir="/net/projects/uri/ra/`whoami`"
-python train.py 'radio' 'ai' "$output_dir"
+python train.py 'police' 'ai' "$output_dir"
 

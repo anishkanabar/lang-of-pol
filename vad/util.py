@@ -526,7 +526,8 @@ def get_predictions(model,input_list, labels_list, batch_size):
         while(idx < num_samples):
             print(idx)
             input_batch = input_list[idx*batch_size:(idx+1)*batch_size]
-            labels_batch = labels_list[idx*batch_size:(idx+1)*batch_size]
+            if labels_list is not None:
+                labels_batch = labels_list[idx*batch_size:(idx+1)*batch_size]
             idx = idx+1
             output_hat = model(input_batch)
             #print(output_hat)

@@ -32,5 +32,5 @@
 python tf_devices.py
 # Run DeepSpeech2
 output_dir="/project/graziul/ra/`whoami`"
-python train.py 'radio' 'rcc' "$output_dir"
+python train.py 'police' 'rcc' "$output_dir"
 
