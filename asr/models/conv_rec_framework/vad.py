@@ -23,8 +23,9 @@ if __name__ == "__main__":
     # parse the command line
     parser = argparse.ArgumentParser(description='Voice Acitity Detection component of the framework.')
     parser.add_argument('corpus_name', default='ami', help='the name of the corpus (default: AMI)')
-    parser.add_argument('gpus', default=0, help='number of gpus.')
-    parser.add_argument('pretrained', default=0, help='load pretrained models or not.')
+    parser.add_argument('-s', '--sub_corpus', type=str ,default='only_words', help='the name of the subcorpus (default: only_words)')
+    parser.add_argument('-g', '--gpus', type=int, default=0, help='number of gpus.')
+    parser.add_argument('-p', '--pretrained', type=int, default=0, help='load pretrained models or not.')
     args = parser.parse_args()
 
     # unique code for the task
@@ -40,7 +41,7 @@ if __name__ == "__main__":
         test_performance(pipeline, protocol, calculate_detection_error_rate, code)
     else:
         # load data
-        protocol = load_data(args.corpus_name)
+        protocol = load_data(args.corpus_name, args.sub_corpus)
         # build the model
         vad = VoiceActivityDetection(protocol, duration=2., batch_size=128)
         model = PyanNet(sincnet={'stride': 10}, task=vad)

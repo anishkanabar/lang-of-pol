@@ -10,13 +10,14 @@ import os, glob
 import pandas as pd
 
 
-def load_data(corpus='ami'):
+def load_data(corpus='ami', prefix='only_words'):
     """
     load dataset
     @corpus: the name of corpus 
+    @prefix: the name of the subcorpus
     """
     preprocessors = {'audio': FileFinder()}
-    protocol = get_protocol(f"{corpus.upper()}.SpeakerDiarization.only_words", preprocessors=preprocessors)
+    protocol = get_protocol(f"{corpus.upper()}.SpeakerDiarization.{prefix}", preprocessors=preprocessors)
     return protocol
 
 
@@ -77,7 +78,7 @@ def generate_rttms(root_path, train, development, test, reference, prefix_ignore
         file = open(root_path+'/rttms/train/'+uri+'.rttm', 'w')
         for index, row in sub_df.iterrows():
             try:
-                file.write(f"SPEAKER {uri} 1 {row['start']} {float(row['end'])-float(row['start'])} <NA> <NA> {row['speaker']} <NA> <NA>" + "\n")
+                file.write(f"SPEAKER {uri} 1 {row['start']} {float(row['end'])-float(row['start'])} <NA> <NA> {row['speaker'].replace(' ', '')} <NA> <NA>" + "\n")
             except BaseException:
                 print(f"Incorrect training instance in .csv file row {index}.")
         file.close()
@@ -87,7 +88,7 @@ def generate_rttms(root_path, train, development, test, reference, prefix_ignore
         file = open(root_path+'/rttms/dev/'+uri+'.rttm', 'w')
         for index, row in sub_df.iterrows():
             try:
-                file.write(f"SPEAKER {uri} 1 {row['start']} {float(row['end'])-float(row['start'])} <NA> <NA> {row['speaker']} <NA> <NA>" + "\n")
+                file.write(f"SPEAKER {uri} 1 {row['start']} {float(row['end'])-float(row['start'])} <NA> <NA> {row['speaker'].replace(' ', '')} <NA> <NA>" + "\n")
             except BaseException:
                 print(f"Incorrect development instance in .csv file row {index}.")
         file.close()
@@ -97,7 +98,7 @@ def generate_rttms(root_path, train, development, test, reference, prefix_ignore
         file = open(root_path+'/rttms/test/'+uri+'.rttm', 'w')
         for index, row in sub_df.iterrows():
             try:
-                file.write(f"SPEAKER {uri} 1 {row['start']} {float(row['end'])-float(row['start'])} <NA> <NA> {row['speaker']} <NA> <NA>" + "\n")
+                file.write(f"SPEAKER {uri} 1 {row['start']} {float(row['end'])-float(row['start'])} <NA> <NA> {row['speaker'].replace(' ', '')} <NA> <NA>" + "\n")
             except BaseException:
                 print(f"Incorrect testing instance in .csv file row {index}.")
         file.close()
