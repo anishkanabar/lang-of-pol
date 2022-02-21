@@ -166,6 +166,8 @@ class ASR(sb.Brain):
             )
             with open(self.hparams.wer_file, "w") as w:
                 self.wer_metric.write_stats(w)
+            with open(self.hparams.cer_file, "w") as w:
+                self.cer_metric.write_stats(w)
 
     def init_optimizers(self):
         "Initializes the wav2vec2 optimizer and model optimizer"
@@ -283,6 +285,7 @@ def dataio_prepare(hparams):
 
 
 if __name__ == "__main__":
+
 
     # CLI:
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])

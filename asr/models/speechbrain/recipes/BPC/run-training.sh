@@ -18,6 +18,8 @@ if [[ `hostname` == *"midway3"* ]]; then
     CLUSTER="rcc"
 elif [[ `hostname` == *"fe"* ]]; then
     CLUSTER="ai"
+elif [[ `hostname` == *"ttic"* ]]; then
+    CLUSTER="ttic"
 else
     usage
     exit 1
@@ -40,6 +42,10 @@ elif [ "$CLUSTER" = "ai" ]; then
     OUTPUT_DIR="/home/`whoami`/slurm_output"
     TIMEOUT="03:59:00"   # 4 hours is the maximum on AI cluster
     PARTITION="general"
+elif [ "$CLUSTER" = "ttic" ]; then
+    OUTPUT_DIR="/scratch/`whoami`/slurm"
+    TIMEOUT="01:00:00"   # 4 hours is the maximum on AI cluster
+    PARTITION="gpu"
 fi
 
 # Define regular params
@@ -55,19 +61,20 @@ GPU_TASKS="1"
 MEM_PER_CPU="24G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
-    mkdir "$OUTPUT_DIR"
+    mkdir -p "$OUTPUT_DIR"
 fi
 
-# Link to libsndfile, which isnt available on rcc compute nodes
-if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
-    LN_PATH=/home/`whoami`/.conda/envs/soundfile/lib
-    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
-fi
-
-# Link to ffmpeg, which isnt available on rcc compute nodes
-if [[ ! "$PATH" == *"ffmpeg"* ]]; then
-    BIN_PATH=/home/`whoami`/.conda/envs/ffmpeg/bin
-    export PATH=$BIN_PATH:$PATH
+if [ "$CLUSTER" = "rcc" ]; then
+    # Link to libsndfile, which isnt available on rcc compute nodes
+    if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
+        LN_PATH=/home/`whoami`/.conda/envs/soundfile/lib
+        export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
+    fi
+    # Link to ffmpeg, which isnt available on rcc compute nodes
+    if [[ ! "$PATH" == *"ffmpeg"* ]]; then
+        BIN_PATH=/home/`whoami`/.conda/envs/ffmpeg/bin
+        export PATH=$BIN_PATH:$PATH
+    fi
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
@@ -100,5 +107,14 @@ elif [ "$CLUSTER" = "ai" ]; then
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
+elif [ "$CLUSTER" = "ttic" ]; then
+    srun -c "$GPUS" \
+            --job-name "$JOB_NAME" \
+            --nodes $NODES \
+            --nodelist "gpu-g3" \
+            --ntasks $NTASKS \
+            --time "$TIMEOUT" \
+            --partition "$PARTITION" \
+            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 fi
-     
+
