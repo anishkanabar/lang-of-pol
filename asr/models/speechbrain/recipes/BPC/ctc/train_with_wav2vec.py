@@ -98,24 +98,18 @@ class ASR(sb.Brain):
 
     def fit_batch(self, batch):
         """Train the parameters given a single batch in input"""
-        logger.debug("fit_batch() top")
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
-        logger.debug("fit_batch() objectives")
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
-        logger.debug("fit_batch() backward")
         loss.backward()
-        logger.debug("fit_batch() check grad")
         if self.check_gradients(loss):
             self.wav2vec_optimizer.step()
             self.model_optimizer.step()
-            with open(self.hparams.debug_file, "a") as f:
-                f.write("Finite,{},{}\n".format(batch['id'], batch['wrd']))
         else:
-            with open(self.hparams.debug_file, "a") as f:
-                f.write("Infinite,{},{}\n".format(batch['id'], batch['wrd']))
+            with open(self.hparams.blacklist_file, "a") as f:
+                f.write("{},{}\n".format(batch['id'], batch['wrd'][0]))
+            
             
 
-        logger.debug("fit_batch() zero_grad")
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
 
@@ -329,6 +323,7 @@ if __name__ == "__main__":
             "split_ratios": hparams["split_ratios"],
             "save_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
+            "blacklist_file": hparams["blacklist_file"],
         },
     )
 
@@ -350,6 +345,8 @@ if __name__ == "__main__":
     asr_brain.tokenizer = label_encoder
 
     # Training
+
+    #with torch.autograd.detect_anomaly():
     asr_brain.fit(
         asr_brain.hparams.epoch_counter,
         train_data,

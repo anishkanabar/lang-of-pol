@@ -5,8 +5,12 @@ import pandas as pd
 
 logger = logging.getLogger('asr.prepare.ctc')
 
-def prepare_bpc(split_ratios: dict, save_folder: str, **kwargs):
+def prepare_bpc(split_ratios: dict, save_folder: str, blacklist_file: str, **kwargs):
     """ See docstring in bpc_prepare for actual params"""
+    if not os.path.exists(blacklist_file):
+        with open(blacklist_file, "w") as f:
+            f.write("id,words\n")
+
     prepare.prepare_bpc(split_ratios=split_ratios, 
                         save_folder=save_folder, 
                         **kwargs)
@@ -17,4 +21,8 @@ def prepare_bpc(split_ratios: dict, save_folder: str, **kwargs):
         olen = len(df)
         df = df.loc[df['duration'] >= min_duration]
         logger.info("Filtering out {} audio < {} sec".format(olen - len(df), min_duration))
+        olen = len(df)
+        blacklist = pd.read_csv(blacklist_file)
+        df = df.loc[~df['ID'].isin(blacklist['id'])]
+        logger.info("Filtering out {} blacklisted audio".format(olen - len(df), min_duration))
         df.to_csv(manifest_path, index=False)
