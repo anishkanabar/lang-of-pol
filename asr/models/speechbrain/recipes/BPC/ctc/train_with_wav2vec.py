@@ -98,13 +98,24 @@ class ASR(sb.Brain):
 
     def fit_batch(self, batch):
         """Train the parameters given a single batch in input"""
+        logger.debug("fit_batch() top")
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
+        logger.debug("fit_batch() objectives")
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
+        logger.debug("fit_batch() backward")
         loss.backward()
+        logger.debug("fit_batch() check grad")
         if self.check_gradients(loss):
             self.wav2vec_optimizer.step()
             self.model_optimizer.step()
+            with open(self.hparams.debug_file, "a") as f:
+                f.write("Finite,{},{}\n".format(batch['id'], batch['wrd']))
+        else:
+            with open(self.hparams.debug_file, "a") as f:
+                f.write("Infinite,{},{}\n".format(batch['id'], batch['wrd']))
+            
 
+        logger.debug("fit_batch() zero_grad")
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
 
