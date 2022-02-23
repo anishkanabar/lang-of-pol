@@ -5,7 +5,7 @@ all_args=("$@")
 TRAINPY=$1
 HPARAMS=$2
 OVERRIDES=("${all_args[@]:2}")
-OVERRIDES+=("--nonfinite_patience=1")
+OVERRIDES+=("--nonfinite_patience=0")
 
 # Validate command line args
 usage() {

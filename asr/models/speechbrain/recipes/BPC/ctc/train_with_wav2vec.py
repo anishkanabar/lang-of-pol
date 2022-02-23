@@ -101,12 +101,14 @@ class ASR(sb.Brain):
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
         loss.backward()
-        if self.check_gradients(loss):
-            self.wav2vec_optimizer.step()
-            self.model_optimizer.step()
-        else:
+        try:
+            if self.check_gradients(loss):
+                self.wav2vec_optimizer.step()
+                self.model_optimizer.step()
+        except ValueError as err:
             with open(self.hparams.blacklist_file, "a") as f:
                 f.write("{},{}\n".format(batch['id'][0], batch['wrd'][0]))
+            raise err
             
             
 
