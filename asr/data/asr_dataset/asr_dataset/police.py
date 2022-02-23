@@ -67,7 +67,7 @@ class BpcETL(AsrETL):
         logger.info(f'Discarding {missing.sum()} transcripts with no text.')
         data = data.loc[~ missing]
         # Filter out inaudible transcripts
-        has_x = data['text'].str.contains('|'.join(BAD_WORDS), regex=True, case=False)
+        has_x = data['text'].str.contains('|'.join(self.BAD_WORDS), regex=True, case=False)
         logger.info(f'Discarding {has_x.sum()} inaudible transcripts.')
         data = data.loc[~ has_x]
         # Filter out uncertain transcripts
@@ -135,7 +135,7 @@ class BpcETL(AsrETL):
         end_str = end_ms.astype(int).astype('str')
 
         audio_names = start_str.str.cat(end_str, '_') + '.flac'
-        audio_paths = data['original_path'].str.replace('data', 'data/utterances', regex=False)
+        audio_paths = data['original_audio'].str.replace('data', 'data/utterances', regex=False)
         audio_paths = audio_paths.str.replace('\.(mp3|wav|flac|ogg)', '/', regex=True)
         audio_paths = audio_paths.str.cat(audio_names)
         return data.assign(audio=audio_paths)
@@ -153,6 +153,8 @@ class BpcETL(AsrETL):
         ts_paths = [os.path.join(ts_dir, x) for x in ts_names]
         audio_dfs = [self._parse_csv(x) for x in ts_paths]
         return pd.concat(audio_dfs, ignore_index=True)
+
+
     
     
     def _parse_csv(self, ts_path: str) -> pd.DataFrame:

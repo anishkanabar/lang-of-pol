@@ -106,7 +106,7 @@ class ASR(sb.Brain):
             self.model_optimizer.step()
         else:
             with open(self.hparams.blacklist_file, "a") as f:
-                f.write("{},{}\n".format(batch['id'], batch['wrd'][0]))
+                f.write("{},{}\n".format(batch['id'][0], batch['wrd'][0]))
             
             
 

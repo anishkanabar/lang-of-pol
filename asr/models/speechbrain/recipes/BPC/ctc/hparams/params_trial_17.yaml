@@ -19,7 +19,7 @@ train_log: !ref <output_folder>/train_log.txt
 # Data files
 cluster: rcc  # 'ai' or 'rcc' or 'ttic'
 scratch_dir: /project/graziul/ra/echandler/scratch
-blacklist_file: !ref <scratch_dir>/blacklist.csv
+blacklist_file: ctc/hparams/blacklist.csv
 dataset_name: atczero  #'librispeech' or 'police' or 'atczero'
 num_train: null
 num_sec: null

@@ -5,6 +5,7 @@ all_args=("$@")
 TRAINPY=$1
 HPARAMS=$2
 OVERRIDES=("${all_args[@]:2}")
+OVERRIDES+=("--nonfinite_patience=1")
 
 # Validate command line args
 usage() {
@@ -34,7 +35,7 @@ fi
 # Define cluster-specific params
 if [ "$CLUSTER" = "rcc" ]; then
     OUTPUT_DIR="/project/graziul/ra/`whoami`/slurm_output"
-    TIMEOUT="18:00:00"
+    TIMEOUT="01:00:00"
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS
@@ -78,6 +79,7 @@ if [ "$CLUSTER" = "rcc" ]; then
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
+    # this node is friendly --nodelist "midway3-0277" \
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
             --mail-type $MAIL_TYPE \
@@ -85,14 +87,13 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --nodelist "midway3-0277" \
             --gpus $GPUS \
             --ntasks $NTASKS \
             --ntasks-per-gpu $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
+            bash pyloop.sh "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
