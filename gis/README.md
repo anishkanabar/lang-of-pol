@@ -1,3 +1,3 @@
-# Geographic Information Systems (GIS)
+# Geographic Information System (GIS) folder
 
 Place for GIS data/analysis
