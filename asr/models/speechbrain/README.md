@@ -1,22 +1,19 @@
 # Recipes for training on police language dataset
 
 ## Installation
-### Midway3
-The midway3 compute nodes do not have libsndfile or ffmpeg. As a workaround, we download this in a conda env and link to it at runtime. 
-1. a. `conda create -c conda-forge -y --name soundfile librosa`
-1. b. `conda create -c conda-forge -y --name ffmpeg ffmpeg`
-2. Dont activate this conda env. Just stay on your base env.
+1. Create a new virtual environment. Do not use conda - it doesnt resolve the dependencies.
+`python3 -m venv path/to/venv`
+2. Install speechbrain and librosa
+`source path/to/venv/bin/activate`
+`pip install speechbrain`
+3. Install asr data loaders
+`cd <PROJECT_ROOT>/asr/data/asr_dataset`
+`pip install -e .`
 
-### All clusters
-4. Create a new virtual environment for speechbrain, activate it, and install dependencies. This sould be a venv, not conda. Conda can't find the right pytorch + cuda combination.
-5. `python3 -m venv path/to/new/env` 
-6. `source path/to/new/env/bin/activate`
-7. `cd <PROJECT_ROOT>/asr/data/asr_dataset`
-8.  `python setup.py build`
-9.  `pip install -e .`
-10.  `cd <PROJECT_ROOT>/asr/models/speechbrain`
-11.  `pip install -r requirements.txt`
-12.  `pip install -e .`
+### Special Instructions for Midway
+Midway compute nodes don't have libsndfile or ffmpeg. Pip won't install these, so we need to install them to a conda environment. Our slurm wrapper script expects the following environments.
+`conda create -c conda-forge -y --name soundfile pysoundfile` and
+`conda create -c conda-forge -y --name ffmpeg ffmpeg`
 
 ## Training
 1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.
