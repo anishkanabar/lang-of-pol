@@ -22,6 +22,7 @@ import os
 import sys
 import torch
 import logging
+import pandas as pd
 import speechbrain as sb
 from speechbrain.utils.distributed import run_on_main
 from hyperpyyaml import load_hyperpyyaml
@@ -98,20 +99,29 @@ class ASR(sb.Brain):
 
     def fit_batch(self, batch):
         """Train the parameters given a single batch in input"""
+        logger.debug("Training batch {}: {}".format(batch['id'][0], batch['wrd'][0]))
+
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
         loss.backward()
+
+
+        error = None
         try:
             if self.check_gradients(loss):
                 self.wav2vec_optimizer.step()
                 self.model_optimizer.step()
         except ValueError as err:
-            with open(self.hparams.blacklist_file, "a") as f:
-                f.write("{},{}\n".format(batch['id'][0], batch['wrd'][0]))
-            raise err
-            
-            
+            error = err
 
+        with open(self.hparams.blacklist_file, "a") as f:
+            f.write('{},{},{},{}\n'.format(self.hparams.seed,
+                                            batch['id'][0],
+                                            error is None,
+                                            batch['wrd'][0]))
+        if error is not None:
+            raise error
+            
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
 
@@ -282,6 +292,7 @@ def dataio_prepare(hparams):
         special_labels=special_labels,
         sequence_input=True,
     )
+    label_encoder.add_unk()
 
     # 4. Set output:
     sb.dataio.dataset.set_output_keys(
@@ -326,6 +337,7 @@ if __name__ == "__main__":
             "save_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
             "blacklist_file": hparams["blacklist_file"],
+            "seed": hparams["seed"],
         },
     )
 
