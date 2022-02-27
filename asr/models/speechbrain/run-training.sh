@@ -4,13 +4,11 @@
 all_args=("$@")
 TRAINPY=$1
 HPARAMS=$2
-OVERRIDES=("${all_args[@]:2}")
-OVERRIDES+=("--nonfinite_patience=0")
 
 # Validate command line args
 usage() {
     echo "Usage:" >&2
-    echo "sh run-training.sh <path/to/train.py> <path/to/params.yaml> [overrides...]" >&2
+    echo "sh run-training.sh <path/to/train.py> <path/to/params.yaml> " >&2
     echo "Overrides are named args matching a hparam key" >&2
 }
 
@@ -93,7 +91,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            bash pyloop.sh "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
+            bash pyloop.sh "$TRAINPY" "$HPARAMS"
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
@@ -107,7 +105,7 @@ elif [ "$CLUSTER" = "ai" ]; then
             --gpus-per-task $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
-            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
+            python "$TRAINPY" "$HPARAMS"
 elif [ "$CLUSTER" = "ttic" ]; then
     srun -c "$GPUS" \
             --job-name "$JOB_NAME" \
@@ -116,6 +114,6 @@ elif [ "$CLUSTER" = "ttic" ]; then
             --ntasks $NTASKS \
             --time "$TIMEOUT" \
             --partition "$PARTITION" \
-            python "$TRAINPY" "$HPARAMS" "${OVERRIDES[@]}"
+            python "$TRAINPY" "$HPARAMS"
 fi
 

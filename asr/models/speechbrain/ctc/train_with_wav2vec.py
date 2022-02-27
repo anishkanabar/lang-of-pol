@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 
 # Define training procedure
 class ASR(sb.Brain):
+
     def compute_forward(self, batch, stage):
         """Forward computations from the waveform batches to the output probabilities."""
         batch = batch.to(self.device)
@@ -105,8 +106,8 @@ class ASR(sb.Brain):
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
         loss.backward()
 
-
         error = None
+        self.batch_idx = 0 if not hasattr(self, 'batch_idx') else self.batch_idx
         try:
             if self.check_gradients(loss):
                 self.wav2vec_optimizer.step()
@@ -115,12 +116,16 @@ class ASR(sb.Brain):
             error = err
 
         with open(self.hparams.blacklist_file, "a") as f:
-            f.write('{},{},{},{}\n'.format(self.hparams.seed,
+            f.write('{},{},{},{},{},{}\n'.format(self.hparams.seed,
+                                            'second',
+                                            self.batch_idx,
                                             batch['id'][0],
                                             error is None,
                                             batch['wrd'][0]))
         if error is not None:
             raise error
+        else:
+            self.batch_idx += 1
             
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()

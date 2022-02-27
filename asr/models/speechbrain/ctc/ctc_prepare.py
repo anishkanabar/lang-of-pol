@@ -21,7 +21,22 @@ def prepare_bpc(split_ratios: dict,
     splits = {k: filter_duration(v) for k, v in splits.items()}
 
     blacklist = get_blacklist(blacklist_file)
-    splits = {k: first_pass(v, blacklist) for k, v in splits.items()}
+
+    # Commenting out first pass because it was written assuming it
+    # could test all data points independently. This is infeasible
+    # due to high computational cost per data point (each incurs the
+    # startup costs of re-loading the model from scratch).
+    # Instead, we'll run the first pass enough times to be confident
+    # we didn't miss any individually problematic data points.
+    # ...
+    # Ran first pass and got 474 negative results. Previous blacklist
+    # had ~ 450 positive results out of 30k training points
+    # = probability of positive result = .015
+    # => prob of randomly sampling 474 negative results
+    # = (1 - prob of positive data point)^m 
+    # = (1-.015)^474 = .00077 => very low probability of Type II error
+    # ...
+    # splits = {k: first_pass(v, blacklist) for k, v in splits.items()}
     splits = {k: second_pass(v, blacklist) for k, v in splits.items()}
 
     write_splits(splits, save_folder)
@@ -30,25 +45,9 @@ def prepare_bpc(split_ratios: dict,
 def get_blacklist(blacklist_file: str):
     if not os.path.exists(blacklist_file):
         with open(blacklist_file, "w") as f:
-            # sequence column is computed in memory so we can just append writes
-            f.write("seed,id,is_finite,wrd\n")
+            f.write("seed,pass,batch,ID,is_finite,wrd\n")
 
-    df = pd.read_csv(blacklist_file)
-    counter = 0
-    ids = set([])
-    sequence = []
-    for row in df.itertuples():
-        if not row.is_finite:
-            sequence.append(counter)
-            counter = 0
-        elif row.id not in ids:
-            counter = 0
-            sequence.append(counter)
-        else:
-            counter = counter + 1
-            sequence.append(counter)
-        ids.add(row.id)
-    return df.assign(sequence=sequence)
+    return pd.read_csv(blacklist_file)
 
 
 def get_splits(split_ratios, save_folder) -> {str, pd.DataFrame}:
@@ -79,19 +78,21 @@ def filter_duration(df: pd.DataFrame) -> pd.DataFrame:
 
 def first_pass(df: pd.DataFrame, blacklist: pd.DataFrame) -> pd.DataFrame:
     """First pass: Train on a single utterance to identify problems independent of sequencing."""
-    singles = blacklist.loc[blacklist['sequence'] == 0, 'id']
+    singles = blacklist.loc[(blacklist['pass'] == 'first') & (blacklist['batch'] == 0), 'ID']
     predicate = ~ df['ID'].isin(singles)
     if predicate.any():
         df = df.loc[predicate].head(1)
-        logger.info("Subsetting first pass to {}:{}".format(df['id'], df['wrd']))
+        logger.info("Blacklist first pass data point {}: {}".format(df['ID'].values[0], df['wrd'].values[0]))
+    else:
+        raise RuntimeError("First pass is done!")
     return df
         
         
 def second_pass(df: pd.DataFrame, blacklist: pd.DataFrame) -> pd.DataFrame:
     """Second pass: Train on all non-blacklisted utterances. Grow blacklist one at a time."""
-    infinite_ids = blacklist.loc[~blacklist['is_finite'], 'id']
+    infinite_ids = blacklist.loc[~(blacklist['is_finite'].astype(bool)), 'ID']
     predicate = df['ID'].isin(infinite_ids)
-    logger.info("Filtering out {} blacklisted second pass audio".format(predicate.sum()))
+    logger.info("Blacklist second pass: filtering out {} audio".format(predicate.sum()))
     df = df.loc[~predicate]
     return df
 
