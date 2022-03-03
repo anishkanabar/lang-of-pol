@@ -45,7 +45,7 @@ def prepare_bpc(split_ratios: dict,
 def get_blacklist(blacklist_file: str):
     if not os.path.exists(blacklist_file):
         with open(blacklist_file, "w") as f:
-            f.write("seed,pass,batch,ID,is_finite,wrd\n")
+            f.write("seed,pass,batch,ID,is_finite,loss,wrd\n")
 
     return pd.read_csv(blacklist_file)
 

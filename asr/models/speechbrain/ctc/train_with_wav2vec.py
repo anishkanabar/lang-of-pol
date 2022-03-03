@@ -116,11 +116,12 @@ class ASR(sb.Brain):
             error = err
 
         with open(self.hparams.blacklist_file, "a") as f:
-            f.write('{},{},{},{},{},{}\n'.format(self.hparams.seed,
+            f.write('{},{},{},{},{},{},{}\n'.format(self.hparams.seed,
                                             'second',
                                             self.batch_idx,
                                             batch['id'][0],
                                             error is None,
+                                            loss.item(),
                                             batch['wrd'][0]))
         if error is not None:
             raise error
