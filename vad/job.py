@@ -87,11 +87,15 @@ for step in range(training_steps):
     end_time = time.time()
     step_time = end_time - start_time
     print("Time Taken for Step = " + str(step_time))
-if my_model == "Attention_LSTM":
+    
+plt.plot(list(range(training_steps)),train_loss_list)
+plt.savefig('LSTM_model_training.png')
+
+'''if my_model == "Attention_LSTM":
     save_path = '/project/graziul/ra/ajays/lang-of-pol/vad/Attention_model_atc0/model_weights_atc0.pt'
 elif my_model == "Vanilla_LSTM":
     save_path = '/project/graziul/ra/ajays/lang-of-pol/vad/LSTM_layer_model_atc0/model_weights_atc0.pt'
-torch.save(model.state_dict(),save_path)
+torch.save(model.state_dict(),save_path)'''
     
 '''for step in range(training_steps):
     start_time = time.time()
