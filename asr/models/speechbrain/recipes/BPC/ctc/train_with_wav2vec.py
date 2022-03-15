@@ -101,9 +101,16 @@ class ASR(sb.Brain):
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
         loss.backward()
-        if self.check_gradients(loss):
-            self.wav2vec_optimizer.step()
-            self.model_optimizer.step()
+        try:
+            if self.check_gradients(loss):
+                self.wav2vec_optimizer.step()
+                self.model_optimizer.step()
+        except ValueError as err:
+            with open(self.hparams.blacklist_file, "a") as f:
+                f.write("{},{}\n".format(batch['id'][0], batch['wrd'][0]))
+            raise err
+            
+            
 
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
@@ -166,6 +173,8 @@ class ASR(sb.Brain):
             )
             with open(self.hparams.wer_file, "w") as w:
                 self.wer_metric.write_stats(w)
+            with open(self.hparams.cer_file, "w") as w:
+                self.cer_metric.write_stats(w)
 
     def init_optimizers(self):
         "Initializes the wav2vec2 optimizer and model optimizer"
@@ -284,6 +293,7 @@ def dataio_prepare(hparams):
 
 if __name__ == "__main__":
 
+
     # CLI:
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])
 
@@ -302,7 +312,7 @@ if __name__ == "__main__":
     )
 
     # Dataset prep (parsing Librispeech)
-    from bpc_prepare import prepare_bpc  # noqa
+    from ctc_prepare import prepare_bpc  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
@@ -315,6 +325,7 @@ if __name__ == "__main__":
             "split_ratios": hparams["split_ratios"],
             "save_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
+            "blacklist_file": hparams["blacklist_file"],
         },
     )
 
@@ -336,6 +347,8 @@ if __name__ == "__main__":
     asr_brain.tokenizer = label_encoder
 
     # Training
+
+    #with torch.autograd.detect_anomaly():
     asr_brain.fit(
         asr_brain.hparams.epoch_counter,
         train_data,

@@ -1,57 +1,46 @@
 Databases:
-   AMI: /Users/shiyang/Desktop/NIH/ami/database/amicorpus/*/audio/{uri}.Mix-Headset.wav
-   MUSAN: /Users/shiyang/Desktop/NIH/ami/database/musan/{uri}.wav
+  AMI: /project/graziul/ra/shiyanglai/corpus/ami/database/amicorpus/*/audio/{uri}.Mix-Headset.wav
 
 Protocols:
    AMI:
       SpeakerDiarization:
          MixHeadset:
             train:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.train.lst
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.train.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.train.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.uem
             development:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.development.lst
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.development.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.development.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.uem
             test:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.test.lst
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.test.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/mixhead/MixHeadset.test.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.uem
          only_words:
             train:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/lists/train.meetings.txt
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/only_words/rttms/train/{uri}.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/uems/train/{uri}.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/train/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/train/{uri}.uem
             development:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/lists/dev.meetings.txt
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/only_words/rttms/dev/{uri}.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/uems/dev/{uri}.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/dev.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/dev/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/dev/{uri}.uem
             test:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/lists/test.meetings.txt
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/only_words/rttms/test/{uri}.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/uems/test/{uri}.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/test.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/test/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
          word_and_vocalsounds:
             train:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/lists/train.meetings.txt
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/word_and_vocalsounds/rttms/train/{uri}.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/uems/train/{uri}.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/train/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/train/{uri}.uem
             development:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/lists/dev.meetings.txt
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/word_and_vocalsounds/rttms/dev/{uri}.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/uems/dev/{uri}.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/dev.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/dev/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/dev/{uri}.uem
             test:
-               uri: /Users/shiyang/Desktop/NIH/ami/database/lists/test.meetings.txt
-               annotation: /Users/shiyang/Desktop/NIH/ami/database/word_and_vocalsounds/rttms/test/{uri}.rttm
-               annotated: /Users/shiyang/Desktop/NIH/ami/database/uems/test/{uri}.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/test.meetings.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/test/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
 
-   MUSAN:
-      Collection:
-         BackgroundNoise:
-            uri: /Users/shiyang/Desktop/NIH/ami/database/MUSAN/background_noise.txt
-         Noise:
-            uri: /Users/shiyang/Desktop/NIH/ami/database/MUSAN/noise.txt
-         Music:
-            uri: /Users/shiyang/Desktop/NIH/ami/database/MUSAN/music.txt
-         Speech:
-            uri: /Users/shiyang/Desktop/NIH/ami/database/MUSAN/speech.txt
