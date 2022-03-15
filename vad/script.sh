@@ -13,5 +13,5 @@
 
 module load python
 source activate new_torch_env
-#srun python job.py BPC Vanilla_LSTM 1
-srun python dominance_analysis.py
+srun python job.py ATC0 Attention_LSTM 1
+#srun python dominance_analysis.py

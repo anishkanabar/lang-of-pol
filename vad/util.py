@@ -19,7 +19,12 @@ from glob import glob
 
 torch.manual_seed(1)
 
-#Testing atc 0
+def convert_to_ms(times_list):
+    ms_time_list = []
+    for elt in times_list:
+        ms_time_list.append([int(elt[0]*1000),int(elt[1]*1000)])
+    return ms_time_list
+
 def process_atc_label_line(line):
     lines_list = str.split(line, "\n")
     times_list = []
@@ -30,7 +35,7 @@ def process_atc_label_line(line):
             new_elt_tok = new_elt.split() 
             new_elt_tok = [float(num) for num in new_elt_tok]
             times_list.append(new_elt_tok)
-    return times_list
+    return convert_to_ms(times_list)
 
 class atc_audio_file():
     def __init__(self, name,audio_path, labels_path,new_flag = 0):
@@ -82,7 +87,7 @@ class atc_audio_file():
                     frames_array[n+1] += 1
                     frames_array[n] += 1
             
-        self.frames = frames_array
+        self.frames = np.clip(frames_array,0,1)
         return self.frames
         
     def get_split_frames(self):
@@ -119,6 +124,7 @@ class atc_audio_file():
         for j in range(self.n_clips):
             frame_arr_list.append(np.expand_dims(frames_array[j*self.clip_size:(j+1)*self.clip_size],axis=0))
         self.frames = np.concatenate(frame_arr_list,axis=0)
+        self.frames = np.clip(self.frames,0,1)
         return self.frames
     
         
@@ -221,14 +227,14 @@ def process_file_atc0(filename,audio_path, labels_path):
     print(filename)
     return mfcc, frames
 
-def process_atc0_files():
+def process_atc0_files(k=1000000):
     input_list = []
     labels_list = []
     #paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dca/data/audio/', '/project/graziul/data/corpora/atc0_comp/atc0_dfw/data/audio/']
     paths = ['/project/graziul/data/corpora/atc0_comp/atc0_bos/data/audio/']
     for idx,path in enumerate(paths):
         for fpath in glob(path + '*.sph'):
-            if(idx > 6):
+            if(idx > k):
                 break
             filename = fpath[-12:-4]
             label_file = path[:-6] + 'transcripts/' + filename + '.txt'
@@ -236,7 +242,7 @@ def process_atc0_files():
             input_list.append(x)
             labels_list.append(y)
             idx = idx+1
-        if(idx>6):
+        if(idx>k):
             break
     input_list = torch.cat(input_list)
     input_list = torch.transpose(input_list,1,2)
@@ -300,6 +306,7 @@ class audio_file():
         self.frames_labels = None
         self.mfcc = None
         self.n_clips = 300
+        self.sample_rate = 22050
         self.flag = new_flag
     
     def get_slices(self, vad_dict):
