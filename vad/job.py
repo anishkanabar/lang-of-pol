@@ -99,6 +99,7 @@ for gamma in gammas:
         print("Time Taken for Step = " + str(step_time))
 
     plt.plot(list(range(training_steps)),train_loss_list, label = str(gamma))
+plt.legend()
 plt.savefig('LSTM_model_gamma.png')
 
 '''if my_model == "Attention_LSTM":
