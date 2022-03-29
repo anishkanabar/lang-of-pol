@@ -57,7 +57,7 @@ elif my_model == "Vanilla_LSTM":
 sample_size = 30
 batch_size = model.batch_size
 num_samples = input_list.size()[0]//batch_size
-training_steps = 500
+training_steps = 1000
 idx = 0
 flag = 0
 num_segments = 30
