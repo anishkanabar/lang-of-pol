@@ -51,13 +51,15 @@ class ATCZeroETL(AsrETL):
         unfiltered_data = data
         data = self._filter_exists(data, "original_audio")
         data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "original_audio")
+        logger.info("Skipping check for corrupted audio (usually nothing is corrupted)")
+        #data = self._filter_corrupt(data, "original_audio")
         # Write new files to disk
         self._write_utterances(data, sample_rate)
         # Filter out bad audio again after writing
         data = self._filter_exists(data, "audio")
         data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "audio")
+        logger.info("Skipping check for corrupted audio (usually nothing is corrupted)")
+        #data = self._filter_corrupt(data, "audio")
         self.describe(data, "-transformed")
         # Delete bad utterance files
         dropped_data = unfiltered_data.loc[unfiltered_data.index.difference(data.index)]
@@ -113,7 +115,7 @@ class ATCZeroETL(AsrETL):
         duration = data['end'].astype(float) - offset
         start_ms = (offset * msPerSec).astype(int).astype('str')  # cast to int for cleaner filenames
         end_ms = ((offset + duration) * msPerSec).astype(int).astype('str')
-        audio_names = start_ms.str.cat(end_ms, "_") + ".sph"
+        audio_names = start_ms.str.cat(end_ms, "_") + ".flac"
         original_paths = self.transcripts_dir + os.sep + data['filePath']
         audio_paths = original_paths.str.replace('audio', 'audio/utterances', regex=False)
         audio_paths = audio_paths.str.replace('\.(sph|wav)', '/', regex=True)
