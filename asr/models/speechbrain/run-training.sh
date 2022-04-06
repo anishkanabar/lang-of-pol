@@ -86,6 +86,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --partition "$PARTITION" \
             --nodes "$NODES" \
             --gpus $GPUS \
+            --nodelist "midway3-0277" \
             --ntasks $NTASKS \
             --ntasks-per-gpu $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
