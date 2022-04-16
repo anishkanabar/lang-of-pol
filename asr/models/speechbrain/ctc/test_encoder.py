@@ -1,14 +1,8 @@
 #!/usr/bin/env/python3
-"""Recipe for training a wav2vec-based ctc ASR system with librispeech.
-The system employs wav2vec as its encoder. Decoding is performed with
-ctc greedy decoder.
-To run this recipe, do the following:
-> python train_with_wav2vec.py hparams/train_with_wav2vec.yaml
-The neural network is trained on CTC likelihood target and character units
-are used as basic recognition tokens. Training is performed on the full
-LibriSpeech dataset (960 h).
+"""Instruments training script to scheck if wav2vec collapses audio frames
 
 Authors
+ * Eric Chandler 2022
  * Sung-Lin Yeh 2021
  * Titouan Parcollet 2021
  * Ju-Chieh Chou 2020
@@ -35,6 +29,18 @@ logger = logging.getLogger(__name__)
 # Define training procedure
 class ASR(sb.Brain):
 
+    def check_co_x(self):
+        dists = []
+        f1 = self.feat_vault[-1]
+        for j, f2 in enumerate(self.feat_vault[:-1]):
+            min_i = min(f1.shape[0], f2.shape[0])
+            min_j = min(f1.shape[1], f2.shape[1])
+            dists = torch.nn.functional.pairwise_distance(f1[0:min_i, 0:min_j], f2[0:min_i, 0:min_j])
+            logger.debug(f'Min vector dist is {torch.min(dists)}')
+            if f1.equal(f2) or len(torch.nonzero(dists)) == 0:
+                logger.warning('{}th and {}th features are the same!'.format(i,j))
+                logger.warning('but "{}" != "{}"'.format(self.tok_vault[i], self.tok_vault[j]))
+        
     def compute_forward(self, batch, stage):
         """Forward computations from the waveform batches to the output probabilities."""
         logger.debug("Computing forward step")
@@ -42,7 +48,6 @@ class ASR(sb.Brain):
         wavs, wav_lens = batch.sig
         tokens_bos, _ = batch.tokens_bos
         wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
-        assert(torch.all(torch.isfinite(wavs)))
 
         # Add augmentation if specified
         if stage == sb.Stage.TRAIN:
@@ -58,23 +63,21 @@ class ASR(sb.Brain):
         # Forward pass
         feats = self.modules.wav2vec2(wavs)
 
-        assert torch.all(torch.isfinite(feats)), "non-finite wav2vec encodings"
-        self.check_grads()
-        self.check_params()
+        # Debug possible collision of X's
+        btoks, blens = batch.tokens
+        self.feat_vault.append(feats[0])
+        self.tok_vault.append(btoks[0])
+        logger.debug('Feat vault len = {}.'.format(len(self.feat_vault)))
 
         x = self.modules.enc(feats)
-
-        assert torch.all(torch.isfinite(x)), "non-finite linear layer output"
 
         # Compute outputs
         p_tokens = None
         logits = self.modules.ctc_lin(x)
 
-        assert torch.all(torch.isfinite(logits)), "non-finite logits"
 
         p_ctc = self.hparams.log_softmax(logits)
 
-        assert torch.all(torch.isfinite(p_ctc)), "non-finite probs"
 
         if stage != sb.Stage.TRAIN:
             p_tokens = sb.decoders.ctc_greedy_decode(
@@ -114,21 +117,6 @@ class ASR(sb.Brain):
 
         return loss
 
-    def check_params(self):
-        for p in self.modules.wav2vec2.parameters():
-            assert torch.isfinite(p).all(), "non-finite wav2vec params"
-        for p in self.modules.enc.parameters():
-            assert torch.isfinite(p).all(), "non-finite encoder params"
-
-    def check_grads(self):
-        for p in self.modules.wav2vec2.parameters():
-            if p.requires_grad and p.grad is not None:
-                assert torch.all(torch.isfinite(p.grad)), "non-finite wav2vec grad"
-        for p in self.modules.enc.parameters():
-            if p.requires_grad and p.grad is not None:
-                # Set to 0
-                p.grad[p.grad != p.grad] = 0
-                assert torch.all(torch.isfinite(p.grad)), "non-finite encoder grad"
 
     def fit_batch(self, batch):
         """Train the parameters given a single batch in input"""
@@ -138,25 +126,13 @@ class ASR(sb.Brain):
 
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
 
-        assert torch.isfinite(loss).all(), "non-finite loss"
-
-        logger.debug("Checking gradients before backward")
-        self.check_grads()
-        self.check_params()
-
         loss.backward()
-
-        logger.debug("Checking gradients after backward")
-        self.check_grads()
-        self.check_params()
 
         if self.check_gradients(loss):
             self.wav2vec_optimizer.step()
             self.model_optimizer.step()
-
-        logger.debug("Checking gradients after optimizer step")
-        self.check_grads() 
-        self.check_params()
+        else:
+            self.check_co_x()
 
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
@@ -172,6 +148,10 @@ class ASR(sb.Brain):
 
     def on_stage_start(self, stage, epoch):
         """Gets called at the beginning of each epoch"""
+        # Debugging
+        self.feat_vault = []
+        self.tok_vault = []
+        # End Debug
         if stage != sb.Stage.TRAIN:
             self.cer_metric = self.hparams.cer_computer()
             self.wer_metric = self.hparams.error_rate_computer()

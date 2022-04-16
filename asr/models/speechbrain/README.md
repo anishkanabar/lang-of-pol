@@ -6,7 +6,9 @@
 2. Install speechbrain and librosa
 `source path/to/venv/bin/activate`
 `pip install speechbrain`
-3. Install asr data loaders
+3. Install huggingface transformers
+`pip install transformers`
+4. Install asr data loaders
 `cd <PROJECT_ROOT>/asr/data/asr_dataset`
 `pip install -e .`
 

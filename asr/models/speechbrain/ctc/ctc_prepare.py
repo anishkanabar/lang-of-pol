@@ -7,7 +7,6 @@ logger = logging.getLogger('asr.prepare.ctc')
 
 def prepare_bpc(split_ratios: dict, 
                 save_folder: str, 
-                blacklist_file: str, 
                 seed: str,
                 **kwargs):
     """ See docstring in bpc_prepare for other params"""
@@ -20,7 +19,7 @@ def prepare_bpc(split_ratios: dict,
     splits = {k: ctc_prep(v) for k, v in splits.items()}
     splits = {k: filter_duration(v) for k, v in splits.items()}
 
-    blacklist = get_blacklist(blacklist_file)
+    # blacklist = get_blacklist(blacklist_file)
 
     # Commenting out first pass because it was written assuming it
     # could test all data points independently. This is infeasible
@@ -37,7 +36,7 @@ def prepare_bpc(split_ratios: dict,
     # = (1-.015)^474 = .00077 => very low probability of Type II error
     # ...
     # splits = {k: first_pass(v, blacklist) for k, v in splits.items()}
-    splits = {k: second_pass(v, blacklist) for k, v in splits.items()}
+    # splits = {k: second_pass(v, blacklist) for k, v in splits.items()}
 
     write_splits(splits, save_folder)
 

@@ -78,6 +78,7 @@ fi
 
 if [ "$CLUSTER" = "rcc" ]; then
     # this node is friendly --nodelist "midway3-0277" \
+    # run with --nonfinite_patience=0 as last arg to shortcut
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
             --mail-type $MAIL_TYPE \
@@ -85,14 +86,14 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --gpus $GPUS \
             --nodelist "midway3-0277" \
+            --gpus $GPUS \
             --ntasks $NTASKS \
             --ntasks-per-gpu $GPU_TASKS \
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            bash pyloop.sh "$TRAINPY" "$HPARAMS"
+            python "$TRAINPY" "$HPARAMS" 
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
