@@ -160,6 +160,35 @@ class BpcETL(AsrETL):
         audio_paths = audio_paths.str.cat(audio_names)
         return data.assign(audio=audio_paths)
         
+    def _resolve_overlaps(self, data: pd.DataFrame) -> set([str]):
+        """
+        Finds maximal number of non-overlapping intervals with random tie-breaks.
+        Param:
+            data: expects columns {audio_x, audio_y, offset_x, offset_y, end_x, end_y}
+        """
+        data = data.sort_values(['end_x','end_y'])
+        keep = set([])
+        counter = -1
+        rnd = default_rng()
+        for tup in data.itertuples(index=False):
+            tup = tup._asdict()
+            ax, ay = tup['audio_x'], tup['audio_y']    # keys
+            ex, ey = tup['end_x'], tup['end_y']        # ordering maintains consistency
+            ox, oy = tup['offset_x'], tup['offset_y']  # determines if fits in 'keep' set
+            if ox > counter and oy > counter:
+                if rnd.random() > 0.5:
+                    keep.add(ax)
+                    counter = ex
+                else:
+                    keep.add(ay)
+                    counter = ey
+            elif ox > counter:
+                keep.add(ax)
+                counter = ex
+            elif oy > counter:
+                keep.add(ay)
+                counter = ey
+        return keep
 
     def _resolve_ambiguity(self, data: pd.DataFrame) -> pd.DataFrame:
         """
@@ -171,73 +200,50 @@ class BpcETL(AsrETL):
             return data
 
         # Find utterances in same 30m file that overlap in time
-        utt_end = data['offset'] + data['duration']
-        intervals = [pd.Interval(x,y) for x,y in zip(data['offset'], utt_end)]
-        data = data.assign(interval = intervals, end = utt_end)
+        data = data.assign(end = data['offset'] + data['duration'])
         candidates = data.merge(data, on='original_audio')
-        # remove reverse duplicates: e.g. when (x,y) followed by (y,x)
-        candidates = candidates.loc[candidates['offset_x'] <= candidates['offset_y']]
-        interval_x = pd.arrays.IntervalArray(candidates['interval_x'])
-        interval_y = pd.arrays.IntervalArray(candidates['interval_y'])
-        overlaps = [ix.overlaps(iy) for ix, iy in zip(interval_x, interval_y)]
+        # remove "reverse duplicates": e.g. when row 1 = (x,y) and row 2 = (y,x)
+        # by keeping the version where x is on the left of the join
+        # conveniently this makes computing overlap easier
+        overlaps = (candidates['offset_x'] <= candidates['offset_y']) \
+                    & (candidates['end_x'] >= candidates['offset_y'])
         same_scriber = candidates['transcriber_x'] == candidates['transcriber_y']
         candidates = candidates.loc[overlaps & ~same_scriber]
-        logger.debug(f'Found {len(candidates)} that overlap somewhat.')
+        n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
+        logger.debug(f'Found {n_candidates} that overlap somewhat.')
 
         # Filter on the amount of time overlap
         OVERLAP_THRESHOLD = .5   # arbitrary
-        interval_x = pd.arrays.IntervalArray(candidates['interval_x'])
-        interval_y = pd.arrays.IntervalArray(candidates['interval_y'])
-        overlap_x = pd.Series(interval_x.right - interval_y.left, index=candidates.index)
-        overlap_y = pd.Series(interval_y.right - interval_x.left, index=candidates.index)
-        intersect = pd.concat([overlap_x, overlap_y], axis=1).apply(min, axis=1)
-        length_x = pd.Series(interval_x.length, index=candidates.index)
-        length_y = pd.Series(interval_y.length, index=candidates.index)
-        shorter = pd.concat([length_x, length_y], axis=1).apply(min, axis=1)
-        overlap = intersect / shorter
-        candidates = candidates.loc[overlap > OVERLAP_THRESHOLD]
-        logger.debug(f'Found {len(candidates)} that overlap > 50%.')
+        intersect = candidates['end_x'] - candidates['offset_y']
+        overlap = pd.concat([candidates['duration_y'], intersect], axis=1).apply(min, axis=1)
+        shorter = candidates[['duration_x','duration_y']].apply(min, axis=1)
+        candidates = candidates.loc[(overlap / shorter) > OVERLAP_THRESHOLD]
+        n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
+        logger.debug(f'Found {n_candidates} that overlap > 50%.')
         
         # Filter on the text similariy
         # XXX: How do you actually measure the within-overlap match without word timings?        
         def _jaccard(str1, str2):
             words1, words2 = str1.split(' '), str2.split(' ')
             bag1, bag2 = set(words1), set(words2)
-            return len(bag1 & bag2) / len(bag1 | bag2)
+            return 1.0 * len(bag1 & bag2) / len(bag1 | bag2)
+
         TEXT_SIM_THRESHOLD = .5  # arbitrary
         sim = candidates.apply(lambda x: _jaccard(x['text_x'],x['text_y']), axis=1)
         candidates = candidates.loc[sim > TEXT_SIM_THRESHOLD]
-        logger.debug(f'Found {len(candidates)} that text match > 50%.')
+        n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
+        logger.debug(f'Found {n_candidates} that text match > 50%.')
 
         # Resolve ambiguities by randomly choosing one transcriber's version
         # Challenges:
         # - maintain consistency for interleaved / many-to-many overlaps
-        # - give equal chance to each transcriber (n > 2)
+        # - give equal chance to each transcriber (n > 2): satisfied if no patterns in timing
         candidate_audios = pd.concat([candidates['audio_x'], candidates['audio_y']])
         ambiguous = data.loc[data['audio'].isin(candidate_audios)]
         non_ambiguous = data.loc[data.index.difference(ambiguous.index)]
-        winners = set([])
-        losers = set([])
-        rng = default_rng()
-        for x,y in candidates[['audio_x','audio_y']].sample(len(candidates)).itertuples(index=False):
-            if x in winners:
-                losers.add(y)
-            elif x in losers:
-                winners.add(y)
-            elif y in winners:
-                losers.add(x)
-            elif y in losers:
-                winners.add(x)
-            elif rng.random() > .5:
-                winners.add(x)
-                losers.add(y)
-            else:
-                winners.add(y)
-                losers.add(x)
-        resolved = data.loc[data['audio'].isin(winners)]
-        logger.info(f'Discarding {len(losers)} inter-transcriber ambiguous utts.')
-        assert len(winners & losers) == 0, f'its {len(winners & losers)}'
-        assert len(data) == len(non_ambiguous) + len(resolved) + len(losers)
+        resolved = data.loc[data['audio'].isin(self._resolve_overlaps(candidates))]
+        num_drop = len(data) - len(non_ambiguous) - len(resolved)
+        logger.info(f'Discarding {num_drop} inter-transcriber ambiguous utts.')
         return pd.concat([non_ambiguous, resolved])
 
     def _parse_manifests(self, ts_dir: str) -> pd.DataFrame:
