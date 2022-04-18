@@ -91,7 +91,7 @@ class BpcETL(AsrETL):
             logger.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
             data = data.loc[~ has_numeric]
         # Resolve inter-transcriber ambiguity
-        # data = self._resolve_ambiguity(data)
+        data = self._resolve_ambiguity(data)
         self.describe(data, "-transformed")
         # Write new files to disk
         self._write_utterances(data, sample_rate)
