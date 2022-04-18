@@ -13,7 +13,7 @@ def prepare_bpc(cluster: str,
                 num_train: int, 
                 num_sec: float,
                 split_ratios: dict,
-                save_folder: str, 
+                output_folder: str, 
                 skip_prep=False):
     """
     @:param
@@ -22,7 +22,7 @@ def prepare_bpc(cluster: str,
         num_train: number of samples to prepare from dataset
         num_sec: total seconds of audio to retrieve from dataset
         split_ratios: dictionary of named train/val/test splits and fraction of dataset
-        save_folder: path to manifest (output) folder
+        output_folder: path to manifest (output) folder
         skip_prep: If True, skip data preparation.
     """
     if skip_prep:
@@ -68,7 +68,7 @@ def prepare_bpc(cluster: str,
     #splits = {'train': train_data, 'val': val_data, 'test': test_data}
     
     for split, splitdata in splits.items():
-        manifest_path = os.path.join(save_folder, split) + '.csv'
+        manifest_path = os.path.join(output_folder, split) + '.csv'
         logger.info("Preparing %s..." % manifest_path)
         
         new_df = pd.DataFrame(

@@ -6,16 +6,16 @@ import pandas as pd
 logger = logging.getLogger('asr.prepare.ctc')
 
 def prepare_bpc(split_ratios: dict, 
-                save_folder: str, 
+                output_folder: str, 
                 seed: str,
                 **kwargs):
     """ See docstring in bpc_prepare for other params"""
 
     prepare.prepare_bpc(split_ratios=split_ratios, 
-                        save_folder=save_folder, 
+                        output_folder=output_folder, 
                         **kwargs)
 
-    splits = get_splits(split_ratios, save_folder)
+    splits = get_splits(split_ratios, output_folder)
     splits = {k: ctc_prep(v) for k, v in splits.items()}
     splits = {k: filter_duration(v) for k, v in splits.items()}
 
@@ -38,7 +38,7 @@ def prepare_bpc(split_ratios: dict,
     # splits = {k: first_pass(v, blacklist) for k, v in splits.items()}
     # splits = {k: second_pass(v, blacklist) for k, v in splits.items()}
 
-    write_splits(splits, save_folder)
+    write_splits(splits, output_folder)
 
 
 def get_blacklist(blacklist_file: str):
@@ -49,17 +49,17 @@ def get_blacklist(blacklist_file: str):
     return pd.read_csv(blacklist_file)
 
 
-def get_splits(split_ratios, save_folder) -> {str, pd.DataFrame}:
+def get_splits(split_ratios, output_folder) -> {str, pd.DataFrame}:
     splits = {}
     for split in split_ratios.keys():
-        manifest_path = os.path.join(save_folder, split) + '.csv'
+        manifest_path = os.path.join(output_folder, split) + '.csv'
         splits[split] = pd.read_csv(manifest_path)
     return splits
 
 
-def write_splits(splits: {str, pd.DataFrame}, save_folder: str):
+def write_splits(splits: {str, pd.DataFrame}, output_folder: str):
     for split in splits.keys():
-        manifest_path = os.path.join(save_folder, split) + '.csv'
+        manifest_path = os.path.join(output_folder, split) + '.csv'
         splits[split].to_csv(manifest_path, index=False)
     
 
