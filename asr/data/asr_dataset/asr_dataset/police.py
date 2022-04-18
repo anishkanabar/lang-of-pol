@@ -7,14 +7,20 @@ Authors: Eric Chandler <echandler@uchicago.edu>
 import os
 import re
 import logging
-import datetime as dt
-from numbers import Real
 import pandas as pd
+import datetime as dt
+from enum import Enum, auto
+from numbers import Real
+from numpy.random import default_rng
 from asr_dataset.base import AsrETL
 from asr_dataset.constants import DATASET_DIRS, Cluster, DataSizeUnit
 
-
 logger = logging.getLogger('asr.etl.bpc')
+
+
+class AmbiguityStrategy(Enum):
+    RANDOM = auto()
+    ALL = auto()
 
 
 class BpcETL(AsrETL):
@@ -22,10 +28,19 @@ class BpcETL(AsrETL):
     BAD_WORDS = ["\[UNCERTAIN\]", "<X>", "INAUDIBLE"] # used as regex, thus [] escaped
     SAMPLE_RATE = 22050  # Hz
 
-    def __init__(self, cluster: Cluster=Cluster.RCC):
+    def __init__(self, 
+                cluster: Cluster=Cluster.RCC, 
+                filter_inaudible=True,
+                filter_uncertain=True,
+                filter_numeric=True,
+                ambiguity=AmbiguityStrategy.RANDOM):
         super().__init__('police')
         self.transcripts_dir = DATASET_DIRS[cluster]['police_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['police_mp3s']
+        self.filter_inaudible = filter_inaudible
+        self.filter_uncertain = filter_uncertain
+        self.filter_numeric = filter_numeric
+        self.ambiguity_strategy = ambiguity
         
 
     def extract(self) -> pd.DataFrame:
@@ -48,37 +63,42 @@ class BpcETL(AsrETL):
 
         This function is intended to run ONCE over the lifetime of the dataset,
         but is a NO-OP if called again. To re-transform the dataset, delete the
-        output of this function.
+        output of this function on disk.
         """
         sample_rate = sample_rate if sample_rate is not None else self.SAMPLE_RATE
         # Filter out bad audio
         unfiltered_data = data
         data = self._filter_exists(data, "original_audio")
         data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "original_audio")
-        # Write new files to disk
-        self._write_utterances(data, sample_rate)
-        # Filter out bad audio again after writing
-        data = self._filter_exists(data, "audio")
-        data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "audio")
+        #data = self._filter_corrupt(data, "original_audio")
         # Filter out missing transcripts
         missing = (data['text'].isna()) | (data['text'].str.len() == 0)
         logger.info(f'Discarding {missing.sum()} transcripts with no text.')
         data = data.loc[~ missing]
         # Filter out inaudible transcripts
-        has_x = data['text'].str.contains('|'.join(self.BAD_WORDS), regex=True, case=False)
-        logger.info(f'Discarding {has_x.sum()} inaudible transcripts.')
-        data = data.loc[~ has_x]
+        if self.filter_inaudible:
+            has_x = data['text'].str.contains('|'.join(self.BAD_WORDS), regex=True, case=False)
+            logger.info(f'Discarding {has_x.sum()} inaudible transcripts.')
+            data = data.loc[~ has_x]
         # Filter out uncertain transcripts
-        has_brackets = data['text'].str.contains('\[.+\]', regex=True)
-        logger.info(f'Discarding {has_brackets.sum()} uncertain transcripts.')
-        data = data.loc[~ has_brackets]
+        if self.filter_uncertain:
+            has_brackets = data['text'].str.contains('\[.+\]', regex=True)
+            logger.info(f'Discarding {has_brackets.sum()} uncertain transcripts.')
+            data = data.loc[~ has_brackets]
         # Filter out transcripts with numbers
-        has_numeric = data['text'].str.contains("[0-9]+", regex=True)
-        logger.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
-        data = data.loc[~ has_numeric]
+        if self.filter_numeric:
+            has_numeric = data['text'].str.contains("[0-9]+", regex=True)
+            logger.info(f'Discarding {has_numeric.sum()} transcripts with numerals.')
+            data = data.loc[~ has_numeric]
+        # Resolve inter-transcriber ambiguity
+        data = self._resolve_ambiguity(data)
         self.describe(data, "-transformed")
+        # Write new files to disk
+        self._write_utterances(data, sample_rate)
+        # Filter out bad audio again after writing
+        data = self._filter_exists(data, "audio")
+        data = self._filter_empty(data, sample_rate)
+        #data = self._filter_corrupt(data, "audio")
         # Delete bad utterance files
         dropped_data = unfiltered_data.loc[unfiltered_data.index.difference(data.index)]
         for dropped_row in dropped_data.itertuples():
@@ -140,6 +160,91 @@ class BpcETL(AsrETL):
         audio_paths = audio_paths.str.cat(audio_names)
         return data.assign(audio=audio_paths)
         
+    def _resolve_overlaps(self, data: pd.DataFrame) -> set([str]):
+        """
+        Finds maximal number of non-overlapping intervals with random tie-breaks.
+        Param:
+            data: expects columns {audio_x, audio_y, offset_x, offset_y, end_x, end_y}
+        """
+        data = data.sort_values(['end_x','end_y'])
+        keep = set([])
+        counter = -1
+        rnd = default_rng()
+        for tup in data.itertuples(index=False):
+            tup = tup._asdict()
+            ax, ay = tup['audio_x'], tup['audio_y']    # keys
+            ex, ey = tup['end_x'], tup['end_y']        # ordering maintains consistency
+            ox, oy = tup['offset_x'], tup['offset_y']  # determines if fits in 'keep' set
+            if ox > counter and oy > counter:
+                if rnd.random() > 0.5:
+                    keep.add(ax)
+                    counter = ex
+                else:
+                    keep.add(ay)
+                    counter = ey
+            elif ox > counter:
+                keep.add(ax)
+                counter = ex
+            elif oy > counter:
+                keep.add(ay)
+                counter = ey
+        return keep
+
+    def _resolve_ambiguity(self, data: pd.DataFrame) -> pd.DataFrame:
+        """
+        Handles inter-transcriber label ambiguity.
+        Params:
+            data: expects columns {original_audio}
+        """
+        if self.ambiguity_strategy == AmbiguityStrategy.ALL:
+            return data
+
+        # Find utterances in same 30m file that overlap in time
+        data = data.assign(end = data['offset'] + data['duration'])
+        candidates = data.merge(data, on='original_audio')
+        # remove "reverse duplicates": e.g. when row 1 = (x,y) and row 2 = (y,x)
+        # by keeping the version where x is on the left of the join
+        # conveniently this makes computing overlap easier
+        overlaps = (candidates['offset_x'] <= candidates['offset_y']) \
+                    & (candidates['end_x'] >= candidates['offset_y'])
+        same_scriber = candidates['transcriber_x'] == candidates['transcriber_y']
+        candidates = candidates.loc[overlaps & ~same_scriber]
+        n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
+        logger.debug(f'Found {n_candidates} that overlap somewhat.')
+
+        # Filter on the amount of time overlap
+        OVERLAP_THRESHOLD = .5   # arbitrary
+        intersect = candidates['end_x'] - candidates['offset_y']
+        overlap = pd.concat([candidates['duration_y'], intersect], axis=1).apply(min, axis=1)
+        shorter = candidates[['duration_x','duration_y']].apply(min, axis=1)
+        candidates = candidates.loc[(overlap / shorter) > OVERLAP_THRESHOLD]
+        n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
+        logger.debug(f'Found {n_candidates} that overlap > 50%.')
+        
+        # Filter on the text similariy
+        # XXX: How do you actually measure the within-overlap match without word timings?        
+        def _jaccard(str1, str2):
+            words1, words2 = str1.split(' '), str2.split(' ')
+            bag1, bag2 = set(words1), set(words2)
+            return 1.0 * len(bag1 & bag2) / len(bag1 | bag2)
+
+        TEXT_SIM_THRESHOLD = .5  # arbitrary
+        sim = candidates.apply(lambda x: _jaccard(x['text_x'],x['text_y']), axis=1)
+        candidates = candidates.loc[sim > TEXT_SIM_THRESHOLD]
+        n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
+        logger.debug(f'Found {n_candidates} that text match > 50%.')
+
+        # Resolve ambiguities by randomly choosing one transcriber's version
+        # Challenges:
+        # - maintain consistency for interleaved / many-to-many overlaps
+        # - give equal chance to each transcriber (n > 2): satisfied if no patterns in timing
+        candidate_audios = pd.concat([candidates['audio_x'], candidates['audio_y']])
+        ambiguous = data.loc[data['audio'].isin(candidate_audios)]
+        non_ambiguous = data.loc[data.index.difference(ambiguous.index)]
+        resolved = data.loc[data['audio'].isin(self._resolve_overlaps(candidates))]
+        num_drop = len(data) - len(non_ambiguous) - len(resolved)
+        logger.info(f'Discarding {num_drop} inter-transcriber ambiguous utts.')
+        return pd.concat([non_ambiguous, resolved])
 
     def _parse_manifests(self, ts_dir: str) -> pd.DataFrame:
         """
@@ -155,8 +260,6 @@ class BpcETL(AsrETL):
         return pd.concat(audio_dfs, ignore_index=True)
 
 
-    
-    
     def _parse_csv(self, ts_path: str) -> pd.DataFrame:
         """
         Extracts mp3 path, utterance timestamp, and duration from transcript metadata
@@ -167,8 +270,14 @@ class BpcETL(AsrETL):
         return pd.DataFrame({'original_audio': self._extract_mp3_path(df),
                              'offset': self._extract_offset(df),
                              'duration': self._extract_duration(df),
+                             'transcriber': self._extract_transcriber(df),
                              'text': df['transcription']})
-    
+
+
+    def _extract_transcriber(self, df):
+        """ Parse transcriber from transcription csv """
+        return df['transcriber']
+
 
     def _extract_mp3_path(self, df):
         """
