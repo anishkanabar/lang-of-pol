@@ -8,6 +8,12 @@ DataSplits = TypedDict('DataSplit', {'split': str, 'data': pd.DataFrame})
 
 logger = logging.getLogger('asr.prepare.ds')
 
+
+def dataio_prepare(hparams):
+    """ Dataset transformation pipeline """
+    return prepare.dataio_prepare(hparams)
+
+
 def prepare_bpc(split_ratios: dict, 
                 output_folder: str, 
                 **kwargs):

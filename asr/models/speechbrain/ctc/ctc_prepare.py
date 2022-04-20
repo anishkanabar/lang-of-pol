@@ -5,6 +5,12 @@ import pandas as pd
 
 logger = logging.getLogger('asr.prepare.ctc')
 
+
+def dataio_prepare(hparams):
+    """ Dataset transformation pipeline """
+    return prepare.dataio_prepare(hparams)
+
+
 def prepare_bpc(split_ratios: dict, 
                 output_folder: str, 
                 seed: str,

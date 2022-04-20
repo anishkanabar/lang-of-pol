@@ -42,7 +42,7 @@ test_csv:
 wav2vec2_name: facebook/wav2vec2-base
 wav2vec2_revision: facebook--wav2vec2-base.main.0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8
 wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
-wav2vec2_sample_rate: 16000
+model_sample_rate: 16000
 
 # Training parameters
 number_of_epochs: 1
@@ -50,7 +50,7 @@ lr: 0.0001
 lr_wav2vec: 0.0001
 sorting: ascending
 auto_mix_prec: False
-sample_rate: 8000
+data_sample_rate: 8000
 
 
 # With data_parallel batch_size is split into N jobs
