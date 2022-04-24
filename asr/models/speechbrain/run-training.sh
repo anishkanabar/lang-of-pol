@@ -33,7 +33,8 @@ fi
 # Define cluster-specific params
 if [ "$CLUSTER" = "rcc" ]; then
     OUTPUT_DIR="/project/graziul/ra/`whoami`/slurm_output"
-    TIMEOUT="06:00:00"
+    # TIMEOUT="06:00:00"
+    TIMEOUT="00:30:00"
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS
@@ -93,7 +94,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --mem-per-cpu "$MEM_PER_CPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            python "$TRAINPY" "$HPARAMS" 
+            python "$TRAINPY" "$HPARAMS" --nonfinite_patience=0
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \

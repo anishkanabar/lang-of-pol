@@ -41,8 +41,9 @@ class ASR(sb.Brain):
         batch = batch.to(self.device)
         wavs, wav_lens = batch.sig
         tokens_bos, _ = batch.tokens_bos
+        # assert(torch.all(torch.isfinite(wavs))), "wavs inf on cpu"
         wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
-        assert(torch.all(torch.isfinite(wavs)))
+        # assert(torch.all(torch.isfinite(wavs))), "wavs inf on gpu"
 
         # Add augmentation if specified
         if stage == sb.Stage.TRAIN:
@@ -271,7 +272,7 @@ if __name__ == "__main__":
             "num_train": hparams["num_train"],
             "num_sec": hparams["num_sec"],
             "split_ratios": hparams["split_ratios"],
-            "save_folder": hparams["output_folder"],
+            "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
             "seed": hparams["seed"],
         },
@@ -293,7 +294,7 @@ if __name__ == "__main__":
     # We dynamicaly add the tokenizer to our brain class.
     # NB: This tokenizer corresponds to the one used for the LM!!
     asr_brain.tokenizer = label_encoder
-
+    
     # Training
 
     #with torch.autograd.detect_anomaly():
