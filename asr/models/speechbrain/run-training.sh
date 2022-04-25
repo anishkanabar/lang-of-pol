@@ -33,8 +33,7 @@ fi
 # Define cluster-specific params
 if [ "$CLUSTER" = "rcc" ]; then
     OUTPUT_DIR="/project/graziul/ra/`whoami`/slurm_output"
-    # TIMEOUT="06:00:00"
-    TIMEOUT="00:30:00"
+    TIMEOUT="06:00:00"
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS

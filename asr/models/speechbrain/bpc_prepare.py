@@ -36,7 +36,7 @@ def prepare_bpc(cluster: str,
 
     cluster = Cluster[cluster.upper()]
     if dataset_name == 'police':
-        etl = BpcETL(cluster)
+        etl = BpcETL(cluster, filter_numeric=False)
     elif dataset_name == 'librispeech':
         etl = LibriSpeechETL(cluster)
     elif dataset_name == 'atczero':

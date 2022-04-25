@@ -25,7 +25,9 @@ def prepare_bpc(split_ratios: dict,
     splits = get_splits(split_ratios, output_folder)
     splits = {k: ctc_prep(v) for k, v in splits.items()}
     splits = {k: filter_duration(v) for k, v in splits.items()}
+    # Commentint this causes error!
     splits = {k: filter_ratio(v) for k, v in splits.items()}
+    # Commentint this causes error!
     splits = {k: filter_nonalphanum(v) for k,v in splits.items()}
 
     # blacklist = get_blacklist(blacklist_file)
@@ -85,9 +87,10 @@ def filter_duration(df: pd.DataFrame) -> pd.DataFrame:
 
 def filter_nonalphanum(df: pd.DataFrame) -> pd.DataFrame:
     # regex gotchas: must escape [], -, / even if inside brackets
-    special = re.compile("[()\[\]\-\/`;:.,?!\"]")
+    special = re.compile("[^A-Za-z0-9 ']")
+    # special = re.compile("[()\[\]\-\/`;:.,?!<>\*\{\}…\"]")
     non_special = df['wrd'].str.upper().str.replace(special, '', regex=True)
-    logger.debug(f"Filtered out {df['wrd'].str.len().sum()-non_special.str.len().sum()} special characters")
+    logger.info(f"Filtered out {df['wrd'].str.len().sum()-non_special.str.len().sum()} special characters")
     return df.assign(wrd = non_special)
 
 
@@ -99,7 +102,8 @@ def filter_ratio(df: pd.DataFrame) -> pd.DataFrame:
     """
     HOP_DURATION = 20  # (ms)
     FRAME_RATE = 49  # (Hz)
-    MIN_RATIO = 5.0
+    MIN_RATIO = 2.84375 # (2.0 is bad --- 2.75 was bad -- 2.796875 bad -- 2.84375 ok -- 2.9375 ok -- 3.125 ok -- 3.5 is ok -- 5.0 is ok)
+    logger.info(f'Testing with MFCC ratio {MIN_RATIO}')
     hop_sec = HOP_DURATION / 1000
     mfcc_lengths = df['duration'] * FRAME_RATE
     # logger.debug(f'Min/Avg/Max Num Frames: {mfcc_lengths.min():.2f} : {mfcc_lengths.mean():.2f} : {mfcc_lengths.max():.2f}')

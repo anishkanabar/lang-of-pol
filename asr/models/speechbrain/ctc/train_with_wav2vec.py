@@ -37,7 +37,7 @@ class ASR(sb.Brain):
 
     def compute_forward(self, batch, stage):
         """Forward computations from the waveform batches to the output probabilities."""
-        logger.debug("Computing forward step")
+        # logger.debug("Computing forward step")
         batch = batch.to(self.device)
         wavs, wav_lens = batch.sig
         tokens_bos, _ = batch.tokens_bos
@@ -59,23 +59,23 @@ class ASR(sb.Brain):
         # Forward pass
         feats = self.modules.wav2vec2(wavs)
 
-        assert torch.all(torch.isfinite(feats)), "non-finite wav2vec encodings"
-        self.check_grads()
-        self.check_params()
+        # assert torch.all(torch.isfinite(feats)), "non-finite wav2vec encodings"
+        # self.check_grads(batch)
+        # self.check_params(batch)
 
         x = self.modules.enc(feats)
 
-        assert torch.all(torch.isfinite(x)), "non-finite linear layer output"
+        # assert torch.all(torch.isfinite(x)), "non-finite linear layer output"
 
         # Compute outputs
         p_tokens = None
         logits = self.modules.ctc_lin(x)
 
-        assert torch.all(torch.isfinite(logits)), "non-finite logits"
+        # assert torch.all(torch.isfinite(logits)), "non-finite logits"
 
         p_ctc = self.hparams.log_softmax(logits)
 
-        assert torch.all(torch.isfinite(p_ctc)), "non-finite probs"
+        # assert torch.all(torch.isfinite(p_ctc)), "non-finite probs"
 
         if stage != sb.Stage.TRAIN:
             p_tokens = sb.decoders.ctc_greedy_decode(
@@ -85,7 +85,7 @@ class ASR(sb.Brain):
 
     def compute_objectives(self, predictions, batch, stage):
         """Computes the loss (CTC+NLL) given predictions and targets."""
-        logger.debug('Computing objective step')
+        # logger.debug('Computing objective step')
 
         p_ctc, wav_lens, predicted_tokens = predictions
         ids = batch.id
@@ -115,13 +115,13 @@ class ASR(sb.Brain):
 
         return loss
 
-    def check_params(self):
+    def check_params(self, batch):
         for p in self.modules.wav2vec2.parameters():
             assert torch.isfinite(p).all(), "non-finite wav2vec params"
         for p in self.modules.enc.parameters():
-            assert torch.isfinite(p).all(), "non-finite encoder params"
+            assert torch.isfinite(p).all(), f"non-finite encoder params. batch {batch.id}"
 
-    def check_grads(self):
+    def check_grads(self, batch):
         for p in self.modules.wav2vec2.parameters():
             if p.requires_grad and p.grad is not None:
                 assert torch.all(torch.isfinite(p.grad)), "non-finite wav2vec grad"
@@ -133,31 +133,31 @@ class ASR(sb.Brain):
 
     def fit_batch(self, batch):
         """Train the parameters given a single batch in input"""
-        logger.debug("Training batch {}: 1st elem is: {}".format(batch['id'][0], batch['wrd'][0]))
+        # logger.debug("Training batch {}: 1st elem is: {}".format(batch['id'][0], batch['wrd'][0]))
 
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
 
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
 
-        assert torch.isfinite(loss).all(), "non-finite loss"
+        # assert torch.isfinite(loss).all(), "non-finite loss"
 
-        logger.debug("Checking gradients before backward")
-        self.check_grads()
-        self.check_params()
+        # logger.debug("Checking gradients before backward")
+        # self.check_grads(batch)
+        # self.check_params(batch)
 
         loss.backward()
 
-        logger.debug("Checking gradients after backward")
-        self.check_grads()
-        self.check_params()
+        # logger.debug("Checking gradients after backward")
+        # self.check_grads(batch)
+        # self.check_params(batch)
 
         if self.check_gradients(loss):
             self.wav2vec_optimizer.step()
             self.model_optimizer.step()
 
-        logger.debug("Checking gradients after optimizer step")
-        self.check_grads() 
-        self.check_params()
+        # logger.debug("Checking gradients after optimizer step")
+        # self.check_grads(batch) 
+        # self.check_params(batch)
 
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
@@ -241,8 +241,6 @@ class ASR(sb.Brain):
 
 
 if __name__ == "__main__":
-
-
     # CLI:
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])
 
@@ -296,6 +294,8 @@ if __name__ == "__main__":
     asr_brain.tokenizer = label_encoder
     
     # Training
+    devices = [torch.cuda.get_device_name(d) for d in range(torch.cuda.device_count())]
+    logger.info(f'Running on devices {";".join(devices)}')
 
     #with torch.autograd.detect_anomaly():
     asr_brain.fit(

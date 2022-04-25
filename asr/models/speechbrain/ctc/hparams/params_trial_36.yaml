@@ -8,7 +8,7 @@
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 1987
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 35
+trial: 36
 output_folder: !ref results/train_wav2vec2_char/seed_<seed>/trial_<trial>
 wer_file: !ref <output_folder>/wer.txt
 cer_file: !ref <output_folder>/cer.txt
@@ -19,6 +19,7 @@ train_log: !ref <output_folder>/train_log.txt
 cluster: rcc  # 'ai' or 'rcc' or 'ttic'
 scratch_dir: /project/graziul/ra/echandler/scratch
 dataset_name: atczero  #'librispeech' or 'police' or 'atczero'
+data_sample_rate: 8000
 num_train: null
 num_sec: null
 skip_prep: False
@@ -44,12 +45,11 @@ wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
 model_sample_rate: 16000
 
 # Training parameters
-number_of_epochs: 5
+number_of_epochs: 200
 lr: 0.0001
 lr_wav2vec: 0.0001
 sorting: ascending
 auto_mix_prec: False
-data_sample_rate: 8000
 
 
 # With data_parallel batch_size is split into N jobs
@@ -75,7 +75,11 @@ dnn_neurons: 768
 freeze_wav2vec: True
 
 # Outputs
-output_neurons: 32  #  alpha, num, space, quote, blank, eos, bos, unk
+# 31 breaks on ATC0
+# 32 is ok on ATC0 and Police
+# 42 is ok on ATC0
+output_neurons: 42 #  alpha, num, space, quote, blank, eos, bos, unk
+
 
 # Decoding parameters
 blank_index: 0
