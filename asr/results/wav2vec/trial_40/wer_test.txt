@@ -1,0 +1,1706 @@
+%WER 73.47 [ 2443 / 3325, 356 ins, 380 del, 1707 sub ]
+%SER 99.41 [ 337 / 339 ]
+Scored 339 sentences, 0 not present in hyp.
+================================================================================
+ALIGNMENTS
+
+Format:
+<utterance-id>, WER DETAILS
+<eps> ; reference  ; on ; the ; first ;  line
+  I   ;     S      ; =  ;  =  ;   S   ;   D  
+ and  ; hypothesis ; on ; the ; third ; <eps>
+================================================================================
+7241, %WER 0.00 [ 0 / 4, 0 ins, 0 del, 0 sub ]
+THIRTY ; SEVEN ; TWENTY ; ONE
+  =    ;   =   ;   =    ;  = 
+THIRTY ; SEVEN ; TWENTY ; ONE
+================================================================================
+13637, %WER 60.00 [ 3 / 5, 0 ins, 2 del, 1 sub ]
+RIGHT ; I'VE ; GOT ; THE ;   AH 
+  D   ;  =   ;  =  ;  S  ;   D  
+<eps> ; I'VE ; GOT ;  TA ; <eps>
+================================================================================
+10688, %WER 66.67 [ 2 / 3, 1 ins, 0 del, 1 sub ]
+<eps> ; THREE ; HUNDRED ;  KNOTS 
+  I   ;   =   ;    =    ;    S   
+  A   ; THREE ; HUNDRED ; DOLLARS
+================================================================================
+13940, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+     UNE      
+================================================================================
+617, %WER 33.33 [ 1 / 3, 0 ins, 0 del, 1 sub ]
+THAT ; IT ; EXACTLY
+ S   ; =  ;    =   
+TATS ; IT ; EXACTLY
+================================================================================
+11981, %WER 83.33 [ 5 / 6, 0 ins, 1 del, 4 sub ]
+FIELD ;  IS ;    IN   ; SIGHT ;   AH  ; ROGER
+  S   ;  S  ;    S    ;   S   ;   D   ;   =  
+VELED ; HIS ; INSIGHT ;   O   ; <eps> ; ROGER
+================================================================================
+16570, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      LE      
+================================================================================
+983, %WER 60.00 [ 3 / 5, 0 ins, 2 del, 1 sub ]
+ U   ;   S   ;  AIR  ; SIXTEEN ; SEVENTEEN
+ S   ;   D   ;   D   ;    =    ;     =    
+ESER ; <eps> ; <eps> ; SIXTEEN ; SEVENTEEN
+================================================================================
+16463, %WER 100.00 [ 6 / 6, 0 ins, 2 del, 4 sub ]
+YEAH ;  I  ; GOT ; HIM ;   IN  ; SIGHT
+ S   ;  S  ;  S  ;  S  ;   D   ;   D  
+ AH  ; CON ;  TO ; PLA ; <eps> ; <eps>
+================================================================================
+24212, %WER 100.00 [ 4 / 4, 0 ins, 1 del, 3 sub ]
+TWO ; EIGHTY ;  OFF   ; PORKS
+ S  ;   S    ;   S    ;   D  
+ENO ;  THE   ; UPROAR ; <eps>
+================================================================================
+4182, %WER 0.00 [ 0 / 5, 0 ins, 0 del, 0 sub ]
+ONE ; TWO ; SEVEN ; POINT ; TWO
+ =  ;  =  ;   =   ;   =   ;  = 
+ONE ; TWO ; SEVEN ; POINT ; TWO
+================================================================================
+17201, %WER 83.33 [ 5 / 6, 0 ins, 1 del, 4 sub ]
+UNITED ; SIX ; OH ; FIVE ; BYE  ;  BYE 
+  =    ;  S  ; S  ;  S   ;  S   ;   D  
+UNITED ;  TO ; ZE ; FIRE ; PAPA ; <eps>
+================================================================================
+18204, %WER 500.00 [ 5 / 1, 4 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I   ;   I  
+     OIN       ;   IN  ;  OUR  ;  OWN  ; VELLA
+================================================================================
+26484, %WER 40.00 [ 2 / 5, 1 ins, 0 del, 1 sub ]
+STANDARD ; TO ; THREE ; SIX ; <eps> ; RIGHT
+   S     ; =  ;   =   ;  =  ;   I   ;   =  
+ ENNER   ; TO ; THREE ; SIX ;   R   ; RIGHT
+================================================================================
+18838, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      E       
+================================================================================
+7743, %WER 100.00 [ 4 / 4, 0 ins, 1 del, 3 sub ]
+FIVE ; ONE ;  FOUR ;  ONE 
+ S   ;  S  ;   S   ;   D  
+ FI  ; ROT ; FORRA ; <eps>
+================================================================================
+16319, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+14139, %WER 116.67 [ 7 / 6, 1 ins, 0 del, 6 sub ]
+ROGER ; WE'LL ; TURN ; HERE ;  ON  ; I  ; <eps>
+  S   ;   S   ;  S   ;  S   ;  S   ; S  ;   I  
+  O   ;  WOS  ; ZER  ;      ; FEER ; TO ;  LAH 
+================================================================================
+16555, %WER 100.00 [ 6 / 6, 0 ins, 2 del, 4 sub ]
+FIVE ; BRAVO ; KILO ;  THANK  ;  YOU  ;  NOW 
+ S   ;   S   ;  S   ;    S    ;   D   ;   D  
+ E   ;   I   ; BROK ; YRLOING ; <eps> ; <eps>
+================================================================================
+6736, %WER 85.71 [ 6 / 7, 0 ins, 2 del, 4 sub ]
+ F  ; A  ;   A   ;  CAR  ; TWELVE ; BOSTON ; TOWER
+ S  ; S  ;   D   ;   D   ;   =    ;   S    ;   S  
+TAK ; OR ; <eps> ; <eps> ; TWELVE ; BOSTOR ;   SE 
+================================================================================
+5001, %WER 40.00 [ 2 / 5, 0 ins, 0 del, 2 sub ]
+THREE ; SIXTY ; NINE ; I  ; SORRY
+  =   ;   =   ;  =   ; S  ;   S  
+THREE ; SIXTY ; NINE ; OP ; ZERVE
+================================================================================
+6287, %WER 100.00 [ 5 / 5, 0 ins, 1 del, 4 sub ]
+NERA ;  THIRTY ; SEVEN  ; TWENTY ;  SIX 
+ S   ;    S    ;   S    ;   S    ;   D  
+WER  ; THIREVN ; TWONTY ;   IV   ; <eps>
+================================================================================
+6334, %WER 50.00 [ 2 / 4, 0 ins, 0 del, 2 sub ]
+OKAY ;  WE ; MOVE ; UP
+ S   ;  S  ;  =   ; = 
+ A   ; GAL ; MOVE ; UP
+================================================================================
+24245, %WER 200.00 [ 2 / 1, 1 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps>
+      S        ;   I  
+     ERTY      ;  OUTD
+================================================================================
+10158, %WER 100.00 [ 6 / 6, 0 ins, 2 del, 4 sub ]
+ ONE  ;  TWO   ; ZERO ; TWO ;  FOUR ;  POP 
+  S   ;   S    ;  S   ;  S  ;   D   ;   D  
+ENETY ; ZEROTY ;  EA  ; PON ; <eps> ; <eps>
+================================================================================
+5363, %WER 100.00 [ 5 / 5, 0 ins, 3 del, 2 sub ]
+ YES  ;        SIR         ; EIGHTEEN ; FORTY ; THREE
+  S   ;         S          ;    D     ;   D   ;   D  
+EZERY ; EIGHTEENFORTYTHREE ;  <eps>   ; <eps> ; <eps>
+================================================================================
+28785, %WER 100.00 [ 5 / 5, 1 ins, 0 del, 4 sub ]
+OKAY ; <eps> ; SIR ; HUSTLER ; TWELVE ; SIXTEEN
+ S   ;   I   ;  =  ;    S    ;   S    ;    S   
+ A   ;   E   ; SIR ;    I    ; TROTI  ;    SE  
+================================================================================
+30309, %WER 100.00 [ 6 / 6, 0 ins, 2 del, 4 sub ]
+TWO ; FOUR ; ZERO ; SIX ;  SIX  ; SEVEN
+ S  ;  S   ;  S   ;  S  ;   D   ;   D  
+    ;  OT  ; ZER  ;  I  ; <eps> ; <eps>
+================================================================================
+24701, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      E       
+================================================================================
+18897, %WER 60.00 [ 3 / 5, 0 ins, 0 del, 3 sub ]
+TWO ; FORTY ; THREE ; EIGHTY ; SIX
+ S  ;   =   ;   =   ;   S    ;  S 
+ E  ; FORTY ; THREE ;   I    ;  SA
+================================================================================
+9956, %WER 42.86 [ 3 / 7, 2 ins, 0 del, 1 sub ]
+TWO ; FIVE ; <eps> ; ZERO ; FOR ; BOXER ; <eps> ; TWO ; TWO
+ =  ;  =   ;   I   ;  =   ;  =  ;   S   ;   I   ;  =  ;  = 
+TWO ; FIVE ;       ; ZERO ; FOR ;  BOX  ;   TO  ; TWO ; TWO
+================================================================================
+27077, %WER 71.43 [ 5 / 7, 0 ins, 1 del, 4 sub ]
+WIND ; ONE ; FOUR ;  ZERO ; AT ;   ONE   ;  FOUR
+ S   ;  =  ;  =   ;   S   ; S  ;    S    ;   D  
+WED  ; ONE ; FOUR ; ZEROA ; T  ; ONEFOUR ; <eps>
+================================================================================
+6643, %WER 100.00 [ 5 / 5, 0 ins, 1 del, 4 sub ]
+DELTA ;   FOUR   ; TEN  ; CONTACT ; DEPARTURE
+  S   ;    S     ;  S   ;    S    ;     D    
+ ELTA ; FOURTEEN ; GUNS ;  EXPERT ;   <eps>  
+================================================================================
+14794, %WER 100.00 [ 4 / 4, 0 ins, 1 del, 3 sub ]
+UNINTELLIGIBLE ; SIX ; SIX ;  GOLF
+      S        ;  S  ;  S  ;   D  
+               ;  FI ;     ; <eps>
+================================================================================
+20066, %WER 100.00 [ 5 / 5, 0 ins, 1 del, 4 sub ]
+AH ; EIGHT  ; FORTY ; SIX ; ROGER
+S  ;   S    ;   S   ;  S  ;   D  
+I  ; CORTYN ;   I   ;  TO ; <eps>
+================================================================================
+27312, %WER 800.00 [ 8 / 1, 7 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I  
+     ICON      ;  TAHT ;   TE  ; ANSUR ;  FON  ;  SIVN ; FORTY ;  TWO 
+================================================================================
+560, %WER 100.00 [ 6 / 6, 1 ins, 2 del, 3 sub ]
+CONTINENTAL ; <eps> ; SIX ; TWENTY ;   IS  ;   AT  ;  SIX 
+     S      ;   I   ;  =  ;   S    ;   S   ;   D   ;   D  
+     EN     ;   LE  ; SIX ; NOISE  ; SIXEN ; <eps> ; <eps>
+================================================================================
+7444, %WER 125.00 [ 5 / 4, 1 ins, 0 del, 4 sub ]
+EIGHT ; ZERO ; UNIFORM ; SEARCHING ;  <eps> 
+  S   ;  S   ;    S    ;     S     ;    I   
+  A   ; TER  ;    ON   ;    IPON   ; SEARCIN
+================================================================================
+8473, %WER 100.00 [ 5 / 5, 1 ins, 0 del, 4 sub ]
+DELTA ; NINE ; ONE ; CONFIRM ; ALTITUDE ; <eps>
+  S   ;  S   ;  =  ;    S    ;    S     ;   I  
+DELAN ; NINA ; ONE ;   CON   ;   FIRM   ; OLTON
+================================================================================
+26310, %WER 83.33 [ 5 / 6, 0 ins, 0 del, 5 sub ]
+THREE ; SIX ; RIGHT ;  AH  ; WITH ; QUEBEC
+  S   ;  S  ;   =   ;  S   ;  S   ;   S   
+  RA  ;  IX ; RIGHT ; DOWN ; WIT  ; KEPIC 
+================================================================================
+21075, %WER 100.00 [ 6 / 6, 0 ins, 0 del, 6 sub ]
+DOWN ; TO ;  THREE   ; ASEA ; FOUR ; FOURTEEN
+ S   ; S  ;    S     ;  S   ;  S   ;    S    
+ ON  ; A  ; THREEING ;  TY  ;  FO  ;  FORETA 
+================================================================================
+8215, %WER 100.00 [ 6 / 6, 0 ins, 0 del, 6 sub ]
+ ZERO  ; FOUR ;   ZERO  ; SIXTEEN ; FIFTY ; TWO
+  S    ;  S   ;    S    ;    S    ;   S   ;  S 
+EREFOR ; THEY ; OFFERED ;    FA   ;  ICTO ; TOX
+================================================================================
+25921, %WER 125.00 [ 5 / 4, 2 ins, 0 del, 3 sub ]
+THIRTYTWO ; <eps> ; ONE ; SEVEN ; SEVENTYFOUR ; <eps>
+    S     ;   I   ;  =  ;   S   ;      S      ;   I  
+  THIRTY  ;  TWO  ; ONE ;  SIX  ;    SIVTY    ;  FOUR
+================================================================================
+16518, %WER 100.00 [ 5 / 5, 0 ins, 0 del, 5 sub ]
+AH ; SIXTY ; FOUR ; FIFTY ; ONE
+S  ;   S   ;  S   ;   S   ;  S 
+GA ;   SE  ;  T   ;  FORV ;  DO
+================================================================================
+16337, %WER 66.67 [ 4 / 6, 0 ins, 0 del, 4 sub ]
+CLEARED ; TO ; GO ; SIX ; HUNDRED ;  J 
+   S    ; =  ; =  ;  S  ;    S    ;  S 
+   ER   ; TO ; GO ;     ;    SI   ; TOT
+================================================================================
+24662, %WER 116.67 [ 7 / 6, 2 ins, 1 del, 4 sub ]
+ALL ;  RIGHT  ; REDUCE ; SPEED ; FORTY ; KNOTS ; <eps> ; <eps>
+ S  ;    S    ;   S    ;   D   ;   =   ;   S   ;   I   ;   I  
+ IV ; PRETUCE ;  PEED  ; <eps> ; FORTY ;  TIN  ;   A   ;   EN 
+================================================================================
+22318, %WER 100.00 [ 7 / 7, 0 ins, 2 del, 5 sub ]
+TWO ;  FOUR  ; TWO ;  FIVE ; SEVEN ;  GOLF ;  LIMA
+ S  ;   S    ;  S  ;   S   ;   S   ;   D   ;   D  
+ E  ; FORDTO ;  FY ; LEVIN ;   OA  ; <eps> ; <eps>
+================================================================================
+28945, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+7481, %WER 66.67 [ 4 / 6, 1 ins, 1 del, 2 sub ]
+TWENTY ; SIX ; POINT ; <eps>  ; FIVE ; GOOD ;  DAY 
+  =    ;  =  ;   S   ;   I    ;  =   ;  S   ;   D  
+TWENTY ; SIX ;   SO  ; POINTY ; FIVE ;  A   ; <eps>
+================================================================================
+19219, %WER 40.00 [ 2 / 5, 0 ins, 0 del, 2 sub ]
+RIGHT ; TURN ; ONE ; NINE ; ZERO
+  =   ;  =   ;  =  ;  S   ;  S  
+RIGHT ; TURN ; ONE ; NIE  ; ZREL
+================================================================================
+16672, %WER 100.00 [ 5 / 5, 0 ins, 0 del, 5 sub ]
+CROSS ; THREE ; THREE  ; EIGHTEEN ; FIFTEEN
+  S   ;   S   ;   S    ;    S     ;    S   
+  E   ;  TEN  ; EGHREE ;   TOY    ;  TIVITI
+================================================================================
+23901, %WER 85.71 [ 6 / 7, 0 ins, 0 del, 6 sub ]
+METRO ; NINE ; ZERO ; TWO ; SIX ; WITH ; PAPA
+  S   ;  S   ;  S   ;  S  ;  S  ;  S   ;  =  
+  IE  ;  I   ;  EO  ; TOO ; SIK ; FOR  ; PAPA
+================================================================================
+2179, %WER 85.71 [ 6 / 7, 0 ins, 1 del, 5 sub ]
+HEADING ; NORTH ;   U   ; S  ; AH ; SIX  ; FIFTEEN
+   =    ;   S   ;   S   ; S  ; S  ;  S   ;    D   
+HEADING ;   AN  ; ORGOS ; SO ; SI ; SIFI ;  <eps> 
+================================================================================
+17129, %WER 71.43 [ 5 / 7, 0 ins, 1 del, 4 sub ]
+LEAR ; THREE ; FIVE ;  T   ;  K  ;  IN ; SEQUENCE
+ S   ;   =   ;  =   ;  S   ;  S  ;  S  ;    D    
+ E   ; THREE ; FIVE ; TEKA ; AND ; SII ;  <eps>  
+================================================================================
+25948, %WER 66.67 [ 4 / 6, 2 ins, 0 del, 2 sub ]
+ZERO ; <eps> ; SEVEN ; NINE ; ONE ; FOXTROT ; <eps> ; PAPA
+ S   ;   I   ;   =   ;  =   ;  =  ;    S    ;   I   ;  =  
+ AH  ;   ER  ; SEVEN ; NINE ; ONE ;   NOX   ;  TRA  ; PAPA
+================================================================================
+18276, %WER 100.00 [ 6 / 6, 0 ins, 0 del, 6 sub ]
+TEN ; THIRTY ; SEVEN ; ONE  ; SEVEN ; ZERO
+ S  ;   S    ;   S   ;  S   ;   S   ;  S  
+ AN ; TIRIY  ;   E   ; FONE ;   EN  ; ZER 
+================================================================================
+28941, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+22940, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      I       
+================================================================================
+10798, %WER 50.00 [ 3 / 6, 2 ins, 0 del, 1 sub ]
+TWO ; ZERO ; ZERO ; NORTHWEST ; <eps> ; FIVE ; <eps> ; SIXTY
+ =  ;  =   ;  =   ;     S     ;   I   ;  =   ;   I   ;   =  
+TWO ; ZERO ; ZERO ;   NORTH   ;  WEST ; FIVE ;       ; SIXTY
+================================================================================
+29035, %WER 57.14 [ 4 / 7, 1 ins, 0 del, 3 sub ]
+ANYTHING ;   <eps>   ; GOING ; ON ; PORT ; ONE ; OH ; TWO
+   S     ;     I     ;   =   ; =  ;  S   ;  =  ; S  ;  = 
+         ; HADYTHING ; GOING ; ON ; FOR  ; ONE ; OR ; TWO
+================================================================================
+7278, %WER 77.78 [ 7 / 9, 0 ins, 3 del, 4 sub ]
+ AH  ;   WE  ; LOOKING ; U ;  S  ;  AIR  ; FOUR ;   OH  ;  FOUR
+ S   ;   S   ;    D    ; = ;  S  ;   S   ;  =   ;   D   ;   D  
+AWER ; LOKAN ;  <eps>  ; U ; SIR ; FOURO ; FOUR ; <eps> ; <eps>
+================================================================================
+13283, %WER 100.00 [ 6 / 6, 0 ins, 2 del, 4 sub ]
+CLEARED ;  TO ;    LAND   ; THIRTY ;  SIX  ; ROGER
+   S    ;  S  ;     S     ;   S    ;   D   ;   D  
+  CLED  ; LAN ; THIRTYSIX ;        ; <eps> ; <eps>
+================================================================================
+17154, %WER 50.00 [ 3 / 6, 1 ins, 0 del, 2 sub ]
+<eps> ; FORTY ; FOUR ; FORTY ; FOUR ;  NO ; PROBLEM
+  I   ;   =   ;  =   ;   =   ;  =   ;  S  ;    S   
+      ; FORTY ; FOUR ; FORTY ; FOUR ; DOT ;   BROA 
+================================================================================
+24750, %WER 71.43 [ 5 / 7, 0 ins, 0 del, 5 sub ]
+TWO ;  SEVEN   ; ZERO ; FOR ; NINE ; NINE ; TWO
+ S  ;    S     ;  =   ;  S  ;  S   ;  S   ;  = 
+ A  ; TWOSEVEN ; ZERO ; OND ; NONE ;  AN  ; TWO
+================================================================================
+23553, %WER 100.00 [ 7 / 7, 0 ins, 3 del, 4 sub ]
+DOWN ;   TO  ; FIVE ; ASEA ;  NINE ;  ZERO ;  FOUR
+ S   ;   S   ;  S   ;  S   ;   D   ;   D   ;   D  
+ EA  ; RIBIT ;      ;  O   ; <eps> ; <eps> ; <eps>
+================================================================================
+967, %WER 100.00 [ 6 / 6, 0 ins, 0 del, 6 sub ]
+ SO  ; LONG ; FOR ; NORTHWEST ; FORTY ;  SIX  
+ S   ;  S   ;  S  ;     S     ;   S   ;   S   
+TELL ;  O   ;  O  ;   NORTH   ; WESTO ; FORTSI
+================================================================================
+16437, %WER 140.00 [ 7 / 5, 2 ins, 0 del, 5 sub ]
+CESSNA ; FIVE ; DELTA ; WHISKEY ; TOWER ; <eps> ; <eps>
+  S    ;  S   ;   S   ;    S    ;   S   ;   I   ;   I  
+TETES  ;  A   ;   FI  ;   DOL   ;   TO  ; WISKY ;  TOL 
+================================================================================
+29399, %WER 28.57 [ 2 / 7, 0 ins, 1 del, 1 sub ]
+ WIND ; ONE ; FOUR ; ZERO ;   AT  ; ONE ; FOUR
+  S   ;  =  ;  =   ;  =   ;   D   ;  =  ;  =  
+POINT ; ONE ; FOUR ; ZERO ; <eps> ; ONE ; FOUR
+================================================================================
+7265, %WER 66.67 [ 6 / 9, 1 ins, 1 del, 4 sub ]
+ DOWN ;   TO  ; NINE ; U ; S ; AIR ; <eps> ; FOUR ; OH ; FOUR
+  S   ;   D   ;  =   ; = ; S ;  S  ;   I   ;  =   ; S  ;  =  
+SEVEN ; <eps> ; NINE ; U ; R ; SER ;       ; FOUR ; O  ; FOUR
+================================================================================
+14165, %WER 77.78 [ 7 / 9, 1 ins, 4 del, 2 sub ]
+U  ;   S   ; ELEVEN ; <eps> ; SIXTY ; SIX ;      ON     ;  TOP  ;   OF  ; OXONN
+S  ;   D   ;   =    ;   I   ;   =   ;  =  ;      S      ;   D   ;   D   ;   D  
+US ; <eps> ; ELEVEN ;       ; SIXTY ; SIX ; CANTABAAXEN ; <eps> ; <eps> ; <eps>
+================================================================================
+27226, %WER 60.00 [ 3 / 5, 0 ins, 1 del, 2 sub ]
+ FIVE ; FORTY ; THREE ; NINETEEN ;  BRIDGE
+  D   ;   =   ;   =   ;    S     ;    S   
+<eps> ; FORTY ; THREE ; NINETEN  ; VERSION
+================================================================================
+26543, %WER 83.33 [ 5 / 6, 0 ins, 1 del, 4 sub ]
+GIVE ; WAY ;  TO ; AMERICAN ; TWELVE ; SIXTEEN
+ S   ;  =  ;  S  ;    S     ;   S    ;    D   
+ AE  ; WAY ; MAN ;   TOP    ;  SIX   ;  <eps> 
+================================================================================
+8209, %WER 100.00 [ 7 / 7, 0 ins, 0 del, 7 sub ]
+SEVEN ; THOUSAND ;  U  ; S  ; SIXTEEN ; FIFTY ;  TWO  
+  S   ;    S     ;  S  ; S  ;    S    ;   S   ;   S   
+ SROM ;    A     ; BOU ; ZE ;   SIX   ;   AN  ; SISTAN
+================================================================================
+3348, %WER 80.00 [ 4 / 5, 2 ins, 0 del, 2 sub ]
+OKAY ; <eps> ; GREAT ; THANKS ; <eps> ; SEE ; YOU
+ S   ;   I   ;   =   ;   =    ;   I   ;  =  ;  S 
+ E   ;  KET  ; GREAT ; THANKS ;   TO  ; SEE ;  A 
+================================================================================
+15249, %WER 50.00 [ 3 / 6, 0 ins, 0 del, 3 sub ]
+DELTA ; EIGHT ; FIFTY ; FOR  ; THREE  ; SIX
+  S   ;   =   ;   =   ;  S   ;   S    ;  = 
+ SEU  ; EIGHT ; FIFTY ; FOUR ; THREEY ; SIX
+================================================================================
+25496, %WER 100.00 [ 8 / 8, 0 ins, 3 del, 5 sub ]
+ ZERO  ; TWO ;  ZERO  ; OFF  ; RANDY ;  ASEA ;  FOUR ;  TEN 
+  S    ;  S  ;   S    ;  S   ;   S   ;   D   ;   D   ;   D  
+ZEROTY ; ZER ; AREADY ; ANTY ;   O   ; <eps> ; <eps> ; <eps>
+================================================================================
+23497, %WER 75.00 [ 3 / 4, 1 ins, 1 del, 1 sub ]
+ ONE  ; NINETEEN ; FOUR ; DELTA ;  <eps> 
+  D   ;    =     ;  =   ;   S   ;    I   
+<eps> ; NINETEEN ; FOUR ;  DOTO ; SIXTEEN
+================================================================================
+8580, %WER 75.00 [ 6 / 8, 0 ins, 0 del, 6 sub ]
+THAT ; WORKS ; NOW ;  U  ; S ; AIR  ; TWO ;  ELEVEN
+ S   ;   S   ;  =  ;  S  ; = ;  S   ;  S  ;    S   
+ AT  ;  FORT ; NOW ; YOU ; S ; ZEAR ;  TO ; BELEVEN
+================================================================================
+17591, %WER 116.67 [ 7 / 6, 1 ins, 0 del, 6 sub ]
+BIZEX ; SIX ; FORTY ; READY ;   TO  ;  GO ; <eps>
+  S   ;  S  ;   S   ;   S   ;   S   ;  S  ;   I  
+  E   ;  AT ;   TO  ; CORTY ; RETYY ; DEL ;  PIA 
+================================================================================
+8742, %WER 100.00 [ 7 / 7, 0 ins, 1 del, 6 sub ]
+  OKAY  ; THE ;  ZERO  ;  FIVE ; SIX ;  RADIAL  ;  OKAY
+   S    ;  S  ;   S    ;   S   ;  S  ;    S     ;   D  
+BECAUSE ;  E  ; ZERERO ; FLIES ;  UC ; RADLOCAN ; <eps>
+================================================================================
+26771, %WER 57.14 [ 4 / 7, 0 ins, 1 del, 3 sub ]
+GOT  ; ANY ;   AH  ; PORT ; VEHICLES ; ON ; FREQUENCY
+ S   ;  S  ;   D   ;  =   ;    =     ; =  ;     S    
+MENY ;  AT ; <eps> ; PORT ; VEHICLES ; ON ; FREPUENCY
+================================================================================
+20373, %WER 100.00 [ 4 / 4, 0 ins, 1 del, 3 sub ]
+NINE ; TWENTY ; TWO ; ROGER
+ S   ;   S    ;  S  ;   D  
+IVE  ;  MIE   ; TEO ; <eps>
+================================================================================
+28074, %WER 83.33 [ 5 / 6, 0 ins, 1 del, 4 sub ]
+DELTA ; FIVE ;  FIFTY   ;  SIX   ;  CONTACT   ; DEPARTURE
+  S   ;  =   ;    S     ;   S    ;     S      ;     D    
+ ELTA ; FIVE ; FIFTYSIX ; CONTAC ; DEPPARTURE ;   <eps>  
+================================================================================
+16459, %WER 100.00 [ 6 / 6, 0 ins, 0 del, 6 sub ]
+ZERO ; FIVE ;   ZERO  ; DEPARTURE ; GOOD ; DAY 
+ S   ;  S   ;    S    ;     S     ;  S   ;  S  
+     ; ZER  ; FASZERR ;  DEPARTUR ;  TO  ; NANN
+================================================================================
+10308, %WER 120.00 [ 6 / 5, 2 ins, 0 del, 4 sub ]
+AND ; WASHINGTON ; ROSS ; FOUR ; <eps> ; <eps> ; ONE
+ S  ;     S      ;  S   ;  S   ;   I   ;   I   ;  = 
+    ;    TAT     ; ORSE ;  SE  ;  ROFF ;  FOR  ; ONE
+================================================================================
+26781, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      E       
+================================================================================
+27342, %WER 150.00 [ 6 / 4, 4 ins, 0 del, 2 sub ]
+HEY ; YOU ; TELL ; THEMUNINTELLIGIBLE ; <eps> ;   <eps>   ; <eps>  ; <eps>
+ S  ;  =  ;  =   ;         S          ;   I   ;     I     ;   I    ;   I  
+ DA ; YOU ; TELL ;        THEM        ; MAHTY ; DRIVERSTO ; KEEPIT ;  DOWN
+================================================================================
+8792, %WER 14.29 [ 1 / 7, 0 ins, 0 del, 1 sub ]
+UNITED ; SIX ; ZERO ; ONE ; TRAFFIC  ; NO ; FACTOR
+  =    ;  =  ;  =   ;  =  ;    S     ; =  ;   =   
+UNITED ; SIX ; ZERO ; ONE ; TRIVEING ; NO ; FACTOR
+================================================================================
+19521, %WER 100.00 [ 7 / 7, 0 ins, 2 del, 5 sub ]
+ ONE   ; ZERO ; ZERO ; DELTA ; ELEVEN ; THIRTY ; SEVEN
+  S    ;  S   ;  S   ;   S   ;   S    ;   D    ;   D  
+DOTERO ; ZER  ;  E   ; LETIR ;        ; <eps>  ; <eps>
+================================================================================
+27566, %WER 100.00 [ 6 / 6, 0 ins, 2 del, 4 sub ]
+HOLD ; SHORT ;  OF ; THREE ;  FIVE ; RIGHT
+ S   ;   S   ;  S  ;   S   ;   D   ;   D  
+ O   ;  ZER  ; NIE ;  RIGH ; <eps> ; <eps>
+================================================================================
+17419, %WER 57.14 [ 4 / 7, 0 ins, 1 del, 3 sub ]
+HERE ; WE ; GO ; DELTA ; SEVENTEEN ;       FORTY       ;  SIX 
+ =   ; =  ; =  ;   S   ;     S     ;         S         ;   D  
+HERE ; WE ; GO ;  TEL  ;     TO    ; SEVENTEENFORTYSIX ; <eps>
+================================================================================
+23623, %WER 100.00 [ 7 / 7, 0 ins, 5 del, 2 sub ]
+DELTA ;        TEN         ; THIRTY ; SEVEN ;  DID  ;  YOU  ;  COPY
+  S   ;         S          ;   D    ;   D   ;   D   ;   D   ;   D  
+ ELTA ; TENTHIRTYSEVENCAPY ; <eps>  ; <eps> ; <eps> ; <eps> ; <eps>
+================================================================================
+10150, %WER 85.71 [ 6 / 7, 1 ins, 1 del, 4 sub ]
+NINER ; <eps> ; THOUSAND ; U  ;   S   ;  AIR  ; FIFTEEN ; ELEVEN
+  S   ;   I   ;    =     ; S  ;   S   ;   D   ;    =    ;   S   
+      ;  NINE ; THOUSAND ; ON ; SIEUR ; <eps> ; FIFTEEN ;  LEUV 
+================================================================================
+6882, %WER 62.50 [ 5 / 8, 0 ins, 1 del, 4 sub ]
+U ;  S  ;  AIR  ; TWO ; SIXTY ;    ONE     ; CONTACT ; DEPARTURE
+S ;  S  ;   S   ;  =  ;   =   ;     S      ;    D    ;     =    
+A ; FUW ; ESZER ; TWO ; SIXTY ; ONECONTACT ;  <eps>  ; DEPARTURE
+================================================================================
+22248, %WER 42.86 [ 3 / 7, 0 ins, 1 del, 2 sub ]
+ZERO ; NINE ; FIVE ;  FOR   ; TEN  ; EIGHTY ; ONE
+ =   ;  =   ;  =   ;   S    ;  S   ;   D    ;  = 
+ZERO ; NINE ; FIVE ; PARTEN ; AHTY ; <eps>  ; ONE
+================================================================================
+19302, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      IE      
+================================================================================
+21687, %WER 33.33 [ 2 / 6, 1 ins, 0 del, 1 sub ]
+ZERO ; EIGHT ; ZERO ; DELTA ; SIX ; SIXTY ; <eps>
+ =   ;   =   ;  =   ;   S   ;  =  ;   =   ;   I  
+ZERO ; EIGHT ; ZERO ; NOPER ; SIX ; SIXTY ;   O  
+================================================================================
+27581, %WER 100.00 [ 6 / 6, 0 ins, 0 del, 6 sub ]
+TOWER ; DELTA ; TEN ; THIRTY ; SEVEN ; TUFFO
+  S   ;   S   ;  S  ;   S    ;   S   ;   S  
+PROUD ;   E   ;  I  ;   SI   ;   E   ;   O  
+================================================================================
+27459, %WER 85.71 [ 6 / 7, 1 ins, 0 del, 5 sub ]
+DELTA ; THREE ; THIRTY ; INTO ; POSITION ;    AND     ; HOLD ; <eps>
+  S   ;   =   ;   =    ;  S   ;    S     ;     S      ;  S   ;   I  
+ ELO  ; THREE ; THIRTY ; FIVE ;    AN    ; ISPOSITION ;  AT  ;  HOME
+================================================================================
+22040, %WER 71.43 [ 5 / 7, 0 ins, 2 del, 3 sub ]
+   AH    ; ZERO ; EIGHT ;  ZERO ; FOR ; ECHO ; CHARLIE
+   S     ;  =   ;   D   ;   D   ;  =  ;  S   ;    S   
+FAZEIGHT ; ZERO ; <eps> ; <eps> ; FOR ;  A   ;  OTURNI
+================================================================================
+25556, %WER 80.00 [ 4 / 5, 2 ins, 0 del, 2 sub ]
+FIVE ; <eps> ; THOUSAND ;  DELTA  ; TEN ; SIXTYSEVEN ; <eps>
+ =   ;   I   ;    =     ;    S    ;  =  ;     S      ;   I  
+FIVE ;       ; THOUSAND ; DOLLARS ; TEN ;   SIXTY    ; SEVEN
+================================================================================
+25611, %WER 100.00 [ 7 / 7, 0 ins, 0 del, 7 sub ]
+ONE ; THREE ; TWO ; POINT ; ONE ; ALPHA ; CHARLIE
+ S  ;   S   ;  S  ;   S   ;  S  ;   S   ;    S   
+WOE ;   TI  ;     ;   OT  ;  IE ;   I   ;    TE  
+================================================================================
+10348, %WER 50.00 [ 3 / 6, 0 ins, 0 del, 3 sub ]
+NINER ; THOUSAND ; JETEX ; TWENTY ; SEVEN ; ELEVEN
+  S   ;    S     ;   S   ;   =    ;   =   ;   =   
+ NIR  ;  THOUS   ; KETIX ; TWENTY ; SEVEN ; ELEVEN
+================================================================================
+16475, %WER 100.00 [ 7 / 7, 2 ins, 1 del, 4 sub ]
+POSITION ;  AND  ; HOLD ; AMERICAN ; FIVE ; SIXTY ; ONE ; <eps> ; <eps>
+   S     ;   D   ;  =   ;    =     ;  S   ;   S   ;  S  ;   I   ;   I  
+ OONCAN  ; <eps> ; HOLD ; AMERICAN ; SIVE ;   LI  ;  AS ;   O   ;   ON 
+================================================================================
+11949, %WER 62.50 [ 5 / 8, 0 ins, 1 del, 4 sub ]
+ EXPECT ; A  ; VISUAL ; THREE ; THREE ; THREE ;  FOUR ;  YANK
+   S    ; S  ;   D    ;   =   ;   =   ;   =   ;   S   ;   S  
+SUPPOSE ; WE ; <eps>  ; THREE ; THREE ; THREE ; FORTY ; EIGHT
+================================================================================
+16688, %WER 87.50 [ 7 / 8, 0 ins, 1 del, 6 sub ]
+U ;  S  ; AIR  ; EIGHT ; FORTY ; THREE  ; CONTACT ; DEPARTURE
+S ;  S  ;  S   ;   S   ;   S   ;   S    ;    D    ;     =    
+E ; WES ; ZERY ;  ORTY ;  THRE ; CONTIC ;  <eps>  ; DEPARTURE
+================================================================================
+13855, %WER 71.43 [ 5 / 7, 1 ins, 1 del, 3 sub ]
+POSITION ;  AND  ; HOLD ; AH ; NORTHWEST ; TRIPLE ; <eps> ; FIVE
+   S     ;   D   ;  =   ; =  ;     S     ;   S    ;   I   ;  =  
+   TA    ; <eps> ; HOLD ; AH ;   NORTH   ;  WEST  ;   R   ; FIVE
+================================================================================
+22763, %WER 75.00 [ 6 / 8, 2 ins, 0 del, 4 sub ]
+OKAY ; MAY ; VERIFY ; THAT ; <eps> ; <eps> ; WAS ; MIDWAY ; TWO ; SEVENTY
+ S   ;  S  ;   S    ;  S   ;   I   ;   I   ;  =  ;   =    ;  =  ;    =   
+KAN  ;  MA ;   A    ; BER  ;  FOT  ;  TAT  ; WAS ; MIDWAY ; TWO ; SEVENTY
+================================================================================
+20591, %WER 42.86 [ 3 / 7, 1 ins, 0 del, 2 sub ]
+METRO ; <eps> ; FIVE ; ELEVEN ; EXPECT ; THREE ; SIX ; LEFT
+  S   ;   I   ;  =   ;   =    ;   =    ;   =   ;  S  ;  =  
+  LE  ;  EUR  ; FIVE ; ELEVEN ; EXPECT ; THREE ; SIT ; LEFT
+================================================================================
+26751, %WER 100.00 [ 8 / 8, 0 ins, 5 del, 3 sub ]
+ AT ;     AH    ;   SAY   ; AGAIN ;  THE  ;   AH  ; NUMBER ;   AH 
+ S  ;     S     ;    S    ;   D   ;   D   ;   D   ;   D    ;   D  
+ATA ; SECONDIAH ; NUMBERA ; <eps> ; <eps> ; <eps> ; <eps>  ; <eps>
+================================================================================
+26790, %WER 66.67 [ 4 / 6, 2 ins, 0 del, 2 sub ]
+EASY ; <eps> ; FORTY ; ONE ; APPROVED ; AS ; REQUESTED ;   <eps>  
+ S   ;   I   ;   =   ;  =  ;    =     ; =  ;     S     ;     I    
+ IS  ;   E   ; FORTY ; ONE ; APPROVED ; AS ;           ; REPUESTED
+================================================================================
+10776, %WER 14.29 [ 1 / 7, 0 ins, 0 del, 1 sub ]
+AH ; YOU ; NEED ; ONE ; FIFTY ; RIGHT ; NOW
+S  ;  =  ;  =   ;  =  ;   =   ;   =   ;  = 
+A  ; YOU ; NEED ; ONE ; FIFTY ; RIGHT ; NOW
+================================================================================
+3858, %WER 28.57 [ 2 / 7, 0 ins, 0 del, 2 sub ]
+ONE ; FIVE ; ZERO ; CACTUS ; EIGHT ; TWENTY ; SIX
+ =  ;  =   ;  =   ;   S    ;   S   ;   =    ;  = 
+ONE ; FIVE ; ZERO ; CACCO  ;  EGHT ; TWENTY ; SIX
+================================================================================
+17968, %WER 71.43 [ 5 / 7, 0 ins, 1 del, 4 sub ]
+AH ; ROSS ; TWO ; AH ; SAY  ;  YOUR ; POSITION
+S  ;  S   ;  =  ; S  ;  S   ;   D   ;    =    
+A  ; ROST ; TWO ; A  ; SANE ; <eps> ; POSITION
+================================================================================
+5136, %WER 37.50 [ 3 / 8, 0 ins, 0 del, 3 sub ]
+TWO ; SEVEN ; POINT ; SEVEN ; AMERICAN ; SIX ; OH ; ONE
+ =  ;   =   ;   =   ;   =   ;    S     ;  S  ; S  ;  = 
+TWO ; SEVEN ; POINT ; SEVEN ;   NINE   ;  FO ; TO ; ONE
+================================================================================
+27530, %WER 57.14 [ 4 / 7, 0 ins, 1 del, 3 sub ]
+ DELTA  ;   EIGHT    ; NINETEEN ; CROSS ; THREE ; FIVE ; LEFT
+   S    ;     S      ;    S     ;   D   ;   =   ;  =   ;  =  
+DLAIGHT ; NINETEENTH ;   COST   ; <eps> ; THREE ; FIVE ; LEFT
+================================================================================
+23910, %WER 171.43 [ 12 / 7, 5 ins, 0 del, 7 sub ]
+NINETEEN ; FOUR ;   AMERICAN  ;  SIX  ; THIRTY ; THREE ; HEAVY ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+   S     ;  S   ;      S      ;   S   ;   S    ;   S   ;   S   ;   I   ;   I   ;   I   ;   I   ;   I  
+  MANG   ; SIX  ; THIRTYTHREE ; HEAVY ;  COT   ;  ATE  ;  BROS ;   EL  ;  ONE  ;  INER ;  PONT ;  FOUR
+================================================================================
+6833, %WER 87.50 [ 7 / 8, 0 ins, 1 del, 6 sub ]
+CROSS ; THE ; RUNWAY ; AND ; AH ; GROUND ; POINT  ;  NINE
+  S   ;  S  ;   S    ;  S  ; S  ;   =    ;   S    ;   D  
+TOSST ; ROM ;   WA   ;  YN ; A  ; GROUND ; POINTE ; <eps>
+================================================================================
+865, %WER 66.67 [ 4 / 6, 0 ins, 1 del, 3 sub ]
+NINETEEN ; ONE ; GOOD ; NIGHT ;      GOOD     ; AFTERNOON
+   =     ;  =  ;  S   ;   S   ;       S       ;     D    
+NINETEEN ; ONE ;  AN  ;   NI  ; GOODAFTERNOON ;   <eps>  
+================================================================================
+24656, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      I       
+================================================================================
+7953, %WER 50.00 [ 4 / 8, 0 ins, 0 del, 4 sub ]
+BIZEX ;  FOUR  ; FIFTY ; FIVE ; SIXTY ; FIVE ; HUNDRED ;  BRAVO 
+  S   ;   S    ;   =   ;  =   ;   =   ;  =   ;    S    ;    S   
+  ES  ; EXPORT ; FIFTY ; FIVE ; SIXTY ; FIVE ;   OND   ; AMBRELO
+================================================================================
+14695, %WER 83.33 [ 5 / 6, 1 ins, 0 del, 4 sub ]
+HENSON ; <eps> ; FORTY ;     FOUR    ; SIXTEEN ; CONTACT ; DEPARTURE
+  S    ;   I   ;   =   ;      S      ;    S    ;    S    ;     =    
+  AT   ;   O   ; FORTY ; FOURSIXTEEN ;   CIE   ;   BACK  ; DEPARTURE
+================================================================================
+21091, %WER 16.67 [ 1 / 6, 0 ins, 0 del, 1 sub ]
+TWENTY ; FOUR ; FIFTEEN ;   ASEA   ; FOUR ; FOURTEEN
+  =    ;  =   ;    =    ;    S     ;  =   ;    =    
+TWENTY ; FOUR ; FIFTEEN ; EIGHTTYE ; FOUR ; FOURTEEN
+================================================================================
+22831, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+12488, %WER 66.67 [ 4 / 6, 1 ins, 0 del, 3 sub ]
+HENSON ;  AH ; <eps> ; FORTY ; THREE ; SIXTY ; WASHINGTON
+  S    ;  S  ;   I   ;   =   ;   =   ;   =   ;     S     
+  A    ; SEN ;   OH  ; FORTY ; THREE ; SIXTY ; WASHINGON 
+================================================================================
+26831, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      E       
+================================================================================
+14361, %WER 75.00 [ 3 / 4, 0 ins, 0 del, 3 sub ]
+UNINTELLIGIBLE ; MAINTAIN ; THREE ; THOUSAND
+      S        ;    S     ;   =   ;    S    
+     MAY       ;   PAY    ; THREE ;  FORSA  
+================================================================================
+14117, %WER 71.43 [ 5 / 7, 0 ins, 2 del, 3 sub ]
+NORTHWEST ;       EIGHTEEN       ; SEVENTY ; THREE ; FOR ; THREE ; SIX
+    S     ;          S           ;    D    ;   D   ;  =  ;   =   ;  S 
+  OTWAS   ; EIGHTEENSEVENTYTHREE ;  <eps>  ; <eps> ; FOR ; THREE ; SEN
+================================================================================
+4078, %WER 28.57 [ 2 / 7, 0 ins, 1 del, 1 sub ]
+ONE ; ZERO ; ZERO ; CLIPPER ; FIVE ;   FORTY    ; SEVEN
+ =  ;  =   ;  =   ;    =    ;  =   ;     S      ;   D  
+ONE ; ZERO ; ZERO ; CLIPPER ; FIVE ; FORTYSEVEN ; <eps>
+================================================================================
+12190, %WER 88.89 [ 8 / 9, 0 ins, 4 del, 4 sub ]
+ONE ; NINE ; ZERO ;   U   ;          S          ;  AIR  ; SEVENTEEN ; SIXTY ; SEVEN
+ S  ;  S   ;  =   ;   S   ;          S          ;   D   ;     D     ;   D   ;   D  
+ ON ; NIN  ; ZERO ; USTER ; SEVENTEENSIXTYSEVEN ; <eps> ;   <eps>   ; <eps> ; <eps>
+================================================================================
+5409, %WER 37.50 [ 3 / 8, 0 ins, 1 del, 2 sub ]
+DELTA ; EIGHTEEN ; THIRTY ; THREE ; RIGHT ; ONE ;   NINE   ;  ZERO
+  S   ;    =     ;   =    ;   =   ;   =   ;  =  ;    S     ;   D  
+SELLA ; EIGHTEEN ; THIRTY ; THREE ; RIGHT ; ONE ; NINEZERO ; <eps>
+================================================================================
+18301, %WER 88.89 [ 8 / 9, 0 ins, 4 del, 4 sub ]
+THREE  ;  SIX   ; LEFT ;  ONE  ;  ONE  ; AH ;   ONE   ; POINT ;  NINE
+  S    ;   S    ;  S   ;   D   ;   D   ; =  ;    S    ;   D   ;   D  
+THRIIS ; LETTRO ;  ON  ; <eps> ; <eps> ; AH ; FORTNOT ; <eps> ; <eps>
+================================================================================
+2576, %WER 111.11 [ 10 / 9, 1 ins, 0 del, 9 sub ]
+TWO ; ZERO ; ZERO ; AND ; TWO  ; THOUSAND ; THREE ; CHARLIE ; FOX ; <eps>
+ S  ;  S   ;  S   ;  S  ;  S   ;    S     ;   S   ;    S    ;  S  ;   I  
+ EN ; ZER  ;      ; ZER ; IRTO ;  HOUSS   ;   OT  ; THREECH ; ALI ; FONCA
+================================================================================
+26858, %WER 266.67 [ 8 / 3, 6 ins, 0 del, 2 sub ]
+TRANSMISSION ;    TO    ; DELTA ; <eps> ; <eps> ; <eps> ; <eps>  ;  <eps>  ; <eps> 
+     S       ;    S     ;   =   ;   I   ;   I   ;   I   ;   I    ;    I    ;   I   
+     AF      ; PIMATIVE ; DELTA ;  AND  ;   ON  ;   E   ; BRIAGE ; CONTACT ; GROUND
+================================================================================
+7652, %WER 71.43 [ 5 / 7, 0 ins, 1 del, 4 sub ]
+NOVEMBER ; TWO ; ZERO ; XRAY ;   AH  ;  SAY  ; AGAIN
+   S     ;  =  ;  =   ;  S   ;   S   ;   S   ;   D  
+ UMBER   ; TWO ; ZERO ;  EX  ; RADIA ; FIGAN ; <eps>
+================================================================================
+21523, %WER 100.00 [ 9 / 9, 1 ins, 0 del, 8 sub ]
+DELTA ; TEN ; SEVENTYEIGHT ; ROGER ; <eps>  ; WE ; SEE ; HIM ;   IN  ; SIGHT
+  S   ;  S  ;      S       ;   S   ;   I    ; =  ;  S  ;  S  ;   S   ;   S  
+ TEL  ;  TE ;      AE      ;   MA  ; RIETER ; WE ; CAI ;  ON ; SSIXI ;  FIT 
+================================================================================
+24815, %WER 100.00 [ 9 / 9, 0 ins, 4 del, 5 sub ]
+THREE ; TWO ; POINT ; ONE ; FOR ; AMERICAN ;  SIX  ; NINETY ;  FOUR
+  S   ;  S  ;   S   ;  S  ;  S  ;    D     ;   D   ;   D    ;   D  
+ TETY ;  BO ; ORMAR ;     ;  IO ;  <eps>   ; <eps> ; <eps>  ; <eps>
+================================================================================
+7386, %WER 100.00 [ 9 / 9, 0 ins, 0 del, 9 sub ]
+ZERO ; SIX ; HOTEL ;   AH  ;   WITH  ; YOU ;  AT ; THREE ; THOUSAND
+ S   ;  S  ;   S   ;   S   ;    S    ;  S  ;  S  ;   S   ;    S    
+ZER  ; WES ;   OX  ; ROTEL ; ATWHICH ;  HE ; WAS ;  REE  ; TOUTESI 
+================================================================================
+10324, %WER 85.71 [ 6 / 7, 2 ins, 0 del, 4 sub ]
+VENUS ; <eps> ; TWO ; FOUR ; WASHINGTON ; <eps> ; DEPARTURE ; RADAR ; CONTACT
+  S   ;   I   ;  =  ;  S   ;     S      ;   I   ;     =     ;   S   ;    =   
+ EING ;   S   ; TWO ; FOLD ;    WORC    ;   AN  ; DEPARTURE ; REDRO ; CONTACT
+================================================================================
+28958, %WER 62.50 [ 5 / 8, 0 ins, 1 del, 4 sub ]
+AMERICAN ; FOURTEEN ; AH ; FOURTEEN ; AT ; THE ; AH ; HASTY
+   D     ;    =     ; S  ;    =     ; S  ;  S  ; =  ;   S  
+ <eps>   ; FOURTEEN ; A  ; FOURTEEN ; A  ;  TI ; AH ;  HATE
+================================================================================
+16913, %WER 90.00 [ 9 / 10, 1 ins, 1 del, 7 sub ]
+NATIONAL ; TOWER ;  NINE ;   SEVEN   ; ONE ; HOTEL ; <eps> ; TEN ; D  ;  M   ;   E  
+   S     ;   S   ;   S   ;     S     ;  =  ;   S   ;   I   ;  =  ; S  ;  S   ;   D  
+ ARE'S   ;   NO  ; TOWOR ; NINESEVEN ; ONE ;   O   ;  TEL  ; TEN ; TY ; EMMI ; <eps>
+================================================================================
+30369, %WER 50.00 [ 3 / 6, 0 ins, 1 del, 2 sub ]
+CONTINENTAL ; SIX ;   NINETY   ;  FIVE ; CONTACT ; DEPARTURE
+     S      ;  =  ;     S      ;   D   ;    =    ;     =    
+ CONNENTAL  ; SIX ; NINETYFIVE ; <eps> ; CONTACT ; DEPARTURE
+================================================================================
+19205, %WER 22.22 [ 2 / 9, 1 ins, 0 del, 1 sub ]
+ZERO ; SIX ; ZERO ; TWELVE ; SEVENTY ; <eps> ; FOUR ; ZERO ; SIX ; ZERO
+ =   ;  =  ;  =   ;   =    ;    S    ;   I   ;  =   ;  =   ;  =  ;  =  
+ZERO ; SIX ; ZERO ; TWELVE ;   TEV   ;   TY  ; FOUR ; ZERO ; SIX ; ZERO
+================================================================================
+9327, %WER 83.33 [ 5 / 6, 2 ins, 0 del, 3 sub ]
+NATIONAL ; <eps> ; ANDREWS ; EASTON ; <eps> ; ONE ; SIX ;  XRAY
+   S     ;   I   ;    =    ;   S    ;   I   ;  =  ;  =  ;   S  
+  MAGI   ;   NO  ; ANDREWS ;   ES   ;   EN  ; ONE ; SIX ; ETARY
+================================================================================
+7247, %WER 50.00 [ 4 / 8, 1 ins, 0 del, 3 sub ]
+LOOKING ; FOR ; THE ; DORNIER ; CLIPPER ; <eps> ; SIXTY ; FIVE ; TWENTY
+   =    ;  =  ;  =  ;    S    ;    S    ;   I   ;   =   ;  =   ;   S   
+LOOKING ; FOR ; THE ;   DOR   ;   NERR  ;  EPPO ; SIXTY ; FIVE ; PONTYN
+================================================================================
+25143, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+4624, %WER 44.44 [ 4 / 9, 1 ins, 0 del, 3 sub ]
+ZERO ; EIGHT ; <eps>  ; ZERO ; FIVE ; THOUSAND ; AH ; ONE ; NINETY ; ONE
+ S   ;   S   ;   I    ;  =   ;  =   ;    =     ; S  ;  =  ;   =    ;  = 
+ TE  ;  ZER  ; WEIGHT ; ZERO ; FIVE ; THOUSAND ; A  ; ONE ; NINETY ; ONE
+================================================================================
+29431, %WER 36.36 [ 4 / 11, 1 ins, 1 del, 2 sub ]
+WIND ; IS ; ONE ; <eps> ; FIVE ; ZERO ;   AT  ; ONE ; FIVE ; GUST ; TWO ; SIX
+ S   ; S  ;  =  ;   I   ;  =   ;  =   ;   D   ;  =  ;  =   ;  =   ;  =  ;  = 
+PLAT ; S  ; ONE ;       ; FIVE ; ZERO ; <eps> ; ONE ; FIVE ; GUST ; TWO ; SIX
+================================================================================
+26611, %WER 87.50 [ 7 / 8, 0 ins, 3 del, 4 sub ]
+AMERICAN ;  AH ; THREE ;   FORTY   ; FOUR ;  ARE  ;  YOU  ;   ON 
+   S     ;  S  ;   =   ;     S     ;  S   ;   D   ;   D   ;   D  
+ MARIGO  ; NAV ; THREE ; FORTYFOUR ;  A   ; <eps> ; <eps> ; <eps>
+================================================================================
+7267, %WER 25.00 [ 2 / 8, 0 ins, 0 del, 2 sub ]
+LEAVING ; NINE ; FOR ; SIX ; CLIPPER ; SIXTY ; FIVE ; TWENTY
+   S    ;  =   ;  =  ;  =  ;    S    ;   =   ;  =   ;   =   
+ LAHDIN ; NINE ; FOR ; SIX ; CLEPPER ; SIXTY ; FIVE ; TWENTY
+================================================================================
+4804, %WER 22.22 [ 2 / 9, 0 ins, 0 del, 2 sub ]
+ONE ; FIVE ; ZERO ; TWO ; SIX ; TWO  ; ZERO ; POINT ; ONE
+ S  ;  =   ;  =   ;  =  ;  =  ;  S   ;  =   ;   =   ;  = 
+ ON ; FIVE ; ZERO ; TWO ; SIX ; TREE ; ZERO ; POINT ; ONE
+================================================================================
+30326, %WER 100.00 [ 8 / 8, 0 ins, 3 del, 5 sub ]
+TOWER ; AMERICAN ; SEVEN ; THIRTEEN ;  OUT   ;  FOR  ; EIGHTEEN ; RIGHT
+  S   ;    S     ;   S   ;    S     ;   S    ;   D   ;    D     ;   D  
+  O   ;  MERICA  ;   E   ;   EIN    ; ATRICA ; <eps> ;  <eps>   ; <eps>
+================================================================================
+25583, %WER 90.00 [ 9 / 10, 1 ins, 4 del, 4 sub ]
+<eps> ; RIGHT ; TURN ; ZERO ; ONE ;  ZERO ; VECTOR ;   TO  ; MEACHAM ; THANK ;  YOU 
+  I   ;   =   ;  S   ;  S   ;  =  ;   S   ;   S    ;   D   ;    D    ;   D   ;   D  
+  A   ; RIGHT ; TEER ;  ZE  ; ONE ; ZEOVA ;  III   ; <eps> ;  <eps>  ; <eps> ; <eps>
+================================================================================
+2803, %WER 100.00 [ 9 / 9, 3 ins, 1 del, 5 sub ]
+<eps> ; ONE ; SEVENTY ; TILL ; RIPIT ; <eps> ; <eps> ; TOWER ; THEN ; EIGHT ; ECHO ;  LIMA
+  I   ;  =  ;    S    ;  S   ;   S   ;   I   ;   I   ;   =   ;  S   ;   =   ;  S   ;   D  
+  I   ; ONE ;    TO   ; STEP ;   TY  ;   TO  ;  RIP  ; TOWER ;  EN  ; EIGHT ; OCLA ; <eps>
+================================================================================
+19324, %WER 400.00 [ 4 / 1, 3 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I  
+      O        ;   O   ;   O   ;   TO 
+================================================================================
+10094, %WER 57.14 [ 4 / 7, 0 ins, 0 del, 4 sub ]
+VENUS ; TWO ; SIX ; WASHINGTON ; DEPARTURE ; RADAR ; CONTACT
+  S   ;  S  ;  =  ;     S      ;     =     ;   S   ;    =   
+  ES  ;  SI ; SIX ;   FORSE    ; DEPARTURE ;  AAR  ; CONTACT
+================================================================================
+27409, %WER 200.00 [ 4 / 2, 3 ins, 0 del, 1 sub ]
+DELTAUNINTELLIGIBLE ; <eps> ; <eps> ; <eps>  ; EIGHT
+         S          ;   I   ;   I   ;   I    ;   =  
+         DE         ;   ER  ;  FOR  ; TWENTY ; EIGHT
+================================================================================
+26945, %WER 80.00 [ 8 / 10, 0 ins, 2 del, 6 sub ]
+DELTA ; ONE ;   THIRTY   ; NINE ; YOU ;   THE   ; SEVEN ; FIVE ; AREN'T ;  YOU 
+  S   ;  =  ;     S      ;  S   ;  S  ;    S    ;   D   ;  =   ;   S    ;   D  
+  DL  ; ONE ; THIRTYNINE ;  IS  ;  E  ; SEVENTY ; <eps> ; FIVE ;  ART   ; <eps>
+================================================================================
+19777, %WER 100.00 [ 7 / 7, 0 ins, 1 del, 6 sub ]
+AMERICAN ; FOURTEEN ; EIGHTY ; THREE ; WE ; HAVE ;  HIM 
+   S     ;    S     ;   S    ;   S   ; S  ;  S   ;   D  
+   MR    ;    CO    ;   O    ;   TI  ; ER ;  ZE  ; <eps>
+================================================================================
+22031, %WER 50.00 [ 4 / 8, 0 ins, 0 del, 4 sub ]
+DELTA ; FOUR ; THIRTY ;  TURN ; RIGHT ; ZERO ; EIGHT ; ZERO
+  S   ;  S   ;   =    ;   S   ;   S   ;  =   ;   =   ;  =  
+DOLTE ;      ; THIRTY ; THIRD ; WIGHT ; ZERO ; EIGHT ; ZERO
+================================================================================
+8783, %WER 30.00 [ 3 / 10, 1 ins, 0 del, 2 sub ]
+ONE ;  SEVEN  ; THOUSAND ; J ; ONE ; FORTY ; NINE ; PACER ; <eps> ; FIVE ; ONE
+ =  ;    S    ;    =     ; = ;  =  ;   =   ;  =   ;   S   ;   I   ;  =   ;  = 
+ONE ; TOSEVEN ; THOUSAND ; J ; ONE ; FORTY ; NINE ;  AGE  ;   O   ; FIVE ; ONE
+================================================================================
+9820, %WER 57.14 [ 4 / 7, 0 ins, 2 del, 2 sub ]
+OKAY ; ONE ; SEVEN ; THOUSAND ;      EIGHTEEN      ; FORTY ; SEVEN
+ S   ;  =  ;   =   ;    =     ;         S          ;   D   ;   D  
+OKA  ; ONE ; SEVEN ; THOUSAND ; EIGHTEENFORTYSEVEN ; <eps> ; <eps>
+================================================================================
+20817, %WER 77.78 [ 7 / 9, 0 ins, 0 del, 7 sub ]
+DELTA ; FIVE ; TWENTY ;    TWO    ; TOWER ; ONE ;    TWENTY   ; FOUR ; FIFTEEN
+  S   ;  S   ;   S    ;     S     ;   S   ;  =  ;      S      ;  S   ;    =   
+      ; ETI  ;  FIV   ; TWENTYTWO ;  TARA ; ONE ; TWENTYFOURR ;      ; FIFTEEN
+================================================================================
+3138, %WER 10.00 [ 1 / 10, 0 ins, 0 del, 1 sub ]
+OUT ; OF ; SIX ; FOR ; THREE ; THOUSAND ; DELTA ; SIX ; NINETY ; FOUR
+ =  ; =  ;  =  ;  =  ;   =   ;    =     ;   S   ;  =  ;   =    ;  =  
+OUT ; OF ; SIX ; FOR ; THREE ; THOUSAND ;  ALPA ; SIX ; NINETY ; FOUR
+================================================================================
+13516, %WER 70.00 [ 7 / 10, 0 ins, 2 del, 5 sub ]
+REDBIRD ; SEVEN ; FORTY ; SEVEN ;     IS     ;  I  ;  L   ;   S   ; THREE ; SIX
+   S    ;   S   ;   D   ;   =   ;     S      ;  S  ;  S   ;   D   ;   =   ;  = 
+  RET   ;  FIRT ; <eps> ; SEVEN ; FORTYSEVEN ; SEI ; LAST ; <eps> ; THREE ; SIX
+================================================================================
+23996, %WER 44.44 [ 4 / 9, 0 ins, 2 del, 2 sub ]
+AMERICAN ; TWO ; THIRTY ; SEVEN ; OUT ;   OF  ; TWELVE ;  FOR  ; ELEVEN
+   S     ;  =  ;   =    ;   =   ;  S  ;   D   ;   =    ;   D   ;   =   
+   I     ; TWO ; THIRTY ; SEVEN ; ALE ; <eps> ; TWELVE ; <eps> ; ELEVEN
+================================================================================
+17221, %WER 127.27 [ 14 / 11, 4 ins, 0 del, 10 sub ]
+T  ;  W  ; A  ; TWO ; ZERO ; EIGHT ; RUNWAY ; AH ; DISREGARD ; <eps> ; <eps> ; <eps> ; HOLD ; SHORT ; <eps>
+S  ;  S  ; S  ;  S  ;  S   ;   S   ;   S    ; S  ;     S     ;   I   ;   I   ;   I   ;  =   ;   S   ;   I  
+ED ; OPE ; ER ;  S  ;  WA  ;   FE  ;  WIIN  ; I  ;     AT    ;   TE  ; CIGAR ;   TO  ; HOLD ;   TO  ;   IT 
+================================================================================
+5029, %WER 37.50 [ 3 / 8, 0 ins, 1 del, 2 sub ]
+ IT ;   AH  ;  NERA ; THIRTY ; SEVEN ; AH ; EIGHTY ; ONE
+ S  ;   S   ;   D   ;   =    ;   =   ; =  ;   =    ;  = 
+SAA ; NEARE ; <eps> ; THIRTY ; SEVEN ; AH ; EIGHTY ; ONE
+================================================================================
+27541, %WER 100.00 [ 12 / 12, 0 ins, 1 del, 11 sub ]
+TOWER ; ASEA ; FOUR ; SIX ; SIX ; INBOUND ;  I  ; L ; S ; THREE ; ONE ; RIGHT
+  S   ;  S   ;  S   ;  S  ;  S  ;    S    ;  S  ; S ; S ;   S   ;  S  ;   D  
+ TARI ;  TY  ;  FO  ;  SI ;  IN ;    EN   ; TIN ;   ; O ;   ON  ;  IE ; <eps>
+================================================================================
+9204, %WER 55.56 [ 5 / 9, 0 ins, 0 del, 5 sub ]
+ONE ; TWO  ; SIX ; FIVE ; FIVE ; FOR ; NINER ; SEVEN ; SIERRA
+ =  ;  S   ;  =  ;  =   ;  =   ;  S  ;   S   ;   S   ;   S   
+ONE ; TREE ; SIX ; FIVE ; FIVE ;     ;  FIVE ;  SET  ;  ZERO 
+================================================================================
+5727, %WER 157.14 [ 11 / 7, 5 ins, 0 del, 6 sub ]
+LEFT ; ONE  ; THREE ; <eps> ; ONE ; FOUR ; ZERO ; UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ;  <eps>  
+ S   ;  S   ;   S   ;   I   ;  =  ;  S   ;  S   ;       S        ;   I   ;   I   ;   I   ;    I    
+ MI  ; FIND ; PROTE ;       ; ONE ; TOOR ;      ;       E        ;   E   ;  TRE  ;  TUN  ; NYNOPEER
+================================================================================
+5414, %WER 87.50 [ 7 / 8, 0 ins, 2 del, 5 sub ]
+DELTA ;       EIGHTEEN      ; THIRTY ; THREE ; HEADING ;  TWO  ; SEVEN ; ZERO
+  S   ;          S          ;   S    ;   S   ;    S    ;   D   ;   D   ;  =  
+ SEL  ; EIGHTEENTHIRTYTHREE ; HEADIG ;   TO  ;  SEVENT ; <eps> ; <eps> ; ZERO
+================================================================================
+10143, %WER 100.00 [ 10 / 10, 0 ins, 1 del, 9 sub ]
+ONE  ;  ONE  ; NINE ; POINT ; SEVEN ; TWO  ; NINE ; ALPHA ;    SO    ;  LONG
+ S   ;   S   ;  S   ;   S   ;   S   ;  S   ;  S   ;   S   ;    S     ;   D  
+ORRO ; NIGHT ;  ON  ;  SAV  ;   ON  ; SOON ; NIE  ;   OS  ; POSSIBLE ; <eps>
+================================================================================
+21577, %WER 87.50 [ 7 / 8, 0 ins, 0 del, 7 sub ]
+SOUTH ; SOUTHWEST ;  TWO   ; TWENTYTHREE ; TURN ; RIGHT ; DIRECT ;  WACO
+  S   ;     S     ;   S    ;      S      ;  =   ;   S   ;   S    ;   S  
+  E   ;  FIFTEEN  ; TWENTY ;    THREE    ; TURN ;  RIE  ; TRECT  ; WACEN
+================================================================================
+5864, %WER 100.00 [ 7 / 7, 0 ins, 3 del, 4 sub ]
+ROGER ;   I    ; GOING ; TO ;   GO  ;   TO  ; UNINTELLIGIBLE
+  S   ;   S    ;   S   ; S  ;   D   ;   D   ;       D       
+  IN  ; TEAGUR ;  WENE ;    ; <eps> ; <eps> ;     <eps>     
+================================================================================
+24564, %WER 45.45 [ 5 / 11, 1 ins, 0 del, 4 sub ]
+SOUTHWEST ; ONE ; FORTY ; ONE ; REDUCE ;  SPEED  ; <eps> ; TO ; AH ; TWO ; ONE ; ZERO
+    S     ;  =  ;   =   ;  =  ;   S    ;    S    ;   I   ; =  ; S  ;  =  ;  =  ;  =  
+   TAES   ; ONE ; FORTY ; ONE ;        ; REDUCED ;  TAIN ; TO ; A  ; TWO ; ONE ; ZERO
+================================================================================
+10562, %WER 42.86 [ 3 / 7, 0 ins, 0 del, 3 sub ]
+ALTITUDE ; ONE ; SEVEN ; THOUSAND ; ONE ; SEVEN  ; HOTEL
+   S     ;  =  ;   =   ;    =     ;  =  ;   S    ;   S  
+ ALTWO   ; ONE ; SEVEN ; THOUSAND ; ONE ; SEVEON ;  OTEL
+================================================================================
+16630, %WER 87.50 [ 7 / 8, 1 ins, 2 del, 4 sub ]
+<eps> ; THREE ; SIX ; CLEARED ; TO ;  LAND ; NORTHWEST  ; EIGHTEEN ; FIFTEEN
+  I   ;   =   ;  =  ;    S    ; S  ;   S   ;     S      ;    D     ;    D   
+      ; THREE ; SIX ;    EN   ; MI ; MOTOS ; TEENTININI ;  <eps>   ;  <eps> 
+================================================================================
+7531, %WER 100.00 [ 10 / 10, 2 ins, 3 del, 5 sub ]
+<eps> ; ONE ; NINETY ; <eps> ; TWO ; OUT ; OF ; BOSTON ;  BIZEX  ;  FOUR ; NINETY ; THREE
+  I   ;  =  ;   S    ;   I   ;  =  ;  S  ; S  ;   S    ;    S    ;   D   ;   D    ;   D  
+  A   ; ONE ;   DE   ;   O   ; TWO ;  ON ; A  ; PASSEN ; ITOTTOE ; <eps> ; <eps>  ; <eps>
+================================================================================
+27572, %WER 55.56 [ 5 / 9, 0 ins, 1 del, 4 sub ]
+HELLO ; TOWER ; DELTA ; TEN ; OH ; FOUR ;   AH  ; PASSING ;  MANDY 
+  S   ;   S   ;   =   ;  =  ; S  ;  =   ;   D   ;    =    ;    S   
+ ELO  ;  TAA  ; DELTA ; TEN ; O  ; FOUR ; <eps> ; PASSING ; BANDING
+================================================================================
+5009, %WER 55.56 [ 5 / 9, 1 ins, 1 del, 3 sub ]
+BIZEX ; FOUR ; NINETY ;   ONE    ; SQUAWK ; THREE ; FIVE ; FOUR ; <eps> ; SIX
+  S   ;  =   ;   =    ;    S     ;   D    ;   =   ;  =   ;  S   ;   I   ;  = 
+ SIX  ; FOUR ; NINETY ; ONESQAWK ; <eps>  ; THREE ; FIVE ; FOR  ;       ; SIX
+================================================================================
+27145, %WER 80.00 [ 8 / 10, 0 ins, 2 del, 6 sub ]
+OKAY ; WE'LL ;  HOLD  ; SHORT ;  OF ; TAXIWAY ; NINETEEN ;   ON  ;  THE  ; INNER
+ S   ;   S   ;   S    ;   S   ;  S  ;    D    ;    =     ;   S   ;   D   ;   =  
+ KA  ;   O   ; HOTERO ;  TAXI ; WAY ;  <eps>  ; NINETEEN ; ONTHE ; <eps> ; INNER
+================================================================================
+18057, %WER 62.50 [ 5 / 8, 1 ins, 0 del, 4 sub ]
+ROSS ; TWO ; AH ; APPROVED ; REPORT ; PASSING ; HAYNES ; <eps> ; POINT
+ =   ;  =  ; S  ;    S     ;   =    ;    S    ;   S    ;   I   ;   =  
+ROSS ; TWO ; A  ;  PROBE   ; REPORT ;    TO   ; PASTN  ; MAINS ; POINT
+================================================================================
+12496, %WER 87.50 [ 7 / 8, 3 ins, 0 del, 4 sub ]
+WASHINGTON ; HENSON ; <eps> ; FORTY ; THREE ; SIXTY ; <eps> ; SIX ; <eps> ; THOUSAND ;  XRAY
+    S      ;   S    ;   I   ;   =   ;   =   ;   S   ;   I   ;  =  ;   I   ;    =     ;   S  
+   OSUN    ;  TON   ;   A   ; FORTY ; THREE ;  SIX  ;  FEET ; SIX ;       ; THOUSAND ; EXTRA
+================================================================================
+20521, %WER 36.36 [ 4 / 11, 0 ins, 0 del, 4 sub ]
+METRO ; SEVEN ; O ;  AH  ; SEVEN ; THIRTY ; FOUR ; YOU ; GOT ; THE ; AIRPORT
+  S   ;   =   ; = ;  S   ;   =   ;   =    ;  =   ;  S  ;  S  ;  =  ;    =   
+PETRO ; SEVEN ; O ; FIVE ; SEVEN ; THIRTY ; FOUR ;     ;  AT ; THE ; AIRPORT
+================================================================================
+2874, %WER 166.67 [ 10 / 6, 6 ins, 0 del, 4 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; SIX ; THOUSAND ; LOOKING ; <eps> ; FOR ; LOWER
+      S        ;   I   ;   I   ;   I   ;   I   ;   I   ;  =  ;    S     ;    S    ;   I   ;  =  ;   S  
+      O        ;  FOO  ;   BE  ;  TITU ; THREE ;       ; SIX ;   TOWN   ;    A    ;   WO  ; FOR ;  LON 
+================================================================================
+21136, %WER 55.56 [ 5 / 9, 1 ins, 1 del, 3 sub ]
+SOUTHWEST ; <eps> ; THIRTY ; SEVEN ;  TURN ; RIGHT ; HEADING ; ONE ;  SEVEN   ;  ZERO
+    S     ;   I   ;   =    ;   =   ;   S   ;   =   ;    =    ;  =  ;    S     ;   D  
+    AH    ;  WAS  ; THIRTY ; SEVEN ; TURND ; RIGHT ; HEADING ; ONE ; SEVENTER ; <eps>
+================================================================================
+14956, %WER 77.78 [ 7 / 9, 3 ins, 0 del, 4 sub ]
+AH ; <eps> ; ONE ; EIGHT ; HOTEL ; FREQUENCY ; <eps> ; CHANGE ; APPROVED ;  GOOD ; <eps> ; DAY
+S  ;   I   ;  =  ;   =   ;   =   ;     S     ;   I   ;   =    ;    S     ;   S   ;   I   ;  = 
+A  ;  TAT  ; ONE ; EIGHT ; HOTEL ;   FREEC   ;  SOO  ; CHANGE ;    AP    ; PROVE ;  GOD  ; DAY
+================================================================================
+19175, %WER 30.00 [ 3 / 10, 0 ins, 1 del, 2 sub ]
+AMERICAN ; SIX ; NINETY ; FOUR ; TURN ; RIGHT ; HEADING ; ONE ; ZERO ; ZERO
+   S     ;  =  ;   =    ;  =   ;  =   ;   S   ;    D    ;  =  ;  =   ;  =  
+  AKET   ; SIX ; NINETY ; FOUR ; TURN ; READY ;  <eps>  ; ONE ; ZERO ; ZERO
+================================================================================
+10168, %WER 100.00 [ 7 / 7, 2 ins, 0 del, 5 sub ]
+EXPEDITE ; CLIMB ; NORTHWEST ;  AH  ; <eps> ; <eps>  ; EIGHTEEN ; TWENTY ; FIVE
+   S     ;   S   ;     S     ;  S   ;   I   ;   I    ;    =     ;   =    ;  S  
+   EX    ;  FOR  ;     I     ; CLIM ;  OFF  ; WEPTAH ; EIGHTEEN ; TWENTY ; INE 
+================================================================================
+23760, %WER 62.50 [ 5 / 8, 1 ins, 1 del, 3 sub ]
+APPROACH ; DELTA ; <eps> ; NINE ; THIRTY ; NINE ; ELEVEN ; THOUSAND ;  PAPA
+   S     ;   S   ;   I   ;  =   ;   =    ;  =   ;   S    ;    =     ;   D  
+   IR    ;   TO  ;   AH  ; NINE ; THIRTY ; NINE ; ALEVEN ; THOUSAND ; <eps>
+================================================================================
+6825, %WER 80.00 [ 8 / 10, 1 ins, 2 del, 5 sub ]
+     AH      ; BOSTON ; BIZEX ; EIGHT ; SEVENTY ; SIX ; CONFIRM ;  TWO  ; TWO ; RIGHT ;  <eps> 
+     S       ;   D    ;   D   ;   =   ;    =    ;  =  ;    S    ;   S   ;  S  ;   S   ;    I   
+EBOSTEPHYSIX ; <eps>  ; <eps> ; EIGHT ; SEVENTY ; SIX ;    TO   ; FIRST ; AND ;   TW  ; RIGHTLY
+================================================================================
+13441, %WER 71.43 [ 10 / 14, 0 ins, 7 del, 3 sub ]
+ PENN ; THIRTY ; SIX ; TWENTY ; FIVE ; AH ;  WITH ;   ON   ;  THE  ;   I   ;   L   ;   S   ; THREE ;  SIX 
+  S   ;   D    ;  =  ;   =    ;  =   ; =  ;   S   ;   S    ;   D   ;   D   ;   D   ;   D   ;   D   ;   D  
+THREE ; <eps>  ; SIX ; TWENTY ; FIVE ; AH ; WOTON ; NILAND ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+================================================================================
+21368, %WER 112.50 [ 9 / 8, 2 ins, 0 del, 7 sub ]
+AMERICAN ; TEN ; EIGHTY ; EIGHT ; REGIONAL ; DEPARTURE ; RADAR  ; CONTACT ; <eps> ;  <eps> 
+   S     ;  =  ;   S    ;   S   ;    S     ;     S     ;   S    ;    S    ;   I   ;    I   
+  ERAN   ; TEN ;  EHTY  ;  EIGN ;   REGE   ;     TO    ; FORTUR ;   RAT   ;   OR  ; COUNTER
+================================================================================
+1090, %WER 37.50 [ 3 / 8, 0 ins, 0 del, 3 sub ]
+BOSTON ;  APPROACH  ; NORTHWEST ; TWO ; FIFTY ; EIGHT ; FIVE ; THOUSAND
+  S    ;     S      ;     S     ;  =  ;   =   ;   =   ;  =   ;    =    
+ OST   ; ANAPPROACH ;  NORTWEST ; TWO ; FIFTY ; EIGHT ; FIVE ; THOUSAND
+================================================================================
+4725, %WER 33.33 [ 3 / 9, 0 ins, 0 del, 3 sub ]
+DEPARTURE ; CLIPPER ;  FI ; FIVE ; TWO ; ONE ; PASSING ; NINE ; HUNDRED
+    =     ;    S    ;  S  ;  =   ;  =  ;  =  ;    S    ;  =   ;    =   
+DEPARTURE ;  CIKER  ; FAT ; FIVE ; TWO ; ONE ; THOUSAN ; NINE ; HUNDRED
+================================================================================
+24376, %WER 50.00 [ 4 / 8, 0 ins, 1 del, 3 sub ]
+AH ;   FLY    ; HEADING ; OF ; AH ; TWO ; SIX ; ZERO
+S  ;    S     ;    D    ; =  ; S  ;  =  ;  =  ;  =  
+A  ; FLINNING ;  <eps>  ; OF ; A  ; TWO ; SIX ; ZERO
+================================================================================
+9533, %WER 83.33 [ 10 / 12, 3 ins, 0 del, 7 sub ]
+NAVY ; ECHO ; MIKE ; <eps> ; <eps> ; FIVE ; TWO ; SIX ; TURN ; RIGHT ; HEADING ; <eps> ; TWO ; SIX ; ZERO
+ S   ;  S   ;  S   ;   I   ;   I   ;  =   ;  =  ;  =  ;  S   ;   S   ;    S    ;   I   ;  =  ;  =  ;  S  
+ AT  ; TIN  ; THE  ;  ARCO ;  MIC  ; FIVE ; TWO ; SIX ; TIR  ;  RAT  ;   AND   ;  ING  ; TWO ; SIX ; ZRER
+================================================================================
+19105, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      U       
+================================================================================
+9509, %WER 55.56 [ 5 / 9, 1 ins, 1 del, 3 sub ]
+<eps> ; AMERICAN ; SIX ; FIFTEEN ; CLIMB ;    AND    ; MAINTAIN ; ONE ; SEVEN ; THOUSAND
+  I   ;    =     ;  =  ;    S    ;   S   ;     S     ;    D     ;  =  ;   =   ;    =    
+      ; AMERICAN ; SIX ; TIXTEEN ; COVEN ; MAINTAIND ;  <eps>   ; ONE ; SEVEN ; THOUSAND
+================================================================================
+258, %WER 81.82 [ 9 / 11, 0 ins, 2 del, 7 sub ]
+OUR ; DISCRETION ; HOLD ; SHORT ;   OF  ; TWO ; SEVEN ; BIZEX  ; AH ; FIVE ; HUNDRED
+ S  ;     =      ;  S   ;   S   ;   D   ;  =  ;   S   ;   S    ; S  ;  S   ;    D   
+ O  ; DISCRETION ; OLD  ;   ZU  ; <eps> ; TWO ;  SIV  ; PHYSIC ; EO ;  O   ;  <eps> 
+================================================================================
+8910, %WER 50.00 [ 6 / 12, 0 ins, 1 del, 5 sub ]
+U  ; S  ;  AIR  ; ONE ; THIRTY ; FIVE ; TURN ; LEFT ; HEADING ; TWO ; ONE ; ZERO
+S  ; S  ;   D   ;  =  ;   =    ;  =   ;  S   ;  S   ;    =    ;  S  ;  =  ;  =  
+US ; SA ; <eps> ; ONE ; THIRTY ; FIVE ;  TI  ;  LE  ; HEADING ;  O  ; ONE ; ZERO
+================================================================================
+23629, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      R       
+================================================================================
+18078, %WER 54.55 [ 6 / 11, 1 ins, 0 del, 5 sub ]
+OKAY ; DOWN ; TO ; FIVE ; THOUSAND ; TEN ; RIGHT ; DELTA ; NINE ; <eps> ; FORTY ; SIX
+ S   ;  S   ; S  ;  =   ;    =     ;  =  ;   =   ;   S   ;  S   ;   I   ;   =   ;  = 
+AKET ; OUT  ; OF ; FIVE ; THOUSAND ; TEN ; RIGHT ;   DE  ;  AN  ; NIGET ; FORTY ; SIX
+================================================================================
+23940, %WER 111.11 [ 10 / 9, 1 ins, 0 del, 9 sub ]
+AMERICAN ; ELEVEN ; SEVENTEEN ; AT ; AH ; ELEVEN ; THOUSAND ; PAPA ; PAPA ; <eps>
+   S     ;   S    ;     S     ; S  ; S  ;   S    ;    S     ;  S   ;  S   ;   I  
+  ERY    ;  LEV   ;  SEVETEEN ; E  ; A  ;  AND   ;    EV    ; ZEUS ; COD  ;  UPON
+================================================================================
+21357, %WER 62.50 [ 5 / 8, 0 ins, 0 del, 5 sub ]
+AMERICAN ; EIGHT ; SIXTY ; SEVEN ; REGIONAL ; DEPARTURE ; RADAR ; CONTACT
+   S     ;   =   ;   =   ;   =   ;    S     ;     S     ;   S   ;    S   
+ ERICAN  ; EIGHT ; SIXTY ; SEVEN ; OREGINAL ; PPARTURAT ;   OR  ;  CONTA 
+================================================================================
+13858, %WER 81.82 [ 9 / 11, 1 ins, 2 del, 6 sub ]
+AND ;   AH   ; TOWER ; UNITED ; SIX ; TWENTY ; OXONN ; INBOUND ; <eps> ; FOR ;  THREE   ;  SIX 
+ S  ;   S    ;   S   ;   D    ;  =  ;   =    ;   S   ;    S    ;   I   ;  =  ;    S     ;   D  
+ AA ; TOWERI ;  NIE  ; <eps>  ; SIX ; TWENTY ;  OXEN ;   AND   ; MOWND ; FOR ; THREESIX ; <eps>
+================================================================================
+2113, %WER 58.33 [ 7 / 12, 0 ins, 4 del, 3 sub ]
+THREE ; SIX ; ZERO ; AND ;     THREE      ; THOUSAND ;   U   ; S ; AIR ;      NINETEEN      ; TWENTY ;  NINE
+  =   ;  =  ;  S   ;  =  ;       S        ;    D     ;   D   ; = ;  =  ;         S          ;   D    ;   D  
+THREE ; SIX ;  O   ; AND ; THREETHOUSANDU ;  <eps>   ; <eps> ; S ; AIR ; NINETEENTWENTYNINE ; <eps>  ; <eps>
+================================================================================
+7882, %WER 92.31 [ 12 / 13, 2 ins, 0 del, 10 sub ]
+DELTA ; <eps> ; TWO ; OH ; TWO ; AFTER ; INNDY ; ZERO ; SIX ; ZERO ; THREE ; <eps>  ; ZERO ; ONE ; FIVE
+  S   ;   I   ;  =  ; S  ;  S  ;   S   ;   S   ;  S   ;  S  ;  S   ;   S   ;   I    ;  =   ;  =  ;  S  
+ UOE  ;   TO  ; TWO ; I  ;  TW ;       ;  AFTR ;  E   ;  TE ; ZER  ;  SIX  ; ZEROEN ; ZERO ; ONE ; FIE 
+================================================================================
+29253, %WER 45.45 [ 5 / 11, 0 ins, 3 del, 2 sub ]
+DELTA ; SEVEN ; FORTY ; FOUR ;   AH  ; TURN ; THE ; CORNER ;    WHEN    ;  YOU  ;  CAN 
+  S   ;   =   ;   =   ;  =   ;   D   ;  =   ;  =  ;   =    ;     S      ;   D   ;   D  
+  DE  ; SEVEN ; FORTY ; FOUR ; <eps> ; TURN ; THE ; CORNER ; WHENYOUCAN ; <eps> ; <eps>
+================================================================================
+21580, %WER 83.33 [ 10 / 12, 0 ins, 2 del, 8 sub ]
+ ZERO  ;  NINE ; ZERO ;   TO   ; JOIN ; THE  ; ZERO ;  SIX  ; SEVEN ; DELTA ; SIX ; SEVENTY
+  S    ;   D   ;  =   ;   S    ;  S   ;  S   ;  S   ;   D   ;   =   ;   S   ;  S  ;    S   
+DONIND ; <eps> ; ZERO ; JOINED ;  TE  ; ZROP ;  ON  ; <eps> ; SEVEN ;   E   ;  A  ;        
+================================================================================
+8682, %WER 40.00 [ 4 / 10, 1 ins, 0 del, 3 sub ]
+LEFT ; <eps> ; TURN ; TO ; AH ; TWO ; NINE ; ZERO ; DID ; YOU ; SAY
+ S   ;   I   ;  =   ; =  ; =  ;  =  ;  =   ;  =   ;  S  ;  =  ;  S 
+LETU ;   RE  ; TURN ; TO ; AH ; TWO ; NINE ; ZERO ;     ; YOU ; SAN
+================================================================================
+29097, %WER 137.50 [ 11 / 8, 3 ins, 0 del, 8 sub ]
+CROSS ;  THE  ;  LEFT  ;  POINT  ;   EIGHT    ; ASEA ; FOUR ; SIXTEEN ; <eps> ; <eps> ; <eps>
+  S   ;   S   ;   S    ;    S    ;     S      ;  S   ;  S   ;    S    ;   I   ;   I   ;   I  
+ SER  ; TOWER ; CONEEN ; INETEEN ; FIFTYSEVEN ;  ON  ; THE  ;   ILAS  ;  TWO  ; AONEY ;   RA 
+================================================================================
+18740, %WER 300.00 [ 12 / 4, 8 ins, 0 del, 4 sub ]
+UNINTELLIGIBLE ; THREE ; THOUSAND ; UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   S   ;    S     ;       S        ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I  
+      E        ;   ZE  ;    E     ;                ;  HRI  ;   O   ;   E   ;  RETE ;   LE  ;   E   ;   I   ;   OR 
+================================================================================
+26165, %WER 71.43 [ 5 / 7, 1 ins, 1 del, 3 sub ]
+GROUND ;  ASEA ; FOUR ; SIXTEEN ; <eps> ; THIRTY ; TWO ; BRIDGE
+  S    ;   D   ;  =   ;    S    ;   I   ;   =    ;  =  ;   S   
+RETECE ; <eps> ; FOUR ;   SIX   ;   Y   ; THIRTY ; TWO ; THREE 
+================================================================================
+4993, %WER 36.36 [ 4 / 11, 1 ins, 0 del, 3 sub ]
+OKAY ; WE ; <eps> ; LEAVING ; SEVENTEEN ; HUNDRED ; AND ; HEADING ; ZERO ; NINE ; ZERO ; NOW
+ S   ; S  ;   I   ;    =    ;     =     ;    =    ;  =  ;    =    ;  =   ;  =   ;  =   ;  S 
+ O   ; K  ; WE'RE ; LEAVING ; SEVENTEEN ; HUNDRED ; AND ; HEADING ; ZERO ; NINE ; ZERO ;  AL
+================================================================================
+9817, %WER 100.00 [ 10 / 10, 1 ins, 2 del, 7 sub ]
+NORTHWEST ; TWELVE ; TWENTY ; NINE ;  TURN  ; LEFT ; <eps> ; HEADING ;     THREE     ;  ZERO ;  ZERO
+    S     ;   S    ;   S    ;  S   ;   S    ;  S   ;   I   ;    =    ;       S       ;   D   ;   D  
+   ORTH   ;   OK   ;        ;  O   ; TWENTY ; NIVE ;  CALE ; HEADING ; THREEZEROZERO ; <eps> ; <eps>
+================================================================================
+22219, %WER 54.55 [ 6 / 11, 0 ins, 1 del, 5 sub ]
+ONE ; SEVEN ; THOUSAND ;  AND  ; ONE ; SEVEN ; ZERO ; AMERICAN ; SEVEN ; NINE ; SEVEN
+ =  ;   =   ;    =     ;   D   ;  =  ;   S   ;  =   ;    S     ;   S   ;  S   ;   S  
+ONE ; SEVEN ; THOUSAND ; <eps> ; ONE ;  EVP  ; ZERO ; AMERICA  ;  SEV  ; MINE ;   SE 
+================================================================================
+3157, %WER 41.67 [ 5 / 12, 0 ins, 0 del, 5 sub ]
+ONE ; SEVEN ; ZERO ;    ON   ; THE ; SPEED ; AND  ;  THEN  ; DOWN ; TO ; FOUR ;   THOUSAND  
+ =  ;   =   ;  =   ;    S    ;  =  ;   =   ;  S   ;   S    ;  =   ; =  ;  S   ;      S      
+ONE ; SEVEN ; ZERO ; ALOWEND ; THE ; SPEED ; THAN ; THENED ; DOWN ; TO ;      ; FOURTHOUSAND
+================================================================================
+21234, %WER 77.78 [ 7 / 9, 3 ins, 0 del, 4 sub ]
+SOUTHWEST ; <eps> ; TWO ; THIRTY ; FIVE ; CLIMB ;  MAINTAIN ; <eps> ; ONE ; ZERO ; THOUSAND ;  <eps> 
+    S     ;   I   ;  =  ;   =    ;  =   ;   S   ;     S     ;   I   ;  =  ;  =   ;    S     ;    I   
+   TAT    ;  WAS  ; TWO ; THIRTY ; FIVE ; CLLIN ; MAINTAIND ;       ; ONE ; ZERO ;          ; THOUSAN
+================================================================================
+10651, %WER 61.54 [ 8 / 13, 0 ins, 3 del, 5 sub ]
+AH ; YES ; SIR ;   WE   ; HAVE ;   HIM   ; IN ; SIGHT ; HENSON ; FORTY ; FOUR ; TWENTY ; EIGHT
+S  ;  =  ;  =  ;   S    ;  S   ;    S    ; S  ;   D   ;   D    ;   =   ;  =   ;   =    ;   D  
+A  ; YES ; SIR ; WEHAVE ; MIS  ; SCITENT ; AN ; <eps> ; <eps>  ; FORTY ; FOUR ; TWENTY ; <eps>
+================================================================================
+9300, %WER 80.00 [ 8 / 10, 1 ins, 3 del, 4 sub ]
+UNITED ;      SIX       ;  TWENTY ; THREE ; CLIMB ;  AND  ; MAINTAIN ; <eps> ; ONE ; SEVEN ;  THOUSAND 
+  S    ;       S        ;    S    ;   D   ;   D   ;   D   ;    =     ;   I   ;  =  ;   =   ;     S     
+UNIVE  ; SIXTWENTYTHREE ; CLIMBAN ; <eps> ; <eps> ; <eps> ; MAINTAIN ;   AH  ; ONE ; SEVEN ; THOUSANDRE
+================================================================================
+2236, %WER 100.00 [ 12 / 12, 0 ins, 0 del, 12 sub ]
+AH ; TWO ; THOUSAND ; NOW ;  AH  ;  LOOKING  ; AT ;    THE    ; AIRPORT ; BIZEX ; FOUR ; FIFTY
+S  ;  S  ;    S     ;  S  ;  S   ;     S     ; S  ;     S     ;    S    ;   S   ;  S   ;   S  
+IT ;     ;  ATOUT   ;  AN ; HOUR ; LOOKINGAT ; TE ; EPPORESIF ;         ;  FOR  ;  E   ; TINKN
+================================================================================
+5480, %WER 69.23 [ 9 / 13, 0 ins, 2 del, 7 sub ]
+UP ; TO ;       TEN       ; THOUSAND ;   FEET  ; ONE ; ZERO ; ZERO ;  THE  ; HEADING ; DELTA ;   FOUR  ;  TEN 
+=  ; =  ;        S        ;    S     ;    S    ;  S  ;  =   ;  S   ;   D   ;    =    ;   S   ;    S    ;   D  
+UP ; TO ; TENTHOUSANDFEET ;          ; ONEZERO ;     ; ZERO ;  TH  ; <eps> ; HEADING ;  DELT ; FORTUNE ; <eps>
+================================================================================
+20967, %WER 45.45 [ 5 / 11, 0 ins, 0 del, 5 sub ]
+AH ; HOW ; ABOUT ; THIRTY ; FIVE ; RIGHT ; FOR ; DELTA ; SEVEN ; SIXTY  ;   EIGHT   
+=  ;  S  ;   =   ;   =    ;  =   ;   =   ;  =  ;   S   ;   S   ;   S    ;     S     
+AH ;  HV ; ABOUT ; THIRTY ; FIVE ; RIGHT ; FOR ;   TE  ; ELTER ; SAILOR ; SIXTYEIGHT
+================================================================================
+26464, %WER 75.00 [ 9 / 12, 0 ins, 2 del, 7 sub ]
+ THE   ; SEVEN ;  FIVE ; TURNING ; NORTH ; BOUND ;     ON     ; THE ; OUTER ;  SAY  ; YOUR ; NUMBERS
+  S    ;   S   ;   S   ;    S    ;   =   ;   S   ;     S      ;  S  ;   D   ;   D   ;  =   ;    =   
+SEVEEN ;  FOG  ; TURNG ;    O    ; NORTH ;  MIN  ; ONTHEOUTER ;  SA ; <eps> ; <eps> ; YOUR ; NUMBERS
+================================================================================
+16521, %WER 75.00 [ 9 / 12, 2 ins, 2 del, 5 sub ]
+U  ; S  ;  AIR  ; FOUR ;   SIXTY   ;  FIVE ; RUNWAY ; THREE ; <eps> ; SIX ; CLEARED ; FOR ; TAKEOFF ; <eps>
+S  ; S  ;   D   ;  =   ;     S     ;   D   ;   =    ;   =   ;   I   ;  =  ;    S    ;  =  ;    S    ;   I  
+ER ; AR ; <eps> ; FOUR ; SIXTYFIVE ; <eps> ; RUNWAY ; THREE ;       ; SIX ;  CLEARD ; FOR ;   TAKE  ;  OFF 
+================================================================================
+8982, %WER 54.55 [ 6 / 11, 0 ins, 1 del, 5 sub ]
+AH ; CLIMB  ; TO ; ONE ; ONE ; THOUSAND ; NORTHWEST ; AH ; TWELVE ;   TWENTY   ;  NINE
+S  ;   S    ; =  ;  =  ;  =  ;    =     ;     S     ; S  ;   =    ;     S      ;   D  
+AT ; CLIMBD ; TO ; ONE ; ONE ; THOUSAND ;  NORTHWES ; TO ; TWELVE ; TWENTYNINE ; <eps>
+================================================================================
+25782, %WER 60.00 [ 6 / 10, 0 ins, 0 del, 6 sub ]
+ONE ; THREE ; ZERO ; OFF ; OF ; AH ; ARINA ; AMERICAN ; FOUR ; SEVENTYTWO
+ S  ;   =   ;  =   ;  S  ; S  ; S  ;   S   ;    S     ;  =   ;     =     
+INE ; THREE ; ZERO ;  OL ; FO ; EV ; ARENA ;   MERI   ; FOUR ; SEVENTYTWO
+================================================================================
+18857, %WER 125.00 [ 10 / 8, 2 ins, 0 del, 8 sub ]
+RIGHT ;  TO  ; THREE ; ZERO ; ZERO ; UNINTELLIGIBLE ; AMERICAN ; FIFTY ;  <eps>  ; <eps>
+  S   ;  S   ;   S   ;  S   ;  S   ;       S        ;    S     ;   S   ;    I    ;   I  
+ ETO  ; THRE ;   ZE  ;  OT  ;  I   ;      LANO      ;   OTE    ;   ON  ; ZEROVAC ;   SI 
+================================================================================
+14095, %WER 69.23 [ 9 / 13, 0 ins, 1 del, 8 sub ]
+AH ; WASH ; TOWER ; HENSON ; FORTY ; FOUR ; SIXTY ; EIGHT ; NINE ; OUT ; FOR ;  THREE  ;  SIX 
+=  ;  =   ;   S   ;   S    ;   S   ;  S   ;   S   ;   S   ;  =   ;  =  ;  S  ;    S    ;   D  
+AH ; WASH ;  TOWR ;  HEN   ;  FORT ; FORT ;  AND  ;  KAKE ; NINE ; OUT ;  TO ; THRISEN ; <eps>
+================================================================================
+11229, %WER 54.55 [ 6 / 11, 1 ins, 1 del, 4 sub ]
+DELTA ; FIVE ; EIGHTY ; FOUR ; DESCENDING ; <eps> ; TO ; TEN  ;    WITH   ; JULIET ; GOOD ; EVENING
+  S   ;  =   ;   =    ;  =   ;     S      ;   I   ; =  ;  S   ;     S     ;   D    ;  =   ;    =   
+ZELTA ; FIVE ; EIGHTY ; FOUR ;    SEND    ;  ING  ; TO ; TEWN ; WITHJULIA ; <eps>  ; GOOD ; EVENING
+================================================================================
+8413, %WER 27.27 [ 3 / 11, 0 ins, 1 del, 2 sub ]
+AIR ; WISCONSIN ; SIXTY ; NINE ; CONTACT ; CENTER ;   ONE    ; THREE ; FIVE ; POINT ; FOUR
+ =  ;     S     ;   =   ;  =   ;    =    ;   =    ;    S     ;   D   ;  =   ;   =   ;  =  
+AIR ;  WASCONTO ; SIXTY ; NINE ; CONTACT ; CENTER ; ONETHREE ; <eps> ; FIVE ; POINT ; FOUR
+================================================================================
+24295, %WER 38.46 [ 5 / 13, 0 ins, 2 del, 3 sub ]
+OKAY ;  WE'RE   ;   OUT    ;   OF  ; ELEVEN ; FOR ; FIVE ; NOW ; AMERICAN ; FIVE ; SIXTY ; FIVE ; HEAVY
+ =   ;    S     ;    S     ;   D   ;   D    ;  =  ;  =   ;  =  ;    =     ;  =   ;   =   ;  =   ;   S  
+OKAY ; WE'REOUT ; OFELEVEN ; <eps> ; <eps>  ; FOR ; FIVE ; NOW ; AMERICAN ; FIVE ; SIXTY ; FIVE ;  ABY 
+================================================================================
+27940, %WER 63.64 [ 7 / 11, 0 ins, 1 del, 6 sub ]
+AMERICAN ; FOUR ; TWENTY ; THREE'S ;  AH ;  ON ; FINAL ; FOR ; THREE ;   ONE   ; RIGHT
+   S     ;  =   ;   =    ;    S    ;  S  ;  S  ;   =   ;  S  ;   =   ;    S    ;   D  
+SECTION  ; FOUR ; TWENTY ;  THREE  ; AND ; AND ; FINAL ; FOO ; THREE ; HUNDRED ; <eps>
+================================================================================
+25589, %WER 63.64 [ 7 / 11, 1 ins, 1 del, 5 sub ]
+ARROW ; FIVE ; SIX ; QUEBEC ; CONTACT ; APPROACH ;  ONE  ; TWO ; <eps> ; ZERO ;   POINT   ;  FIVE
+  S   ;  =   ;  =  ;   S    ;    =    ;    S     ;   S   ;  =  ;   I   ;  =   ;     S     ;   D  
+ TERO ; FIVE ; SIX ; CUEBEC ; CONTACT ;   PROA   ; TWONE ; TWO ;       ; ZERO ; POINTFIVE ; <eps>
+================================================================================
+25515, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      E       
+================================================================================
+25610, %WER 90.91 [ 10 / 11, 1 ins, 2 del, 7 sub ]
+HAWKER ; KILO ; ALPHA ; CHARLIE ; CONTACT ; APPROACH ; <eps> ; ONE ; THREE ;     TWO     ; POINT ;  ONE 
+  S    ;  S   ;   S   ;    S    ;    S    ;    S     ;   I   ;  =  ;   =   ;      S      ;   D   ;   D  
+ AKER  ;  K   ;   O   ;   ALPA  ;  CHARLA ; CONTECT  ;  BOCE ; ONE ; THREE ; TWOPOINTONE ; <eps> ; <eps>
+================================================================================
+7288, %WER 73.33 [ 11 / 15, 0 ins, 0 del, 11 sub ]
+OKAY ; AND ; AH ;  ON  ; DOWN ; TO ; SIX ; THOUSAND ; FOR ; U  ; S  ; AIR  ; FOUR ; OH ; FOUR
+ S   ;  =  ; S  ;  S   ;  =   ; S  ;  =  ;    S     ;  =  ; S  ; S  ;  S   ;  S   ; S  ;  S  
+ OK  ; AND ; A  ; HOND ; DOWN ; TE ; SIX ;  TOSAN   ; FOR ; OU ; AS ; ZERE ; FOR  ; A  ; FORT
+================================================================================
+11607, %WER 57.14 [ 8 / 14, 1 ins, 1 del, 6 sub ]
+U ; S ; AIR ; ONE ; EIGHTEEN ; AT ; OXONN ; <eps> ; CONTACT ; TOWER ; ONE ; ONE  ;  NINER  ; POINT ; ONE
+= ; = ;  S  ;  =  ;    =     ; =  ;   S   ;   I   ;    =    ;   S   ;  S  ;  S   ;    S    ;   D   ;  = 
+U ; S ;  AR ; ONE ; EIGHTEEN ; AT ;   OX  ;  CON  ; CONTACT ; COLNT ; WER ; NONT ; APPOINT ; <eps> ; ONE
+================================================================================
+18698, %WER 36.36 [ 4 / 11, 1 ins, 1 del, 2 sub ]
+AMERICAN ; THIRTEEN ;   AH  ; SEVENTY ; NINE ; TURN ; RIGHT ; HEADING ; THREE ; <eps> ; ONE ; ZERO
+   S     ;    =     ;   D   ;    =    ;  =   ;  =   ;   =   ;    S    ;   =   ;   I   ;  =  ;  =  
+MERICAN  ; THIRTEEN ; <eps> ; SEVENTY ; NINE ; TURN ; RIGHT ;  ENGHTY ; THREE ;   T   ; ONE ; ZERO
+================================================================================
+20644, %WER 54.55 [ 6 / 11, 1 ins, 0 del, 5 sub ]
+AMERICAN ; SIX ;  OH  ;  SIX  ; HEAVY ; DESCEND ; AND ; MAINTAIN ; AH ; <eps> ; THREE ; THOUSAND
+   =     ;  =  ;  S   ;   S   ;   S   ;    S    ;  =  ;    =     ; S  ;   I   ;   =   ;    =    
+AMERICAN ; SIX ; OSIX ; SEVEN ;   TO  ;   CEN   ; AND ; MAINTAIN ; A  ;       ; THREE ; THOUSAND
+================================================================================
+10179, %WER 90.00 [ 9 / 10, 0 ins, 1 del, 8 sub ]
+NORTHWEST ; EIGHTEEN ;  TWENTY ;    FIVE    ; TURN ; RIGHT ; HEADING ; ZERO ;   FIVE   ;  ZERO
+    S     ;    S     ;    S    ;     S      ;  S   ;   S   ;    S    ;  =   ;    S     ;   D  
+    EP    ;   TOS    ; EIGTEEN ; TWENTYFIVE ; TER  ; RATED ;    IN   ; ZERO ; FIVEZERO ; <eps>
+================================================================================
+5405, %WER 33.33 [ 4 / 12, 1 ins, 1 del, 2 sub ]
+BOSTON ; NERA ; <eps> ; THIRTY ; SEVEN ; TWENTY ; FOUR ; ONE ;  POINT   ;  TWO  ; FOR ; THREE ; THOUSAND
+  =    ;  S   ;   I   ;   =    ;   =   ;   =    ;  =   ;  =  ;    S     ;   D   ;  =  ;   =   ;    =    
+BOSTON ;  ER  ;   AR  ; THIRTY ; SEVEN ; TWENTY ; FOUR ; ONE ; POINTTWO ; <eps> ; FOR ; THREE ; THOUSAND
+================================================================================
+12455, %WER 25.00 [ 3 / 12, 0 ins, 2 del, 1 sub ]
+DELTA ; FIVE ;      ZERO      ;  ONE  ; DESCENDING ; TO ; EIGHT ; THOUSAND ; RIGHT ; THREE ; FOUR ; ZERO
+  =   ;  =   ;       S        ;   D   ;     D      ; =  ;   =   ;    =     ;   =   ;   =   ;  =   ;  =  
+DELTA ; FIVE ; ZEROONESENDING ; <eps> ;   <eps>    ; TO ; EIGHT ; THOUSAND ; RIGHT ; THREE ; FOUR ; ZERO
+================================================================================
+3270, %WER 73.33 [ 11 / 15, 1 ins, 3 del, 7 sub ]
+YEAH ;   IT  ;   IS  ; PRETTY ; HAZY ; AH ; WE ; GOT ; ABOUT ;  AH ;  FOUR ;   OR  ; FIVE ; MILES ; VISIBILITY ; <eps>
+ S   ;   D   ;   D   ;   =    ;  S   ; =  ; =  ;  S  ;   S   ;  S  ;   S   ;   D   ;  =   ;   =   ;     S      ;   I  
+ATS  ; <eps> ; <eps> ; PRETTY ; EASY ; AH ; WE ; GET ;  BACK ; DOW ; FOURR ; <eps> ; FIVE ; MILES ;     AS     ;   ZE 
+================================================================================
+6979, %WER 69.23 [ 9 / 13, 1 ins, 0 del, 8 sub ]
+BOSTON ; BIZEX  ; THREE ; <eps> ; TWENTY ; TWO ;  WE ; CHECKING ; IN ; FOUR ; THOUSAND ; GOT  ; THE ; INFO
+  S    ;   S    ;   =   ;   I   ;   =    ;  =  ;  S  ;    S     ; S  ;  =   ;    =     ;  S   ;  S  ;  S  
+ BOS   ; PHYSIC ; THREE ;       ; TWENTY ; TWO ; WER ;  CHECK   ; AN ; FOUR ; THOUSAND ; GOTT ;  IN ;  FO 
+================================================================================
+19273, %WER 100.00 [ 13 / 13, 0 ins, 1 del, 12 sub ]
+CHAPARRAL ; SEVEN  ; NINETY ; FOUR ; TURN ; RIGHT ; EIGHT ; ONE ; ZERO ;  ZERO  ; ONE ;   ZERO  ;  ZERO
+    S     ;   S    ;   S    ;  S   ;  S   ;   S   ;   S   ;  S  ;  S   ;   S    ;  S  ;    S    ;   D  
+   CAP    ; ROUSED ;   UP   ; NOEY ;  FO  ;  TAR  ; GRITY ; ZRE ; ONEO ; ZEROZR ; ONT ; EROSERO ; <eps>
+================================================================================
+14231, %WER 100.00 [ 9 / 9, 0 ins, 0 del, 9 sub ]
+DELTA ; SEVENTEEN ; SIXTY ; RUNWAY ; THREE ; SIX ; TAXI ;  INTO  ; POSITION
+  S   ;     S     ;   S   ;   S    ;   S   ;  S  ;  S   ;   S    ;    S    
+  E   ;     RA    ;   OT  ;   E    ;   II  ; HRA ; SAIT ; TACTUS ;   SICH  
+================================================================================
+25183, %WER 100.00 [ 13 / 13, 0 ins, 6 del, 7 sub ]
+APPROACH ; AMERICAN ;   AH  ; ONE  ; EIGHTY ; ELEVEN ; EIGHTY ; THREE ;   IS  ;  WITH ;  YOU  ;   AT  ; ELEVEN
+   S     ;    S     ;   S   ;  S   ;   S    ;   S    ;   S    ;   D   ;   D   ;   D   ;   D   ;   D   ;   D   
+  ENRO   ;    MI    ; OOIEI ; TOTE ;  TOVO  ;   TE   ;   O    ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> 
+================================================================================
+23077, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      U       
+================================================================================
+21104, %WER 50.00 [ 7 / 14, 0 ins, 2 del, 5 sub ]
+DELTA ; EIGHT ; OH ;    TWO     ; CONTACT ;  FORT ; WORTH ; CENTER ; ONE ; THREE ; FOUR ; POINT ; ONE ; FIVE
+  S   ;   =   ; S  ;     S      ;    S    ;   S   ;   D   ;   D    ;  =  ;   =   ;  =   ;   =   ;  =  ;  =  
+ ELT  ; EIGHT ; O  ; TWOCONNECT ;   FOUR  ; CENTO ; <eps> ; <eps>  ; ONE ; THREE ; FOUR ; POINT ; ONE ; FIVE
+================================================================================
+7877, %WER 71.43 [ 10 / 14, 1 ins, 1 del, 8 sub ]
+GOOD ; MORNING ; BOSTON ;  JET  ;  LINK ; THIRTY ; EIGHT ; <eps> ; FORTY ; TWO ; WITH ; YOU ; SIX ; THOUSAND ; ALPHA
+ S   ;    S    ;   S    ;   S   ;   D   ;   =    ;   S   ;   I   ;   =   ;  =  ;  =   ;  S  ;  =  ;    S     ;   S  
+ E   ;  MONTYN ;  PAS   ; GEOLI ; <eps> ; THIRTY ;   E   ;   O   ; FORTY ; TWO ; WITH ;  O  ; SIX ;   OUS    ;  OLPA
+================================================================================
+9265, %WER 33.33 [ 5 / 15, 1 ins, 0 del, 4 sub ]
+LEFT ; TO ; ONE ; NINE ; ZERO ; AND ;  AH  ; ONE ; ONE ; THOUSAND ; <eps> ; TWO ; FOUR ; ONE ; LIMA ; ALPHA
+ =   ; =  ;  =  ;  =   ;  =   ;  =  ;  S   ;  S  ;  =  ;    =     ;   I   ;  =  ;  =   ;  =  ;  S   ;   S  
+LEFT ; TO ; ONE ; NINE ; ZERO ; AND ; DAAT ; WEN ; ONE ; THOUSAND ;       ; TWO ; FOUR ; ONE ;  I   ;  MAVA
+================================================================================
+15558, %WER 53.85 [ 7 / 13, 0 ins, 1 del, 6 sub ]
+AH ; WASHINGTON ; AH ; TOWER ; UNITED ; SIX ;    TWENTY    ;  SIX   ; TURNING ; FINAL ; FOR ; THREE ; SIX
+=  ;     =      ; S  ;   S   ;   S    ;  S  ;      S       ;   S    ;    D    ;   =   ;  =  ;   =   ;  = 
+AH ; WASHINGTON ; A  ; TOWRY ;  AND   ;  AT ; SIXTWENTYSIX ; TURNAN ;  <eps>  ; FINAL ; FOR ; THREE ; SIX
+================================================================================
+29028, %WER 77.78 [ 7 / 9, 2 ins, 0 del, 5 sub ]
+UNINTELLIGIBLE ; FLIP ; THE  ; <eps>  ; <eps> ; SWITCH ; A ; COUPLE ; OF ; TIMES ; HERE
+      S        ;  S   ;  S   ;   I    ;   I   ;   =    ; = ;   =    ; S  ;   =   ;  S  
+    RIGHT      ;  A   ; OIVE ; SLIPPD ;   TE  ; SWITCH ; A ; COUPLE ; O  ; TIMES ; SER 
+================================================================================
+22859, %WER 64.29 [ 9 / 14, 1 ins, 4 del, 4 sub ]
+SOUTHWEST ; ONE ; SIXTY ;     FOUR    ; CONTACT ;  FORT ; WORTH ; CENTER ; ON ; <eps> ; ONE ;      TWO      ; SEVEN ; POINT ; ZERO
+    S     ;  =  ;   =   ;      S      ;    S    ;   D   ;   D   ;   =    ; =  ;   I   ;  =  ;       S       ;   D   ;   D   ;  =  
+    SE    ; ONE ; SIXTY ; FOURORGANIC ;   FORA  ; <eps> ; <eps> ; CENTER ; ON ;       ; ONE ; TWOSEVENPOINT ; <eps> ; <eps> ; ZERO
+================================================================================
+837, %WER 43.75 [ 7 / 16, 0 ins, 3 del, 4 sub ]
+DOWN ; TO ; THREE ; THOUSAND ; THEN ; SLOW ;      TO      ; ONE  ; SEVENTY ;   T   ;   W   ;   A   ; SEVEN ; FIFTY ; FOUR ; HEAVY
+ =   ; =  ;   =   ;    =     ;  S   ;  =   ;      S       ;  S   ;    S    ;   D   ;   D   ;   D   ;   =   ;   =   ;  =   ;   =  
+DOWN ; TO ; THREE ; THOUSAND ; TEN  ; SLOW ; TOONESEVENTY ; HETO ;   AGH   ; <eps> ; <eps> ; <eps> ; SEVEN ; FIFTY ; FOUR ; HEAVY
+================================================================================
+21223, %WER 68.75 [ 11 / 16, 0 ins, 1 del, 10 sub ]
+ZERO ; NINE ; ZERO ; EIGHT ; THOUSAND ; JOIN ; AH ; D  ;   F   ; W ;  ZERO ; SIX ; SEVEN ; SOUTHWEST ; EIGHTY ; TWO
+ S   ;  =   ;  S   ;   =   ;    =     ;  =   ; S  ; S  ;   S   ; S ;   D   ;  =  ;   S   ;     S     ;   S    ;  S 
+ZEO  ; NINE ; REA  ; EIGHT ; THOUSAND ; JOIN ; OH ; DE ; TITYS ; E ; <eps> ; SIX ; TELAN ;   TOUTHO  ;  ATY   ;  TO
+================================================================================
+23155, %WER 26.67 [ 4 / 15, 0 ins, 1 del, 3 sub ]
+ OKAY ;   A   ; TWO ; SIX ; ZERO ; FOR ; THE ; TWO ; SEVEN ; FOUR ; AMERICAN ;  AH ; TWELVE ; EIGHTY ; NINE
+  S   ;   D   ;  =  ;  =  ;  =   ;  =  ;  S  ;  =  ;   =   ;  =   ;    =     ;  S  ;   =    ;   =    ;  =  
+OKAYA ; <eps> ; TWO ; SIX ; ZERO ; FOR ;  TE ; TWO ; SEVEN ; FOUR ; AMERICAN ; NAS ; TWELVE ; EIGHTY ; NINE
+================================================================================
+21721, %WER 76.92 [ 10 / 13, 2 ins, 3 del, 5 sub ]
+AH ; THIRTYTWO ; <eps> ; <eps> ; EIGHTYFIVE ; AND ; UP ; TO ;   AH  ; ONE ; SEVEN ;      THOUSAND     ;    AMERICAN   ; THREE ; EIGHTEEN
+S  ;     S     ;   I   ;   I   ;     =      ;  =  ; =  ; S  ;   D   ;  =  ;   =   ;         S         ;       S       ;   D   ;    D    
+A  ;   THIRTY  ;  TWO  ;       ; EIGHTYFIVE ; AND ; UP ; TA ; <eps> ; ONE ; SEVEN ; THOUSANDAMERICANS ; THREEEIGHTEEN ; <eps> ;  <eps>  
+================================================================================
+26741, %WER 83.33 [ 10 / 12, 0 ins, 0 del, 10 sub ]
+AND ; GROUND ; U ; S ; AIR  ; FOURTEEN ;   EIGHTY   ;  FIVE ; PUSH ;  ON  ; GATE ; TWELVE
+ S  ;   S    ; = ; S ;  S   ;    =     ;     S      ;   S   ;  S   ;  S   ;  S   ;   S   
+ AN ; GROND  ; U ; A ; SAIR ; FOURTEEN ; EIGHTYFIVE ; FOHON ;  TI  ; TLON ;  Y   ;  MONE 
+================================================================================
+3628, %WER 100.00 [ 12 / 12, 2 ins, 1 del, 9 sub ]
+REDUCING ; <eps> ; ONE ; SEVENTY ; UNTIL ;   AH   ; RIPIT ;  AIR  ; <eps> ; PORTUGAL ; THREE ; THREE ; ZERO ; HEAVY
+   S     ;   I   ;  =  ;    S    ;   S   ;   S    ;   S   ;   S   ;   I   ;    =     ;   S   ;   S   ;  S   ;   D  
+   IT    ;  ISNT ; ONE ;  SEVEN  ;   TG  ; ENTEEL ;   A   ; RICHA ; SINTA ; PORTUGAL ;  TITO ;   ZO  ;  IT  ; <eps>
+================================================================================
+29168, %WER 84.62 [ 11 / 13, 4 ins, 0 del, 7 sub ]
+DELTA ; <eps> ; AMERICAN ; TWO ; TWELVE ; HEAVY ; <eps> ; LEFT ; TURN ; AROUND ; <eps> ; THE ; CORNER ; ON ; TAXIWAY ; <eps> ; NINETEEN
+  S   ;   I   ;    =     ;  S  ;   S    ;   S   ;   I   ;  =   ;  S   ;   S    ;   I   ;  =  ;   =    ; =  ;    S    ;   I   ;    =    
+ OTA  ;  RIX  ; AMERICAN ; SWO ;  TRO   ;  SAV  ;   EY  ; LEFT ;  ER  ;        ; ROUND ; THE ; CORNER ; ON ;   TAXU  ;   AY  ; NINETEEN
+================================================================================
+16468, %WER 61.54 [ 8 / 13, 2 ins, 0 del, 6 sub ]
+NOVEMBER ; FIVE ; DELTA ; WHISKEY ; CONTACT ; TOWER ;  AT ;  <eps>  ; <eps> ; ONE ; TWO ; ZERO ; POINT ; SEVEN ; FIVE
+   S     ;  =   ;   S   ;    S    ;    S    ;   S   ;  S  ;    I    ;   I   ;  =  ;  =  ;  =   ;   =   ;   =   ;  =  
+  EGRA   ; FIVE ;  DELT ;    TE   ;  WHISKE ;       ; SEN ; CONTACT ; TOWAD ; ONE ; TWO ; ZERO ; POINT ; SEVEN ; FIVE
+================================================================================
+26252, %WER 60.00 [ 9 / 15, 1 ins, 3 del, 5 sub ]
+CHAPARRAL ; SIX ;  FIFTEEN   ;   ALL    ;  RIGHT   ;  SIR  ;  AND  ; WHICH ; WAY ; YOU ; <eps> ; GOING ; EAST ; OR ; WEST ; BOUND
+    S     ;  =  ;     S      ;    S     ;    S     ;   D   ;   D   ;   D   ;  =  ;  S  ;   I   ;   =   ;  =   ; =  ;  =   ;   =  
+    E     ; SIX ; FIXTEENALL ; RIGHTSIR ; ANDWHICH ; <eps> ; <eps> ; <eps> ; WAY ;  R  ;   YU  ; GOING ; EAST ; OR ; WEST ; BOUND
+================================================================================
+12533, %WER 36.36 [ 4 / 11, 0 ins, 0 del, 4 sub ]
+ MALI ; MALIBU ; ZERO ; ZERO ; ZULU ; TURN ; LEFT ; HEADING ; ONE ; EIGHT ; ZERO
+  S   ;   S    ;  =   ;  =   ;  S   ;  =   ;  =   ;    S    ;  =  ;   =   ;  =  
+MELOP ; MELAPO ; ZERO ; ZERO ; ZERO ; TURN ; LEFT ;  TADING ; ONE ; EIGHT ; ZERO
+================================================================================
+11514, %WER 62.50 [ 10 / 16, 1 ins, 1 del, 8 sub ]
+NORTHWEST ; <eps> ; TWO ; EIGHTY ; EIGHT ; TO ; ARMEL ; DIRECT ;  TO ; AH ; D ; C ; AND ; WE'RE ; LOOKING ;  FOR  ; TRAFFIC
+    S     ;   I   ;  =  ;   =    ;   =   ; S  ;   S   ;   =    ;  S  ; S  ; S ; = ;  =  ;   S   ;    S    ;   D   ;    =   
+  DATER   ;  WAS  ; TWO ; EIGHTY ; EIGHT ; R  ;  MAIL ; DIRECT ; TWO ;    ; T ; C ; AND ;  WER  ;  LEFINT ; <eps> ; TRAFFIC
+================================================================================
+17204, %WER 53.33 [ 8 / 15, 0 ins, 2 del, 6 sub ]
+AND ;  IT'S ; FORTY ; THREE ; NINETY ;    TWO    ; AH ; WE'RE ; WITH ; YOU ; ON ;   THE   ; VISUAL ; THREE ; THREE
+ S  ;   D   ;   =   ;   =   ;   S    ;     S     ; =  ;   S   ;  =   ;  =  ; =  ;    S    ;   S    ;   =   ;   D  
+ATI ; <eps> ; FORTY ; THREE ;        ; NINETYTWO ; AH ;  WAR  ; WITH ; YOU ; ON ; DEVITAL ; THIRTY ; THREE ; <eps>
+================================================================================
+28241, %WER 61.54 [ 8 / 13, 0 ins, 2 del, 6 sub ]
+    AH     ; REGIONAL ;   AH  ; TOWER ; METRO ; SEVEN ; TWENTY ; FOUR ; IS ; WITH ; YOU ; VANDY ; INBOUND
+    S      ;    S     ;   S   ;   D   ;   D   ;   =   ;   =    ;  =   ; =  ;  =   ;  S  ;   S   ;    S   
+TAREGINAAH ;   TAAR   ; PETRO ; <eps> ; <eps> ; SEVEN ; TWENTY ; FOUR ; IS ; WITH ;  YU ; VANTY ;   ETBO 
+================================================================================
+4711, %WER 33.33 [ 5 / 15, 1 ins, 1 del, 3 sub ]
+LEFT ; TURNING ; ZERO ;   NINE   ;  ZERO ; UP ; TO ; ONE ; <eps> ; ZERO ; THOUSAND ; SWISSAIR ; ONE ; TWO ; SEVEN ; HEAVY
+ =   ;    S    ;  =   ;    S     ;   D   ; =  ; =  ;  =  ;   I   ;  =   ;    =     ;    S     ;  =  ;  =  ;   =   ;   =  
+LEFT ; HEADING ; ZERO ; NINEZERO ; <eps> ; UP ; TO ; ONE ;       ; ZERO ; THOUSAND ;  THREEA  ; ONE ; TWO ; SEVEN ; HEAVY
+================================================================================
+26853, %WER 350.00 [ 21 / 6, 16 ins, 1 del, 4 sub ]
+TRANSMISSION ;  TO ; HUSTLER ; TWELVE ; FORTY ; TWO ; <eps> ; <eps> ; <eps>  ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+     S       ;  S  ;    D    ;   =    ;   S   ;  S  ;   I   ;   I   ;   I    ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I  
+     AH      ; SIR ;  <eps>  ; TWELVE ; OIGHT ; TER ;   I   ;  TAR  ; NUMBER ; THREE ;  FIVE ;  DEIN ;  NINE ;  SIX  ;  MILE ;  FINE ;  RUN  ;  WAY  ;  ONE  ; EIGHT ; RALAR ;  LEM 
+================================================================================
+11287, %WER 61.54 [ 8 / 13, 1 ins, 1 del, 6 sub ]
+APPROACH ; AMERICAN ; <eps> ; FIFTEEN ;   NINETY   ;  FOUR ; NINE ; FOR ; EIGHT ; AND ;  WE ; HAVE ; THE ;    ATIS  
+   S     ;    S     ;   I   ;    =    ;     S      ;   D   ;  =   ;  =  ;   =   ;  =  ;  S  ;  =   ;  S  ;     S    
+ BROAC   ;  MERING  ;   AN  ; FIFTEEN ; NINETYFOUR ; <eps> ; NINE ; FOR ; EIGHT ; AND ; NOE ; HAVE ;  TH ; EIGHTESEN
+================================================================================
+5711, %WER 69.23 [ 9 / 13, 2 ins, 2 del, 5 sub ]
+CESSNA ; THREE ; EIGHT ; FOXTROT ;    TURN   ; <eps> ; RIGHT ; HEADING ;     TWO      ; SEVEN ;  ZERO ; AND ; CONTACT ; <eps> ; DEPARTURE
+  S    ;   =   ;   =   ;    S    ;     S     ;   I   ;   =   ;    =    ;      S       ;   D   ;   D   ;  =  ;    S    ;   I   ;     =    
+  A    ; THREE ; EIGHT ;   CLOC  ; STRECTURE ;  AND  ; RIGHT ; HEADING ; TWOSEVENZERO ; <eps> ; <eps> ; AND ;   CON   ;  SACT ; DEPARTURE
+================================================================================
+12520, %WER 100.00 [ 10 / 10, 1 ins, 0 del, 9 sub ]
+APPROACH ; TRUMP  ; SIXTY ; FIVE ; ELEVEN ; INFORMATION ; XRAY ;   AT   ;   TEN   ; THOUSAND ; <eps>
+   =     ;   S    ;   S   ;  S   ;   S    ;      S      ;  S   ;   S    ;    S    ;    S     ;   I  
+APPROACH ; CROSIC ; TREEN ; FIE  ; LEVEV  ;      I      ; EEN  ; PATIEN ; EXTRAID ;   HER    ;  SEL 
+================================================================================
+19217, %WER 107.69 [ 14 / 13, 3 ins, 0 del, 11 sub ]
+AMERICAN ; TWELVE ; SEVENTY ; FOUR ; NOW ; TURN ; <eps> ; <eps> ; RIGHT ; HEADING ; OF ; <eps> ; ONE ; AH ; NINE ; ZERO
+   S     ;   S    ;    S    ;  S   ;  S  ;  S   ;   I   ;   I   ;   =   ;    S    ; S  ;   I   ;  =  ; S  ;  S   ;  S  
+  TEL    ; MARTY  ;    OS   ;  ET  ;  Y  ; FOR  ;   OT  ;   TR  ; RIGHT ;    AN   ; E  ;   DO  ; ONE ; A  ; NIIN ; ZER 
+================================================================================
+9232, %WER 46.67 [ 7 / 15, 1 ins, 0 del, 6 sub ]
+GOOD ; DAY  ; TRADOC ; THREE ; MAINTAIN ; <eps> ; FOUR ; THOUSAND ; CONTACT ;  DULLES ; ONE ; TWO ; FOUR ; POINT ; SIX ; FIVE
+ S   ;  S   ;   S    ;   =   ;    S     ;   I   ;  =   ;    =     ;    S    ;    S    ;  =  ;  =  ;  =   ;   =   ;  =  ;  =  
+ A   ; THOE ;  NIK   ; THREE ;   MAIN   ;   TA  ; FOUR ; THOUSAND ;  TONTAX ; DOLLARS ; ONE ; TWO ; FOUR ; POINT ; SIX ; FIVE
+================================================================================
+20669, %WER 47.06 [ 8 / 17, 1 ins, 2 del, 5 sub ]
+FOLLOW ; HIM ; TOWER ; ONE ; TWO ; FOUR ; POINT ; ONE ; <eps> ; FIVE ;  A  ; HUNDRED ;  AND  ; EIGHTY ;  TO ; THE  ; OUTER ; MARKER
+  S    ;  =  ;   S   ;  =  ;  =  ;  =   ;   =   ;  =  ;   I   ;  =   ;  S  ;    =    ;   D   ;   =    ;  S  ;  S   ;   D   ;   =   
+FOLLO  ; HIM ;  TAR  ; ONE ; TWO ; FOUR ; POINT ; ONE ;       ; FIVE ; ONE ; HUNDRED ; <eps> ; EIGHTY ; TIY ; OUTO ; <eps> ; MARKER
+================================================================================
+16690, %WER 64.71 [ 11 / 17, 3 ins, 1 del, 7 sub ]
+ T  ; W  ;   A   ; SEVENTY ; FIVE ; WIND ;  ZERO ; NINER ; <eps> ; ZERO ; AT ; THREE ; RUNWAY ; THREE ; <eps> ; SIX ; CLEARED ; FOR ; TAKEOFF ; <eps>
+ S  ; S  ;   D   ;    =    ;  =   ;  S   ;   S   ;   S   ;   I   ;  =   ; =  ;   =   ;   =    ;   =   ;   I   ;  =  ;    S    ;  =  ;    S    ;   I  
+TOO ; KA ; <eps> ; SEVENTY ; FIVE ; ONE  ; ZEROE ;  NINE ;   OR  ; ZERO ; AT ; THREE ; RUNWAY ; THREE ;       ; SIX ;  CLEAR  ; FOR ;   TAKE  ;  OFF 
+================================================================================
+26447, %WER 84.62 [ 11 / 13, 0 ins, 6 del, 5 sub ]
+AMERICAN ; FOURTEEN ; OH ; SIX ; THIRTY ;  NINE ;    AH   ;  TAXI ;  GATE ;   OR  ; TWENTY ; UNINTELLIGIBLE ;  TAXI
+   S     ;    =     ; S  ;  =  ;   S    ;   S   ;    S    ;   D   ;   D   ;   D   ;   D    ;       D        ;   D  
+   R     ; FOURTEEN ; O  ; SIX ;        ; FIRTI ; NANDAEI ; <eps> ; <eps> ; <eps> ; <eps>  ;     <eps>      ; <eps>
+================================================================================
+25377, %WER 26.67 [ 4 / 15, 0 ins, 0 del, 4 sub ]
+NINE ; SIERRA ; JULIET ; AH ; MAINTAIN ; AH ; TURN ; LEFT ; HEADING ; TWO ; SIX ; ZERO ; MAINTAIN ; SIX ; THOUSAND
+ S   ;   S    ;   =    ; S  ;    =     ; S  ;  =   ;  =   ;    =    ;  =  ;  =  ;  =   ;    =     ;  =  ;    =    
+NIN  ;   ER   ; JULIET ; DA ; MAINTAIN ; A  ; TURN ; LEFT ; HEADING ; TWO ; SIX ; ZERO ; MAINTAIN ; SIX ; THOUSAND
+================================================================================
+10719, %WER 69.23 [ 9 / 13, 0 ins, 0 del, 9 sub ]
+YEAH ; WE'RE ; AH ; AH ; DESCENDING ; OUT ; OF ; TEN ; POINT ; EIGHT ; FOR ; EIGHT  ; THOUSAND
+ S   ;   S   ; S  ; S  ;     S      ;  S  ; S  ;  =  ;   =   ;   =   ;  =  ;   S    ;    S    
+ ER  ;  WER  ; A  ; A  ;  SEADING   ;  OT ; A  ; TEN ; POINT ; EIGHT ; FOR ; EIGHTH ;   DOS   
+================================================================================
+12167, %WER 86.67 [ 13 / 15, 1 ins, 5 del, 7 sub ]
+WASHINGTON ; APPROACH ;  U  ;           S            ;  AIR  ; SEVENTEEN ; SIXTY ; SEVEN ;  TEN  ; THOUSAND ; AND ; AH ; WE ; HAVE ; PAPA ; <eps>
+    S      ;    S     ;  S  ;           S            ;   D   ;     D     ;   D   ;   D   ;   D   ;    =     ;  =  ; =  ; S  ;  S   ;  S   ;   I  
+OSEPPROACH ;    OU    ; SER ; SEVENTEENSIXTYSEVENTEN ; <eps> ;   <eps>   ; <eps> ; <eps> ; <eps> ; THOUSAND ; AND ; AH ;    ;  AF  ;  A   ;  PAP 
+================================================================================
+21142, %WER 90.91 [ 10 / 11, 1 ins, 0 del, 9 sub ]
+SPADE ; ZERO ; FOUR ;  REGIONAL ; DEPARTURE ;  ROGER   ;  RADAR  ; CONTACT ; SAY ; ALTITUDE ; LEAVING ; <eps>
+  S   ;  =   ;  =   ;     S     ;     S     ;    S     ;    S    ;    S    ;  S  ;    S     ;    S    ;   I  
+ AINT ; ZERO ; FOUR ; RETORINED ;     TH    ; DARTUROG ; GREAGHT ; ARCOTAC ;  LA ;   OUTO   ;   TOR   ;  LEVE
+================================================================================
+23276, %WER 93.33 [ 14 / 15, 0 ins, 2 del, 12 sub ]
+LEFT ; TWO ;   FOUR  ;  ZERO  ; INTERCEPT ; THE ; MILSAP ; ZERO ; SEVEN ;  NINE ; RADIAL ; AMERICAN ; FIVE ; THIRTY ; THREE
+ S   ;  =  ;    S    ;   S    ;     S     ;  S  ;   S    ;  S   ;   S   ;   S   ;   S    ;    S     ;  S   ;   D    ;   D  
+LET  ; TWO ; FOURZER ; SEPTIN ;     E     ; SEP ;  TWO   ;  PO  ;  NOW  ; READY ;   WI   ;    SA    ;  I   ; <eps>  ; <eps>
+================================================================================
+26948, %WER 68.42 [ 13 / 19, 1 ins, 5 del, 7 sub ]
+  TAKE   ;  A  ; RIGHT ;   AH  ; ON ; THE ; OUTER  ;  AND  ; THIRTY ;  TWO   ;  AND  ; FOLLOW ; THE ;   AH  ; AMERICAN ; DELTA ; ONE ; THIRTY ; NINE ; <eps>
+   S     ;  S  ;   D   ;   D   ; =  ;  =  ;   S    ;   D   ;   =    ;   S    ;   D   ;   =    ;  =  ;   D   ;    =     ;   =   ;  S  ;   S    ;  S   ;   I  
+KARIGHTE ; TWO ; <eps> ; <eps> ; ON ; THE ; OUNTER ; <eps> ; THIRTY ; TWOAND ; <eps> ; FOLLOW ; THE ; <eps> ; AMERICAN ; DELTA ;  ON ;  TRED  ;  E   ;   O  
+================================================================================
+9848, %WER 76.92 [ 10 / 13, 4 ins, 1 del, 5 sub ]
+WASHINGTON ; <eps> ; <eps> ; DEPARTURE ; TRADOC ; <eps> ; FIVE ; PASSING ; <eps> ; EIGHT ; HUNDRED ; FEET ; AH ; CLIMBING ;   TO  ; TWO ; THOUSAND
+    S      ;   I   ;   I   ;     =     ;   S    ;   I   ;  =   ;    S    ;   I   ;   =   ;    =    ;  =   ; S  ;    S     ;   D   ;  =  ;    =    
+   ROTA    ;   TI  ;       ; DEPARTURE ;  TRE   ;   O   ; FIVE ;    I    ;   AX  ; EIGHT ; HUNDRED ; FEET ; AA ;   CIME   ; <eps> ; TWO ; THOUSAND
+================================================================================
+16499, %WER 64.71 [ 11 / 17, 1 ins, 1 del, 9 sub ]
+AND ; <eps> ; AH ; WASHINGTON ; TRUMP ; AH ; SIXTY ; FOUR ; FIFTY ;   ONE    ; WE'RE ; ABOUT ; AH ; THREE ; AND ;   A   ; HALF ; OUT
+ =  ;   I   ; =  ;     S      ;   S   ; S  ;   =   ;  =   ;   S   ;    S     ;   S   ;   S   ; S  ;   =   ;  S  ;   D   ;  =   ;  = 
+AND ;   A   ; AH ;   WOCHN    ;  TROP ; O  ; SIXTY ; FOUR ;       ; FIFTYONE ;  WER  ;  BOC  ; A  ; THREE ;  AN ; <eps> ; HALF ; OUT
+================================================================================
+5213, %WER 43.75 [ 7 / 16, 0 ins, 3 del, 4 sub ]
+BIZEX ; THREE ;  FIFTY   ;  SIX  ; CONTACT ; BOSTON ;     APPROACH    ; CONTROL ; ON ; FREQUENCY ; ONE ; ONE ; EIGHT ; POINT ;   TWO   ;  FIVE
+  S   ;   =   ;    S     ;   D   ;    =    ;   =    ;        S        ;    D    ; =  ;     =     ;  =  ;  =  ;   =   ;   =   ;    S    ;   D  
+ SIX  ; THREE ; FIFTYSIX ; <eps> ; CONTACT ; BOSTON ; APPROACHCONTROL ;  <eps>  ; ON ; FREQUENCY ; ONE ; ONE ; EIGHT ; POINT ; TWOFIVE ; <eps>
+================================================================================
+22965, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      N       
+================================================================================
+14572, %WER 56.25 [ 9 / 16, 2 ins, 2 del, 5 sub ]
+ALLEGHENY ; THIRTY ; SEVEN ;   TWENTY   ;    NINE   ;  WIND ; THREE ; TWO ; ZERO ; AT ; SIX ; <eps> ; RUNWAY ; THREE ; CLEARED ; FOR ; TAKEOFF ; <eps>
+    S     ;   =    ;   =   ;     S      ;     S     ;   D   ;   D   ;  =  ;  =   ; S  ;  =  ;   I   ;   =    ;   =   ;    =    ;  =  ;    S    ;   I  
+ALLEGHANI ; THIRTY ; SEVEN ; TWENTYNINE ; WINDTHREE ; <eps> ; <eps> ; TWO ; ZERO ; ET ; SIX ;       ; RUNWAY ; THREE ; CLEARED ; FOR ;   TAKE  ;  OFF 
+================================================================================
+5008, %WER 57.89 [ 11 / 19, 0 ins, 3 del, 8 sub ]
+UNINTELLIGIBLE ; TWENTY ; SEVEN ; TWO ; AND ; AH ;    TWO     ; SEVENTY ; ON ;  THE  ; HEADING ; U ; S ;     AIR      ; THREE ; SIXTY ; NINE ; SO ; LONG
+      S        ;   =    ;   =   ;  =  ;  =  ; =  ;     S      ;    S    ; S  ;   S   ;    D    ; = ; = ;      S       ;   D   ;   D   ;  =   ; S  ;  S  
+      I        ; TWENTY ; SEVEN ; TWO ; AND ; AH ; TWOSEVENTY ;   ENE   ; TH ; HEAND ;  <eps>  ; U ; S ; ARTHREESIXTY ; <eps> ; <eps> ; NINE ; SI ; LON 
+================================================================================
+19469, %WER 100.00 [ 11 / 11, 0 ins, 10 del, 1 sub ]
+UNINTELLIGIBLE ; SOUNDS ;  LIKE ; HEADING ;  ZERO ;  NINE ;  ZERO ;  ASEA ; THREE ; SIXTY ;  FOUR
+      S        ;   D    ;   D   ;    D    ;   D   ;   D   ;   D   ;   D   ;   D   ;   D   ;   D  
+      E        ; <eps>  ; <eps> ;  <eps>  ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+================================================================================
+1148, %WER 80.00 [ 16 / 20, 1 ins, 3 del, 12 sub ]
+O ;    K    ;  CLEARED  ;  FOR  ;  THE  ; APPROACH ; THREE ; THOUSAND ; ONE ;   OR  ; AH ; <eps> ; ONE ; NINETY ; TO ; RIPPER ; AMERICAN ; AH ; FIVE ; SIXTY ; SIX
+S ;    S    ;     S     ;   D   ;   D   ;    D     ;   =   ;    S     ;  S  ;   S   ; S  ;   I   ;  =  ;   =    ; S  ;   S    ;    S     ; S  ;  S   ;   =   ;  = 
+E ; EQUIPPD ; EPTPROACH ; <eps> ; <eps> ;  <eps>   ; THREE ;   TRES   ;  IN ; HONOR ; O  ;   A   ; ONE ; NINETY ; A  ; REPPO  ;  MARKAN  ; A  ; FIV  ; SIXTY ; SIX
+================================================================================
+4668, %WER 71.43 [ 10 / 14, 1 ins, 3 del, 6 sub ]
+O  ;     K     ;  LEFT ; HEADING ; ZERO ; NINER ; ZERO ; CLIMB ;   MAINTAIN  ;  ONE  ; ZERO ; THOUSAND ; VIRGIN ;  <eps>   ; TWELVE
+S  ;     S     ;   D   ;    D    ;  =   ;   S   ;  =   ;   S   ;      S      ;   D   ;  =   ;    =     ;   S    ;    I     ;   =   
+KA ; LAPEADING ; <eps> ;  <eps>  ; ZERO ; NINEH ; ZERO ;  FIVE ; MAINTAINONE ; <eps> ; ZERO ; THOUSAND ;  ONE   ; HUNDREDA ; TWELVE
+================================================================================
+8032, %WER 46.67 [ 7 / 15, 2 ins, 0 del, 5 sub ]
+GOOD ; MORNING ; BOSTON ; CLIPPER ; FIVE ; TWENTY ; <eps> ; SIX ; ELEVEN ; THOUSAND ; TWO ; EIGHTY ; KNOTS ; WITH ; BRAVO ; <eps> ; PROVIDENCE
+ S   ;    S    ;   S    ;    =    ;  =   ;   =    ;   I   ;  =  ;   =    ;    =     ;  =  ;   =    ;   S   ;  =   ;   S   ;   I   ;     =     
+BOY  ;    AN   ; ROSSON ; CLIPPER ; FIVE ; TWENTY ;       ; SIX ; ELEVEN ; THOUSAND ; TWO ; EIGHTY ;  NUTS ; WITH ;  TROV ;   AN  ; PROVIDENCE
+================================================================================
+1464, %WER 94.12 [ 16 / 17, 1 ins, 4 del, 11 sub ]
+APPROACH ; NORTHWEST ;  AH  ; <eps> ; FORTY ; TWO ; IS ; WITH ;  YOU  ; HEADING ;  AH ; ONE ; TEN ; GOING ;  DOWN ;   TO  ;  SIX  ; THOUSAND
+   S     ;     S     ;  S   ;   I   ;   =   ;  =  ; S  ;  S   ;   S   ;    S    ;  S  ;  S  ;  S  ;   S   ;   D   ;   D   ;   D   ;    D    
+   O     ;    ZRO    ; GLES ;   TE  ; FORTY ; TWO ; SE ;  DA  ; HEADY ;   OON   ; CAN ;  OT ;  O  ;  SOL  ; <eps> ; <eps> ; <eps> ;  <eps>  
+================================================================================
+8227, %WER 87.50 [ 14 / 16, 1 ins, 3 del, 10 sub ]
+CITATION ; AH ; ONE ; SIERRA ; SIERRA ; BOSTON ; <eps> ; AH ; APPROACH ;  ROGER  ; RADAR ;    CONTACT    ; CLIMB ;          AND           ; MAINTAIN ; THREE ; THOUSAND
+   S     ; =  ;  =  ;   S    ;   S    ;   S    ;   I   ; =  ;    S     ;    S    ;   S   ;       S       ;   S   ;           S            ;    D     ;   D   ;    D    
+ITATION  ; AH ; ONE ;   R    ;  SAR   ; BOSSON ;  AND  ; AH ;   TRO    ; TREAZUR ;  EDOR ; CONTACTCLAIMB ;  ANT  ; MAINTAINDTHREETHOUSAND ;  <eps>   ; <eps> ;  <eps>  
+================================================================================
+22370, %WER 43.75 [ 7 / 16, 0 ins, 2 del, 5 sub ]
+ O   ;   K   ;   AH  ; RIGHT ; TURN ; DELTA ; EIGHT ;   SEVENTY    ; AND ; AH ; TWO ; SEVEN ; ZERO ; ON ; THE ; HEADING
+ S   ;   D   ;   D   ;   =   ;  =   ;   S   ;   S   ;      S       ;  =  ; S  ;  =  ;   =   ;  =   ; =  ;  =  ;    =   
+OKAA ; <eps> ; <eps> ; RIGHT ; TURN ;  DOWN ;   TO  ; EIGHTSEVENTY ; AND ; A  ; TWO ; SEVEN ; ZERO ; ON ; THE ; HEADING
+================================================================================
+15656, %WER 105.56 [ 19 / 18, 4 ins, 0 del, 15 sub ]
+ADVISE ; JOINING ; THE ; ROUTES ; <eps> ; <eps> ; AT ; AH ; RIVERDALE ; <eps> ; AND ; AH ; THE ; ROUTES ; APPROVED ; ALTIMETER'S ;   AH  ; THREE  ; ZERO ;  ZERO ; TWO ; <eps>
+  S    ;    S    ;  S  ;   S    ;   I   ;   I   ; =  ; S  ;     S     ;   I   ;  =  ; =  ;  S  ;   S    ;    S     ;      S      ;   S   ;   S    ;  S   ;   S   ;  S  ;   I  
+  I    ; ADVISED ;  T  ;   A    ;   TY  ; ROOTS ; AT ; TA ;   RIVER   ;  DALE ; AND ; AH ;  TE ; ROOTS  ;    O     ;    PROVED   ; OLTTO ; INTERS ; AHT  ; THREE ; TRS ;  ROAN
+================================================================================
+14326, %WER 76.47 [ 13 / 17, 3 ins, 2 del, 8 sub ]
+CITATION ; <eps> ; TWO ; AH ; DELTA ; MIKE ; WIND ;  THREE   ;  ONE  ; ZERO ;  AT ; NINER ; RUNWAY ;  <eps>  ; THREE ;   SIX    ; CLEARED ; FOR ; TAKEOFF ; <eps>
+   S     ;   I   ;  =  ; =  ;   =   ;  =   ;  S   ;    S     ;   D   ;  =   ;  S  ;   S   ;   S    ;    I    ;   =   ;    S     ;    D    ;  =  ;    S    ;   I  
+  NIT    ; TATIO ; TWO ; AH ; DELTA ; MIKE ; AINE ; THREEONE ; <eps> ; ZERO ; AHT ;  NINE ;   AR   ; RUNAWAY ; THREE ; SIXDLAED ;  <eps>  ; FOR ;   TAKE  ;  OFF 
+================================================================================
+21764, %WER 75.00 [ 12 / 16, 2 ins, 1 del, 9 sub ]
+DELTA  ; ONE ; FORTY ; RIGHT ;  TO ; AH ; ONE ; <eps> ; TWENTY ; AH ; <eps> ; AND ;  JOIN  ; THE ; ZERO ;  NINE ; ZERO ; RADIAL
+  S    ;  =  ;   =   ;   S   ;  S  ; =  ;  =  ;   I   ;   =    ; S  ;   I   ;  =  ;   S    ;  S  ;  S   ;   S   ;  S   ;   D   
+TALSAH ; ONE ; FORTY ;  FIVE ; TWO ; AH ; ONE ;       ; TWENTY ; T  ;   A   ; AND ; DEINGT ;  ZE ;  I   ; GERVI ;  YO  ; <eps> 
+================================================================================
+29055, %WER 50.00 [ 9 / 18, 2 ins, 1 del, 6 sub ]
+  AND   ; TWIN ; CESSNA ; TWO ; THREE ; NOVEMBER ; <eps> ; TURN ; LEFT ; HEADING ; AH ; ZERO ; NINER ; <eps> ; ZERO ; AND ; REMAIN ; ON ; THIS ; FREQUENCY
+   S    ;  S   ;   D    ;  =  ;   =   ;    S     ;   I   ;  =   ;  =   ;    =    ; S  ;  =   ;   S   ;   I   ;  =   ;  =  ;   =    ; =  ;  S   ;     =    
+ANDTWES ; EST  ; <eps>  ; TWO ; THREE ;    NE    ;  OUR  ; TURN ; LEFT ; HEADING ; A  ; ZERO ;  NINE ;   AR  ; ZERO ; AND ; REMAIN ; ON ; HIS  ; FREQUENCY
+================================================================================
+16484, %WER 57.14 [ 8 / 14, 1 ins, 0 del, 7 sub ]
+HENSON ; FORTY ; FOUR ; FIFTY ; TWO ; WASHINGTON ; TOWER ; WIND ; ZERO ; NINER ; ZERO ; <eps> ; AT ; THREE ; CONTINUE
+  S    ;   =   ;  =   ;   =   ;  =  ;     S      ;   =   ;  S   ;  S   ;   S   ;  S   ;   I   ; =  ;   =   ;    S    
+ENTRAN ; FORTY ; FOUR ; FIFTY ; TWO ;  WOCHANG   ; TOWER ; WEN  ; ZOWN ;   ON  ;  ER  ;  ZEL  ; AT ; THREE ; CONTENUE
+================================================================================
+8790, %WER 82.35 [ 14 / 17, 0 ins, 2 del, 12 sub ]
+UNITED ; SIX ; ZERO ; ONE ; TRAFFIC ; ONE ; FIVE ; MILES ; WEST ; OF ;    YOUR    ; POSITION ; EAST ;    BOUND     ;    NINE   ; THOUSAND ; DESCENDING
+  S    ;  S  ;  S   ;  =  ;    =    ;  =  ;  S   ;   S   ;  S   ; S  ;     S      ;    S     ;  S   ;      S       ;     S     ;    D     ;     D     
+  AS   ;  I  ; TRE  ; ONE ; TRAFFIC ; ONE ; FOT  ;  MOR  ; WAS  ; TE ; OPPOSITION ;    E     ; TOU  ; NINETHOUSAND ; DECENTANT ;  <eps>   ;   <eps>   
+================================================================================
+17741, %WER 70.00 [ 14 / 20, 1 ins, 1 del, 12 sub ]
+HENSON ; FORTY ; FOUR ;  FIFTY   ;   TWO    ; RUNWAY ; THREE ; THREE ; CLEARED ; FOR ; TAKEOFF ; TRAFFIC ;  ON ; A  ; TWO ; MILE ; FINAL ; RUNWAY ; <eps> ; THREE ; SIX
+  S    ;   =   ;  =   ;    S     ;    S     ;   D    ;   =   ;   =   ;    S    ;  S  ;    S    ;    S    ;  S  ; S  ;  =  ;  S   ;   S   ;   S    ;   I   ;   =   ;  = 
+ ESAN  ; FORTY ; FOUR ; FIFTYTWO ; ONWAIGHT ; <eps>  ; THREE ; THREE ;  CLEAR  ;  FO ;   TAKE  ;    OF   ; TAT ; IE ; TWO ; MIE  ;  FIV  ;   O    ; WAGHT ; THREE ; SIX
+================================================================================
+22958, %WER 1100.00 [ 11 / 1, 10 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I  
+      E        ;   I   ;   E   ;       ;   OI  ;   I   ;   I   ;   O   ;   O   ;   I   ;      
+================================================================================
+25569, %WER 84.21 [ 16 / 19, 0 ins, 3 del, 13 sub ]
+ARROW ; UH ;  THREE  ;  TWO  ; FIVE ; SIX  ;   QUEBEC  ;  REGIONAL ; APPROACH ; DEPART ; JUSTY ; HEADING ;   ONE    ; THREE ; ZERO ; FOR  ; VECTOR ; TO ; MEACHAM
+  S   ; S  ;    S    ;   D   ;  =   ;  S   ;     S     ;     S     ;    S     ;   S    ;   D   ;    =    ;    S     ;   D   ;  =   ;  S   ;   S    ; S  ;    S   
+ ARO  ; AH ; THREETY ; <eps> ; FIVE ; SIXT ; FACTORYES ; OPPPROACH ; TAPPART  ; JESTY  ; <eps> ; HEADING ; ONETHREE ; <eps> ; ZERO ; FORT ;  BACO  ; TE ;  MATRON
+================================================================================
+27942, %WER 68.42 [ 13 / 19, 0 ins, 5 del, 8 sub ]
+CLEARED ; FOR  ; TAKEOFF ;   ON  ; THREE ; FIVE ; LEFT ; THREE ; SIXTY ; AT ;  THE   ;  AH  ;   MIDDLE  ; MARKER ; AMERICAN ;   AH  ; FOURTEEN ;  OH  ;  SIX 
+   S    ;  S   ;    S    ;   D   ;   =   ;  =   ;  =   ;   =   ;   =   ; S  ;   S    ;  S   ;     S     ;   D    ;    D     ;   D   ;    =     ;  S   ;   D  
+ CLEFTS ; TAKE ;   AON   ; <eps> ; THREE ; FIVE ; LEFT ; THREE ; SIXTY ; TE ; MENTAL ; MARK ; AMERICANA ; <eps>  ;  <eps>   ; <eps> ; FOURTEEN ; OSIX ; <eps>
+================================================================================
+23241, %WER 600.00 [ 6 / 1, 5 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I   ;   I   ;   I  
+      E        ;  SIE  ;   E   ;   AT  ;  SAT  ;   A  
+================================================================================
+28614, %WER 105.88 [ 18 / 17, 1 ins, 0 del, 17 sub ]
+REGIONAL ; TOWER ;   GOOD  ; EVENING ; ASEA ; NINE ; SEVENTY ; EIGHT ; WE'RE ; ON ; THE ; THREE ; ONE ; RIGHT  ; SEVEN ;    OUT    ; UNINTELLIGIBLE ; <eps>
+   S     ;   S   ;    S    ;    S    ;  S   ;  S   ;    S    ;   S   ;   S   ; S  ;  S  ;   S   ;  S  ;   S    ;   S   ;     S     ;       S        ;   I  
+  WRE    ;   O   ; WITHOUR ; GENEVEN ;  I   ; TIN  ;    ON   ;   E   ;   TY  ; A  ;  ER ;   I   ;  AV ; THREEN ;  ONE  ; RIGTSEVEN ;       OU       ;      
+================================================================================
+9152, %WER 57.14 [ 12 / 21, 0 ins, 2 del, 10 sub ]
+NOVEMBER ; TWO ; FIVE ; ZULU ; CLIMB ;   AND   ; MAINTAIN ; V  ;  F   ; R  ; AT ;  AH ;  MAKE ;   IT  ; ONE ; ZERO ; THOUSAND ; FIVE ; HUNDRED ; TEN ; FIVE
+   S     ;  =  ;  =   ;  S   ;   S   ;    S    ;    S     ; S  ;  S   ; S  ; S  ;  S  ;   D   ;   D   ;  =  ;  =   ;    =     ;  =   ;    =    ;  =  ;  =  
+EMEMBERA ; TWO ; FIVE ;      ;  ZILU ; ECONOMI ;    TE    ; VO ; FOUR ; AD ; TA ; MAK ; <eps> ; <eps> ; ONE ; ZERO ; THOUSAND ; FIVE ; HUNDRED ; TEN ; FIVE
+================================================================================
+9697, %WER 78.95 [ 15 / 19, 3 ins, 2 del, 10 sub ]
+  RAT   ;  SIX  ; ZERO ; ONE ; CLIMB ; MAINTAIN ; FLIGHT ;   LEVEL   ; TWO ; <eps> ; ONE ;  ZERO ; CONTACT ; WASHINGTON ; CENTER ; <eps> ; <eps> ; ONE ; THREE ;    FIVE   ; POINT ; FOUR
+   S    ;   D   ;  =   ;  =  ;   S   ;    S     ;   S    ;     S     ;  =  ;   I   ;  =  ;   S   ;    S    ;     S      ;   S    ;   I   ;   I   ;  =  ;   =   ;     S     ;   D   ;  =  
+BRATSIX ; <eps> ; ZERO ; ONE ;  CLIM ;   EIN    ;  TEEN  ; FOINTLEVO ; TWO ;       ; ONE ; ZZERO ;    AT   ;    TAH     ;   AS   ;  SEN  ; SENER ; ONE ; THREE ; FIVEPOINT ; <eps> ; FOUR
+================================================================================
+653, %WER 82.61 [ 19 / 23, 1 ins, 3 del, 15 sub ]
+  AH  ; THREE ; THIRTY ; <eps> ; LONER ;   AT   ;  OR  ; ABOVE ; THREE ; CLEARED ; I ; L ; S ;   AH  ;  D  ;  M   ; E ; TWO ; SEVEN ; AH ; CONTINENTAL ;   THREE    ; FIFTY ; EIGHT
+  D   ;   =   ;   =    ;   I   ;   =   ;   S    ;  S   ;   D   ;   =   ;    S    ; S ; S ; S ;   S   ;  S  ;  S   ; S ;  S  ;   S   ; S  ;      S      ;     S      ;   D   ;   =  
+<eps> ; THREE ; THIRTY ;   AH  ; LONER ; AINTER ; ABOV ; <eps> ; THREE ;  CLEAR  ; O ; A ; A ; TEALI ; TWO ; SEEN ; A ;  CO ;   A   ; OL ;     TER     ; THREEFIFTY ; <eps> ; EIGHT
+================================================================================
+23270, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+26689, %WER 38.89 [ 7 / 18, 1 ins, 0 del, 6 sub ]
+OKAY ; TWO ; FOUR ; TWO ; WE'LL ; CROSS ; ONE ; EIGHT ; LEFT ; AT ; TWENTY ; THREE ; AND ; GO ; <eps> ; RIGHT ; ON ; THE ; INNER 
+ S   ;  =  ;  =   ;  =  ;   S   ;   S   ;  =  ;   =   ;  =   ; S  ;   =    ;   =   ;  S  ; =  ;   I   ;   =   ; =  ;  =  ;   S   
+ OK  ; TWO ; FOUR ; TWO ;   WE  ; TROPS ; ONE ; EIGHT ; LEFT ; AN ; TWENTY ; THREE ;  A  ; GO ;   A   ; RIGHT ; ON ; THE ; ENNERT
+================================================================================
+12871, %WER 76.19 [ 16 / 21, 2 ins, 6 del, 8 sub ]
+WASHINGTON ; APPROACH ;      AH      ; <eps> ; GOOD ; EVENING ; <eps> ; AH ;     BIZEX     ; THREE ;  ZERO ;  FIVE ; IS ; AH ; V ; F ; R  ; LEVEL ;          SIX           ; THOUSAND ;  FIVE ; HUNDRED ; ZULU
+    S      ;    S     ;      S       ;   I   ;  =   ;    =    ;   I   ; =  ;       S       ;   D   ;   D   ;   D   ; =  ; S  ; = ; S ; S  ;   =   ;           S            ;    D     ;   D   ;    D    ;  =  
+   WILE    ;    SO    ; CONDAPPROACH ;   A   ; GOOD ; EVENING ; PISEX ; AH ; THREEZEROFIVE ; <eps> ; <eps> ; <eps> ; IS ; A  ; V ; A ; FA ; LEVEL ; SIXTHOUSANDFIVEHUNDRED ;  <eps>   ; <eps> ;  <eps>  ; ZULU
+================================================================================
+26558, %WER 68.75 [ 11 / 16, 0 ins, 3 del, 8 sub ]
+AMERICAN ; TWO ; FORTY ; THREE ; REGIONAL ; GROUND ; VIA  ; THE  ; SHORTPAUSE ;  AH ;  THAT  ;   AH  ; CHAPARRAL ; TWO ;   FORTY    ; THREE
+   =     ;  =  ;   =   ;   =   ;    S     ;   S    ;  S   ;  S   ;     S      ;  S  ;   S    ;   D   ;     D     ;  =  ;     S      ;   D  
+AMERICAN ; TWO ; FORTY ; THREE ;    RE    ;  CON   ; GRON ; FIZI ;    SAT     ; TAH ; SAPPOI ; <eps> ;   <eps>   ; TWO ; FORTYTHREE ; <eps>
+================================================================================
+21346, %WER 33.33 [ 7 / 21, 0 ins, 2 del, 5 sub ]
+AMERICAN ; FIVE ;   THIRTY   ;  NINE ; TURN ; AH ; RIGHT ; HEADING ; ONE ; TWO ; ZERO ; AND ; CLIMB ; MAINTAIN ; ONE ; SEVEN ; THOUSAND ; AMERICAN ;    FIVE    ; THIRTY ; NINE
+   =     ;  =   ;     S      ;   D   ;  =   ; S  ;   =   ;    =    ;  =  ;  =  ;  =   ;  =  ;   S   ;    =     ;  =  ;   =   ;    S     ;    =     ;     S      ;   D    ;  =  
+AMERICAN ; FIVE ; THIRTYNINE ; <eps> ; TURN ; A  ; RIGHT ; HEADING ; ONE ; TWO ; ZERO ; AND ;  CLIM ; MAINTAIN ; ONE ; SEVEN ;   TOUS   ; AMERICAN ; FIVETHIRTY ; <eps>  ; NINE
+================================================================================
+27424, %WER 44.44 [ 12 / 27, 2 ins, 2 del, 8 sub ]
+AMERICAN ; <eps> ; SEVENTY ; NINE ; HEAVY ; <eps> ; GIVE ; WAY ; TO ; AH ; DELTA ; M ; D ; EIGHTY ; HE'S ; GOING ; TO ; BE ; MAKING ; A ; TURN ; AHEAD ;   OF  ; YOU  ; THERE ; ON ; NINETEEN ; AND  ;   AH 
+   S     ;   I   ;    =    ;  =   ;   =   ;   I   ;  =   ;  =  ; =  ; S  ;   =   ; = ; = ;   =    ;  S   ;   S   ; =  ; =  ;   =    ; = ;  =   ;   S   ;   S   ;  S   ;   D   ; =  ;    =     ;  S   ;   D  
+  WER    ;  GET  ; SEVENTY ; NINE ; HEAVY ;   A   ; GIVE ; WAY ; TO ; A  ; DELTA ; M ; D ; EIGHTY ;  S   ;  GOIN ; TO ; BE ; MAKING ; A ; TURN ;   A   ; HEAVY ; HERE ; <eps> ; ON ; NINETEEN ; ANDA ; <eps>
+================================================================================
+8862, %WER 76.92 [ 20 / 26, 1 ins, 3 del, 16 sub ]
+GOOD ;      MORNING      ; WASHINGTON ;  AH ; KING ;  AIR  ; THREE ; FOUR ; TANGO ; MIKE ; OUT  ;  OF ; <eps> ; NINE ; POINT ; ONE ; GOING ; V  ;  F   ; R  ;   UP  ; TO ;     FIFTEEN      ; POINT ;  FIVE ; TO ; ALLENTOWN
+ =   ;         S         ;     S      ;  S  ;  S   ;   D   ;   =   ;  =   ;   S   ;  S   ;  S   ;  S  ;   I   ;  =   ;   S   ;  =  ;   S   ; S  ;  S   ; S  ;   S   ; =  ;        S         ;   D   ;   D   ; =  ;     S    
+GOOD ; MORNINGWASHINGTON ;    NIHT    ; KEN ;  AR  ; <eps> ; THREE ; FOUR ;  TAKE ;  O   ; MIHT ; TUN ;   AN  ; NINE ;  OIT  ; ONE ;   A   ; IT ; GONE ; TE ; FARUP ; TO ; FIFTEENPOINTFIVE ; <eps> ; <eps> ; TO ;  ALANTOWN
+================================================================================
+29021, %WER 63.16 [ 12 / 19, 1 ins, 1 del, 10 sub ]
+ CESSNA ; <eps> ; TWO ; THREE ; NOVEMBER ; REGIONAL ; GROUND ; EXIT ;   THE   ; RAMP ;  TAXI ; RUNWAY ; ONE ; EIGHT ;       LEFT       ; INTERSECTION ; TWENTY ; THREE ; FOR ; DEPARTURE 
+   S    ;   I   ;  =  ;   S   ;    =     ;    S     ;   S    ;  S   ;    S    ;  S   ;   D   ;   =    ;  =  ;   =   ;        S         ;      S       ;   =    ;   =   ;  =  ;     S     
+CONSEST ;  TAT  ; TWO ; THROE ; NOVEMBER ;  RESCO   ;  NIX   ;  TA  ; RAMPTAX ;  TE  ; <eps> ; RUNWAY ; ONE ; EIGHT ; LEFTINTERSECTION ;              ; TWENTY ; THREE ; FOR ; DEPPARTURE
+================================================================================
+9780, %WER 73.91 [ 17 / 23, 4 ins, 1 del, 12 sub ]
+  AH  ; NEGATIVE ; U ;  S  ;  AIR  ; ONE ; THIRTY ; THREE ; PROCEED ; DIRECT ; LINDEN ; RESUME ;    OWN    ; <eps> ; <eps> ; NAVIGATION ; CONTACT ; WASHINGTON ; CENTER ; <eps> ; <eps> ; ONE ; TWO ; ZERO ; POINT ; SIX ; FIVE
+  S   ;    S     ; S ;  S  ;   D   ;  =  ;   =    ;   =   ;    S    ;   S    ;   S    ;   S    ;     S     ;   I   ;   I   ;     =      ;    S    ;     S      ;   S    ;   I   ;   I   ;  =  ;  =  ;  =   ;   =   ;  =  ;  =  
+NAADE ;    EW    ; O ; SIR ; <eps> ; ONE ; THIRTY ; THREE ;    TO   ; SEETE  ;   LE   ; CORECT ; ONLANDERE ;   ZE  ;   ON  ; NAVIGATION ;    A    ;    FIVE    ;   O    ;   SE  ;  SEDO ; ONE ; TWO ; ZERO ; POINT ; SIX ; FIVE
+================================================================================
+5199, %WER 60.87 [ 14 / 23, 2 ins, 2 del, 10 sub ]
+SUNDANCE ; <eps> ; SIX ;   EIGHTY   ;  FIVE ; BOSTON ; DEPARTURE ; RADAR ; CONTACT ; ROGER ; AH ; FLY ; <eps> ; HEADING ; OF ; AH ; TWO ; AH ; EIGHT ; ZERO ; CLIMB ;    AND    ; MAINTAIN ; FOUR ; THOUSAND
+   S     ;   I   ;  =  ;     S      ;   S   ;   S    ;     S     ;   D   ;    =    ;   =   ; S  ;  S  ;   I   ;    =    ; =  ; S  ;  =  ; =  ;   =   ;  =   ;   S   ;     S     ;    D     ;  =   ;    =    
+ SUNDAY  ;   AN  ; SIX ; EIGHTYFIVE ; OSTIN ; PONTU  ;   RADOC   ; <eps> ; CONTACT ; ROGER ; R  ;  A  ;  FLI  ; HEADING ; OF ; A  ; TWO ; AH ; EIGHT ; ZERO ; CLEMA ; MAINTAIND ;  <eps>   ; FOUR ; THOUSAND
+================================================================================
+15595, %WER 82.61 [ 19 / 23, 2 ins, 1 del, 16 sub ]
+HELICOPTER ; <eps> ; <eps> ; THREE ; MIKE ; MIKE ; FREQUENCY ; CHANGE ; APPROVED ;  YOU   ;  HAVE ; TRAFFIC ; JUST ; AH ; OVER ; AH ; THE ; POTOMAC ;   AH  ; DISREGARD ; THAT ; TRAFFIC'S ; HIGH ; NO ; FACTOR
+    S      ;   I   ;   I   ;   =   ;  S   ;  S   ;     =     ;   =    ;    S     ;   S    ;   S   ;    S    ;  S   ; S  ;  S   ; S  ;  S  ;    S    ;   D   ;     =     ;  S   ;     S     ;  S   ; =  ;   =   
+    E      ;  COT  ;  THE  ; THREE ; MIK  ; MIC  ; FREQUENCY ; CHANGE ;  THROA   ; TIVEIX ; JUSTA ;   OVER  ;  AR  ; TO ;  TE  ; ME ; CIX ;    IH   ; <eps> ; DISREGARD ; TAT  ;  TRIVEINX ;  SI  ; NO ; FACTOR
+================================================================================
+21398, %WER 38.46 [ 10 / 26, 3 ins, 1 del, 6 sub ]
+CITATION ;  SEVEN  ; SIX  ;  ZERO ; NOVEMBER ; BRAVO ; REGIONAL ; DEPARTURE ; RADAR ; <eps> ; CONTACT ; CLIMB ; AND ; MAINTAIN ; <eps> ; EIGHT ; THOUSAND ; LEAVING ; <eps> ; FOUR ; THOUSAND ; FIVE ; HUNDRED ; TURN ; RIGHT ; TO ; ONE ; ZERO ; ZERO
+   S     ;    S    ;  S   ;   D   ;    =     ;   =   ;    S     ;     =     ;   S   ;   I   ;    =    ;   =   ;  =  ;    =     ;   I   ;   =   ;    S     ;    =    ;   I   ;  =   ;    =     ;  =   ;    =    ;  =   ;   =   ; =  ;  =  ;  =   ;  =  
+ATATION  ; SEVENTI ; ZOON ; <eps> ; NOVEMBER ; BRAVO ;  REGON   ; DEPARTURE ;  RAT  ;  ART  ; CONTACT ; CLIMB ; AND ; MAINTAIN ;   A   ; EIGHT ;   TOUS   ; LEAVING ;       ; FOUR ; THOUSAND ; FIVE ; HUNDRED ; TURN ; RIGHT ; TO ; ONE ; ZERO ; ZERO
+================================================================================
+27230, %WER 54.55 [ 18 / 33, 3 ins, 4 del, 11 sub ]
+UNITED ;       FIVE       ; SEVENTY ; SEVEN ; ROGER ; EXIT ; THE ;   AH  ; RAMP ; AND ; FOLLOW ; A ;  G  ; ONE ; <eps> ; FIFTY ; <eps> ; NINE ; NORTH ; BOUND ; ON ; THE ; INNER ; TAXIWAY ; FOR ; RUNWAY ; ONE ; SEVEN ; RIGHT ;  AND  ; HOLD ; SHORT ; OF ; TAXIWAY ; <eps> ; NINETEEN
+  S    ;        S         ;    D    ;   D   ;   =   ;  S   ;  S  ;   D   ;  =   ;  S  ;   =    ; = ;  S  ;  =  ;   I   ;   =   ;   I   ;  =   ;   =   ;   S   ; =  ;  =  ;   S   ;    S    ;  S  ;   =    ;  =  ;   =   ;   =   ;   D   ;  =   ;   =   ; =  ;    S    ;   I   ;    =    
+  A    ; FIVESEVENTYSEVEN ;  <eps>  ; <eps> ; ROGER ; EXET ;  TE ; <eps> ; RAMP ;  TE ; FOLLOW ; A ; AHT ; ONE ;       ; FIFTY ;       ; NINE ; NORTH ;  BEN  ; ON ; THE ; INTER ;   TAX   ; WAF ; RUNWAY ; ONE ; SEVEN ; RIGHT ; <eps> ; HOLD ; SHORT ; OF ;   TAXI  ;  WAY  ; NINETEEN
+================================================================================
+28398, %WER 54.84 [ 17 / 31, 1 ins, 4 del, 12 sub ]
+METRO ; EIGHT ;   NINETY   ; FIVE ;  THE  ; SEVEN ;   SIX    ; SEVEN ; IS ;  TURNING  ; AT ;  THE  ; HIGH ; SPEED ; WIND ;  IS ; THREE ; FIVE ; <eps> ; ZERO ;   AT  ; EIGHT ; RUNWAY ; THREE ; FIVE ; RIGHT ; CLEARED ; FOR ; TAKEOFF ; TRAFFIC ; TWO ; OUT
+  S   ;   =   ;     S      ;  S   ;   D   ;   =   ;    S     ;   D   ; =  ;     S     ; S  ;   D   ;  =   ;   =   ;  S   ;  S  ;   =   ;  =   ;   I   ;  =   ;   D   ;   =   ;   =    ;   =   ;  =   ;   =   ;    S    ;  S  ;    S    ;    =    ;  =  ;  S 
+TETUR ; EIGHT ; NINETYFIVE ;  TE  ; <eps> ; SEVEN ; SIXSEVEN ; <eps> ; IS ; TURNINGIN ; TO ; <eps> ; HIGH ; SPEED ; WEN  ; DOS ; THREE ; FIVE ;       ; ZERO ; <eps> ; EIGHT ; RUNWAY ; THREE ; FIVE ; RIGHT ;  CLAIRF ; TAK ;   OFF   ; TRAFFIC ; TWO ;  OU
+================================================================================
+11828, %WER 93.75 [ 30 / 32, 1 ins, 2 del, 27 sub ]
+  D   ;   C   ; APPROACH ;   AH   ; COMMANDER ;    FOUR   ; NINER ; FOUR ; FOUR ; WHISKEY ; IS ; WITH ; YOU  ; BROOKE ; AH ; OVER ; THE ; BROOKE ; V ; O ; R ;  AT  ; TWO  ;  FIVE ; HUNDRED ; ENROUTE ; <eps> ; TO ; THE ; WESTMINSTER ; V ; O ;   R  
+  S   ;   D   ;    =     ;   S    ;     S     ;     S     ;   S   ;  S   ;  S   ;    S    ; S  ;  S   ;  S   ;   S    ; S  ;  S   ;  S  ;   S    ; S ; S ; S ;  S   ;  S   ;   S   ;    S    ;    S    ;   I   ; =  ;  S  ;      S      ; S ; = ;   D  
+EETTY ; <eps> ; APPROACH ; OXMENE ;     TO    ; FORNEETER ;  FOR  ;  FO  ;  O   ;    F    ;    ;  O   ; TOFO ;  FOR   ; TO ; OTO  ;  O  ;  ARE   ;   ; A ;   ; FIVE ; FONE ; TORRT ;   FRO   ;    OU   ;   T   ; TO ;     ;     NON     ;   ; O ; <eps>
+================================================================================
+26761, %WER 50.00 [ 17 / 34, 1 ins, 6 del, 10 sub ]
+U ;  S   ; AIR  ; FOURTEEN ; EIGHTY ; FIVE ;   AH  ; NORTH ; ON ; THE ; INNER ; CROSS  ; THE ; EIGHTEEN ; BRIDGE ;  FOR  ; RUNWAY ; ONE ; SEVEN ; RIGHT ;  ON  ;  THE  ; BRIDGE ; CONTACT ; GROUND ; POINT ; SIX ; <eps> ; FIVE ; JULIET ;   IS  ; ON ; DEPARTURE ;  ATIS ;  NOW 
+S ;  S   ;  S   ;    S     ;   D    ;  =   ;   D   ;   =   ; =  ;  =  ;   =   ;   S    ;  =  ;    =     ;   =    ;   D   ;   =    ;  =  ;   =   ;   =   ;  S   ;   D   ;   =    ;    =    ;   S    ;   =   ;  =  ;   I   ;  =   ;   S    ;   D   ; =  ;     S     ;   S   ;   D  
+O ; SAIR ; FOUR ;   TANY   ; <eps>  ; FIVE ; <eps> ; NORTH ; ON ; THE ; INNER ; CROSSD ; THE ; EIGHTEEN ; BRIDGE ; <eps> ; RUNWAY ; ONE ; SEVEN ; RIGHT ; TOWD ; <eps> ; BRIDGE ; CONTACT ; ROUND  ; POINT ; SIX ;       ; FIVE ; JULIE  ; <eps> ; ON ;  PARTRATO ; SNAFP ; <eps>
+================================================================================
+22876, %WER 2700.00 [ 27 / 1, 26 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I  
+     TEE       ;   I   ;  TER  ;   RE  ;   I   ;   TI  ;       ;   O   ;   O   ;   O   ;   O   ;   O   ;   O   ;   TO  ;   O   ;       ;  ITI  ;   I   ;   OA  ;   TA  ;   I   ;   O   ;   O   ;   OI  ;   T   ;   O   ;   O  
+================================================================================
+22852, %WER 3100.00 [ 31 / 1, 30 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps> ; <eps>
+      S        ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I   ;   I  
+     TEPE      ;   MA  ; BERTY ;   FI  ;   I   ;   I   ;       ;       ;   I   ;   I   ;   FI  ;   I   ;   I   ;   I   ;   I   ;   II  ;   I   ;   I   ;   I   ;   I   ;   I   ;       ;   I   ;   I   ;   I   ;   I   ;   II  ;   I   ;       ;   I   ;   OO 
+================================================================================
+26704, %WER 50.00 [ 14 / 28, 3 ins, 2 del, 9 sub ]
+AMERICAN ; LOCAL ; TWO ;  FORTY   ;  TWO  ; CROSS ; THE ; THIRTY ;    TWO    ; BRIDGE ; WHEN ; YOU ; GET ; ON ; THE ; BRIDGE ; <eps> ; CONTACT ; GROUND ;   ONE    ; THREE ; FOUR ; POINT ; <eps> ; ZERO ; FIVE ; <eps> ; THIRTY ; FOUR ; ZERO ; FIVE
+   S     ;   S   ;  =  ;    S     ;   D   ;   =   ;  =  ;   S    ;     S     ;   =    ;  S   ;  =  ;  =  ; =  ;  S  ;   =    ;   I   ;    =    ;   =    ;    S     ;   D   ;  =   ;   =   ;   I   ;  =   ;  =   ;   I   ;   =    ;  =   ;  S   ;  =  
+ AMERIC  ;  LOCO ; TWO ; FORTYTWO ; <eps> ; CROSS ; THE ;        ; THIRTYTWO ; BRIDGE ; WEN  ; YOU ; GET ; ON ;  TE ; BRIDGE ;   TE  ; CONTACT ; GROUND ; ONETHREE ; <eps> ; FOUR ; POINT ;       ; ZERO ; FIVE ;       ; THIRTY ; FOUR ;  O   ; FIVE
+================================================================================
+23263, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+              
+================================================================================
+7163, %WER 88.89 [ 32 / 36, 2 ins, 0 del, 30 sub ]
+OKAY ;   SIX    ; THREE ; THREE ;  ZERO ; NOVEMBER ;   IS  ; CLEARED ;   TO  ; TETERBORO ; VIA ; RADAR ; VECTORS ; BOSOX ; FOUR ; NINETEEN ; TO ; VICTOR ; FOUR ; NINETY ; NINE ; HARTFORD ; TWO ; TWENTY ; NINE ; TO ; ONE ; EIGHTY ; VICTOR ; ONE ; EIGHTY ; EIGHT ; SPARTA ; DIRECT ; <eps> ; <eps>  ; SIX ; THOUSAND
+ S   ;    S     ;   =   ;   S   ;   S   ;    S     ;   S   ;    S    ;   S   ;     S     ;  S  ;   S   ;    S    ;   S   ;  S   ;    S     ; =  ;   S    ;  S   ;   S    ;  S   ;    S     ;  =  ;   S    ;  S   ; =  ;  =  ;   S    ;   S    ;  S  ;   S    ;   S   ;   S    ;   S    ;   I   ;   I    ;  =  ;    S    
+OKA  ; SIXTHREE ; THREE ;  ZER  ; APERS ;   PET    ; TETER ;   BORO  ; TOREE ;     ZO    ; TAC ; FOLLO ;   FAC   ;   OT  ;  IN  ;    TE    ; TO ; SIXTEF ; FOT  ;   IT   ;  NA  ;   ATIC   ; TWO ; TWONTY ; NIN  ; TO ; ONE ;   I    ;   SI   ;  TO ;  WONT  ;   I   ;   AN   ;   BO   ;   AR  ; DORECT ; SIX ;  TWOUT  
+================================================================================
+23808, %WER 66.67 [ 34 / 51, 1 ins, 8 del, 25 sub ]
+COMMANDER ; <eps> ; EIGHT ; SIERRA ; ALPHA ;   IS   ; RADAR ; CONTACT ; FOUR ; MILES ; EAST ; OF ; AH ; ALKID ; INTERSECTION ;  FLY  ; HEADING ;  OF ;  FLY  ; HEADING ; ONE ; SEVEN ;  ZERO  ; AND  ;   ONCE  ; AGAIN ; MAINTAIN ; V ;  F  ;   R   ; CONDITIONS ;   AH  ; CAN ;   YOU    ; START ; A  ; V ;  F  ; R  ; DESCENT ; AH ; OH ; MAYBE ; DOWN ; TO ;   AH  ; FIFTY ; FIVE ; OR ; SOMETHING ;  LIKE  ;  THAT
+    =     ;   I   ;   =   ;   S    ;   S   ;   S    ;   D   ;    =    ;  =   ;   =   ;  =   ; =  ; S  ;   S   ;      =       ;   S   ;    S    ;  S  ;   D   ;    D    ;  =  ;   =   ;   S    ;  S   ;    S    ;   D   ;    =     ; S ;  S  ;   D   ;     =      ;   D   ;  =  ;    S     ;   S   ; S  ; S ;  S  ; S  ;    S    ; S  ; S  ;   =   ;  =   ; =  ;   D   ;   =   ;  =   ; S  ;     S     ;   S    ;   D  
+COMMANDER ;       ; EIGHT ;   UR   ; OLFES ; READOR ; <eps> ; CONTACT ; FOUR ; MILES ; EAST ; OF ; A  ; ALKAT ; INTERSECTION ; IEHDI ;    NO   ; ITY ; <eps> ;  <eps>  ; ONE ; SEVEN ; ZEROME ; ONES ; TOAGAIN ; <eps> ; MAINTAIN ; T ; FAR ; <eps> ; CONDITIONS ; <eps> ; CAN ; YOUSTART ;   O   ; BE ;   ; FAR ; TO ;   CENT  ; A  ; O  ; MAYBE ; DOWN ; TO ; <eps> ; FIFTY ; FIVE ; R  ;    SEN    ; LENGON ; <eps>
+================================================================================
+23238, %WER 100.00 [ 1 / 1, 0 ins, 0 del, 1 sub ]
+UNINTELLIGIBLE
+      S       
+      U       
+================================================================================
+23849, %WER 71.43 [ 15 / 21, 2 ins, 5 del, 8 sub ]
+AMERICAN ; EIGHT ;  ZERO ; ONE ; HEAVY ; DESCEND ;  AND   ; MAINTAIN ; <eps> ; SIX ; THOUSAND ; LONGPAUSE ; AMERICAN ; EIGHT ;  ZERO ; ONE ; HEAVY ; DESCEND ;  AND  ; MAINTAIN ; <eps> ; SIX ; THOUSAND
+   S     ;   D   ;   D   ;  =  ;   =   ;    S    ;   S    ;    S     ;   I   ;  =  ;    =     ;     S     ;    D     ;   D   ;   D   ;  =  ;   =   ;    S    ;   S   ;    S     ;   I   ;  =  ;    =    
+PLEAZURE ; <eps> ; <eps> ; ONE ; HEAVY ;         ; TWENTY ;  MAINT   ;  AIN  ; SIX ; THOUSAND ;  PLEAZURY ;  <eps>   ; <eps> ; <eps> ; ONE ; HEAVY ;    TO   ; SINTO ;  MAINT   ;  TAIN ; SIX ; THOUSAND
+================================================================================
+27128, %WER 55.07 [ 38 / 69, 4 ins, 5 del, 29 sub ]
+AMERICAN ;  TEN  ; SEVENTY ; FOUR ; TURN ; RIGHT ; ON ; THAT ; INNER ; SHORT ; PAUSE ; UNINTELLIGIBLE ; MISSED ; THAT ; MAKE ; A ; <eps> ; LEFT ;  TURN  ;   ON  ; INDIA ; AH ;   CORRECTION   ; THAT'S ;   AH  ; HOTEL ; HERE ; WE ;  GO  ; MAKE ; A ; LEFT ; TURN ; ON ; <eps> ; HOTEL ; AND ; THEN ; AH ; FOLLOW ;  THE  ;  M   ; D ; EIGHTY ; THAT'S ; <eps> ; SOUTH ; BOUND ; ON ; THE ; OUTER ; TAXIWAY ; <eps> ; SOUTH ; BOUND ; ON ;   THE    ; OUTER ; AND ; THEN ; LEFT ; AT ;   THIRTY  ;   TWO   ; CORRECTION ; THIRTY ; THREE ; AND ; HOLD ; SHORT ; OF ; THIRTY ; TWO
+   S     ;   D   ;    =    ;  =   ;  =   ;   =   ; =  ;  =   ;   S   ;   S   ;   S   ;       S        ;   S    ;  =   ;  =   ; = ;   I   ;  =   ;   S    ;   D   ;   =   ; S  ;       S        ;   S    ;   D   ;   =   ;  S   ; =  ;  S   ;  =   ; = ;  =   ;  =   ; =  ;   I   ;   =   ;  =  ;  S   ; S  ;   S    ;   S   ;  S   ; = ;   S    ;   S    ;   I   ;   =   ;   S   ; =  ;  =  ;   S   ;    S    ;   I   ;   =   ;   S   ; =  ;    S     ;   D   ;  =  ;  S   ;  =   ; S  ;     S     ;    S    ;     D      ;   =    ;   =   ;  =  ;  =   ;   =   ; S  ;   =    ;  = 
+   TE    ; <eps> ; SEVENTY ; FOUR ; TURN ; RIGHT ; ON ; THAT ; ENNER ;  WELL ;   IF  ;       TO       ;  MISS  ; THAT ; MAKE ; A ;       ; LEFT ; TURNON ; <eps> ; INDIA ; A  ; CRRECTIONTHATS ;   SA   ; <eps> ; HOTEL ; HER  ; WE ; GONT ; MAKE ; A ; LEFT ; TURN ; ON ;   H   ; HOTEL ; AND ; AND  ; A  ;   O    ; FOLLO ; THEM ; D ;   E    ;   AT   ;       ; SOUTH ; BOWND ; ON ; THE ; OUTOR ;   TAXI  ;  WAY  ; SOUTH ; BOWND ; ON ; THEOUTER ; <eps> ; AND ; TEN  ; LEFT ; A  ; THIRTYTWO ; OECTION ;   <eps>    ; THIRTY ; THREE ; AND ; HOLD ; SHORT ; T  ; THIRTY ; TWO

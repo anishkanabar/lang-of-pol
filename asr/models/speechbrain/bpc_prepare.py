@@ -1,9 +1,7 @@
-from cmath import isnan
 import os
 import torch
 import logging
 import librosa
-import numpy as np
 import pandas as pd
 from pathlib import Path
 import speechbrain as sb
@@ -139,13 +137,10 @@ def dataio_prepare(hparams):
     @sb.utils.data_pipeline.provides("sig")
     def audio_pipeline(wav):
         sig = sb.dataio.dataio.read_audio(wav)
-        sig_np = sig.numpy()
-        sig_res = librosa.resample(sig_np, hparams['data_sample_rate'], hparams['model_sample_rate'])
-        # # HACK FOR INF WAVS
-        # sig_res = np.where(np.isfinite(sig_res), sig_res, 0.0)
-        # # END HACK
-        sig = torch.tensor(sig_res)
-        # assert(torch.all(torch.isfinite(sig)))
+        sig = librosa.resample(sig.numpy(), 
+                               orig_sr=hparams['data_sample_rate'], 
+                               target_sr=hparams['model_sample_rate'])
+        sig = torch.tensor(sig)
         return sig
  
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
