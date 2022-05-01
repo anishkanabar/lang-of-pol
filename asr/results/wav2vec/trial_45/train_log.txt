@@ -1,0 +1,17 @@
+epoch: 1, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 3.07 - valid loss: 3.18, valid CER: 55.74, valid WER: 86.10
+epoch: 2, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 2.92 - valid loss: 3.00, valid CER: 55.30, valid WER: 85.72
+epoch: 3, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 2.89 - valid loss: 3.06, valid CER: 55.13, valid WER: 85.00
+epoch: 4, lr_model: 7.20e-01, lr_wav2vec: 9.00e-05 - train loss: 2.86 - valid loss: 2.82, valid CER: 54.99, valid WER: 84.90
+epoch: 5, lr_model: 7.20e-01, lr_wav2vec: 9.00e-05 - train loss: 2.85 - valid loss: 3.07, valid CER: 54.97, valid WER: 84.64
+epoch: 6, lr_model: 5.76e-01, lr_wav2vec: 8.10e-05 - train loss: 2.84 - valid loss: 2.92, valid CER: 54.70, valid WER: 84.28
+epoch: 7, lr_model: 5.76e-01, lr_wav2vec: 8.10e-05 - train loss: 2.84 - valid loss: 2.89, valid CER: 54.68, valid WER: 84.38
+epoch: 8, lr_model: 5.76e-01, lr_wav2vec: 8.10e-05 - train loss: 2.83 - valid loss: 2.91, valid CER: 54.62, valid WER: 84.43
+epoch: 9, lr_model: 4.61e-01, lr_wav2vec: 7.29e-05 - train loss: 2.82 - valid loss: 2.92, valid CER: 54.51, valid WER: 84.21
+epoch: 10, lr_model: 3.69e-01, lr_wav2vec: 6.56e-05 - train loss: 2.81 - valid loss: 2.82, valid CER: 54.44, valid WER: 83.76
+epoch: 11, lr_model: 3.69e-01, lr_wav2vec: 6.56e-05 - train loss: 2.81 - valid loss: 2.79, valid CER: 54.41, valid WER: 83.93
+epoch: 12, lr_model: 3.69e-01, lr_wav2vec: 6.56e-05 - train loss: 2.81 - valid loss: 2.86, valid CER: 54.32, valid WER: 83.95
+epoch: 13, lr_model: 2.95e-01, lr_wav2vec: 5.90e-05 - train loss: 2.80 - valid loss: 2.78, valid CER: 54.45, valid WER: 83.92
+epoch: 14, lr_model: 2.95e-01, lr_wav2vec: 5.90e-05 - train loss: 2.80 - valid loss: 2.76, valid CER: 54.44, valid WER: 83.62
+epoch: 15, lr_model: 2.95e-01, lr_wav2vec: 5.90e-05 - train loss: 2.80 - valid loss: 2.87, valid CER: 54.29, valid WER: 83.98
+epoch: 16, lr_model: 2.36e-01, lr_wav2vec: 5.31e-05 - train loss: 2.79 - valid loss: 2.84, valid CER: 54.41, valid WER: 83.66
+epoch: 17, lr_model: 2.36e-01, lr_wav2vec: 5.31e-05 - train loss: 2.80 - valid loss: 2.88, valid CER: 54.23, valid WER: 84.24
