@@ -64,16 +64,11 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
-    # Link to libsndfile, which isnt available on rcc compute nodes
-    if [[ ! "$LD_LIBRARY_PATH" == *"soundfile"* ]]; then
-        LN_PATH=/home/`whoami`/.conda/envs/soundfile/lib
-        export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
-    fi
-    # Link to ffmpeg, which isnt available on rcc compute nodes
-    if [[ ! "$PATH" == *"ffmpeg"* ]]; then
-        BIN_PATH=/home/`whoami`/.conda/envs/ffmpeg/bin
-        export PATH=$BIN_PATH:$PATH
-    fi
+    # Link to libsndfile and ffmpeg and sox
+    LN_PATH=/home/`whoami`/.conda/envs/audio/lib
+    export LD_LIBRARY_PATH=$LN_PATH:$LD_LIBRARY_PATH
+    BIN_PATH=/home/`whoami`/.conda/envs/audio/bin
+    export PATH=$BIN_PATH:$PATH
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
