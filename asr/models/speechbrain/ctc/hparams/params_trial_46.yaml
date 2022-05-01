@@ -8,11 +8,13 @@
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 1987
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 44
+trial: 46
+input_trial: 39
+input_folder: !ref results/train_wav2vec2_char/seed_<seed>/trial_<input_trial>
 output_folder: !ref results/train_wav2vec2_char/seed_<seed>/trial_<trial>
 wer_file: !ref <output_folder>/wer.txt
 cer_file: !ref <output_folder>/cer.txt
-save_folder: !ref <output_folder>/save
+save_folder: !ref <input_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 
 # Data files
@@ -45,7 +47,7 @@ wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
 model_sample_rate: 16000
 
 # Training parameters
-number_of_epochs: 26
+number_of_epochs: 50
 lr: 0.9
 lr_wav2vec: 0.0001
 sorting: ascending
