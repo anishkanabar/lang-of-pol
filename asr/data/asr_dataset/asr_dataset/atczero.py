@@ -61,12 +61,6 @@ class ATCZeroETL(AsrETL):
         logger.info("Skipping check for corrupted audio (usually nothing is corrupted)")
         #data = self._filter_corrupt(data, "audio")
         self.describe(data, "-transformed")
-        # Delete bad utterance files
-        dropped_data = unfiltered_data.loc[unfiltered_data.index.difference(data.index)]
-        for dropped_row in dropped_data.itertuples():
-            dropped_row = dropped_row._asdict()
-            if os.path.exists(dropped_row['audio']):
-                os.remove(dropped_row['audio'])
         return data
 
 

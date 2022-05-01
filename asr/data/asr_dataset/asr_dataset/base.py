@@ -85,6 +85,11 @@ class AsrETL(abc.ABC):
         Prints helpful statistics about dataset.
         """
         logger.info(f"{self.name}{name_suffix} dataset stats:")
+        self.__class__._describe(data)
+
+
+    @classmethod
+    def _describe(cls, data: pd.DataFrame):
         logger.info(f"\tRow count = {data.shape[0]}")
         logger.info(f"\tMin duration = {data['duration'].min():.2f} (sec)")
         logger.info(f"\tMax duration = {data['duration'].max():.2f} (sec)")
