@@ -21,7 +21,7 @@ scratch_dir: /project/graziul/ra/echandler/scratch
 dataset_name: librispeech  #'librispeech' or 'police' or 'atczero'
 data_sample_rate: 16000
 num_train: null
-num_sec: 39600
+num_sec: 49500   # yields 11h training split
 skip_prep: False
 ckpt_interval_minutes: 25 # save checkpoint every N min
 split_ratios:
