@@ -31,7 +31,7 @@ if __name__ == "__main__":
     )
 
     # 1.  # Dataset prep (parsing timers-and-such)
-    from bpc_prepare import prepare_bpc  # noqa
+    from tok_prepare import prepare_bpc  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
@@ -42,7 +42,7 @@ if __name__ == "__main__":
             "num_train": hparams["num_train"],
             "num_sec": hparams["num_sec"],
             "split_ratios": hparams["split_ratios"],
-            "save_folder": hparams["output_folder"],
+            "output_folder": hparams["output_folder"],
         },
     )
 

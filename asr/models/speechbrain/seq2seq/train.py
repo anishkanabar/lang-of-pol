@@ -181,86 +181,6 @@ class ASR(sb.Brain):
                 self.cer_metric.write_stats(w)
 
 
-def dataio_prepare(hparams):
-    """
-    This function prepares the datasets to be used in the brain class.
-    It also defines the data processing pipeline through user-defined functions.
-    """
-
-    train_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["train_data"]
-    )
-
-    if hparams["sorting"] == "ascending":
-        # we sort training data to speed up training and get better results.
-        train_data = train_data.filtered_sorted(sort_key="duration")
-        # when sorting do not shuffle in dataloader ! otherwise is pointless
-        hparams["train_dataloader_opts"]["shuffle"] = False
-
-    elif hparams["sorting"] == "descending":
-        train_data = train_data.filtered_sorted(
-            sort_key="duration", reverse=True
-        )
-        # when sorting do not shuffle in dataloader ! otherwise is pointless
-        hparams["train_dataloader_opts"]["shuffle"] = False
-
-    elif hparams["sorting"] == "random":
-        pass
-
-    else:
-        raise NotImplementedError(
-            "sorting must be random, ascending or descending"
-        )
-
-    valid_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["valid_data"]
-    )
-    valid_data = valid_data.filtered_sorted(sort_key="duration")
-
-    test_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["test_data"]
-    )
-    test_data = test_data.filtered_sorted(sort_key="duration")
-
-    datasets = [train_data, valid_data, test_data]
-
-    # Defining tokenizer and loading it
-    tokenizer = hparams["tokenizer"]
-
-    # 2. Define audio pipeline:
-    @sb.utils.data_pipeline.takes("wav")
-    @sb.utils.data_pipeline.provides("sig")
-    def audio_pipeline(wav):
-        sig = sb.dataio.dataio.read_audio(wav)
-        return sig
-
-    sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
-
-    # 3. Define text pipeline:
-    @sb.utils.data_pipeline.takes("transcript")
-    @sb.utils.data_pipeline.provides(
-        "wrd", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
-    )
-    def text_pipeline(wrd):
-        yield wrd
-        tokens_list = tokenizer.encode_as_ids(wrd)
-        yield tokens_list
-        tokens_bos = torch.LongTensor([hparams["bos_index"]] + (tokens_list))
-        yield tokens_bos
-        tokens_eos = torch.LongTensor(tokens_list + [hparams["eos_index"]])
-        yield tokens_eos
-        tokens = torch.LongTensor(tokens_list)
-        yield tokens
-
-    sb.dataio.dataset.add_dynamic_item(datasets, text_pipeline)
-
-    # 4. Set output:
-    sb.dataio.dataset.set_output_keys(
-        datasets, ["id", "sig", "wrd", "tokens_bos", "tokens_eos", "tokens"],
-    )
-    return train_data, valid_data, test_data, tokenizer
-
-
 if __name__ == "__main__":
 
     # CLI:
@@ -280,7 +200,7 @@ if __name__ == "__main__":
     )
 
     # 1.  # Dataset prep (parsing Librispeech)
-    from bpc_prepare import prepare_bpc  # noqa
+    from seq_prepare import prepare_bpc, dataio_prepare  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
@@ -291,7 +211,7 @@ if __name__ == "__main__":
             "num_train": hparams["num_train"],
             "num_sec": hparams["num_sec"],
             "split_ratios": hparams["split_ratios"],
-            "save_folder": hparams["output_folder"],
+            "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
         },
     )

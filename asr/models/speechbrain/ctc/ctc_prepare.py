@@ -1,22 +1,60 @@
 import re
 import os
+import torch
 import logging
+import pandas as pd
+import speechbrain as sb
 import bpc_prepare as prepare
 from asr_dataset.base import AsrETL
 from asr_dataset.atczero import ATCZeroETL
-import pandas as pd
 
 logger = logging.getLogger('asr.prepare.ctc')
 
 
 def dataio_prepare(hparams):
     """ Dataset transformation pipeline """
-    return prepare.dataio_prepare(hparams)
+
+    label_encoder = sb.dataio.encoder.CTCTextEncoder()
+
+    @sb.utils.data_pipeline.takes("wrd")
+    @sb.utils.data_pipeline.provides(
+        "wrd", "char_list", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
+    )
+    def text_pipeline(wrd):
+        yield wrd
+        char_list = list(wrd)
+        yield char_list
+        tokens_list = label_encoder.encode_sequence(char_list)
+        yield tokens_list
+        tokens_bos = torch.LongTensor([hparams["bos_index"]] + (tokens_list))
+        yield tokens_bos
+        tokens_eos = torch.LongTensor(tokens_list + [hparams["eos_index"]])
+        yield tokens_eos
+        tokens = torch.LongTensor(tokens_list)
+        yield tokens
+
+    train_data, val_data, test_data = prepare.dataio_prepare(hparams, text_pipeline)
+
+    lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
+    special_labels = {
+        "bos_label": hparams["bos_index"],
+        "eos_label": hparams["eos_index"],
+        "blank_label": hparams["blank_index"],
+    }
+    label_encoder.load_or_create(
+        path=lab_enc_file,
+        from_didatasets=[train_data],
+        output_key="char_list",
+        special_labels=special_labels,
+        sequence_input=True,
+    )
+    label_encoder.add_unk()
+
+    return train_data, val_data, test_data, label_encoder
 
 
 def prepare_bpc(split_ratios: dict, 
                 output_folder: str, 
-                seed: str,
                 **kwargs):
     """ See docstring in bpc_prepare for other params"""
 
@@ -26,7 +64,6 @@ def prepare_bpc(split_ratios: dict,
 
     splits = get_splits(split_ratios, output_folder)
     splits = {k: ctc_prep(v) for k, v in splits.items()}
-    # splits = {k: filter_duration(v) for k, v in splits.items()}
     splits = {k: filter_nonalphanum(v) for k,v in splits.items()}
     splits = {k: filter_ratio(v) for k, v in splits.items()}
 
@@ -53,14 +90,6 @@ def write_splits(splits: {str, pd.DataFrame}, output_folder: str):
 
 def ctc_prep(df: pd.DataFrame) -> pd.DataFrame:
     return df.rename(columns={'transcript':'wrd'})
-
-
-def filter_duration(df: pd.DataFrame) -> pd.DataFrame:
-    min_duration = 1.5  # minimum librispeech duration
-    predicate = df['duration'] >= min_duration
-    logger.info("Filtering out {} audio < {} sec".format(len(df) - predicate.sum(), min_duration))
-    df = df.loc[predicate]
-    return df
 
 
 def filter_nonalphanum(df: pd.DataFrame) -> pd.DataFrame:

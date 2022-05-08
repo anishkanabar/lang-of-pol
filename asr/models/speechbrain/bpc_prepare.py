@@ -85,7 +85,7 @@ def prepare_bpc(cluster: str,
         )
         new_df.to_csv(manifest_path, index=False)
         
-def dataio_prepare(hparams):
+def dataio_prepare(hparams, text_pipeline):
     """This function prepares the datasets to be used in the brain class.
     It also defines the data processing pipeline through user-defined functions."""
 
@@ -142,51 +142,16 @@ def dataio_prepare(hparams):
                                target_sr=hparams['model_sample_rate'])
         sig = torch.tensor(sig)
         return sig
- 
+
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
-    label_encoder = sb.dataio.encoder.CTCTextEncoder()
-
+ 
     # 3. Define text pipeline:
-    @sb.utils.data_pipeline.takes("wrd")
-    @sb.utils.data_pipeline.provides(
-        "wrd", "char_list", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
-    )
-    def text_pipeline(wrd):
-        yield wrd
-        char_list = list(wrd)
-        yield char_list
-        tokens_list = label_encoder.encode_sequence(char_list)
-        yield tokens_list
-        tokens_bos = torch.LongTensor([hparams["bos_index"]] + (tokens_list))
-        yield tokens_bos
-        tokens_eos = torch.LongTensor(tokens_list + [hparams["eos_index"]])
-        yield tokens_eos
-        tokens = torch.LongTensor(tokens_list)
-        yield tokens
-
     sb.dataio.dataset.add_dynamic_item(datasets, text_pipeline)
 
-    lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
-    special_labels = {
-        "bos_label": hparams["bos_index"],
-        "eos_label": hparams["eos_index"],
-        "blank_label": hparams["blank_index"],
-    }
-    label_encoder.load_or_create(
-        path=lab_enc_file,
-        from_didatasets=[train_data],
-        output_key="char_list",
-        special_labels=special_labels,
-        sequence_input=True,
-    )
-    label_encoder.add_unk()
-
     # 4. Set output:
-    sb.dataio.dataset.set_output_keys(
-        datasets,
-        ["id", "sig", "wrd", "char_list", "tokens_bos", "tokens_eos", "tokens"],
+    sb.dataio.dataset.set_output_keys(datasets, 
+        ["id", "sig"] + [x for x in text_pipeline.provides]
     )
-    return train_data, valid_data, test_datasets, label_encoder
+    return train_data, valid_data, test_datasets
 
  
-        
