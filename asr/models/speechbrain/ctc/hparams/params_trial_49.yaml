@@ -38,9 +38,9 @@ test_csv:
 
 # URL for the biggest Fairseq english wav2vec2 model.
 # Using pre-downladed version because compute nodes firewalled...
-# Downloaded via huggingface_hub.snapshot_download() (see fetch_model.py for example)
-wav2vec2_name: facebook/wav2vec2-large-960h-lv60-self
-wav2vec2_revision: facebook--wav2vec2-large-960h-lv60-self.main.6f0b7949d197194ee1f3659def27831054cfc06f
+# Downloaded via huggingface_hub.base
+wav2vec2_name: facebook/wav2vec2-base
+wav2vec2_revision: facebook--wav2vec2-base.main.0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8
 wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
 model_sample_rate: 16000
 
@@ -55,7 +55,7 @@ auto_mix_prec: False
 # With data_parallel batch_size is split into N jobs
 # With DDP batch_size is multiplied by N jobs
 # Must be 3 per GPU to fit 32GB of VRAM
-batch_size: 3  # 6 is normal and worked, but OOMs with 3.5 ratio
+batch_size: 1
 test_batch_size: 8
 
 # Dataloader options
@@ -71,7 +71,7 @@ test_dataloader_opts:
 # Model parameters
 activation: !name:torch.nn.LeakyReLU
 dnn_layers: 2
-dnn_neurons: 1024
+dnn_neurons: 768
 freeze_wav2vec: False
 
 # Outputs
