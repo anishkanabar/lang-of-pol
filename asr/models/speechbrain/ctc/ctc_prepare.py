@@ -65,6 +65,7 @@ def prepare_bpc(split_ratios: dict,
     splits = get_splits(split_ratios, output_folder)
     splits = {k: ctc_prep(v) for k, v in splits.items()}
     splits = {k: filter_nonalphanum(v) for k,v in splits.items()}
+    splits = {k: filter_nonblank(v) for k,v in splits.items()}
     splits = {k: filter_ratio(v) for k, v in splits.items()}
 
     for k, v in splits.items():
@@ -99,6 +100,12 @@ def filter_nonalphanum(df: pd.DataFrame) -> pd.DataFrame:
     non_special = df['wrd'].str.upper().str.replace(special, '', regex=True)
     logger.info(f"Filtered out {df['wrd'].str.len().sum()-non_special.str.len().sum()} special characters")
     return df.assign(wrd = non_special)
+
+
+def filter_nonblank(df: pd.DataFrame) -> pd.DataFrame:
+    nonblank = df['wrd'].str.contains("[A-Za-z0-9]", regex=True)
+    logger.info(f"Discarding {len(nonblank) - nonblank.sum()} blank transcripts")
+    return df.loc[nonblank]
 
 
 def filter_ratio(df: pd.DataFrame) -> pd.DataFrame:

@@ -70,7 +70,7 @@ class BpcETL(AsrETL):
         unfiltered_data = data
         data = self._filter_exists(data, "original_audio")
         data = self._filter_empty(data, sample_rate)
-        # data = self._filter_corrupt(data, "original_audio")
+        data = self._filter_corrupt(data, "original_audio")
         # Filter out missing transcripts
         missing = (data['text'].isna()) | (data['text'].str.len() == 0)
         logger.info(f'Discarding {missing.sum()} transcripts with no text.')
@@ -98,7 +98,7 @@ class BpcETL(AsrETL):
         # Filter out bad audio again after writing
         data = self._filter_exists(data, "audio")
         data = self._filter_empty(data, sample_rate)
-        # data = self._filter_corrupt(data, "audio")
+        data = self._filter_corrupt(data, "audio")
         return data
 
     

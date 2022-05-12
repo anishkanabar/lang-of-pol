@@ -51,15 +51,13 @@ class ATCZeroETL(AsrETL):
         unfiltered_data = data
         data = self._filter_exists(data, "original_audio")
         data = self._filter_empty(data, sample_rate)
-        logger.info("Skipping check for corrupted audio (usually nothing is corrupted)")
-        #data = self._filter_corrupt(data, "original_audio")
+        data = self._filter_corrupt(data, "original_audio")
         # Write new files to disk
         self._write_utterances(data, sample_rate)
         # Filter out bad audio again after writing
         data = self._filter_exists(data, "audio")
         data = self._filter_empty(data, sample_rate)
-        logger.info("Skipping check for corrupted audio (usually nothing is corrupted)")
-        #data = self._filter_corrupt(data, "audio")
+        data = self._filter_corrupt(data, "audio")
         self.describe(data, "-transformed")
         return data
 

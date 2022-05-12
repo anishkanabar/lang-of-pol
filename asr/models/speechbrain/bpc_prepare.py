@@ -5,7 +5,7 @@ import librosa
 import pandas as pd
 from pathlib import Path
 import speechbrain as sb
-from asr_dataset.police import BpcETL
+from asr_dataset.police import BpcETL, AmbiguityStrategy
 from asr_dataset.librispeech import LibriSpeechETL
 from asr_dataset.atczero import ATCZeroETL
 from asr_dataset.constants import DataSizeUnit, Cluster
@@ -34,7 +34,7 @@ def prepare_bpc(cluster: str,
 
     cluster = Cluster[cluster.upper()]
     if dataset_name == 'police':
-        etl = BpcETL(cluster, filter_numeric=False)
+        etl = BpcETL(cluster, filter_numeric=False, ambiguity=AmbiguityStrategy.ALL)
     elif dataset_name == 'librispeech':
         etl = LibriSpeechETL(cluster)
     elif dataset_name == 'atczero':
