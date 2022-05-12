@@ -16,7 +16,7 @@ def dataio_prepare(hparams):
 
     tokenizer = hparams["tokenizer"]
 
-    @sb.utils.data_pipeline.takes("transcript")
+    @sb.utils.data_pipeline.takes("wrd")
     @sb.utils.data_pipeline.provides(
         "wrd", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
     )

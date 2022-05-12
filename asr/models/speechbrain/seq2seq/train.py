@@ -11,6 +11,7 @@ from speechbrain.utils.distributed import run_on_main
 from hyperpyyaml import load_hyperpyyaml
 
 logger = logging.getLogger(__name__)
+logging.getLogger('numba').setLevel(logging.WARNING)
 
 
 # Define training procedure

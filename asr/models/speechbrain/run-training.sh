@@ -82,14 +82,14 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --nodelist "midway3-0277" \
+            --nodelist "midway3-0286" \
             --gpus $GPUS \
             --ntasks $NTASKS \
             --ntasks-per-gpu $GPU_TASKS \
             --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            python "$TRAINPY" "$HPARAMS" --nonfinite_patience=0
+            python "$TRAINPY" "$HPARAMS"
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
