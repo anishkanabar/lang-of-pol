@@ -37,6 +37,7 @@ class AsrETL(abc.ABC):
     def etl(self, **kwargs) -> pd.DataFrame:
         """ Perform extract, transform, and load steps """
         data = self.extract()
+        data = self.split(data)
         data = self.transform(data)
         return self.load(data, **kwargs)
     
@@ -78,7 +79,25 @@ class AsrETL(abc.ABC):
         Returns: DataFrame with same columns as extract()
         """
         pass
-
+    
+    def split(self, data: pd.DataFrame, split_ratios={'all':1}):
+        """
+        Randomly assign data to subsets.
+        Params:
+            - splits: dictionary of split name -> fraction of rows
+        """
+        splits = pd.Series()
+        other_splits = data
+        other_frac = 1
+        for split, frac in split_ratios.items():
+            current_frac = max(0., min(1., frac / other_frac))
+            current_split = other_splits.sample(frac=current_frac, random_state=1234)
+            other_splits = other_splits.loc[other_splits.index.difference(current_split.index)]
+            other_frac = max(0., min(1., other_frac - frac))
+            split_col = pd.Series([split]*len(current_split), index=current_split.index))
+            splits = pd.concat(splits, split_col)
+        return data.assign(split=splits)
+        
 
     def describe(self, data: pd.DataFrame, name_suffix: str=''):
         """

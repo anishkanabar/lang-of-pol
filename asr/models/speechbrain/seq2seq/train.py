@@ -117,6 +117,7 @@ class ASR(sb.Brain):
 
         if stage != sb.Stage.TRAIN:
             self.cer_metric.append(ids, predicted_words, target_words)
+            self.wer_metric.append(ids, predicted_words, target_words)
 
         return loss
 
@@ -149,6 +150,7 @@ class ASR(sb.Brain):
         self.batch_idx = 0
         if stage != sb.Stage.TRAIN:
             self.cer_metric = self.hparams.cer_computer()
+            self.wer_metric = self.hparams.wer_computer()
 
     def on_stage_end(self, stage, stage_loss, epoch):
         """
@@ -160,6 +162,7 @@ class ASR(sb.Brain):
             self.train_stats = stage_stats
         else:
             stage_stats["CER"] = self.cer_metric.summarize("error_rate")
+            stage_stats["WER"] = self.wer_metric.summarize("error_rate")
 
         # Perform end-of-iteration things, like annealing, logging, etc.
         if stage == sb.Stage.VALID:
@@ -171,7 +174,9 @@ class ASR(sb.Brain):
                 valid_stats=stage_stats,
             )
             self.checkpointer.save_and_keep_only(
-                meta={"CER": stage_stats["CER"]}, min_keys=["CER"],
+                meta={"CER": stage_stats["CER"],
+                      "WER": stage_stats["WER"]}, 
+                min_keys=["CER","WER"],
             )
         elif stage == sb.Stage.TEST:
             self.hparams.train_logger.log_stats(
@@ -180,6 +185,8 @@ class ASR(sb.Brain):
             )
             with open(self.hparams.cer_file, "w") as w:
                 self.cer_metric.write_stats(w)
+            with open(self.hparams.wer_file, "w") as w:
+                self.wer_metric.write_stats(w)
 
 
 if __name__ == "__main__":
