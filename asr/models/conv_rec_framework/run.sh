@@ -19,10 +19,10 @@ fi
 
 # Define job params
 JOB_NAME="pyanode-$PYNAME"
-TIMEOUT="00:30:00"
+TIMEOUT="24:00:00"
 ACCOUNT="pi-graziul"
 GPUS=1
-MEM="24G"
+CPUS=5
 PARTITION="gpu"
 OUTPUT_DIR="/scratch/midway3/`whoami`/slurm"
 
@@ -40,17 +40,30 @@ if [[ ! "$LD_LIBRARY_PATH" == *"pyannote"* ]]; then
     export LD_LIBRARY_PATH=$LN_PATH_1:$LN_PATH_2:$LN_PATH_3:$LN_PATH_4:$LD_LIBRARY_PATH
 fi
 
+if [[ ! "$LD_LIBRARY_PATH" == *"pyannote2"* ]]; then
+    LN_PATH_1=/home/`whoami`/.conda/envs/pyannote2/lib/libsndfile.a
+    LN_PATH_2=/home/`whoami`/.conda/envs/pyannote2/lib/libsndfile.so
+    LN_PATH_3=/home/`whoami`/.conda/envs/pyannote2/lib/libsndfile.so.1
+    LN_PATH_4=/home/`whoami`/.conda/envs/pyannote2/lib/libsndfile.so.1.0.31
+    export LD_LIBRARY_PATH=$LN_PATH_1:$LN_PATH_2:$LN_PATH_3:$LN_PATH_4:$LD_LIBRARY_PATH
+fi
+
 # Run actual task
 # ntasks-per-node is 1 because we want 1 'main' process.
+# --nodelist "midway3-0277" \
+# --mem-per-gpu "$MEM_GPU" \
+# --gres "gpu:$GPUS" \
+# --gpus-per-task "$GPUS" \
 srun --job-name "$JOB_NAME" \
     --time "$TIMEOUT" \
     --account "$ACCOUNT" \
     --partition "$PARTITION" \
-    --mem-per-cpu "$MEM" \
-    --gres "gpu:$GPUS" \
     --nodes "1" \
     --ntasks-per-node "1" \
+    --cpus-per-task "$CPUS" \
+    --mem "128G" \
+    --exclusive \
+    --mail-user "shiyanglai@uchicago.edu" \
     --output "$OUTPUT_DIR/%j.%N.stdout" \
     --error "$OUTPUT_DIR/%j.%N.stderr" \
     python "$PYSCRIPT" "${OTHER_ARGS[@]}"
- 

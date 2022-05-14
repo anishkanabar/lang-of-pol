@@ -1,22 +1,26 @@
 Databases:
-  AMI: /project/graziul/ra/shiyanglai/corpus/ami/database/amicorpus/*/audio/{uri}.Mix-Headset.wav
+   AMI: /project/graziul/ra/shiyanglai/corpus/ami/database/amicorpus/*/audio/{uri}.Mix-Headset.wav
+   SWB: /project/graziul/data/corpora/swb1/*/data/sw{uri}.sph
+   ATC0: /project/graziul/data/corpora/atc0_comp/*/data/audio/{uri}.sph
+   MUSAN: /project/graziul/ra/shiyanglai/corpus/ami/database/musan/{uri}.wav
 
 Protocols:
    AMI:
       SpeakerDiarization:
          MixHeadset:
             train:
-               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.lst
-               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.rttm
-               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.train.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.train.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.train.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.train.uem
             development:
-               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.lst
-               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.rttm
-               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.development.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.development.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.development.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.development.uem
             test:
-               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.lst
-               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.rttm
-               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/mixhead/MixHeadset.test.uem
+               uri: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.test.lst
+               annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.test.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.test.uem
+         
          only_words:
             train:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
@@ -30,6 +34,7 @@ Protocols:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/test.meetings.txt
                annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/test/{uri}.rttm
                annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
+
          word_and_vocalsounds:
             train:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
@@ -44,3 +49,29 @@ Protocols:
                annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/word_and_vocalsounds/rttms/test/{uri}.rttm
                annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
 
+   ATC0:
+      SpeakerDiarization:
+         All:
+            train: 
+               uri: /project/graziul/ra/shiyanglai/corpus/atc0/lists/train.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/atc0/rttms/train/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/atc0/uems/train/{uri}.uem
+            development:
+               uri: /project/graziul/ra/shiyanglai/corpus/atc0/lists/dev.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/atc0/rttms/dev/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/atc0/uems/dev/{uri}.uem
+            test:
+               uri: /project/graziul/ra/shiyanglai/corpus/atc0/lists/test.txt
+               annotation: /project/graziul/ra/shiyanglai/corpus/atc0/rttms/test/{uri}.rttm
+               annotated: /project/graziul/ra/shiyanglai/corpus/atc0/uems/test/{uri}.uem
+
+   MUSAN:
+      Collection:
+         BackgroundNoise:
+            uri: /project/graziul/ra/shiyanglai/corpus/ami/database/MUSAN/background_noise.txt
+         Noise:
+            uri: /project/graziul/ra/shiyanglai/corpus/ami/database/MUSAN/noise.txt
+         Music:
+            uri: /project/graziul/ra/shiyanglai/corpus/ami/database/MUSAN/music.txt
+         Speech:
+            uri: /project/graziul/ra/shiyanglai/corpus/ami/database/MUSAN/speech.txt
