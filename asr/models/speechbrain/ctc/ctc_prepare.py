@@ -6,7 +6,6 @@ import pandas as pd
 import speechbrain as sb
 import bpc_prepare as prepare
 from asr_dataset.base import AsrETL
-from asr_dataset.atczero import ATCZeroETL
 
 logger = logging.getLogger('asr.prepare.ctc')
 
@@ -53,40 +52,39 @@ def dataio_prepare(hparams):
     return train_data, val_data, test_data, label_encoder
 
 
-def prepare_bpc(split_ratios: dict, 
+def prepare_bpc(splits: dict, 
                 output_folder: str, 
                 **kwargs):
     """ See docstring in bpc_prepare for other params"""
 
-    prepare.prepare_bpc(split_ratios=split_ratios, 
+    prepare.prepare_bpc(splits=splits, 
                         output_folder=output_folder, 
                         **kwargs)
 
-    splits = get_splits(split_ratios, output_folder)
-    splits = {k: ctc_prep(v) for k, v in splits.items()}
-    splits = {k: filter_nonalphanum(v) for k,v in splits.items()}
-    splits = {k: filter_nonblank(v) for k,v in splits.items()}
-    splits = {k: filter_ratio(v) for k, v in splits.items()}
+    splitdata = get_splits(splits, output_folder)
+    splitdata = {k: ctc_prep(v) for k, v in splitdata.items()}
+    splitdata = {k: filter_nonalphanum(v) for k,v in splitdata.items()}
+    splitdata = {k: filter_nonblank(v) for k,v in splitdata.items()}
+    splitdata = {k: filter_ratio(v) for k, v in splitdata.items()}
 
-    for k, v in splits.items():
-        logger.info(f'{k} dataset stats:')
-        AsrETL._describe(v)
+    for k, v in splitdata.items():
+        AsrETL._describe(v, k)
 
-    write_splits(splits, output_folder)
-
-
-def get_splits(split_ratios, output_folder) -> {str, pd.DataFrame}:
-    splits = {}
-    for split in split_ratios.keys():
-        manifest_path = os.path.join(output_folder, split) + '.csv'
-        splits[split] = pd.read_csv(manifest_path)
-    return splits
+    write_splits(splitdata, output_folder)
 
 
-def write_splits(splits: {str, pd.DataFrame}, output_folder: str):
+def get_splits(splits, output_folder) -> {str, pd.DataFrame}:
+    splitdata = {}
     for split in splits.keys():
         manifest_path = os.path.join(output_folder, split) + '.csv'
-        splits[split].to_csv(manifest_path, index=False)
+        splitdata[split] = pd.read_csv(manifest_path)
+    return splitdata
+
+
+def write_splits(splitdata: {str, pd.DataFrame}, output_folder: str):
+    for split in splitdata.keys():
+        manifest_path = os.path.join(output_folder, split) + '.csv'
+        splitdata[split].to_csv(manifest_path, index=False)
     
 
 def ctc_prep(df: pd.DataFrame) -> pd.DataFrame:

@@ -28,8 +28,7 @@ def prepare_bpc(split_ratios: dict,
     splits = {k: filter_ratio(v) for k, v in splits.items()}
 
     for k, v in splits.items():
-        logger.info(f'{k} dataset stats:')
-        AsrETL._describe(v)
+        AsrETL._describe(v, k)
 
     write_splits(splits, output_folder)
 

@@ -216,9 +216,7 @@ if __name__ == "__main__":
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],
-            "num_train": hparams["num_train"],
-            "num_sec": hparams["num_sec"],
-            "split_ratios": hparams["split_ratios"],
+            "splits": hparams["splits"],
             "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
         },

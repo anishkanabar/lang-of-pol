@@ -14,7 +14,6 @@ from enum import Enum, auto
 import librosa
 import soundfile
 import pandas as pd
-from asr_dataset.constants import DataSizeUnit
 
 
 logger = logging.getLogger('asr.etl')
@@ -37,7 +36,6 @@ class AsrETL(abc.ABC):
     def etl(self, **kwargs) -> pd.DataFrame:
         """ Perform extract, transform, and load steps """
         data = self.extract()
-        data = self.split(data)
         data = self.transform(data)
         return self.load(data, **kwargs)
     
@@ -70,9 +68,7 @@ class AsrETL(abc.ABC):
 
     @abc.abstractmethod
     def load(self, 
-            data: pd.DataFrame=None, 
-            qty:Real=None, 
-            units: DataSizeUnit=None) -> pd.DataFrame:
+            data: pd.DataFrame=None) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
 
@@ -80,35 +76,45 @@ class AsrETL(abc.ABC):
         """
         pass
     
-    def split(self, data: pd.DataFrame, split_ratios={'all':1}):
+
+    def _sample_split(self, data: pd.DataFrame, splits=None):
         """
-        Randomly assign data to subsets.
+        Randomly sample and assign to subsets.
         Params:
-            - splits: dictionary of split name -> fraction of rows
+            - splits: dictionary of split name -> number of seconds
         """
-        splits = pd.Series()
-        other_splits = data
-        other_frac = 1
-        for split, frac in split_ratios.items():
-            current_frac = max(0., min(1., frac / other_frac))
-            current_split = other_splits.sample(frac=current_frac, random_state=1234)
-            other_splits = other_splits.loc[other_splits.index.difference(current_split.index)]
-            other_frac = max(0., min(1., other_frac - frac))
-            split_col = pd.Series([split]*len(current_split), index=current_split.index))
-            splits = pd.concat(splits, split_col)
-        return data.assign(split=splits)
+        data = data.assign(split='all')
+        if splits is None:
+            return data
+
+        data = data.sample(frac=1, random_state=1234)  # random shuffle
+        cum_sec = data['duration'].cumsum()
+        prev_idx = 0
+        prev_sec = 0
+        split_col_idx = data.columns.get_loc('split')
+        for split, sec in splits.items():
+            split_idx = cum_sec.searchsorted(prev_sec + sec)
+            data.iloc[prev_idx:split_idx, split_col_idx] = split
+            logger.debug(f'Split {split} should get {split_idx-prev_idx} rows')
+            prev_sec += sec
+            prev_idx = split_idx
+        is_sampled = data['split'].isin(splits.keys())  # discard unsampled data
+        logger.info(f'Discarding {len(data) - is_sampled.sum()} unsampled data')
+        data = data.loc[is_sampled]
+        logger.debug(f'Split data has {data["split"].nunique()} splits')
+        return data
         
 
-    def describe(self, data: pd.DataFrame, name_suffix: str=''):
+    def describe(self, data: pd.DataFrame, name_suffix=''):
         """
         Prints helpful statistics about dataset.
         """
-        logger.info(f"{self.name}{name_suffix} dataset stats:")
-        self.__class__._describe(data)
+        self.__class__._describe(data, self.name + name_suffix)
 
 
     @classmethod
-    def _describe(cls, data: pd.DataFrame):
+    def _describe(self, data: pd.DataFrame, name: str=''):
+        logger.info(f"{name} dataset stats:")
         logger.info(f"\tRow count = {data.shape[0]}")
         logger.info(f"\tMin duration = {data['duration'].min():.2f} (sec)")
         logger.info(f"\tMax duration = {data['duration'].max():.2f} (sec)")
@@ -264,35 +270,4 @@ class AsrETL(abc.ABC):
             return False
         except:
             return True
-
-
-    ###################################
-    #### Helper methoda for Load  #####
-    ###################################
-
-
-    @classmethod
-    def _sample(cls, 
-                data: pd.DataFrame,
-                qty:Real, 
-                units: DataSizeUnit) -> pd.DataFrame:
-        """
-        Subset the data by duration, count, or ratio.
-        Params:
-            data: manifest. expects columns {duration}
-            qty: amount of data to keep
-            units: units for qty. [seconds, count, ratio]
-        """
-        if units is None:
-            return data
-        elif units == DataSizeUnit.SECONDS:
-            idx = data['duration'].cumsum().searchsorted(qty)
-            return data.head(idx)
-        elif units == DataSizeUnit.ROW_COUNT:
-            return data.head(qty)
-        elif units == DataSizeUnit.ROW_FRAC:
-            return data.sample(frac=qty, random_state=1234)
-        else:
-            raise ValueError('Invalid value {} for {}' \
-                .format(units, DataSizeUnit))
 
