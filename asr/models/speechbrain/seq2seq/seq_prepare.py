@@ -98,11 +98,8 @@ def filter_ratio(df: pd.DataFrame) -> pd.DataFrame:
         df - expects columns {duration, wrd} 
     """
     FRAME_RATE = 49  # (Hz)
-    #MIN_RATIO = 2.84375 # (2.0 is bad --- 2.75 was bad -- 2.796875 bad -- 2.84375 ok -- 2.9375 ok -- 3.125 ok -- 3.5 is ok -- 5.0 is ok)
     MIN_RATIO = 1.0
-    logger.info(f'Testing with MFCC ratio {MIN_RATIO}')
     mfcc_lengths = df['duration'] * FRAME_RATE
-    # logger.debug(f'Min/Avg/Max Num Frames: {mfcc_lengths.min():.2f} : {mfcc_lengths.mean():.2f} : {mfcc_lengths.max():.2f}')
     num_chars = df['wrd'].str.len()
     mfcc_ratios = mfcc_lengths / num_chars
     pred = mfcc_ratios > MIN_RATIO
