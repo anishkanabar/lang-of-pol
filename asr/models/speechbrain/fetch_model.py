@@ -1,7 +1,8 @@
 #from speechbrain.lobes.models.huggingface_wav2vec import HuggingFaceWav2Vec2
 
 #model_name = "facebook/wav2vec2-base"
-model_name = "speechbrain/asr-wav2vec2-commonvoice-en"
+#model_name = "speechbrain/asr-wav2vec2-commonvoice-en"
+model_name = "speechbrain/asr-crdnn-rnnlm-librispeech"
 revision = "main"
 
 save_path = "/project/graziul/ra/echandler/scratch/" + model_name
