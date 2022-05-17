@@ -46,7 +46,6 @@ def prepare_bpc(splits: dict,
 
     splitdata = get_splits(splits, output_folder)
     splitdata = {k: ctc_prep(v) for k, v in splitdata.items()}
-    # splitdata = {k: filter_duration(v) for k, v in splitdata.items()}
     splitdata = {k: filter_nonalphanum(v) for k,v in splitdata.items()}
     splitdata = {k: filter_ratio(v) for k, v in splitdata.items()}
 
@@ -72,14 +71,6 @@ def write_splits(splitdata: {str, pd.DataFrame}, output_folder: str):
 
 def ctc_prep(df: pd.DataFrame) -> pd.DataFrame:
     return df.rename(columns={'transcript':'wrd'})
-
-
-def filter_duration(df: pd.DataFrame) -> pd.DataFrame:
-    min_duration = 1.5  # minimum librispeech duration
-    predicate = df['duration'] >= min_duration
-    logger.info("Filtering out {} audio < {} sec".format(len(df) - predicate.sum(), min_duration))
-    df = df.loc[predicate]
-    return df
 
 
 def filter_nonalphanum(df: pd.DataFrame) -> pd.DataFrame:
