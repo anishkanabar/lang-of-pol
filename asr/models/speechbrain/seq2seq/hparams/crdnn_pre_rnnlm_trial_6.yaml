@@ -11,7 +11,7 @@
 seed: 2602
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 trial: 6
-output_folder: !ref results/seq2seq/rnnlm/seed_<seed>/trial_<trial>
+output_folder: !ref results/seq2seq/pre_rnnlm/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save

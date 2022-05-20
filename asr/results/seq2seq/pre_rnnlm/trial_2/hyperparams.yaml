@@ -1,5 +1,5 @@
-# Generated 2022-05-18 from:
-# /project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/seq2seq/hparams/rnnlm_trial_6.yaml
+# Generated 2022-05-17 from:
+# /project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/seq2seq/hparams/rnnlm_trial_2.yaml
 # yamllint disable
 # ############################################################################
 # Model: E2E ASR with attention-based ASR
@@ -7,18 +7,18 @@
 # Decoder: GRU + beamsearch + RNNLM
 # Tokens: BPE with bpe 1000
 # losses: CTC+ NLL
-# Training: Librispeech
+# Training: ATC0
 # Notes: based on Librispeech recipe
 # ############################################################################
 
 seed: 2602
 __set_seed: !apply:torch.manual_seed [2602]
-trial: 6
-output_folder: results/seq2seq/rnnlm/seed_2602/trial_6
-cer_file: results/seq2seq/rnnlm/seed_2602/trial_6/cer.txt
-wer_file: results/seq2seq/rnnlm/seed_2602/trial_6/wer.txt
-save_folder: results/seq2seq/rnnlm/seed_2602/trial_6/save
-train_log: results/seq2seq/rnnlm/seed_2602/trial_6/train_log.txt
+trial: 2
+output_folder: results/seq2seq/pre_rnnlm/seed_2602/trial_2
+cer_file: results/seq2seq/pre_rnnlm/seed_2602/trial_2/cer.txt
+wer_file: results/seq2seq/pre_rnnlm/seed_2602/trial_2/wer.txt
+save_folder: results/seq2seq/pre_rnnlm/seed_2602/trial_2/save
+train_log: results/seq2seq/pre_rnnlm/seed_2602/trial_2/train_log.txt
 
 # Vocab size should match tokenizer config
 vocab_size: 1000
@@ -32,16 +32,16 @@ lm_file: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-libri
 # Data files
 cluster: rcc
 scratch_dir: /project/graziul/ra/echandler/scratch
-dataset_name: librispeech
-data_sample_rate: 16000
+dataset_name: atczero
+data_sample_rate: 8000
 splits:
-  train: 36000    # 10h 
-  dev: 4500     # 75m
-  test: 4500    # 75m
-train_csv: results/seq2seq/rnnlm/seed_2602/trial_6/train.csv
-valid_csv: results/seq2seq/rnnlm/seed_2602/trial_6/dev.csv
+  train: 3600    # 1h 
+  dev: 450     # 7.5m
+  test: 450    # 7.5m
+train_csv: results/seq2seq/pre_rnnlm/seed_2602/trial_2/train.csv
+valid_csv: results/seq2seq/pre_rnnlm/seed_2602/trial_2/dev.csv
 test_csv:
-- results/seq2seq/rnnlm/seed_2602/trial_6/test.csv
+- results/seq2seq/pre_rnnlm/seed_2602/trial_2/test.csv
 ambiguity_strategy: ALL
 
 # rirs data downloaded here if needed
@@ -50,7 +50,7 @@ skip_prep: false
 ckpt_interval_minutes: 15 # save checkpoint every N min
 
 # Training parameters
-number_of_epochs: 45 # first run 15 second 30
+number_of_epochs: 45 # first run 15. second run 30
 number_of_ctc_epochs: 5
 batch_size: 8
 lr: 1.0
@@ -257,14 +257,14 @@ lr_annealing: &id011 !new:speechbrain.nnet.schedulers.NewBobScheduler
   patient: 0
 
 checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
-  checkpoints_dir: results/seq2seq/rnnlm/seed_2602/trial_6/save
+  checkpoints_dir: results/seq2seq/pre_rnnlm/seed_2602/trial_2/save
   recoverables:
     model: *id010
     scheduler: *id011
     normalizer: *id008
     counter: *id012
 train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
-  save_file: results/seq2seq/rnnlm/seed_2602/trial_6/train_log.txt
+  save_file: results/seq2seq/pre_rnnlm/seed_2602/trial_2/train_log.txt
 
 remove_spaces: false
 split_tokens: true   # must be opposite remove spaces
@@ -275,7 +275,7 @@ cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
   split_tokens: true
 
 pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
-  collect_in: results/seq2seq/rnnlm/seed_2602/trial_6/save
+  collect_in: results/seq2seq/pre_rnnlm/seed_2602/trial_2/save
   loadables:
     lm: *id009
     tokenizer: *id013

@@ -10,8 +10,8 @@
 
 seed: 2602
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 3
-output_folder: !ref results/seq2seq/rnnlm/seed_<seed>/trial_<trial>
+trial: 1
+output_folder: !ref results/seq2seq/pre_rnnlm/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save
@@ -32,9 +32,9 @@ scratch_dir: /project/graziul/ra/echandler/scratch
 dataset_name: atczero
 data_sample_rate: 8000
 splits:
-    train: 36000  # 10h 
-    dev: 4500   # 75m
-    test: 4500  # 75m
+    train: 600  # 10m 
+    dev: 75  # 75s
+    test: 75  # 75s
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv:
@@ -47,13 +47,13 @@ skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 
 # Training parameters
-number_of_epochs: 45 # first run 15, second run 30
+number_of_epochs: 45 # first run 15, second 30
 number_of_ctc_epochs: 5
 batch_size: 8
 lr: 1.0
 ctc_weight: 0.5
 sorting: ascending
-dynamic_batching: False
+dynamic_batching: True
 
 dynamic_batch_sampler:
    feats_hop_size: 0.01

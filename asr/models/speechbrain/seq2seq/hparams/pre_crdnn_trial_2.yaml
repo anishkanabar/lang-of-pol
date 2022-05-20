@@ -2,17 +2,18 @@
 # Model: E2E ASR with attention-based ASR
 # Encoder: CRDNN model
 # Decoder: GRU + beamsearch + RNNLM
-# Tokens: BPE with unigram
+# Tokens: BPE with unigram 1000
 # losses: CTC+ NLL
 # Training: BPC
+# Notes: Recipe for evaluating a pre-trained model. No fine tuning!
 # ############################################################################
 
 seed: 2602
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 1
+trial: 2
 # Vocab size should match tokenizer config
 # Tokenizer trials are not necessarily in sync with this models trials
-output_folder: !ref results/seq2seq/pre_rnnlm/seed_<seed>/trial_<trial>
+output_folder: !ref results/seq2seq/pre_crdnn/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save
@@ -21,12 +22,12 @@ train_log: !ref <output_folder>/train_log.txt
 # Data files
 cluster: rcc
 scratch_dir: /project/graziul/ra/echandler/scratch
-dataset_name: atczero
-data_sample_rate: 8000
+dataset_name: librispeech
+data_sample_rate: 16000
 splits:
-    train: 600  # 10m 
-    dev: 75  # 75s
-    test: 75  # 75s
+    train: 3600  # 10m 
+    dev: 450  # 75s
+    test: 450  # 75s
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv:

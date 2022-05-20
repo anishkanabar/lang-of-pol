@@ -1,5 +1,5 @@
-# Generated 2022-05-17 from:
-# /project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/seq2seq/hparams/rnnlm_trial_4.yaml
+# Generated 2022-05-18 from:
+# /project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/seq2seq/hparams/rnnlm_trial_3.yaml
 # yamllint disable
 # ############################################################################
 # Model: E2E ASR with attention-based ASR
@@ -13,12 +13,12 @@
 
 seed: 2602
 __set_seed: !apply:torch.manual_seed [2602]
-trial: 4
-output_folder: results/seq2seq/rnnlm/seed_2602/trial_4
-cer_file: results/seq2seq/rnnlm/seed_2602/trial_4/cer.txt
-wer_file: results/seq2seq/rnnlm/seed_2602/trial_4/wer.txt
-save_folder: results/seq2seq/rnnlm/seed_2602/trial_4/save
-train_log: results/seq2seq/rnnlm/seed_2602/trial_4/train_log.txt
+trial: 3
+output_folder: results/seq2seq/pre_rnnlm/seed_2602/trial_3
+cer_file: results/seq2seq/pre_rnnlm/seed_2602/trial_3/cer.txt
+wer_file: results/seq2seq/pre_rnnlm/seed_2602/trial_3/wer.txt
+save_folder: results/seq2seq/pre_rnnlm/seed_2602/trial_3/save
+train_log: results/seq2seq/pre_rnnlm/seed_2602/trial_3/train_log.txt
 
 # Vocab size should match tokenizer config
 vocab_size: 1000
@@ -32,16 +32,16 @@ lm_file: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-libri
 # Data files
 cluster: rcc
 scratch_dir: /project/graziul/ra/echandler/scratch
-dataset_name: librispeech
-data_sample_rate: 16000
+dataset_name: atczero
+data_sample_rate: 8000
 splits:
-  train: 600    # 10m 
-  dev: 75    # 75s
-  test: 75    # 75s
-train_csv: results/seq2seq/rnnlm/seed_2602/trial_4/train.csv
-valid_csv: results/seq2seq/rnnlm/seed_2602/trial_4/dev.csv
+  train: 36000    # 10h 
+  dev: 4500     # 75m
+  test: 4500    # 75m
+train_csv: results/seq2seq/pre_rnnlm/seed_2602/trial_3/train.csv
+valid_csv: results/seq2seq/pre_rnnlm/seed_2602/trial_3/dev.csv
 test_csv:
-- results/seq2seq/rnnlm/seed_2602/trial_4/test.csv
+- results/seq2seq/pre_rnnlm/seed_2602/trial_3/test.csv
 ambiguity_strategy: ALL
 
 # rirs data downloaded here if needed
@@ -50,13 +50,13 @@ skip_prep: false
 ckpt_interval_minutes: 15 # save checkpoint every N min
 
 # Training parameters
-number_of_epochs: 30 # first run 15
+number_of_epochs: 45 # first run 15, second run 30
 number_of_ctc_epochs: 5
 batch_size: 8
 lr: 1.0
 ctc_weight: 0.5
 sorting: ascending
-dynamic_batching: true
+dynamic_batching: false
 
 dynamic_batch_sampler:
   feats_hop_size: 0.01
@@ -123,7 +123,7 @@ temperature_lm: 1.25
 
 epoch_counter: &id012 !new:speechbrain.utils.epoch_loop.EpochCounter
 
-  limit: 30
+  limit: 45
 
 normalize: &id008 !new:speechbrain.processing.features.InputNormalization
    # commented out because having trouble loading rirs
@@ -257,14 +257,14 @@ lr_annealing: &id011 !new:speechbrain.nnet.schedulers.NewBobScheduler
   patient: 0
 
 checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
-  checkpoints_dir: results/seq2seq/rnnlm/seed_2602/trial_4/save
+  checkpoints_dir: results/seq2seq/pre_rnnlm/seed_2602/trial_3/save
   recoverables:
     model: *id010
     scheduler: *id011
     normalizer: *id008
     counter: *id012
 train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
-  save_file: results/seq2seq/rnnlm/seed_2602/trial_4/train_log.txt
+  save_file: results/seq2seq/pre_rnnlm/seed_2602/trial_3/train_log.txt
 
 remove_spaces: false
 split_tokens: true   # must be opposite remove spaces
@@ -275,7 +275,7 @@ cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
   split_tokens: true
 
 pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
-  collect_in: results/seq2seq/rnnlm/seed_2602/trial_4/save
+  collect_in: results/seq2seq/pre_rnnlm/seed_2602/trial_3/save
   loadables:
     lm: *id009
     tokenizer: *id013
