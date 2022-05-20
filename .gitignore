@@ -9,3 +9,6 @@
 
 # Vim artifacts
 *.swp
+
+# BPC archive MP3 files
+*.mp3
