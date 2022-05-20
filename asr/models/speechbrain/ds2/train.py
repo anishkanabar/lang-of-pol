@@ -32,9 +32,18 @@ class ASR(sb.Brain):
         wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
         
         # Spectrogram
+        logger.debug(f'Wavs shape {wavs.shape}')
         x = self.modules.spec(wavs)
 
         # Masked ConvNet
+        # XXX ILL NEVER FIX THESE PADDING ERRORS. JUST TRY TO REPLICATE DS WITH
+        # THE SPEECHBRAIN CRDNN WHICH IS BASICALLY THE WHOLE THING-ISH
+        logger.debug(f'Spec shape {x.shape}')
+        h = self.modules.conv1(x)
+        logger.debug(f'Conv 1 shape {h.shape}')
+        h = self.modules.conv2(h)
+        logger.debug(f'Conv 2 shape {h.shape}')
+        
 
         # RNN
 
@@ -43,13 +52,15 @@ class ASR(sb.Brain):
 
         # Fully Connected
         # + Activation (here or in training loop?)
-        pred_tokens = None
-        probits = self.modules.fc(x)
+        logger.debug(f'Post-conv shape {h.shape}')
+        probits = self.modules.fc(h)
 
         # Make Tokens Here or During Eval?
         if stage != sb.Stage.TRAIN:
             pred_tokens = sb.decoders.ctc_greedy_decode(probits, wav_lens, 
                 blank_id=self.tokenizer.get_blank_index())
+        else:
+            pred_tokens = None
             
         return probits, wav_lens, pred_tokens
 
