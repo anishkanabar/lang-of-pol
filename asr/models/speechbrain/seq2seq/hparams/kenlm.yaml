@@ -1,0 +1,8 @@
+pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
+   collect_in: !ref <save_folder>
+   loadables:
+      lm: !ref <lm_model>
+      tokenizer: !ref <tokenizer>
+   paths:
+      lm: !ref <lm_file>
+      tokenizer: !ref <tokenizer_file>
