@@ -1,0 +1,285 @@
+# Generated 2022-05-18 from:
+# /project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/seq2seq/hparams/rnnlm_trial_1.yaml
+# yamllint disable
+# ############################################################################
+# Model: E2E ASR with attention-based ASR
+# Encoder: CRDNN model
+# Decoder: GRU + beamsearch + RNNLM
+# Tokens: BPE with bpe 1000
+# losses: CTC+ NLL
+# Training: ATC0
+# Notes: based on Librispeech recipe
+# ############################################################################
+
+seed: 2602
+__set_seed: !apply:torch.manual_seed [2602]
+trial: 1
+output_folder: results/seq2seq/rnnlm/seed_2602/trial_1
+cer_file: results/seq2seq/rnnlm/seed_2602/trial_1/cer.txt
+wer_file: results/seq2seq/rnnlm/seed_2602/trial_1/wer.txt
+save_folder: results/seq2seq/rnnlm/seed_2602/trial_1/save
+train_log: results/seq2seq/rnnlm/seed_2602/trial_1/train_log.txt
+
+# Vocab size should match tokenizer config
+vocab_size: 1000
+# Tokenizer trials are not necessarily in sync with this models trials
+# tokenizer_file: results/tokenizer/bpe_1000/data_atczero/sec_600/trial_1/1000_bpe.model
+# Speech recognizer and LM should use same tokenizer!
+pretrained_lm_folder: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677
+tokenizer_file: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt
+lm_file: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/lm.ckpt
+
+# Data files
+cluster: rcc
+scratch_dir: /project/graziul/ra/echandler/scratch
+dataset_name: atczero
+data_sample_rate: 8000
+splits:
+  train: 600    # 10m 
+  dev: 75    # 75s
+  test: 75    # 75s
+train_csv: results/seq2seq/rnnlm/seed_2602/trial_1/train.csv
+valid_csv: results/seq2seq/rnnlm/seed_2602/trial_1/dev.csv
+test_csv:
+- results/seq2seq/rnnlm/seed_2602/trial_1/test.csv
+ambiguity_strategy: ALL
+
+# rirs data downloaded here if needed
+data_folder_rirs: /project/graziul/ra/echandler/scratch/rirs
+skip_prep: false
+ckpt_interval_minutes: 15 # save checkpoint every N min
+
+# Training parameters
+number_of_epochs: 45 # first run 15, second 30
+number_of_ctc_epochs: 5
+batch_size: 8
+lr: 1.0
+ctc_weight: 0.5
+sorting: ascending
+dynamic_batching: true
+
+dynamic_batch_sampler:
+  feats_hop_size: 0.01
+  max_batch_len: 20000  # in terms of frames
+  shuffle_ex: true
+  batch_ordering: random
+  num_buckets: 20
+
+# Feature parameters
+model_sample_rate: 16000
+n_fft: 400
+n_mels: 40
+
+opt_class: !name:torch.optim.Adadelta
+  lr: 1.0
+  rho: 0.95
+  eps: 1.e-8
+
+# Dataloader options
+train_dataloader_opts:
+  batch_size: 8
+
+valid_dataloader_opts:
+  batch_size: 8
+
+test_dataloader_opts:
+  batch_size: 8
+
+# Model parameters
+activation: &id001 !name:torch.nn.LeakyReLU
+dropout: 0.15
+cnn_blocks: 2
+cnn_channels: (128, 256)
+inter_layer_pooling_size: (2, 2)
+cnn_kernelsize: (3, 3)
+time_pooling_size: 4
+rnn_class: &id002 !name:speechbrain.nnet.RNN.LSTM
+rnn_layers: 4
+rnn_neurons: 1024
+rnn_bidirectional: true
+dnn_blocks: 2
+dnn_neurons: 512
+emb_size: 128
+dec_neurons: 1024
+output_neurons: 1000               # Number of tokens
+blank_index: 0
+# Must match tokenizer
+bos_index: 1
+eos_index: 2
+unk_index: 0
+
+# Decoding parameters
+min_decode_ratio: 0.0
+max_decode_ratio: 1.0
+beam_size: 80
+eos_threshold: 1.5
+using_max_attn_shift: true
+max_attn_shift: 240
+lm_weight: 0.50
+ctc_weight_decode: 0.0
+coverage_penalty: 1.5
+temperature: 1.25
+temperature_lm: 1.25
+
+epoch_counter: &id012 !new:speechbrain.utils.epoch_loop.EpochCounter
+
+  limit: 45
+
+normalize: &id008 !new:speechbrain.processing.features.InputNormalization
+   # commented out because having trouble loading rirs
+   # env_corrupt: !ref <env_corrupt>
+  norm_type: global
+
+compute_features: !new:speechbrain.lobes.features.Fbank
+  sample_rate: 16000
+  n_fft: 400
+  n_mels: 40
+
+env_corrupt: !new:speechbrain.lobes.augment.EnvCorrupt
+  openrir_folder: /project/graziul/ra/echandler/scratch/rirs
+  babble_prob: 0.0
+  reverb_prob: 0.0
+  noise_prob: 1.0
+  noise_snr_low: 0
+  noise_snr_high: 15
+
+augmentation: !new:speechbrain.lobes.augment.TimeDomainSpecAugment
+  sample_rate: 16000
+  speeds: [95, 100, 105]
+
+enc: &id003 !new:speechbrain.lobes.models.CRDNN.CRDNN
+  input_shape: [null, null, 40]
+  activation: *id001
+  dropout: 0.15
+  cnn_blocks: 2
+  cnn_channels: (128, 256)
+  cnn_kernelsize: (3, 3)
+  inter_layer_pooling_size: (2, 2)
+  time_pooling: true
+  using_2d_pooling: false
+  time_pooling_size: 4
+  rnn_class: *id002
+  rnn_layers: 4
+  rnn_neurons: 1024
+  rnn_bidirectional: true
+  rnn_re_init: true
+  dnn_blocks: 2
+  dnn_neurons: 512
+  use_rnnp: false
+
+emb: &id004 !new:speechbrain.nnet.embedding.Embedding
+  num_embeddings: 1000
+  embedding_dim: 128
+
+dec: &id005 !new:speechbrain.nnet.RNN.AttentionalRNNDecoder
+  enc_dim: 512
+  input_size: 128
+  rnn_type: gru
+  attn_type: location
+  hidden_size: 1024
+  attn_dim: 1024
+  num_layers: 1
+  scaling: 1.0
+  channels: 10
+  kernel_size: 100
+  re_init: true
+  dropout: 0.15
+
+ctc_lin: &id006 !new:speechbrain.nnet.linear.Linear
+  input_size: 512
+  n_neurons: 1000
+
+seq_lin: &id007 !new:speechbrain.nnet.linear.Linear
+  input_size: 1024
+  n_neurons: 1000
+
+log_softmax: !new:speechbrain.nnet.activations.Softmax
+  apply_log: true
+
+ctc_cost: !name:speechbrain.nnet.losses.ctc_loss
+  blank_index: 0
+
+seq_cost: !name:speechbrain.nnet.losses.nll_loss
+  label_smoothing: 0.1
+
+# This is the RNNLM that is used according to the Huggingface repository
+ # NB: It has to match the pre-trained RNNLM!!
+lm_model: &id009 !new:speechbrain.lobes.models.RNNLM.RNNLM
+
+  output_neurons: 1000
+  embedding_dim: 128
+  activation: !name:torch.nn.LeakyReLU
+  dropout: 0.0
+  rnn_layers: 2
+  rnn_neurons: 2048
+  dnn_blocks: 1
+  dnn_neurons: 512
+  return_hidden: true    # For inference
+
+tokenizer: &id013 !new:sentencepiece.SentencePieceProcessor
+
+# Models
+modules:
+  enc: *id003
+  emb: *id004
+  dec: *id005
+  ctc_lin: *id006
+  seq_lin: *id007
+  normalize: *id008
+  lm_model: *id009
+model: &id010 !new:torch.nn.ModuleList
+- [*id003, *id004, *id005, *id006, *id007]
+beam_search: !new:speechbrain.decoders.S2SRNNBeamSearchLM
+  embedding: *id004
+  decoder: *id005
+  linear: *id007
+  ctc_linear: *id006
+  language_model: *id009
+  bos_index: 1
+  eos_index: 2
+  blank_index: 0
+  min_decode_ratio: 0.0
+  max_decode_ratio: 1.0
+  beam_size: 80
+  eos_threshold: 1.5
+  using_max_attn_shift: true
+  max_attn_shift: 240
+  coverage_penalty: 1.5
+  lm_weight: 0.50
+  ctc_weight: 0.0
+  temperature: 1.25
+  temperature_lm: 1.25
+
+lr_annealing: &id011 !new:speechbrain.nnet.schedulers.NewBobScheduler
+  initial_value: 1.0
+  improvement_threshold: 0.0025
+  annealing_factor: 0.8
+  patient: 0
+
+checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
+  checkpoints_dir: results/seq2seq/rnnlm/seed_2602/trial_1/save
+  recoverables:
+    model: *id010
+    scheduler: *id011
+    normalizer: *id008
+    counter: *id012
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+  save_file: results/seq2seq/rnnlm/seed_2602/trial_1/train_log.txt
+
+remove_spaces: false
+split_tokens: true   # must be opposite remove spaces
+
+wer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+
+cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+  split_tokens: true
+
+pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
+  collect_in: results/seq2seq/rnnlm/seed_2602/trial_1/save
+  loadables:
+    lm: *id009
+    tokenizer: *id013
+  paths:
+    lm: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/lm.ckpt
+    tokenizer: /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt
+
