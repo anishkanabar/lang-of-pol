@@ -92,18 +92,10 @@ def dataio_prepare(hparams, text_pipeline):
     )
     valid_data = valid_data.filtered_sorted(sort_key="duration")
 
-    # test is separate
-    test_datasets = {}
-    for csv_file in hparams["test_csv"]:
-        name = Path(csv_file).stem
-        test_datasets[name] = sb.dataio.dataset.DynamicItemDataset.from_csv(
-            csv_path=csv_file
-        )
-        test_datasets[name] = test_datasets[name].filtered_sorted(
-            sort_key="duration"
-        )
+    test_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
+        csv_path=hparams["test_csv"])
 
-    datasets = [train_data, valid_data] + [i for k, i in test_datasets.items()]
+    datasets = [train_data, valid_data, test_data]
 
     # 2. Define audio pipeline:
     @sb.utils.data_pipeline.takes("wav")
@@ -125,6 +117,6 @@ def dataio_prepare(hparams, text_pipeline):
     sb.dataio.dataset.set_output_keys(datasets, 
         ["id", "sig"] + [x for x in text_pipeline.provides]
     )
-    return train_data, valid_data, test_datasets
+    return train_data, valid_data, test_data
 
  

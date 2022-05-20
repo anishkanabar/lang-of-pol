@@ -207,7 +207,7 @@ if __name__ == "__main__":
         overrides=overrides,
     )
 
-    # 1.  # Dataset prep (parsing Librispeech)
+    # Dataset prep 
     from seq_prepare import prepare_bpc, dataio_prepare  # noqa
 
     # multi-gpu (ddp) save data preparation
