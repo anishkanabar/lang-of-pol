@@ -5,27 +5,24 @@ import librosa
 import pandas as pd
 from pathlib import Path
 import speechbrain as sb
-from asr_dataset.police import BpcETL
+from asr_dataset.police import BpcETL, AmbiguityStrategy
 from asr_dataset.librispeech import LibriSpeechETL
 from asr_dataset.atczero import ATCZeroETL
-from asr_dataset.constants import DataSizeUnit, Cluster
+from asr_dataset.constants import Cluster
 
 logger = logging.getLogger(__name__)
 
 def prepare_bpc(cluster: str, 
                 dataset_name:str, 
-                num_train: int, 
-                num_sec: float,
-                split_ratios: dict,
+                splits: dict,
                 output_folder: str, 
+                ambiguity_strategy: str='ALL',
                 skip_prep=False):
     """
     @:param
         cluster: cluster name. either ['rcc', 'ai', 'ttic']
         dataset_name: either ['police', 'librispeech', 'atczero']
-        num_train: number of samples to prepare from dataset
-        num_sec: total seconds of audio to retrieve from dataset
-        split_ratios: dictionary of named train/val/test splits and fraction of dataset
+        splits: dictionary of named train/val/test splits and duration
         output_folder: path to manifest (output) folder
         skip_prep: If True, skip data preparation.
     """
@@ -34,7 +31,7 @@ def prepare_bpc(cluster: str,
 
     cluster = Cluster[cluster.upper()]
     if dataset_name == 'police':
-        etl = BpcETL(cluster, filter_numeric=False)
+        etl = BpcETL(cluster, filter_numeric=False, ambiguity=ambiguity_strategy)
     elif dataset_name == 'librispeech':
         etl = LibriSpeechETL(cluster)
     elif dataset_name == 'atczero':
@@ -42,42 +39,18 @@ def prepare_bpc(cluster: str,
     else:
         raise NotImplementedError('dataset ' + dataset_name)
 
-    if num_sec is not None:
-        qty = num_sec
-        units = DataSizeUnit.SECONDS
-    else:
-        qty = num_train
-        units = DataSizeUnit.ROW_COUNT
-    data = etl.etl(qty=qty, units=units)
+    data = etl.etl(splits=splits)
+    logger.debug(f'Loaded data has {data["split"].nunique()} splits')
 
-    # Make IDs global to splits
-    data = data.reset_index()
-    data = data.assign(ID = data.index.to_series())
-    
-    # Split into hparams-defined splits
-    splits = {}
-    other_splits = data
-    other_frac = 1
-    for split, frac in split_ratios.items():
-        current_frac = max(0., min(1., frac / other_frac))
-        current_split = other_splits.sample(frac=current_frac, random_state=1234)
-        other_splits = other_splits.loc[other_splits.index.difference(current_split.index)]
-        other_frac = max(0., min(1., other_frac - frac))
-        splits[split] = current_split
-        
-    #test_data = data.sample(frac=.2, random_state=1234)
-    #trainval_data = data.iloc[data.index.difference(test_data.index)]
-    #val_data = trainval_data.sample(frac=.25, random_state=1234)
-    #train_data = trainval_data.iloc[trainval_data.index.difference(val_data.index)]
-    #splits = {'train': train_data, 'val': val_data, 'test': test_data}
-    
-    for split, splitdata in splits.items():
+    # Write separate df csv per split
+    for split in data['split'].unique():
         manifest_path = os.path.join(output_folder, split) + '.csv'
-        logger.info("Preparing %s..." % manifest_path)
+        logger.info("Preparing %s ..." % manifest_path)
         
+        splitdata = data[data['split'] == split]
         new_df = pd.DataFrame(
             {
-                "ID": splitdata['ID'],
+                "ID": splitdata.index.to_series(),
                 "duration": splitdata['duration'],
                 "wav": splitdata['audio'],
                 "transcript": splitdata['text']
@@ -85,7 +58,7 @@ def prepare_bpc(cluster: str,
         )
         new_df.to_csv(manifest_path, index=False)
         
-def dataio_prepare(hparams):
+def dataio_prepare(hparams, text_pipeline):
     """This function prepares the datasets to be used in the brain class.
     It also defines the data processing pipeline through user-defined functions."""
 
@@ -142,51 +115,16 @@ def dataio_prepare(hparams):
                                target_sr=hparams['model_sample_rate'])
         sig = torch.tensor(sig)
         return sig
- 
+
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
-    label_encoder = sb.dataio.encoder.CTCTextEncoder()
-
+ 
     # 3. Define text pipeline:
-    @sb.utils.data_pipeline.takes("wrd")
-    @sb.utils.data_pipeline.provides(
-        "wrd", "char_list", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
-    )
-    def text_pipeline(wrd):
-        yield wrd
-        char_list = list(wrd)
-        yield char_list
-        tokens_list = label_encoder.encode_sequence(char_list)
-        yield tokens_list
-        tokens_bos = torch.LongTensor([hparams["bos_index"]] + (tokens_list))
-        yield tokens_bos
-        tokens_eos = torch.LongTensor(tokens_list + [hparams["eos_index"]])
-        yield tokens_eos
-        tokens = torch.LongTensor(tokens_list)
-        yield tokens
-
     sb.dataio.dataset.add_dynamic_item(datasets, text_pipeline)
 
-    lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
-    special_labels = {
-        "bos_label": hparams["bos_index"],
-        "eos_label": hparams["eos_index"],
-        "blank_label": hparams["blank_index"],
-    }
-    label_encoder.load_or_create(
-        path=lab_enc_file,
-        from_didatasets=[train_data],
-        output_key="char_list",
-        special_labels=special_labels,
-        sequence_input=True,
-    )
-    label_encoder.add_unk()
-
     # 4. Set output:
-    sb.dataio.dataset.set_output_keys(
-        datasets,
-        ["id", "sig", "wrd", "char_list", "tokens_bos", "tokens_eos", "tokens"],
+    sb.dataio.dataset.set_output_keys(datasets, 
+        ["id", "sig"] + [x for x in text_pipeline.provides]
     )
-    return train_data, valid_data, test_datasets, label_encoder
+    return train_data, valid_data, test_datasets
 
  
-        

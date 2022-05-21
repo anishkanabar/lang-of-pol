@@ -1,32 +1,28 @@
 import re
 import os
 import logging
-import speechbrain as sb
 import torch
-from typing import TypedDict
+import speechbrain as sb
 import bpc_prepare as prepare
 from asr_dataset.base import AsrETL
 from asr_dataset.atczero import ATCZeroETL
 import pandas as pd
 
-DataSplits = TypedDict('DataSplit', {'split': str, 'data': pd.DataFrame})
 logger = logging.getLogger('asr.prepare.ctc')
 
 
 def dataio_prepare(hparams):
     """ Dataset transformation pipeline """
 
-    label_encoder = sb.dataio.encoder.CTCTextEncoder()
+    tokenizer = hparams["tokenizer"]
 
     @sb.utils.data_pipeline.takes("wrd")
     @sb.utils.data_pipeline.provides(
-        "wrd", "char_list", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
+        "wrd", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
     )
     def text_pipeline(wrd):
         yield wrd
-        char_list = list(wrd)
-        yield char_list
-        tokens_list = label_encoder.encode_sequence(char_list)
+        tokens_list = tokenizer.encode_as_ids(wrd)
         yield tokens_list
         tokens_bos = torch.LongTensor([hparams["bos_index"]] + (tokens_list))
         yield tokens_bos
@@ -36,60 +32,44 @@ def dataio_prepare(hparams):
         yield tokens
 
     train_data, val_data, test_data = prepare.dataio_prepare(hparams, text_pipeline)
+    return train_data, val_data, test_data, tokenizer
+    
 
-    lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
-    special_labels = {
-        "bos_label": hparams["bos_index"],
-        "eos_label": hparams["eos_index"],
-        "blank_label": hparams["blank_index"],
-    }
-    label_encoder.load_or_create(
-        path=lab_enc_file,
-        from_didatasets=[train_data],
-        output_key="char_list",
-        special_labels=special_labels,
-        sequence_input=True,
-    )
-    label_encoder.add_unk()
-
-    return train_data, val_data, test_data, label_encoder
-
-
-def prepare_bpc(split_ratios: dict, 
+def prepare_bpc(splits: dict, 
                 output_folder: str, 
                 **kwargs):
     """ See docstring in bpc_prepare for other params"""
 
-    prepare.prepare_bpc(split_ratios=split_ratios, 
+    prepare.prepare_bpc(splits=splits, 
                         output_folder=output_folder, 
                         **kwargs)
 
-    splits = get_splits(split_ratios, output_folder)
-    splits = {k: ds_prep(v) for k, v in splits.items()}
-    splits = {k: filter_nonalphanum(v) for k,v in splits.items()}
-    splits = {k: filter_ratio(v) for k, v in splits.items()}
+    splitdata = get_splits(splits, output_folder)
+    splitdata = {k: ctc_prep(v) for k, v in splitdata.items()}
+    splitdata = {k: filter_nonalphanum(v) for k,v in splitdata.items()}
+    splitdata = {k: filter_ratio(v) for k, v in splitdata.items()}
 
-    for k, v in splits.items():
+    for k, v in splitdata.items():
         AsrETL._describe(v, k)
 
-    write_splits(splits, output_folder)
+    write_splits(splitdata, output_folder)
 
 
-def get_splits(split_ratios, output_folder) -> {str, pd.DataFrame}:
-    splits = {}
-    for split in split_ratios.keys():
-        manifest_path = os.path.join(output_folder, split) + '.csv'
-        splits[split] = pd.read_csv(manifest_path)
-    return splits
-
-
-def write_splits(splits: {str, pd.DataFrame}, output_folder: str):
+def get_splits(splits, output_folder) -> {str, pd.DataFrame}:
+    splitdata = {}
     for split in splits.keys():
         manifest_path = os.path.join(output_folder, split) + '.csv'
-        splits[split].to_csv(manifest_path, index=False)
+        splitdata[split] = pd.read_csv(manifest_path)
+    return splitdata
+
+
+def write_splits(splitdata: {str, pd.DataFrame}, output_folder: str):
+    for split in splitdata.keys():
+        manifest_path = os.path.join(output_folder, split) + '.csv'
+        splitdata[split].to_csv(manifest_path, index=False)
     
 
-def ds_prep(df: pd.DataFrame) -> pd.DataFrame:
+def ctc_prep(df: pd.DataFrame) -> pd.DataFrame:
     return df.rename(columns={'transcript':'wrd'})
 
 
@@ -109,11 +89,8 @@ def filter_ratio(df: pd.DataFrame) -> pd.DataFrame:
         df - expects columns {duration, wrd} 
     """
     FRAME_RATE = 49  # (Hz)
-    #MIN_RATIO = 2.84375 # (2.0 is bad --- 2.75 was bad -- 2.796875 bad -- 2.84375 ok -- 2.9375 ok -- 3.125 ok -- 3.5 is ok -- 5.0 is ok)
     MIN_RATIO = 1.0
-    logger.info(f'Testing with MFCC ratio {MIN_RATIO}')
     mfcc_lengths = df['duration'] * FRAME_RATE
-    # logger.debug(f'Min/Avg/Max Num Frames: {mfcc_lengths.min():.2f} : {mfcc_lengths.mean():.2f} : {mfcc_lengths.max():.2f}')
     num_chars = df['wrd'].str.len()
     mfcc_ratios = mfcc_lengths / num_chars
     pred = mfcc_ratios > MIN_RATIO

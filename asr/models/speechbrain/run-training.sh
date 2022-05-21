@@ -54,10 +54,10 @@ MAIL_TYPE="all"
 OUTPUT="$OUTPUT_DIR/%j.%N.stdout"
 ERROR="$OUTPUT_DIR/%j.%N.stderr"
 NODES="1"
-GPUS="1"
+GPUS="2"
 NTASKS="1"
 GPU_TASKS="1"
-MEM_PER_CPU="24G" 
+MEM_PER_GPU="32G" 
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir -p "$OUTPUT_DIR"
@@ -73,6 +73,7 @@ fi
 
 if [ "$CLUSTER" = "rcc" ]; then
     # this node is friendly --nodelist "midway3-0277" \
+    # this node is friendly --nodelist "midway3-0286" \
     # run with --nonfinite_patience=0 as last arg to shortcut
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
@@ -81,14 +82,11 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --nodelist "midway3-0277" \
             --gpus $GPUS \
-            --ntasks $NTASKS \
-            --ntasks-per-gpu $GPU_TASKS \
-            --mem-per-cpu "$MEM_PER_CPU" \
+            --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
             --account "$ACCOUNT" \
-            python "$TRAINPY" "$HPARAMS" --nonfinite_patience=0
+            python "$TRAINPY" "$HPARAMS" --data_parallel_backend
 elif [ "$CLUSTER" = "ai" ]; then
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \

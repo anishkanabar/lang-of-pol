@@ -2,7 +2,12 @@
 
 ## Installation
 1. Create a new conda environment with soundfile, ffmpeg, sox, transformers, pip
-`conda create -c conda-forge -c huggingface -y --name audio pysoundfile ffmpeg sox transformers pip`
+```
+conda create -y --name audio \
+    -c pytorch-nightly -c conda-forge -c huggingface \
+    pysoundfile ffmpeg sox transformers pip \
+    pytorch torchaudio cudatoolkit=10.2
+```
 2. Install speechbrain to env
 `conda activate audio`
 `pip install speechbrain`

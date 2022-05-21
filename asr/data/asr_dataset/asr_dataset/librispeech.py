@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 from numbers import Real
 from asr_dataset.base import AsrETL
-from asr_dataset.constants import DATASET_DIRS, Cluster, DataSizeUnit
+from asr_dataset.constants import DATASET_DIRS, Cluster
 
 logger = logging.getLogger('asr.etl.librispeech')
 
@@ -40,9 +40,8 @@ class LibriSpeechETL(AsrETL):
         
 
     def load(self, 
-             data: pd.DataFrame=None, 
-             qty:Real=None, 
-             units: DataSizeUnit=None) -> pd.DataFrame:
+             data: pd.DataFrame=None,
+             splits: dict=None) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -51,7 +50,7 @@ class LibriSpeechETL(AsrETL):
         """
         if data is None:
             data = self.extract()
-        data = self._sample(data, qty, units)
+        data = self._sample_split(data, splits)
         self.describe(data)
         return data
         

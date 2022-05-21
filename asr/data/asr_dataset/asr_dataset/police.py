@@ -13,7 +13,7 @@ from enum import Enum, auto
 from numbers import Real
 from numpy.random import default_rng
 from asr_dataset.base import AsrETL
-from asr_dataset.constants import DATASET_DIRS, Cluster, DataSizeUnit
+from asr_dataset.constants import DATASET_DIRS, Cluster
 
 logger = logging.getLogger('asr.etl.bpc')
 
@@ -104,8 +104,7 @@ class BpcETL(AsrETL):
     
     def load(self,
             data: pd.DataFrame=None,
-            qty:Real=None,
-            units: DataSizeUnit=None) -> pd.DataFrame:
+            splits: dict=None) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -115,7 +114,7 @@ class BpcETL(AsrETL):
         if data is None:
             data = self._create_manifest()
         data = self._filter_exists(data, "audio", log=False)
-        data = self._sample(data, qty, units)
+        data = self._sample_split(data, splits)
         self.describe(data, '-loaded')
         return data 
         
@@ -184,17 +183,20 @@ class BpcETL(AsrETL):
                 counter = ey
         return keep
 
+
     def _resolve_ambiguity(self, data: pd.DataFrame) -> pd.DataFrame:
         """
         Handles inter-transcriber label ambiguity.
         Params:
             data: expects columns {original_audio}
         """
+        # Do this in all cases so columns align
+        data = data.assign(end = data['offset'] + data['duration'])
+
         if self.ambiguity_strategy == AmbiguityStrategy.ALL:
             return data
 
         # Find utterances in same 30m file that overlap in time
-        data = data.assign(end = data['offset'] + data['duration'])
         candidates = data.merge(data, on='original_audio')
         # remove "reverse duplicates": e.g. when row 1 = (x,y) and row 2 = (y,x)
         # by keeping the version where x is on the left of the join
@@ -205,6 +207,10 @@ class BpcETL(AsrETL):
         candidates = candidates.loc[overlaps & ~same_scriber]
         n_candidates = pd.concat([candidates['audio_x'],candidates['audio_y']]).nunique()
         logger.debug(f'Found {n_candidates} that overlap somewhat.')
+
+        # Pandas column-wise aggregation has unusual behavior for 0-length data-frames. 
+        if n_candidates == 0:
+            return data
 
         # Filter on the amount of time overlap
         OVERLAP_THRESHOLD = .5   # arbitrary

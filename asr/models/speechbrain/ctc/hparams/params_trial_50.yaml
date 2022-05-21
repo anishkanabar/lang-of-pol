@@ -8,7 +8,7 @@
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 1987
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 48
+trial: 50
 output_folder: !ref results/train_wav2vec2_char/seed_<seed>/trial_<trial>
 wer_file: !ref <output_folder>/wer.txt
 cer_file: !ref <output_folder>/cer.txt
@@ -18,10 +18,10 @@ train_log: !ref <output_folder>/train_log.txt
 # Data files
 cluster: rcc  # 'ai' or 'rcc' or 'ttic'
 scratch_dir: /project/graziul/ra/echandler/scratch
-dataset_name: librispeech  #'librispeech' or 'police' or 'atczero'
-data_sample_rate: 16000
+dataset_name: atczero  #'librispeech' or 'police' or 'atczero'
+data_sample_rate: 8000
 num_train: null
-num_sec: 49500   # yields 11h training split
+num_sec: null
 skip_prep: False
 ckpt_interval_minutes: 25 # save checkpoint every N min
 split_ratios:
@@ -45,7 +45,7 @@ wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
 model_sample_rate: 16000
 
 # Training parameters
-number_of_epochs: 5
+number_of_epochs: 7
 lr: 0.9
 lr_wav2vec: 0.0001
 sorting: ascending
@@ -72,7 +72,7 @@ test_dataloader_opts:
 activation: !name:torch.nn.LeakyReLU
 dnn_layers: 2
 dnn_neurons: 1024
-freeze_wav2vec: True
+freeze_wav2vec: False
 
 # Outputs
 # 31 breaks on ATC0

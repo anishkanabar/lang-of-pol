@@ -30,7 +30,6 @@ from hyperpyyaml import load_hyperpyyaml
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
-logging.getLogger('numba').setLevel(logging.WARNING)
 
 
 # Define training procedure
@@ -268,15 +267,19 @@ if __name__ == "__main__":
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],
-            "splits": hparams["splits"],
+            "num_train": hparams["num_train"],
+            "num_sec": hparams["num_sec"],
+            "split_ratios": hparams["split_ratios"],
             "output_folder": hparams["output_folder"],
-            "ambiguity_strategy": hparams['ambiguity_strategy'],
             "skip_prep": hparams["skip_prep"],
+            "seed": hparams["seed"],
         },
     )
 
     # here we create the datasets objects as well as tokenization and encoding
-    train_data, valid_data, test_datasets, label_encoder = dataio_prepare(hparams)
+    train_data, valid_data, test_datasets, label_encoder = dataio_prepare(
+        hparams
+    )
 
     # Trainer initialization
     asr_brain = ASR(
