@@ -20,7 +20,6 @@ Protocols:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.test.lst
                annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.test.rttm
                annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/AMI/MixHeadset.test.uem
-         
          only_words:
             train:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt
@@ -34,7 +33,6 @@ Protocols:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/test.meetings.txt
                annotation: /project/graziul/ra/shiyanglai/corpus/ami/database/only_words/rttms/test/{uri}.rttm
                annotated: /project/graziul/ra/shiyanglai/corpus/ami/database/uems/test/{uri}.uem
-
          word_and_vocalsounds:
             train:
                uri: /project/graziul/ra/shiyanglai/corpus/ami/database/lists/train.meetings.txt

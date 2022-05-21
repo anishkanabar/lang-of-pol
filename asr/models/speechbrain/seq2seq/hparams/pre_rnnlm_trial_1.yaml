@@ -1,0 +1,74 @@
+# ############################################################################
+# Model: E2E ASR with attention-based ASR
+# Encoder: CRDNN model
+# Decoder: GRU + beamsearch + RNNLM
+# Tokens: BPE with unigram
+# losses: CTC+ NLL
+# Training: BPC
+# ############################################################################
+
+seed: 2602
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+trial: 1
+# Vocab size should match tokenizer config
+# Tokenizer trials are not necessarily in sync with this models trials
+output_folder: !ref results/seq2seq/pre_rnnlm/seed_<seed>/trial_<trial>
+cer_file: !ref <output_folder>/cer.txt
+wer_file: !ref <output_folder>/wer.txt
+save_folder: !ref <output_folder>/save
+train_log: !ref <output_folder>/train_log.txt
+
+# Data files
+cluster: rcc
+scratch_dir: /project/graziul/ra/echandler/scratch
+dataset_name: atczero
+data_sample_rate: 8000
+splits:
+    train: 600  # 10m 
+    dev: 75  # 75s
+    test: 75  # 75s
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv:
+    - !ref <output_folder>/test.csv
+ambiguity_strategy: ALL
+skip_prep: False
+
+# Model parameters
+bos_index: 0
+eos_index: 0
+tokenizer: !new:sentencepiece.SentencePieceProcessor
+pretrained_model: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677'
+
+pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
+   collect_in: !ref <save_folder>
+   loadables:
+      tokenizer: !ref <tokenizer>
+   paths:
+      tokenizer: !ref <pretrained_model>/tokenizer.ckpt
+
+# Training parameters
+batch_size: 8
+sorting: ascending
+
+# Feature parameters
+model_sample_rate: 16000
+
+# Dataloader options
+train_dataloader_opts:
+   batch_size: !ref <batch_size>
+
+valid_dataloader_opts:
+   batch_size: !ref <batch_size>
+
+test_dataloader_opts:
+   batch_size: !ref <batch_size>
+
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+   save_file: !ref <train_log>
+
+remove_spaces: False
+wer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+   split_tokens: True
+
