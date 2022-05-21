@@ -4,13 +4,13 @@
 # Decoder: GRU + beamsearch + RNNLM
 # Tokens: BPE with bpe 1000
 # losses: CTC+ NLL
-# Training: ATC0
+# Training: BPC
 # Notes: based on Librispeech recipe
 # ############################################################################
 
 seed: 2602
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 3
+trial: 8
 output_folder: !ref results/seq2seq/pre_rnnlm/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 wer_file: !ref <output_folder>/wer.txt
@@ -29,12 +29,12 @@ lm_file: !ref <pretrained_lm_folder>/lm.ckpt
 # Data files
 cluster: rcc
 scratch_dir: /project/graziul/ra/echandler/scratch
-dataset_name: atczero
-data_sample_rate: 8000
+dataset_name: police
+data_sample_rate: 22050
 splits:
-    train: 36000  # 10h 
-    dev: 4500   # 75m
-    test: 4500  # 75m
+    train: 3600  # 1h 
+    dev: 450   # 7.5m
+    test: 450  # 7.5m
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv: !ref <output_folder>/test.csv
@@ -46,7 +46,7 @@ skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 
 # Training parameters
-number_of_epochs: 45 # first run 15, second run 30
+number_of_epochs: 45 # first run 15. second run 30
 number_of_ctc_epochs: 5
 batch_size: 8
 lr: 1.0

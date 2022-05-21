@@ -219,6 +219,7 @@ if __name__ == "__main__":
             "splits": hparams["splits"],
             "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
+            "ambiguity_strategy": hparams["ambiguity_strategy"],
         },
     )
 

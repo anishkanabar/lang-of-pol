@@ -33,14 +33,14 @@ class BpcETL(AsrETL):
                 filter_inaudible=True,
                 filter_uncertain=True,
                 filter_numeric=True,
-                ambiguity=AmbiguityStrategy.RANDOM):
+                ambiguity: str='RANDOM'):
         super().__init__('police')
         self.transcripts_dir = DATASET_DIRS[cluster]['police_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['police_mp3s']
         self.filter_inaudible = filter_inaudible
         self.filter_uncertain = filter_uncertain
         self.filter_numeric = filter_numeric
-        self.ambiguity_strategy = ambiguity
+        self.ambiguity_strategy = AmbiguityStrategy[ambiguity.upper()]
         
 
     def extract(self) -> pd.DataFrame:

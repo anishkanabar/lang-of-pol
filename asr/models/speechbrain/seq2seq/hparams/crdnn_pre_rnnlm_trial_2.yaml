@@ -37,8 +37,7 @@ splits:
     test: 450  # 7.5m
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
-test_csv:
-    - !ref <output_folder>/test.csv
+test_csv: !ref <output_folder>/test.csv
 ambiguity_strategy: ALL
 
 # rirs data downloaded here if needed

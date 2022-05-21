@@ -11,7 +11,7 @@
 seed: 2602
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 trial: 3
-output_folder: !ref results/seq2seq/pre_rnnlm/seed_<seed>/trial_<trial>
+output_folder: !ref results/seq2seq/rnnlm/seed_<seed>/trial_<trial>
 cer_file: !ref <output_folder>/cer.txt
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save
@@ -19,12 +19,10 @@ train_log: !ref <output_folder>/train_log.txt
 
 # Vocab size should match tokenizer config
 vocab_size: 1000
-# Tokenizer trials are not necessarily in sync with this models trials
-# tokenizer_file: results/tokenizer/bpe_1000/data_atczero/sec_600/trial_1/1000_bpe.model
 # Speech recognizer and LM should use same tokenizer!
-pretrained_lm_folder: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677'
-tokenizer_file: !ref <pretrained_lm_folder>/tokenizer.ckpt
-lm_file: !ref <pretrained_lm_folder>/lm.ckpt
+tokenizer_file: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt'
+# Speech recognizer and LM should use common validation + test sets!
+lm_file: '/project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/results/RNNLM/seed_2602/trial_2/save/CKPT+2022-05-20+16-35-01+00/model.ckpt'
 
 # Data files
 cluster: rcc
@@ -46,7 +44,7 @@ skip_prep: False
 ckpt_interval_minutes: 15 # save checkpoint every N min
 
 # Training parameters
-number_of_epochs: 45 # first run 15, second run 30
+number_of_epochs: 45 # first run 15, second 30
 number_of_ctc_epochs: 5
 batch_size: 8
 lr: 1.0
@@ -95,7 +93,7 @@ rnn_neurons: 1024
 rnn_bidirectional: True
 dnn_blocks: 2
 dnn_neurons: 512
-emb_size: 128
+emb_size: 256
 dec_neurons: 1024
 output_neurons: !ref <vocab_size>  # Number of tokens
 blank_index: 0
@@ -203,7 +201,7 @@ lm_model: !new:speechbrain.lobes.models.RNNLM.RNNLM
     activation: !name:torch.nn.LeakyReLU
     dropout: 0.0
     rnn_layers: 2
-    rnn_neurons: 2048
+    rnn_neurons: 512
     dnn_blocks: 1
     dnn_neurons: 512
     return_hidden: True  # For inference

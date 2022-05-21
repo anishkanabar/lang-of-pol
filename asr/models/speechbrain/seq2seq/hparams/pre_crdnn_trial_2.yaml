@@ -30,8 +30,7 @@ splits:
     test: 450  # 75s
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
-test_csv:
-    - !ref <output_folder>/test.csv
+test_csv: !ref <output_folder>/test.csv
 ambiguity_strategy: ALL
 skip_prep: False
 
