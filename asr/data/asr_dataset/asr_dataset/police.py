@@ -247,7 +247,9 @@ class BpcETL(AsrETL):
             ts_dir: Location of folder with transcripts csvs
         """
         ts_dir_files = os.listdir(ts_dir)
-        pattern = "transcripts2022_02_06.csv"
+        pattern = "transcripts\d{4}_\d{2}_\d{2}.csv"
+        # USE THIS ASAP!
+        # pattern = "transcripts2022_02_06.csv"
         ts_names = [x for x in ts_dir_files if re.match(pattern, x)]
         ts_paths = [os.path.join(ts_dir, x) for x in ts_names]
         audio_dfs = [self._parse_csv(x) for x in ts_paths]
