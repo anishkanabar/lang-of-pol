@@ -1,0 +1,129 @@
+# ################################
+# Model: DeepSpeech 2 (fc + ctc)
+# Authors: Eric Chandler 2022
+# ################################
+
+# Environment Parameters
+seed: 1986
+trial: 3
+number_of_epochs: 2
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+output_folder: !ref results/train_deepspeech/seed_<seed>/trial_<trial>
+
+cluster: rcc   # 'ai' or 'rcc'
+scratch_dir: /project/graziul/ra/echandler/scratch
+
+# Data Parameters
+dataset_name: police   #'librispeech' or 'police' or 'atczero'
+data_sample_rate: 8000
+sorting: ascending
+num_train: null
+num_sec: null
+
+split_ratios:
+    train: .8
+    dev: .1
+    test: .1
+
+train_splits: ["train"]
+dev_splits: ["dev"]
+test_splits: ["test"]
+
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv: 
+    - !ref <output_folder>/test.csv
+
+# With data_parallel batch_size is split into N jobs
+# With DDP batch_size is multiplied by N jobs
+# Must be 3 per GPU to fit 32GB of VRAM
+batch_size: 6
+test_batch_size: 8
+
+train_dataloader_opts:
+   batch_size: !ref <batch_size>
+valid_dataloader_opts:
+   batch_size: !ref <batch_size>
+test_dataloader_opts:
+   batch_size: !ref <test_batch_size>
+
+
+# Model Parameters
+input_size: 660
+hidden_size: 32
+num_classes: 31   #  BPE size, index(blank/eos/bos) = 0
+model_sample_rate: 16000
+
+
+# Decoding parameters
+blank_index: 0
+bos_index: 1
+eos_index: 2
+
+# Model Architecture
+spec: !new:speechbrain.lobes.features.MFCC
+
+final_linear: !new:torch.nn.Linear
+  in_features: !ref <input_size>   # shoudl be <hidden_size>
+  out_features: !ref <num_classes>
+  bias: False
+
+fc: !new:torch.nn.Sequential  # Should start with batch_norm over hidden_size
+  - !ref <final_linear>
+  - !new:speechbrain.nnet.activations.Softmax
+
+# lookahead: !new:torch.nn.Sequential
+#   - !new:speechbrain.nnet.activations.ReLU
+
+#         self.lookahead = nn.Sequential(
+#             # consider adding batch norm?
+#             Lookahead(self.model_cfg.hidden_size, context=self.model_cfg.lookahead_context),
+#             nn.Hardtanh(0, 20, inplace=True)
+#         ) 
+
+ctc_cost: !name:speechbrain.nnet.losses.ctc_loss
+  blank_index: !ref <blank_index>
+
+modules:
+  spec: !ref <spec>
+  fc: !ref <fc>
+
+model: !new:torch.nn.ModuleList
+  - [!ref <fc>]
+
+
+# Optimizer
+learning_rate: .1
+optimizer: !name:torch.optim.SGD
+  lr: !ref <learning_rate>
+
+lr_annealing_model: !new:speechbrain.nnet.schedulers.NewBobScheduler
+   initial_value: !ref <learning_rate>
+   improvement_threshold: 0.0025
+   annealing_factor: 0.8
+   patient: 0
+
+
+# Bookkeeping
+wer_file: !ref <output_folder>/wer.txt
+cer_file: !ref <output_folder>/cer.txt
+
+epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
+  limit: !ref <number_of_epochs>
+
+error_rate_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+
+cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+  split_tokens: True
+
+checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
+  checkpoints_dir: !ref <save_folder>
+  recoverables:
+    model: !ref <model>
+    scheduler_model: !ref <lr_annealing_model>
+    counter: !ref <epoch_counter>
+
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+  save_file: !ref <output_folder>/train_log.txt
+
+

@@ -43,7 +43,7 @@ wav2vec2_name: facebook/wav2vec2-large-960h-lv60-self
 wav2vec2_revision: facebook--wav2vec2-large-960h-lv60-self.main.6f0b7949d197194ee1f3659def27831054cfc06f
 #wav2vec2_hub: /project/graziul/ra/echandler/scratch/facebook/wav2vec2-large-960h-lv60-self/facebook--wav2vec2-large-960h-lv60-self.main.6f0b7949d197194ee1f3659def27831054cfc06f
 wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
-wav2vec_sample_rate: 16000
+model_sample_rate: 16000
 
 # Training parameters
 number_of_epochs: 1
@@ -51,7 +51,7 @@ lr: 0.9
 lr_wav2vec: 0.0001
 sorting: ascending
 auto_mix_prec: False
-sample_rate: 8000
+data_sample_rate: 8000
 
 
 # With data_parallel batch_size is split into N jobs
@@ -91,7 +91,7 @@ epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
    limit: !ref <number_of_epochs>
 
 augmentation: !new:speechbrain.lobes.augment.TimeDomainSpecAugment
-   sample_rate: !ref <sample_rate>
+   sample_rate: !ref <data_sample_rate>
    speeds: [95, 100, 105]
 
 enc: !new:speechbrain.lobes.models.VanillaNN.VanillaNN

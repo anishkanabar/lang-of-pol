@@ -6,12 +6,6 @@ Authors: Eric Chandler <echandler@uchicago.edu>
 from enum import Enum, auto
 
 
-class DataSizeUnit(Enum):
-    SECONDS = auto()
-    ROW_COUNT = auto()
-    ROW_FRAC = auto()
-
-
 class Cluster(Enum):
     RCC = auto()
     AI = auto()

@@ -1,0 +1,270 @@
+2022-04-27 01:04:34,111 - speechbrain.core - INFO - Beginning experiment!
+2022-04-27 01:04:34,112 - speechbrain.core - INFO - Experiment folder: results/train_wav2vec2_char/seed_1987/trial_39
+2022-04-27 01:04:34,826 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+git@github.com:UrbanResiliencyInitiative/lang-of-pol.git@165e215c4e292404be467af6a9b2e2f0beb02ce7#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+audioread==2.1.9
+certifi==2021.10.8
+cffi==1.15.0
+charset-normalizer==2.0.12
+click==8.0.4
+decorator==5.1.1
+filelock==3.6.0
+huggingface-hub==0.4.0
+HyperPyYAML==1.0.0
+idna==3.3
+joblib==1.1.0
+librosa==0.9.1
+llvmlite==0.38.0
+numba==0.55.1
+numpy==1.21.5
+packaging==21.3
+pandas==1.4.1
+pooch==1.6.0
+pycparser==2.21
+pyparsing==3.0.7
+python-dateutil==2.8.2
+pytz==2021.3
+PyYAML==6.0
+regex==2022.1.18
+requests==2.27.1
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses==0.0.47
+scikit-learn==1.0.2
+scipy==1.8.0
+sentencepiece==0.1.96
+six==1.16.0
+SoundFile==0.10.3.post1
+speechbrain==0.5.11
+threadpoolctl==3.1.0
+tokenizers==0.11.5
+torch==1.10.2
+torchaudio==0.10.2
+tqdm==4.62.3
+transformers==4.16.2
+typing-extensions==4.1.1
+urllib3==1.26.8
+
+
+2022-04-27 01:04:34,866 - speechbrain.utils.superpowers - DEBUG - 165e215
+
+
+2022-04-27 01:25:15,942 - asr.etl - INFO - librispeech dataset stats:
+2022-04-27 01:25:15,943 - asr.etl - INFO - 	Row count = 28539
+2022-04-27 01:25:15,943 - asr.etl - INFO - 	Min duration = 1.41 (sec)
+2022-04-27 01:25:15,943 - asr.etl - INFO - 	Max duration = 24.52 (sec)
+2022-04-27 01:25:15,944 - asr.etl - INFO - 	Mean duration = 12.69 (sec)
+2022-04-27 01:25:15,944 - asr.etl - INFO - 	Stdev duration = 3.57 (sec)
+2022-04-27 01:25:15,945 - asr.etl - INFO - 	Total duration = 4 days 04:35:27.166750
+2022-04-27 01:25:15,945 - asr.etl - INFO - librispeech dataset stats:
+2022-04-27 01:25:15,945 - asr.etl - INFO - 	Row count = 28539
+2022-04-27 01:25:15,945 - asr.etl - INFO - 	Min duration = 1.41 (sec)
+2022-04-27 01:25:15,945 - asr.etl - INFO - 	Max duration = 24.52 (sec)
+2022-04-27 01:25:15,946 - asr.etl - INFO - 	Mean duration = 12.69 (sec)
+2022-04-27 01:25:15,946 - asr.etl - INFO - 	Stdev duration = 3.57 (sec)
+2022-04-27 01:25:15,946 - asr.etl - INFO - 	Total duration = 4 days 04:35:27.166750
+2022-04-27 01:25:15,957 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1987/trial_39/train.csv...
+2022-04-27 01:25:16,095 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1987/trial_39/dev.csv...
+2022-04-27 01:25:16,113 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1987/trial_39/test.csv...
+2022-04-27 01:25:16,212 - asr.prepare.ctc - INFO - Filtering out 1 audio < 1.5 sec
+2022-04-27 01:25:16,213 - asr.prepare.ctc - INFO - Filtering out 0 audio < 1.5 sec
+2022-04-27 01:25:16,214 - asr.prepare.ctc - INFO - Filtering out 0 audio < 1.5 sec
+2022-04-27 01:25:16,215 - asr.prepare.ctc - INFO - Testing with MFCC ratio 2.84375
+2022-04-27 01:25:16,222 - asr.prepare.ctc - INFO - Discarding 2313 bad MFCC ratios of 22830 examples.
+2022-04-27 01:25:16,223 - asr.prepare.ctc - INFO - Testing with MFCC ratio 2.84375
+2022-04-27 01:25:16,225 - asr.prepare.ctc - INFO - Discarding 307 bad MFCC ratios of 2854 examples.
+2022-04-27 01:25:16,225 - asr.prepare.ctc - INFO - Testing with MFCC ratio 2.84375
+2022-04-27 01:25:16,227 - asr.prepare.ctc - INFO - Discarding 289 bad MFCC ratios of 2854 examples.
+2022-04-27 01:25:16,277 - asr.prepare.ctc - INFO - Filtered out 0 special characters
+2022-04-27 01:25:16,284 - asr.prepare.ctc - INFO - Filtered out 0 special characters
+2022-04-27 01:25:16,291 - asr.prepare.ctc - INFO - Filtered out 0 special characters
+2022-04-27 01:25:16,711 - speechbrain.dataio.encoder - DEBUG - Would load categorical encoding from results/train_wav2vec2_char/seed_1987/trial_39/save/label_encoder.txt, but file doesn't exist yet.
+2022-04-27 01:25:17,383 - speechbrain.dataio.encoder - INFO - Moving label 'E' from index 0, because '<blank>' was put at its place.
+2022-04-27 01:25:17,384 - speechbrain.dataio.encoder - INFO - Moving label 'A' from index 1, because '<bos>' was put at its place.
+2022-04-27 01:25:17,384 - speechbrain.dataio.encoder - INFO - Moving label 'S' from index 2, because '<eos>' was put at its place.
+2022-04-27 01:25:17,385 - speechbrain.dataio.encoder - INFO - Load called, but CTCTextEncoder is not empty. Loaded data will overwrite everything. This is normal if there is e.g. an unk label defined at init.
+2022-04-27 01:25:17,386 - speechbrain.dataio.encoder - DEBUG - Loaded categorical encoding from results/train_wav2vec2_char/seed_1987/trial_39/save/label_encoder.txt
+2022-04-27 01:25:17,386 - speechbrain.core - INFO - Info: auto_mix_prec arg from hparam file is used
+2022-04-27 01:25:17,386 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-04-27 01:25:20,421 - speechbrain.core - INFO - 2.1M trainable parameters in ASR
+2022-04-27 01:25:20,422 - __main__ - INFO - Running on devices Tesla V100-PCIE-16GB
+2022-04-27 01:25:20,423 - speechbrain.utils.checkpoints - INFO - Would load a checkpoint here, but none found yet.
+2022-04-27 01:25:20,423 - speechbrain.utils.epoch_loop - INFO - Going into epoch 1
+2022-04-27 01:50:24,962 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+01-50-20+00
+2022-04-27 02:14:56,649 - speechbrain.utils.train_logger - INFO - epoch: 1, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 2.49e-01 - valid loss: 3.03e-02, valid CER: 5.09e-01, valid WER: 2.06
+2022-04-27 02:15:02,049 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+02-14-56+00
+2022-04-27 02:15:02,056 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+01-50-20+00
+2022-04-27 02:15:02,056 - speechbrain.utils.epoch_loop - INFO - Going into epoch 2
+2022-04-27 02:40:09,309 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+02-40-02+00
+2022-04-27 03:08:16,287 - speechbrain.utils.train_logger - INFO - epoch: 2, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 1.82e-01 - valid loss: 2.96e-02, valid CER: 4.30e-01, valid WER: 1.65
+2022-04-27 03:08:26,517 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+03-08-16+00
+2022-04-27 03:08:26,534 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+02-40-02+00
+2022-04-27 03:08:26,536 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+02-14-56+00
+2022-04-27 03:08:26,536 - speechbrain.utils.epoch_loop - INFO - Going into epoch 3
+2022-04-27 03:33:31,707 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+03-33-26+00
+2022-04-27 03:53:24,739 - speechbrain.utils.train_logger - INFO - epoch: 3, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 1.71e-01 - valid loss: 2.79e-02, valid CER: 4.29e-01, valid WER: 1.63
+2022-04-27 03:53:28,269 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+03-53-24+00
+2022-04-27 03:53:28,291 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+03-33-26+00
+2022-04-27 03:53:28,293 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+03-08-16+00
+2022-04-27 03:53:28,293 - speechbrain.utils.epoch_loop - INFO - Going into epoch 4
+2022-04-27 04:18:33,488 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+04-18-28+00
+2022-04-27 04:38:01,999 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.9 to 0.72
+2022-04-27 04:38:02,026 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0001 to 9e-05
+2022-04-27 04:38:02,026 - speechbrain.utils.train_logger - INFO - epoch: 4, lr_model: 9.00e-01, lr_wav2vec: 1.00e-04 - train loss: 1.67e-01 - valid loss: 3.07e-02, valid CER: 4.31e-01, valid WER: 1.67
+2022-04-27 04:38:05,966 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+04-38-02+00
+2022-04-27 04:38:05,993 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+04-18-28+00
+2022-04-27 04:38:05,993 - speechbrain.utils.epoch_loop - INFO - Going into epoch 5
+2022-04-27 05:03:08,635 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-03-06+00
+2022-04-27 05:22:51,806 - speechbrain.utils.train_logger - INFO - epoch: 5, lr_model: 7.20e-01, lr_wav2vec: 9.00e-05 - train loss: 1.59e-01 - valid loss: 2.69e-02, valid CER: 4.31e-01, valid WER: 1.66
+2022-04-27 05:22:56,790 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-22-51+00
+2022-04-27 05:22:56,832 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+04-38-02+00
+2022-04-27 05:22:56,833 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-03-06+00
+2022-04-27 05:22:56,833 - speechbrain.utils.epoch_loop - INFO - Going into epoch 6
+2022-04-27 05:48:00,497 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-47-57+00
+2022-04-27 05:59:55,084 - speechbrain.utils.train_logger - INFO - epoch: 6, lr_model: 7.20e-01, lr_wav2vec: 9.00e-05 - train loss: 1.59e-01 - valid loss: 2.31e-02, valid CER: 4.26e-01, valid WER: 1.61
+2022-04-27 06:00:00,099 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-59-55+00
+2022-04-27 06:00:00,152 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+03-53-24+00
+2022-04-27 06:00:00,153 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-22-51+00
+2022-04-27 06:00:00,154 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-47-57+00
+2022-04-27 06:00:00,154 - speechbrain.utils.epoch_loop - INFO - Going into epoch 7
+2022-04-27 06:25:04,285 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+06-25-00+00
+2022-04-27 06:37:44,959 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.72 to 0.58
+2022-04-27 06:37:44,985 - speechbrain.nnet.schedulers - INFO - Changing lr from 9e-05 to 8.1e-05
+2022-04-27 06:37:44,985 - speechbrain.utils.train_logger - INFO - epoch: 7, lr_model: 7.20e-01, lr_wav2vec: 9.00e-05 - train loss: 1.55e-01 - valid loss: 3.20e-02, valid CER: 5.01e-01, valid WER: 2.33
+2022-04-27 06:37:47,748 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+06-37-44+00
+2022-04-27 06:37:47,792 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+06-25-00+00
+2022-04-27 06:37:47,792 - speechbrain.utils.epoch_loop - INFO - Going into epoch 8
+2022-04-27 07:02:51,117 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+07-02-48+00
+2022-04-27 10:57:22,022 - speechbrain.core - INFO - Beginning experiment!
+2022-04-27 10:57:22,023 - speechbrain.core - INFO - Experiment folder: results/train_wav2vec2_char/seed_1987/trial_39
+2022-04-27 10:57:24,714 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+git@github.com:UrbanResiliencyInitiative/lang-of-pol.git@165e215c4e292404be467af6a9b2e2f0beb02ce7#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+audioread==2.1.9
+certifi==2021.10.8
+cffi==1.15.0
+charset-normalizer==2.0.12
+click==8.0.4
+decorator==5.1.1
+filelock==3.6.0
+huggingface-hub==0.4.0
+HyperPyYAML==1.0.0
+idna==3.3
+joblib==1.1.0
+librosa==0.9.1
+llvmlite==0.38.0
+numba==0.55.1
+numpy==1.21.5
+packaging==21.3
+pandas==1.4.1
+pooch==1.6.0
+pycparser==2.21
+pyparsing==3.0.7
+python-dateutil==2.8.2
+pytz==2021.3
+PyYAML==6.0
+regex==2022.1.18
+requests==2.27.1
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses==0.0.47
+scikit-learn==1.0.2
+scipy==1.8.0
+sentencepiece==0.1.96
+six==1.16.0
+SoundFile==0.10.3.post1
+speechbrain==0.5.11
+threadpoolctl==3.1.0
+tokenizers==0.11.5
+torch==1.10.2
+torchaudio==0.10.2
+tqdm==4.62.3
+transformers==4.16.2
+typing-extensions==4.1.1
+urllib3==1.26.8
+
+
+2022-04-27 10:57:24,746 - speechbrain.utils.superpowers - DEBUG - 165e215
+
+
+2022-04-27 11:32:32,861 - asr.etl - INFO - librispeech dataset stats:
+2022-04-27 11:32:32,861 - asr.etl - INFO - 	Row count = 28539
+2022-04-27 11:32:32,862 - asr.etl - INFO - 	Min duration = 1.41 (sec)
+2022-04-27 11:32:32,862 - asr.etl - INFO - 	Max duration = 24.52 (sec)
+2022-04-27 11:32:32,863 - asr.etl - INFO - 	Mean duration = 12.69 (sec)
+2022-04-27 11:32:32,863 - asr.etl - INFO - 	Stdev duration = 3.57 (sec)
+2022-04-27 11:32:32,863 - asr.etl - INFO - 	Total duration = 4 days 04:35:27.166750
+2022-04-27 11:32:32,864 - asr.etl - INFO - librispeech dataset stats:
+2022-04-27 11:32:32,864 - asr.etl - INFO - 	Row count = 28539
+2022-04-27 11:32:32,864 - asr.etl - INFO - 	Min duration = 1.41 (sec)
+2022-04-27 11:32:32,864 - asr.etl - INFO - 	Max duration = 24.52 (sec)
+2022-04-27 11:32:32,864 - asr.etl - INFO - 	Mean duration = 12.69 (sec)
+2022-04-27 11:32:32,865 - asr.etl - INFO - 	Stdev duration = 3.57 (sec)
+2022-04-27 11:32:32,865 - asr.etl - INFO - 	Total duration = 4 days 04:35:27.166750
+2022-04-27 11:32:32,875 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1987/trial_39/train.csv...
+2022-04-27 11:32:33,013 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1987/trial_39/dev.csv...
+2022-04-27 11:32:33,032 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1987/trial_39/test.csv...
+2022-04-27 11:32:33,235 - asr.prepare.ctc - INFO - Filtering out 1 audio < 1.5 sec
+2022-04-27 11:32:33,237 - asr.prepare.ctc - INFO - Filtering out 0 audio < 1.5 sec
+2022-04-27 11:32:33,237 - asr.prepare.ctc - INFO - Filtering out 0 audio < 1.5 sec
+2022-04-27 11:32:33,238 - asr.prepare.ctc - INFO - Testing with MFCC ratio 2.84375
+2022-04-27 11:32:33,246 - asr.prepare.ctc - INFO - Discarding 2313 bad MFCC ratios of 22830 examples.
+2022-04-27 11:32:33,246 - asr.prepare.ctc - INFO - Testing with MFCC ratio 2.84375
+2022-04-27 11:32:33,248 - asr.prepare.ctc - INFO - Discarding 307 bad MFCC ratios of 2854 examples.
+2022-04-27 11:32:33,248 - asr.prepare.ctc - INFO - Testing with MFCC ratio 2.84375
+2022-04-27 11:32:33,250 - asr.prepare.ctc - INFO - Discarding 289 bad MFCC ratios of 2854 examples.
+2022-04-27 11:32:33,298 - asr.prepare.ctc - INFO - Filtered out 0 special characters
+2022-04-27 11:32:33,306 - asr.prepare.ctc - INFO - Filtered out 0 special characters
+2022-04-27 11:32:33,313 - asr.prepare.ctc - INFO - Filtered out 0 special characters
+2022-04-27 11:32:33,791 - speechbrain.dataio.encoder - DEBUG - Loaded categorical encoding from results/train_wav2vec2_char/seed_1987/trial_39/save/label_encoder.txt
+2022-04-27 11:32:33,791 - speechbrain.dataio.encoder - INFO - Load called, but CTCTextEncoder is not empty. Loaded data will overwrite everything. This is normal if there is e.g. an unk label defined at init.
+2022-04-27 11:32:33,792 - speechbrain.dataio.encoder - DEBUG - Loaded categorical encoding from results/train_wav2vec2_char/seed_1987/trial_39/save/label_encoder.txt
+2022-04-27 11:32:33,793 - speechbrain.core - INFO - Info: auto_mix_prec arg from hparam file is used
+2022-04-27 11:32:33,793 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-04-27 11:32:36,707 - speechbrain.core - INFO - 2.1M trainable parameters in ASR
+2022-04-27 11:32:36,707 - __main__ - INFO - Running on devices Tesla V100-PCIE-16GB
+2022-04-27 11:32:36,711 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+07-02-48+00
+2022-04-27 11:32:49,468 - speechbrain.utils.epoch_loop - INFO - Going into epoch 8
+2022-04-27 11:54:15,632 - speechbrain.utils.train_logger - INFO - epoch: 8, lr_model: 5.76e-01, lr_wav2vec: 8.10e-05 - train loss: 1.52e-01 - valid loss: 2.37e-02, valid CER: 4.22e-01, valid WER: 1.61
+2022-04-27 11:54:23,713 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+11-54-15+00
+2022-04-27 11:54:23,728 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+05-59-55+00
+2022-04-27 11:54:23,737 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+06-37-44+00
+2022-04-27 11:54:23,739 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+07-02-48+00
+2022-04-27 11:54:23,739 - speechbrain.utils.epoch_loop - INFO - Going into epoch 9
+2022-04-27 12:19:35,035 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+12-19-23+00
+2022-04-27 12:45:00,305 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+12-44-35+00
+2022-04-27 12:45:00,329 - speechbrain.utils.checkpoints - DEBUG - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+12-19-23+00
+2022-04-27 13:03:56,933 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.58 to 0.46
+2022-04-27 13:03:56,933 - speechbrain.nnet.schedulers - INFO - Changing lr from 8.1e-05 to 7.3e-05
+2022-04-27 13:03:56,934 - speechbrain.utils.train_logger - INFO - epoch: 9, lr_model: 5.76e-01, lr_wav2vec: 8.10e-05 - train loss: 1.51e-01 - valid loss: 2.51e-02, valid CER: 4.27e-01, valid WER: 1.62
+2022-04-27 13:04:11,901 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+13-03-56+00
+2022-04-27 13:04:11,917 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+12-44-35+00
+2022-04-27 13:04:11,918 - speechbrain.utils.epoch_loop - INFO - Going into epoch 10
+2022-04-27 13:29:18,191 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+13-29-12+00
+2022-04-27 13:54:25,610 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+13-54-18+00
+2022-04-27 13:54:25,643 - speechbrain.utils.checkpoints - DEBUG - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+13-29-12+00
+2022-04-27 14:07:51,799 - speechbrain.utils.train_logger - INFO - epoch: 10, lr_model: 4.61e-01, lr_wav2vec: 7.29e-05 - train loss: 1.48e-01 - valid loss: 2.31e-02, valid CER: 4.24e-01, valid WER: 1.62
+2022-04-27 14:07:56,587 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+14-07-51+00
+2022-04-27 14:07:56,621 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+13-03-56+00
+2022-04-27 14:07:56,623 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+13-54-18+00
+2022-04-27 14:07:56,623 - speechbrain.utils.epoch_loop - INFO - Going into epoch 11
+2022-04-27 14:33:04,219 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+14-32-56+00
+2022-04-27 14:58:13,251 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+14-58-04+00
+2022-04-27 14:58:13,320 - speechbrain.utils.checkpoints - DEBUG - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+14-32-56+00
+2022-04-27 15:12:12,530 - speechbrain.utils.train_logger - INFO - epoch: 11, lr_model: 4.61e-01, lr_wav2vec: 7.29e-05 - train loss: 1.48e-01 - valid loss: 2.29e-02, valid CER: 4.23e-01, valid WER: 1.62
+2022-04-27 15:12:19,765 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+15-12-12+00
+2022-04-27 15:12:19,810 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+14-07-51+00
+2022-04-27 15:12:19,811 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+14-58-04+00
+2022-04-27 15:12:19,811 - speechbrain.utils.epoch_loop - INFO - Going into epoch 12
+2022-04-27 15:37:30,989 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+15-37-20+00
+2022-04-27 16:02:38,091 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+16-02-31+00
+2022-04-27 16:02:38,229 - speechbrain.utils.checkpoints - DEBUG - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+15-37-20+00
+2022-04-27 16:18:49,472 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.46 to 0.37
+2022-04-27 16:18:49,712 - speechbrain.nnet.schedulers - INFO - Changing lr from 7.3e-05 to 6.6e-05
+2022-04-27 16:18:49,712 - speechbrain.utils.train_logger - INFO - epoch: 12, lr_model: 4.61e-01, lr_wav2vec: 7.29e-05 - train loss: 1.46e-01 - valid loss: 2.32e-02, valid CER: 4.29e-01, valid WER: 1.63
+2022-04-27 16:18:56,013 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+16-18-49+00
+2022-04-27 16:18:56,068 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+15-12-12+00
+2022-04-27 16:18:56,069 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+16-02-31+00
+2022-04-27 16:18:56,069 - speechbrain.utils.epoch_loop - INFO - Going into epoch 13
+2022-04-27 16:44:26,040 - speechbrain.utils.checkpoints - DEBUG - Saved an intra-epoch checkpoint in results/train_wav2vec2_char/seed_1987/trial_39/save/CKPT+2022-04-27+16-43-56+00

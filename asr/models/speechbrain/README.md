@@ -1,21 +1,22 @@
 # Recipes for training on police language dataset
 
 ## Installation
-1. Create a new virtual environment. Do not use conda - it doesnt resolve the dependencies.
-`python3 -m venv path/to/venv`
-2. Install speechbrain and librosa
-`source path/to/venv/bin/activate`
+1. Create a new conda environment with soundfile, ffmpeg, sox, transformers, pip
+```
+conda create -y --name audio \
+    -c pytorch-nightly -c conda-forge -c huggingface \
+    pysoundfile ffmpeg sox transformers pip \
+    pytorch torchaudio cudatoolkit=10.2
+```
+2. Install speechbrain to env
+`conda activate audio`
 `pip install speechbrain`
-3. Install huggingface transformers
-`pip install transformers`
-4. Install asr data loaders
+3. Install asr data loaders
 `cd <PROJECT_ROOT>/asr/data/asr_dataset`
 `pip install -e .`
 
 ### Special Instructions for Midway
-Midway compute nodes don't have libsndfile or ffmpeg. Pip won't install these, so we need to install them to a conda environment. Our slurm wrapper script expects the following environments.
-`conda create -c conda-forge -y --name soundfile pysoundfile` and
-`conda create -c conda-forge -y --name ffmpeg ffmpeg`
+Midway compute nodes don't have the backend audio processing libraries we need. Our slurm wrapper script expects a conda environment named 'audio', as created above.
 
 ## Training
 1. Edit hparams/params.yaml to change the dataset, cluster, number of transcripts.

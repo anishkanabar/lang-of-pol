@@ -1,0 +1,45 @@
+# ############################################################################
+# Tokenizer: BPE 1000
+# Training: ATC0 10m
+# ############################################################################
+
+trial: 1
+vocab_size: 1000
+
+# Data files
+cluster: rcc
+dataset_name: atczero
+splits:
+    train: 600  # 10m
+    dev:   75   # 75s
+    test:  75   # 75s
+train_splits: ["train"]
+dev_splits: ["dev"]
+test_splits: ["test"]
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv:
+    - !ref <output_folder>/test.csv
+
+output_folder: !ref results/tokenizer/bpe_<vocab_size>/data_<dataset_name>/sec_<splits[train]>/trial_<trial>
+train_log: !ref <output_folder>/train_log.txt
+
+# Training parameters
+token_type: bpe  # ["unigram", "bpe", "char"]
+token_output: !ref <vocab_size> 
+character_coverage: 1.0
+csv_read: transcript
+bos_index: 1
+eos_index: 2
+
+
+tokenizer: !name:speechbrain.tokenizers.SentencePiece.SentencePiece
+   model_dir: !ref <output_folder>
+   vocab_size: !ref <token_output>
+   annotation_train: !ref <train_csv>
+   annotation_read: !ref <csv_read>
+   model_type: !ref <token_type> # ["unigram", "bpe", "char"]
+   character_coverage: !ref <character_coverage>
+   bos_id: !ref <bos_index>
+   eos_id: !ref <eos_index>
+   annotation_list_to_check: [!ref <train_csv>, !ref <valid_csv>]

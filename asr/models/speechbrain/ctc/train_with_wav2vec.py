@@ -30,6 +30,7 @@ from hyperpyyaml import load_hyperpyyaml
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+logging.getLogger('numba').setLevel(logging.WARNING)
 
 
 # Define training procedure
@@ -37,12 +38,13 @@ class ASR(sb.Brain):
 
     def compute_forward(self, batch, stage):
         """Forward computations from the waveform batches to the output probabilities."""
-        logger.debug("Computing forward step")
+        # logger.debug("Computing forward step")
         batch = batch.to(self.device)
         wavs, wav_lens = batch.sig
         tokens_bos, _ = batch.tokens_bos
+        # assert(torch.all(torch.isfinite(wavs))), "wavs inf on cpu"
         wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
-        assert(torch.all(torch.isfinite(wavs)))
+        # assert(torch.all(torch.isfinite(wavs))), "wavs inf on gpu"
 
         # Add augmentation if specified
         if stage == sb.Stage.TRAIN:
@@ -58,23 +60,23 @@ class ASR(sb.Brain):
         # Forward pass
         feats = self.modules.wav2vec2(wavs)
 
-        assert torch.all(torch.isfinite(feats)), "non-finite wav2vec encodings"
-        self.check_grads()
-        self.check_params()
+        # assert torch.all(torch.isfinite(feats)), "non-finite wav2vec encodings"
+        # self.check_grads(batch)
+        # self.check_params(batch)
 
         x = self.modules.enc(feats)
 
-        assert torch.all(torch.isfinite(x)), "non-finite linear layer output"
+        # assert torch.all(torch.isfinite(x)), "non-finite linear layer output"
 
         # Compute outputs
         p_tokens = None
         logits = self.modules.ctc_lin(x)
 
-        assert torch.all(torch.isfinite(logits)), "non-finite logits"
+        # assert torch.all(torch.isfinite(logits)), "non-finite logits"
 
         p_ctc = self.hparams.log_softmax(logits)
 
-        assert torch.all(torch.isfinite(p_ctc)), "non-finite probs"
+        # assert torch.all(torch.isfinite(p_ctc)), "non-finite probs"
 
         if stage != sb.Stage.TRAIN:
             p_tokens = sb.decoders.ctc_greedy_decode(
@@ -84,7 +86,7 @@ class ASR(sb.Brain):
 
     def compute_objectives(self, predictions, batch, stage):
         """Computes the loss (CTC+NLL) given predictions and targets."""
-        logger.debug('Computing objective step')
+        # logger.debug('Computing objective step')
 
         p_ctc, wav_lens, predicted_tokens = predictions
         ids = batch.id
@@ -114,13 +116,13 @@ class ASR(sb.Brain):
 
         return loss
 
-    def check_params(self):
+    def check_params(self, batch):
         for p in self.modules.wav2vec2.parameters():
             assert torch.isfinite(p).all(), "non-finite wav2vec params"
         for p in self.modules.enc.parameters():
-            assert torch.isfinite(p).all(), "non-finite encoder params"
+            assert torch.isfinite(p).all(), f"non-finite encoder params. batch {batch.id}"
 
-    def check_grads(self):
+    def check_grads(self, batch):
         for p in self.modules.wav2vec2.parameters():
             if p.requires_grad and p.grad is not None:
                 assert torch.all(torch.isfinite(p.grad)), "non-finite wav2vec grad"
@@ -132,31 +134,31 @@ class ASR(sb.Brain):
 
     def fit_batch(self, batch):
         """Train the parameters given a single batch in input"""
-        logger.debug("Training batch {}: 1st elem is: {}".format(batch['id'][0], batch['wrd'][0]))
+        # logger.debug("Training batch {}: 1st elem is: {}".format(batch['id'][0], batch['wrd'][0]))
 
         predictions = self.compute_forward(batch, sb.Stage.TRAIN)
 
         loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
 
-        assert torch.isfinite(loss).all(), "non-finite loss"
+        # assert torch.isfinite(loss).all(), "non-finite loss"
 
-        logger.debug("Checking gradients before backward")
-        self.check_grads()
-        self.check_params()
+        # logger.debug("Checking gradients before backward")
+        # self.check_grads(batch)
+        # self.check_params(batch)
 
         loss.backward()
 
-        logger.debug("Checking gradients after backward")
-        self.check_grads()
-        self.check_params()
+        # logger.debug("Checking gradients after backward")
+        # self.check_grads(batch)
+        # self.check_params(batch)
 
         if self.check_gradients(loss):
             self.wav2vec_optimizer.step()
             self.model_optimizer.step()
 
-        logger.debug("Checking gradients after optimizer step")
-        self.check_grads() 
-        self.check_params()
+        # logger.debug("Checking gradients after optimizer step")
+        # self.check_grads(batch) 
+        # self.check_params(batch)
 
         self.wav2vec_optimizer.zero_grad()
         self.model_optimizer.zero_grad()
@@ -238,112 +240,8 @@ class ASR(sb.Brain):
             self.checkpointer.add_recoverable("modelopt", self.model_optimizer)
 
 
-def dataio_prepare(hparams):
-    """This function prepares the datasets to be used in the brain class.
-    It also defines the data processing pipeline through user-defined functions."""
-
-    train_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["train_csv"]
-    )
-
-    if hparams["sorting"] == "ascending":
-        # we sort training data to speed up training and get better results.
-        train_data = train_data.filtered_sorted(sort_key="duration")
-        # when sorting do not shuffle in dataloader ! otherwise is pointless
-        hparams["train_dataloader_opts"]["shuffle"] = False
-
-    elif hparams["sorting"] == "descending":
-        train_data = train_data.filtered_sorted(
-            sort_key="duration", reverse=True
-        )
-        # when sorting do not shuffle in dataloader ! otherwise is pointless
-        hparams["train_dataloader_opts"]["shuffle"] = False
-
-    elif hparams["sorting"] == "random":
-        pass
-
-    else:
-        raise NotImplementedError(
-            "sorting must be random, ascending or descending"
-        )
-
-    valid_data = sb.dataio.dataset.DynamicItemDataset.from_csv(
-        csv_path=hparams["valid_csv"]
-    )
-    valid_data = valid_data.filtered_sorted(sort_key="duration")
-
-    # test is separate
-    test_datasets = {}
-    for csv_file in hparams["test_csv"]:
-        name = Path(csv_file).stem
-        test_datasets[name] = sb.dataio.dataset.DynamicItemDataset.from_csv(
-            csv_path=csv_file
-        )
-        test_datasets[name] = test_datasets[name].filtered_sorted(
-            sort_key="duration"
-        )
-
-    datasets = [train_data, valid_data] + [i for k, i in test_datasets.items()]
-
-    # 2. Define audio pipeline:
-    @sb.utils.data_pipeline.takes("wav")
-    @sb.utils.data_pipeline.provides("sig")
-    def audio_pipeline(wav):
-        sig = sb.dataio.dataio.read_audio(wav)
-        sig_np = sig.numpy()
-        sig_res = librosa.resample(sig_np, hparams['sample_rate'], hparams['wav2vec2_sample_rate'])
-        sig = torch.tensor(sig_res)
-        return sig
-
-    sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
-    label_encoder = sb.dataio.encoder.CTCTextEncoder()
-
-    # 3. Define text pipeline:
-    @sb.utils.data_pipeline.takes("wrd")
-    @sb.utils.data_pipeline.provides(
-        "wrd", "char_list", "tokens_list", "tokens_bos", "tokens_eos", "tokens"
-    )
-    def text_pipeline(wrd):
-        yield wrd
-        char_list = list(wrd)
-        yield char_list
-        tokens_list = label_encoder.encode_sequence(char_list)
-        yield tokens_list
-        tokens_bos = torch.LongTensor([hparams["bos_index"]] + (tokens_list))
-        yield tokens_bos
-        tokens_eos = torch.LongTensor(tokens_list + [hparams["eos_index"]])
-        yield tokens_eos
-        tokens = torch.LongTensor(tokens_list)
-        yield tokens
-
-    sb.dataio.dataset.add_dynamic_item(datasets, text_pipeline)
-
-    lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
-    special_labels = {
-        "bos_label": hparams["bos_index"],
-        "eos_label": hparams["eos_index"],
-        "blank_label": hparams["blank_index"],
-    }
-    label_encoder.load_or_create(
-        path=lab_enc_file,
-        from_didatasets=[train_data],
-        output_key="char_list",
-        special_labels=special_labels,
-        sequence_input=True,
-    )
-    label_encoder.add_unk()
-
-    # 4. Set output:
-    sb.dataio.dataset.set_output_keys(
-        datasets,
-        ["id", "sig", "wrd", "char_list", "tokens_bos", "tokens_eos", "tokens"],
-    )
-    return train_data, valid_data, test_datasets, label_encoder
-
 
 if __name__ == "__main__":
-
-
     # CLI:
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])
 
@@ -362,7 +260,7 @@ if __name__ == "__main__":
     )
 
     # Dataset prep (parsing Librispeech)
-    from ctc_prepare import prepare_bpc  # noqa
+    from ctc_prepare import prepare_bpc, dataio_prepare  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
@@ -370,19 +268,15 @@ if __name__ == "__main__":
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],
-            "num_train": hparams["num_train"],
-            "num_sec": hparams["num_sec"],
-            "split_ratios": hparams["split_ratios"],
-            "save_folder": hparams["output_folder"],
+            "splits": hparams["splits"],
+            "output_folder": hparams["output_folder"],
+            "ambiguity_strategy": hparams['ambiguity_strategy'],
             "skip_prep": hparams["skip_prep"],
-            "seed": hparams["seed"],
         },
     )
 
     # here we create the datasets objects as well as tokenization and encoding
-    train_data, valid_data, test_datasets, label_encoder = dataio_prepare(
-        hparams
-    )
+    train_data, valid_data, test_datasets, label_encoder = dataio_prepare(hparams)
 
     # Trainer initialization
     asr_brain = ASR(
@@ -395,8 +289,10 @@ if __name__ == "__main__":
     # We dynamicaly add the tokenizer to our brain class.
     # NB: This tokenizer corresponds to the one used for the LM!!
     asr_brain.tokenizer = label_encoder
-
+    
     # Training
+    devices = [torch.cuda.get_device_name(d) for d in range(torch.cuda.device_count())]
+    logger.info(f'Running on devices {";".join(devices)}')
 
     #with torch.autograd.detect_anomaly():
     asr_brain.fit(
