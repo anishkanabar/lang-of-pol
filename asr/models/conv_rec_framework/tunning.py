@@ -18,9 +18,11 @@ def tune_pipeline(pipeline, protocol, freeze_set=None, initial_params={"onset": 
     if freeze_set != None:
         pipeline.freeze(freeze_set)
     optimizer = Optimizer(pipeline)
-    optimizer.tune(list(protocol.development()),
+    print('Start tunning!')
+    optimizer.tune(protocol.development(),
                     warm_start=initial_params,
-                    n_iterations=20,
+                    n_iterations=5,
                     show_progress=True)
+    print(f'The best parameters are {optimizer.best_params}')
     optimized_params = optimizer.best_params
     return optimized_params
