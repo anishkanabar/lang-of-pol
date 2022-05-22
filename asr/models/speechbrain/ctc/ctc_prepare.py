@@ -1,14 +1,9 @@
-import re
-import os
 import torch
 import logging
-import pandas as pd
 import speechbrain as sb
-import bpc_prepare as prepare
-from asr_dataset.base import AsrETL
+import corpus_pipeline as pipeline
 
 logger = logging.getLogger('asr.prepare.ctc')
-
 
 def dataio_prepare(hparams):
     """ Dataset transformation pipeline """
@@ -32,7 +27,7 @@ def dataio_prepare(hparams):
         tokens = torch.LongTensor(tokens_list)
         yield tokens
 
-    train_data, val_data, test_data = prepare.dataio_prepare(hparams, text_pipeline)
+    train_data, val_data, test_data = pipeline.dataio_pipeline(hparams, text_pipeline)
 
     lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
     special_labels = {
@@ -52,72 +47,6 @@ def dataio_prepare(hparams):
     return train_data, val_data, test_data, label_encoder
 
 
-def prepare_bpc(splits: dict, 
-                output_folder: str, 
-                **kwargs):
-    """ See docstring in bpc_prepare for other params"""
-
-    prepare.prepare_bpc(splits=splits, 
-                        output_folder=output_folder, 
-                        **kwargs)
-
-    splitdata = get_splits(splits, output_folder)
-    splitdata = {k: ctc_prep(v) for k, v in splitdata.items()}
-    splitdata = {k: filter_nonalphanum(v) for k,v in splitdata.items()}
-    splitdata = {k: filter_nonblank(v) for k,v in splitdata.items()}
-    splitdata = {k: filter_ratio(v) for k, v in splitdata.items()}
-
-    for k, v in splitdata.items():
-        AsrETL._describe(v, k)
-
-    write_splits(splitdata, output_folder)
-
-
-def get_splits(splits, output_folder) -> {str, pd.DataFrame}:
-    splitdata = {}
-    for split in splits.keys():
-        manifest_path = os.path.join(output_folder, split) + '.csv'
-        splitdata[split] = pd.read_csv(manifest_path)
-    return splitdata
-
-
-def write_splits(splitdata: {str, pd.DataFrame}, output_folder: str):
-    for split in splitdata.keys():
-        manifest_path = os.path.join(output_folder, split) + '.csv'
-        splitdata[split].to_csv(manifest_path, index=False)
-    
-
-def ctc_prep(df: pd.DataFrame) -> pd.DataFrame:
-    return df.rename(columns={'transcript':'wrd'})
-
-
-def filter_nonalphanum(df: pd.DataFrame) -> pd.DataFrame:
-    # regex gotchas: must escape [], -, / even if inside brackets
-    special = re.compile("[^A-Za-z0-9 ']")
-    # special = re.compile("[()\[\]\-\/`;:.,?!<>\*\{\}…\"]")
-    non_special = df['wrd'].str.upper().str.replace(special, '', regex=True)
-    logger.info(f"Filtered out {df['wrd'].str.len().sum()-non_special.str.len().sum()} special characters")
-    return df.assign(wrd = non_special)
-
-
-def filter_nonblank(df: pd.DataFrame) -> pd.DataFrame:
-    nonblank = df['wrd'].str.contains("[A-Za-z0-9]", regex=True)
-    logger.info(f"Discarding {len(nonblank) - nonblank.sum()} blank transcripts")
-    return df.loc[nonblank]
-
-
-def filter_ratio(df: pd.DataFrame) -> pd.DataFrame:
-    """ 
-    Filters out examples where expected MFCC length is close to text length
-    Params:
-        df - expects columns {duration, wrd} 
-    """
-    FRAME_RATE = 49  # (Hz)
-    MIN_RATIO = 1.0
-    mfcc_lengths = df['duration'] * FRAME_RATE
-    num_chars = df['wrd'].str.len()
-    mfcc_ratios = mfcc_lengths / num_chars
-    pred = mfcc_ratios > MIN_RATIO
-    logger.info(f"Discarding {len(pred) - pred.sum()} bad MFCC ratios of {len(pred)} examples.")
-    return df.loc[pred]
+def create_manifests(**kwargs):
+    pipeline.create_manifests(text_col="wrd", **kwargs)
 

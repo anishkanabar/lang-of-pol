@@ -12,13 +12,56 @@ from asr_dataset.constants import Cluster
 
 logger = logging.getLogger(__name__)
 
-def prepare_bpc(cluster: str, 
+def create_manifests(cluster: str, 
+                dataset_name:str, 
+                splits: dict,
+                output_folder: str, 
+                text_col: str,
+                ambiguity_strategy: str='ALL',
+                seed: int=1234,
+                skip_prep=False):
+    """
+    Typical ETL steps into SB model-specific format.
+    @:param
+        cluster: cluster name. either ['rcc', 'ai', 'ttic']
+        dataset_name: either ['police', 'librispeech', 'atczero']
+        splits: dictionary of named train/val/test splits and duration
+        output_folder: path to manifest (output) folder
+        text_col: column name for transcript string
+        seed: Random seed for sampling data subsets
+        skip_prep: If True, skip data preparation.
+    """
+    if skip_prep:
+        return
+
+    create_basic_manifests(cluster, 
+        dataset_name, 
+        splits, 
+        output_folder, 
+        ambiguity_strategy, 
+        skip_prep)
+    
+    splitdata = get_splits(splits, output_folder)
+    splitdata = {k: rename_text_col(v, text_col) for k, v in splitdata.items()}
+    splitdata = {k: uppercase(v, text_col) for k,v in splitdata.items()}
+    splitdata = {k: filter_nonalphanum(v, text_col) for k,v in splitdata.items()}
+    splitdata = {k: filter_nonblank(v, text_col) for k,v in splitdata.items()}
+    splitdata = {k: filter_ratio(v, text_col) for k, v in splitdata.items()}
+
+    for k, v in splitdata.items():
+        AsrETL._describe(v, k)
+
+    write_splits(splitdata, output_folder) 
+    return splitdata
+
+def create_basic_manifests(cluster: str, 
                 dataset_name:str, 
                 splits: dict,
                 output_folder: str, 
                 ambiguity_strategy: str='ALL',
                 skip_prep=False):
     """
+    Preliminary ETL steps into SB model-agnostic format.
     @:param
         cluster: cluster name. either ['rcc', 'ai', 'ttic']
         dataset_name: either ['police', 'librispeech', 'atczero']
@@ -119,4 +162,59 @@ def dataio_prepare(hparams, text_pipeline):
     )
     return train_data, valid_data, test_data
 
- 
+
+def get_splits(splits, output_folder) -> {str, pd.DataFrame}:
+    if splits is None:
+        splits = {'all': 1}  # hack for LM 
+    splitdata = {}
+    for split in splits.keys():
+        manifest_path = os.path.join(output_folder, split) + '.csv'
+        splitdata[split] = pd.read_csv(manifest_path)
+    return splitdata
+
+
+def write_splits(splitdata: {str, pd.DataFrame}, output_folder: str):
+    for split in splitdata.keys():
+        manifest_path = os.path.join(output_folder, split) + '.csv'
+        splitdata[split].to_csv(manifest_path, index=False) 
+
+
+def uppercase(df: pd.DataFrame, text_col:str) -> pd.DataFrame:
+    return df.assign(**{text_col: df[text_col].str.upper()})
+
+
+def filter_nonalphanum(df: pd.DataFrame, text_col:str) -> pd.DataFrame:
+    # regex gotchas: must escape [], -, / even if inside brackets
+    special = re.compile("[^A-Za-z0-9 ']")
+    # special = re.compile("[()\[\]\-\/`;:.,?!<>\*\{\}…\"]")
+    non_special = df[text_col].str.replace(special, '', regex=True)
+    logger.info(f"Filtered out {df[text_col].str.len().sum()-non_special.str.len().sum()} special characters")
+    return df.assign(**{text_col: non_special})
+
+
+def filter_nonblank(df: pd.DataFrame, text_col:str) -> pd.DataFrame:
+    nonblank = df[text_col].str.contains("[A-Za-z0-9]", regex=True)
+    logger.info(f"Discarding {len(nonblank) - nonblank.sum()} blank transcripts")
+    return df.loc[nonblank]
+
+
+def filter_ratio(df: pd.DataFrame, text_col:str) -> pd.DataFrame:
+    """
+    Filters out examples where expected MFCC length is close to text length
+    Params:
+        df - expects columns {duration, <text_col>}
+    """
+    FRAME_RATE = 49  # (Hz)
+    MIN_RATIO = 1.0
+    mfcc_lengths = df['duration'] * FRAME_RATE
+    num_chars = df[text_col].str.len()
+    mfcc_ratios = mfcc_lengths / num_chars
+    pred = mfcc_ratios > MIN_RATIO
+    logger.info(f"Discarding {len(pred) - pred.sum()} bad MFCC ratios of {len(pred)} examples.")
+    return df.loc[pred]
+
+
+def rename_text_col(df: pd.DataFrame, text_col: str) -> pd.DataFrame:
+    return df.rename(columns={'transcript':text_col})
+
+
