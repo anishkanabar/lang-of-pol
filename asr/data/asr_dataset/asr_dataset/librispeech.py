@@ -41,7 +41,8 @@ class LibriSpeechETL(AsrETL):
 
     def load(self, 
              data: pd.DataFrame=None,
-             splits: dict=None) -> pd.DataFrame:
+             splits: dict=None,
+             seed: int=1234) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -50,7 +51,7 @@ class LibriSpeechETL(AsrETL):
         """
         if data is None:
             data = self.extract()
-        data = self._sample_split(data, splits)
+        data = self._sample_split(data, splits, seed)
         self.describe(data)
         return data
         

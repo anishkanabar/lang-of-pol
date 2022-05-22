@@ -70,7 +70,7 @@ class BpcETL(AsrETL):
         unfiltered_data = data
         data = self._filter_exists(data, "original_audio")
         data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "original_audio")
+        # data = self._filter_corrupt(data, "original_audio")
         # Filter out missing transcripts
         missing = (data['text'].isna()) | (data['text'].str.len() == 0)
         logger.info(f'Discarding {missing.sum()} transcripts with no text.')
@@ -104,7 +104,8 @@ class BpcETL(AsrETL):
     
     def load(self,
             data: pd.DataFrame=None,
-            splits: dict=None) -> pd.DataFrame:
+            splits: dict=None,
+            seed: int=1234) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -114,7 +115,7 @@ class BpcETL(AsrETL):
         if data is None:
             data = self._create_manifest()
         data = self._filter_exists(data, "audio", log=False)
-        data = self._sample_split(data, splits)
+        data = self._sample_split(data, splits, seed)
         self.describe(data, '-loaded')
         return data 
         

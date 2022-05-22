@@ -25,10 +25,10 @@ cluster: rcc
 dataset_name: librispeech
 data_sample_rate: 16000
 model_sample_rate: 16000
-splits:  # 1h / 7.5m / 7.5m
+splits:  # 1h / 10m / 10m
     train: 3600
-    dev: 450
-    test: 450
+    dev: 600
+    test: 600
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv: !ref <output_folder>/test.csv

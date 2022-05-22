@@ -77,17 +77,18 @@ class AsrETL(abc.ABC):
         pass
     
 
-    def _sample_split(self, data: pd.DataFrame, splits=None):
+    def _sample_split(self, data: pd.DataFrame, splits=None, seed=1234):
         """
         Randomly sample and assign to subsets.
         Params:
             - splits: dictionary of split name -> number of seconds
+            - seed: random seed
         """
         data = data.assign(split='all')
         if splits is None:
             return data
 
-        data = data.sample(frac=1, random_state=1234)  # random shuffle
+        data = data.sample(frac=1, random_state=seed)  # random shuffle
         cum_sec = data['duration'].cumsum()
         prev_idx = 0
         prev_sec = 0
@@ -95,7 +96,6 @@ class AsrETL(abc.ABC):
         for split, sec in splits.items():
             split_idx = cum_sec.searchsorted(prev_sec + sec)
             data.iloc[prev_idx:split_idx, split_col_idx] = split
-            logger.debug(f'Split {split} should get {split_idx-prev_idx} rows')
             prev_sec += sec
             prev_idx = split_idx
         is_sampled = data['split'].isin(splits.keys())  # discard unsampled data

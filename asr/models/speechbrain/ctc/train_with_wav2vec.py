@@ -260,11 +260,11 @@ if __name__ == "__main__":
     )
 
     # Dataset prep (parsing Librispeech)
-    from ctc_prepare import prepare_bpc, dataio_prepare  # noqa
+    from ctc_prepare import create_manifests, dataio_prepare  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
-        prepare_bpc,
+        create_manifests,
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],

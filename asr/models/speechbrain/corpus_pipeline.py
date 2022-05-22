@@ -1,3 +1,7 @@
+"""
+Pipeline from model-agnostic ASR dataloaders into speechbrain format
+"""
+import re
 import os
 import torch
 import logging
@@ -6,6 +10,7 @@ import pandas as pd
 from pathlib import Path
 import speechbrain as sb
 from asr_dataset.police import BpcETL
+from asr_dataset.base import AsrETL
 from asr_dataset.librispeech import LibriSpeechETL
 from asr_dataset.atczero import ATCZeroETL
 from asr_dataset.constants import Cluster
@@ -32,13 +37,14 @@ def create_manifests(cluster: str,
         skip_prep: If True, skip data preparation.
     """
     if skip_prep:
-        return
+        return None
 
     create_basic_manifests(cluster, 
         dataset_name, 
         splits, 
         output_folder, 
         ambiguity_strategy, 
+        seed,
         skip_prep)
     
     splitdata = get_splits(splits, output_folder)
@@ -59,7 +65,9 @@ def create_basic_manifests(cluster: str,
                 splits: dict,
                 output_folder: str, 
                 ambiguity_strategy: str='ALL',
-                skip_prep=False):
+                seed: int=1234,
+                skip_prep=False,
+                **kwargs):
     """
     Preliminary ETL steps into SB model-agnostic format.
     @:param
@@ -74,7 +82,11 @@ def create_basic_manifests(cluster: str,
 
     cluster = Cluster[cluster.upper()]
     if dataset_name == 'police':
-        etl = BpcETL(cluster, filter_numeric=False, ambiguity=ambiguity_strategy)
+        etl = BpcETL(
+                cluster, 
+                filter_numeric=False, 
+                ambiguity=ambiguity_strategy,
+                **kwargs)
     elif dataset_name == 'librispeech':
         etl = LibriSpeechETL(cluster)
     elif dataset_name == 'atczero':
@@ -82,13 +94,13 @@ def create_basic_manifests(cluster: str,
     else:
         raise NotImplementedError('dataset ' + dataset_name)
 
-    data = etl.etl(splits=splits)
+    data = etl.etl(splits=splits, seed=seed)
     logger.debug(f'Loaded data has {data["split"].nunique()} splits')
 
     # Write separate df csv per split
     for split in data['split'].unique():
         manifest_path = os.path.join(output_folder, split) + '.csv'
-        logger.info("Preparing %s ..." % manifest_path)
+        logger.info("Preparing %s ..." % os.path.basename(manifest_path))
         
         splitdata = data[data['split'] == split]
         new_df = pd.DataFrame(

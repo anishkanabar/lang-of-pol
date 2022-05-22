@@ -25,10 +25,10 @@ cluster: rcc
 dataset_name: atczero
 data_sample_rate: 8000
 model_sample_rate: 16000
-splits:  # 10h / 75m / 75m
+splits:  # 10h / 1h / 1h
     train: 36000
-    dev: 4500
-    test: 4500
+    dev: 3600
+    test: 3600
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv: !ref <output_folder>/test.csv
@@ -43,7 +43,7 @@ train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
 tokenizer_file: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt'
 
 # Training parameters
-number_of_epochs: 20
+number_of_epochs: 6
 batch_size: 80
 lr: 0.001
 accu_steps: 1 # Gradient accumulation to simulate large batch training

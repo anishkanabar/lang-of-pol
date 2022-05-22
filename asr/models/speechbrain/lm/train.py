@@ -181,9 +181,9 @@ if __name__ == "__main__":
     )
 
     # Create dataset objects "train", "valid", and "test"
-    from lm_prepare import prepare_bpc, dataio_prepare  # noqa
+    from lm_prepare import create_manifests, dataio_prepare  # noqa
     run_on_main(
-        prepare_bpc,
+        create_manifests,
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],

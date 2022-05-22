@@ -25,10 +25,10 @@ cluster: rcc
 dataset_name: police
 data_sample_rate: 22050
 model_sample_rate: 16000
-splits:  # 10m / 75s / 75s
+splits:  # 10m / 1m / 1m
     train: 600
-    dev: 75
-    test: 75
+    dev: 60
+    test: 60
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv: !ref <output_folder>/test.csv
@@ -43,7 +43,7 @@ train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
 tokenizer_file: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt'
 
 # Training parameters
-number_of_epochs: 20
+number_of_epochs: 6
 batch_size: 80
 lr: 0.001
 accu_steps: 1 # Gradient accumulation to simulate large batch training
