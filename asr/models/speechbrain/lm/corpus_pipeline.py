@@ -1,1 +1,1 @@
-corpus_pipeline.py
+../corpus_pipeline.py
