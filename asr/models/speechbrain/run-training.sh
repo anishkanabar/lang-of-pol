@@ -81,6 +81,7 @@ if [ "$CLUSTER" = "rcc" ]; then
     # Now run the job on cluster
     # this node is friendly --nodelist "midway3-0277" \
     # this node is friendly --nodelist "midway3-0286" \
+    # this node is friendly --nodelist "midway3-0279" \
     # run with --nonfinite_patience=0 as last arg to shortcut
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
@@ -89,6 +90,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
+            --nodelist "midway3-0279" \
             --gpus $GPUS \
             --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
