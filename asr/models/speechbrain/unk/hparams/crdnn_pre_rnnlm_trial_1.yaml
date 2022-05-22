@@ -1,0 +1,199 @@
+# ############################################################################
+# Model: E2E ASR with attention-based ASR
+# Encoder: CRDNN model
+# Decoder: GRU + RNNLM
+# Tokens: BPE with bpe 1000
+# losses: CTC+ NLL
+# Training: BPC
+# Notes: based on Librispeech recipe
+# ############################################################################
+
+seed: 2602
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+trial: 1
+output_folder: !ref results/unk/seed_<seed>/trial_<trial>
+cer_file: !ref <output_folder>/cer.txt
+wer_file: !ref <output_folder>/wer.txt
+save_folder: !ref <output_folder>/save
+train_log: !ref <output_folder>/train_log.txt
+
+# Vocab size should match tokenizer config
+vocab_size: 1000
+# Tokenizer trials are not necessarily in sync with this models trials
+# tokenizer_file: results/tokenizer/bpe_1000/data_atczero/sec_600/trial_1/1000_bpe.model
+# Speech recognizer and LM should use same tokenizer!
+tokenizer_file: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt'
+
+# Data files
+cluster: rcc
+scratch_dir: /project/graziul/ra/echandler/scratch
+dataset_name: police
+data_sample_rate: 22050
+splits:
+    train: 600  # 10m 
+    dev:   60   # 1m
+    test:  60   # 1m
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv: !ref <output_folder>/test.csv
+ambiguity_strategy: ALL
+unk_def: BRACKETS
+
+# rirs data downloaded here if needed
+data_folder_rirs: !ref <scratch_dir>/rirs
+skip_prep: False
+ckpt_interval_minutes: 15 # save checkpoint every N min
+
+# Training parameters
+number_of_epochs: 45 # first run 15, second 30
+batch_size: 8
+lr: 1.0
+sorting: ascending
+dynamic_batching: True
+
+dynamic_batch_sampler:
+   feats_hop_size: 0.01
+   max_batch_len: 20000 # in terms of frames
+   shuffle_ex: True
+   batch_ordering: random
+   num_buckets: 20
+
+# Feature parameters
+model_sample_rate: 16000
+n_fft: 400
+n_mels: 40
+
+opt_class: !name:torch.optim.Adadelta
+   lr: !ref <lr>
+   rho: 0.95
+   eps: 1.e-8
+
+# Dataloader options
+train_dataloader_opts:
+   batch_size: !ref <batch_size>
+
+valid_dataloader_opts:
+   batch_size: !ref <batch_size>
+
+test_dataloader_opts:
+   batch_size: !ref <batch_size>
+
+# Model parameters
+activation: !name:torch.nn.LeakyReLU
+dropout: 0.15
+cnn_blocks: 2
+cnn_channels: (128, 256)
+inter_layer_pooling_size: (2, 2)
+cnn_kernelsize: (3, 3)
+time_pooling_size: 4
+rnn_class: !name:speechbrain.nnet.RNN.LSTM
+rnn_layers: 4
+rnn_neurons: 1024
+rnn_bidirectional: True
+dnn_blocks: 2
+dnn_neurons: 512
+#emb_size: 128
+dec_neurons: 1024
+output_neurons: !ref <vocab_size>  # Number of tokens
+blank_index: 0
+# Must match tokenizer
+bos_index: 1
+eos_index: 2
+unk_index: 0
+
+epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
+   limit: !ref <number_of_epochs>
+
+normalize: !new:speechbrain.processing.features.InputNormalization
+   norm_type: global
+
+compute_features: !new:speechbrain.lobes.features.Fbank
+   sample_rate: !ref <model_sample_rate>
+   n_fft: !ref <n_fft>
+   n_mels: !ref <n_mels>
+
+augmentation: !new:speechbrain.lobes.augment.TimeDomainSpecAugment
+   sample_rate: !ref <model_sample_rate>
+   speeds: [95, 100, 105]
+
+enc: !new:speechbrain.lobes.models.CRDNN.CRDNN
+   input_shape: [null, null, !ref <n_mels>]
+   activation: !ref <activation>
+   dropout: !ref <dropout>
+   cnn_blocks: !ref <cnn_blocks>
+   cnn_channels: !ref <cnn_channels>
+   cnn_kernelsize: !ref <cnn_kernelsize>
+   inter_layer_pooling_size: !ref <inter_layer_pooling_size>
+   time_pooling: True
+   using_2d_pooling: False
+   time_pooling_size: !ref <time_pooling_size>
+   rnn_class: !ref <rnn_class>
+   rnn_layers: !ref <rnn_layers>
+   rnn_neurons: !ref <rnn_neurons>
+   rnn_bidirectional: !ref <rnn_bidirectional>
+   rnn_re_init: True
+   dnn_blocks: !ref <dnn_blocks>
+   dnn_neurons: !ref <dnn_neurons>
+   use_rnnp: False
+
+#emb: !new:speechbrain.nnet.embedding.Embedding
+#   num_embeddings: !ref <output_neurons>
+#   embedding_dim: !ref <emb_size>
+
+classifier: !new:speechbrain.lobes.models.VanillaNN.VanillaNN
+   input_shape: [null, !ref <dnn_neurons>]
+   activation: !ref <activation>
+   dnn_blocks: 2
+   dnn_neurons: 2
+
+
+log_softmax: !new:speechbrain.nnet.activations.Softmax
+   apply_log: True
+
+classifier_cost: !new:torch.nn.HingeEmbeddingLoss
+
+# This is the RNNLM that is used according to the Huggingface repository
+ # NB: It has to match the pre-trained RNNLM!!
+tokenizer: !new:sentencepiece.SentencePieceProcessor
+
+# Models
+modules:
+   enc: !ref <enc>
+   #emb: !ref <emb>
+   classifier: !ref <classifier>
+   normalize: !ref <normalize>
+
+model: !new:torch.nn.ModuleList
+   - [!ref <enc>, 
+      #!ref <emb>, 
+      !ref <classifier>]
+
+lr_annealing: !new:speechbrain.nnet.schedulers.NewBobScheduler
+   initial_value: !ref <lr>
+   improvement_threshold: 0.0025
+   annealing_factor: 0.8
+   patient: 0
+
+checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
+   checkpoints_dir: !ref <save_folder>
+   recoverables:
+      model: !ref <model>
+      scheduler: !ref <lr_annealing>
+      normalizer: !ref <normalize>
+      counter: !ref <epoch_counter>
+
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+   save_file: !ref <train_log>
+
+remove_spaces: False
+split_tokens: True   # must be opposite remove spaces
+
+err_computer: !name:speechbrain.utils.metric_stats.BinaryMetricStats
+
+pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
+   collect_in: !ref <save_folder>
+   loadables:
+      tokenizer: !ref <tokenizer>
+   paths:
+      tokenizer: !ref <tokenizer_file>
+
