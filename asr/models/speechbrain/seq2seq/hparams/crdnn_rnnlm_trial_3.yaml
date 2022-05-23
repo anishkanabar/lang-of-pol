@@ -22,17 +22,17 @@ vocab_size: 1000
 # Speech recognizer and LM should use same tokenizer!
 tokenizer_file: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt'
 # Speech recognizer and LM should use common validation + test sets!
-lm_file: '/project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/results/RNNLM/seed_2602/trial_3/save/CKPT+2022-05-20+16-30-43+00/model.ckpt'
+lm_file: '/project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/results/RNNLM/seed_2602/trial_3/save/CKPT+2022-05-23+00-02-47+00/model.ckpt'
 
 # Data files
 cluster: rcc
 scratch_dir: /project/graziul/ra/echandler/scratch
 dataset_name: atczero
 data_sample_rate: 8000
-splits:
-    train: 36000  # 10h 
-    dev: 4500   # 75m
-    test: 4500  # 75m
+splits:  # 10h / 1h / 1h
+    train: 36000 
+    dev: 3600
+    test: 3600 
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
 test_csv: !ref <output_folder>/test.csv
