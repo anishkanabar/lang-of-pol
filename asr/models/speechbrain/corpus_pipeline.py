@@ -24,7 +24,8 @@ def create_manifests(cluster: str,
                 text_col: str,
                 ambiguity_strategy: str='ALL',
                 seed: int=1234,
-                skip_prep=False):
+                skip_prep=False,
+                stratify: str=None):
     """
     Typical ETL steps into SB model-specific format.
     @:param
@@ -45,7 +46,8 @@ def create_manifests(cluster: str,
         output_folder, 
         ambiguity_strategy, 
         seed,
-        skip_prep)
+        skip_prep,
+        stratify)
     
     splitdata = get_splits(splits, output_folder)
     splitdata = {k: rename_text_col(v, text_col) for k, v in splitdata.items()}
@@ -67,6 +69,7 @@ def create_basic_manifests(cluster: str,
                 ambiguity_strategy: str='ALL',
                 seed: int=1234,
                 skip_prep=False,
+                stratify: str=None,
                 **kwargs):
     """
     Preliminary ETL steps into SB model-agnostic format.
@@ -94,7 +97,7 @@ def create_basic_manifests(cluster: str,
     else:
         raise NotImplementedError('dataset ' + dataset_name)
 
-    data = etl.etl(splits=splits, seed=seed)
+    data = etl.etl(splits=splits, seed=seed, stratify=stratify)
     logger.debug(f'Loaded data has {data["split"].nunique()} splits')
 
     # Write separate df csv per split

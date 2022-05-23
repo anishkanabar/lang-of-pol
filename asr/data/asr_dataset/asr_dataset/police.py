@@ -105,7 +105,8 @@ class BpcETL(AsrETL):
     def load(self,
             data: pd.DataFrame=None,
             splits: dict=None,
-            seed: int=1234) -> pd.DataFrame:
+            seed: int=1234,
+            stratify: bool=False) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -115,7 +116,7 @@ class BpcETL(AsrETL):
         if data is None:
             data = self._create_manifest()
         data = self._filter_exists(data, "audio", log=False)
-        data = self._sample_split(data, splits, seed)
+        data = self._sample_split(data, splits, seed, stratify)
         self.describe(data, '-loaded')
         return data 
         

@@ -77,7 +77,7 @@ class AsrETL(abc.ABC):
         pass
     
 
-    def _sample_split(self, data: pd.DataFrame, splits=None, seed=1234):
+    def _sample_split(self, data: pd.DataFrame, splits=None, seed=1234, stratify=None):
         """
         Randomly sample and assign to subsets.
         Params:
@@ -89,6 +89,18 @@ class AsrETL(abc.ABC):
             return data
 
         data = data.sample(frac=1, random_state=seed)  # random shuffle
+
+        # XXX: only really used for term project experiment
+        if stratify == 'tall':  # encourages getting multiple transcribers per file
+            keys = data["original_audio"].drop_duplicates()
+            ordering = keys.index.to_series().sample(frac=1, random_state=seed).reset_index(drop=True)
+            file_order = pd.DataFrame({"original_audio": keys, "ordering": ordering})
+            data = data.merge(file_order, on="original_audio").sort_values(by="ordering")
+        elif stratify == 'wide':  # encourages getting one transcriber per file
+            transcribers = data[["original_audio", "transcriber"]].drop_duplicates()
+            pick = transcribers.groupby("original_audio").sample(n=1,random_state=seed)
+            data = data.merge(transcribers, how="inner")
+
         cum_sec = data['duration'].cumsum()
         prev_idx = 0
         prev_sec = 0
