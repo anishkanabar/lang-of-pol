@@ -20,7 +20,8 @@ DATASET_DIRS = {
         'atczero_data' : '/project/graziul/ra/wdolan/atc0_comp',
     },
     Cluster.AI: {
-        'police_transcripts':'/net/projects/uri/transcripts',
+        #'police_transcripts':'/net/projects/uri/transcripts',
+        'police_transcripts':'/home/echandler/LangOfPol/transcripts',
         'police_mp3s':'/net/projects/uri/data',
         'librispeech_data':'/net/projects/uri/ra/shiyanglai/experiment1/audio data/LibriSpeech/train-clean-100',
         'atczero_data': '/net/projects/uri/ra/wdolan/atc0_comp',

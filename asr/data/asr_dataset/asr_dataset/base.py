@@ -68,7 +68,8 @@ class AsrETL(abc.ABC):
 
     @abc.abstractmethod
     def load(self, 
-            data: pd.DataFrame=None) -> pd.DataFrame:
+            data: pd.DataFrame=None, 
+            **kwargs) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
 

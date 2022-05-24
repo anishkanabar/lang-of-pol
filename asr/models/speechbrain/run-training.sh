@@ -105,11 +105,9 @@ elif [ "$CLUSTER" = "ai" ]; then
             --partition "$PARTITION" \
             --nodes $NODES \
             --gpus $GPUS \
-            --ntasks $NTASKS \
-            --gpus-per-task $GPU_TASKS \
-            --mem-per-cpu "$MEM_PER_CPU" \
+            --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
-            python "$TRAINPY" "$HPARAMS"
+            python "$TRAINPY" "$HPARAMS" --data_parallel_backend
 elif [ "$CLUSTER" = "ttic" ]; then
     srun -c "$GPUS" \
             --job-name "$JOB_NAME" \
