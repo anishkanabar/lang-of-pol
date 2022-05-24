@@ -93,7 +93,9 @@ class AsrETL(abc.ABC):
         # XXX: only really used for term project experiment
         if stratify == 'tall':  # encourages getting multiple transcribers per file
             keys = data["original_audio"].drop_duplicates()
-            ordering = keys.index.to_series().sample(frac=1, random_state=seed).reset_index(drop=True)
+            ordering = keys.index.to_series() \
+                           .sample(frac=1, random_state=seed) \
+                           .reset_index(drop=True)
             file_order = pd.DataFrame({"original_audio": keys, "ordering": ordering})
             data = data.merge(file_order, on="original_audio").sort_values(by="ordering")
         elif stratify == 'wide':  # encourages getting one transcriber per file
@@ -114,6 +116,12 @@ class AsrETL(abc.ABC):
         logger.info(f'Discarding {len(data) - is_sampled.sum()} unsampled data')
         data = data.loc[is_sampled]
         logger.debug(f'Split data has {data["split"].nunique()} splits')
+        nwavs = data['original_audio'].nunique()
+        ntrans = data['transcriber'].nunique()
+        nwavtrans = data[['original_audio', 'transcriber']].drop_duplicates().shape[0]
+        logger.debug(f"Stratified data has {nwavs} wavs")
+        logger.debug(f"Stratified data has {ntrans} scribers")
+        logger.debug(f"Stratified data has {nwavtrans} wav-scribers")
         return data
         
 

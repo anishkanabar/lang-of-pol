@@ -54,7 +54,7 @@ MAIL_TYPE="all"
 OUTPUT="$OUTPUT_DIR/%j.%N.stdout"
 ERROR="$OUTPUT_DIR/%j.%N.stderr"
 NODES="1"
-GPUS="2"
+GPUS="4"
 NTASKS="1"
 GPU_TASKS="1"
 MEM_PER_GPU="32G" 
@@ -90,7 +90,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --nodelist "midway3-0279" \
+            --nodelist "midway3-0286" \
             --gpus $GPUS \
             --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \

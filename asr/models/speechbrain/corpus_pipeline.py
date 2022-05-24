@@ -116,7 +116,7 @@ def create_basic_manifests(cluster: str,
         )
         new_df.to_csv(manifest_path, index=False)
         
-def dataio_prepare(hparams, text_pipeline):
+def dataio_prepare(hparams, text_pipeline, add_audio_pipeline=True):
     """This function prepares the datasets to be used in the brain class.
     It also defines the data processing pipeline through user-defined functions."""
 
@@ -155,7 +155,24 @@ def dataio_prepare(hparams, text_pipeline):
 
     datasets = [train_data, valid_data, test_data]
 
+
     # 2. Define audio pipeline:
+    if add_audio_pipeline:
+        audio_pipeline = gen_audio_pipeline(hparams)
+        sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
+ 
+    # 3. Define text pipeline:
+    sb.dataio.dataset.add_dynamic_item(datasets, text_pipeline)
+
+    # 4. Set output:
+    output_keys = ["id"]
+    output_keys += [x for x in text_pipeline.provides]
+    if add_audio_pipeline:
+        output_keys += [x for x in audio_pipeline.provides]
+    sb.dataio.dataset.set_output_keys(datasets, output_keys)
+    return train_data, valid_data, test_data
+
+def gen_audio_pipeline(hparams):
     @sb.utils.data_pipeline.takes("wav")
     @sb.utils.data_pipeline.provides("sig")
     def audio_pipeline(wav):
@@ -165,18 +182,7 @@ def dataio_prepare(hparams, text_pipeline):
                                target_sr=hparams['model_sample_rate'])
         sig = torch.tensor(sig)
         return sig
-
-    sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
- 
-    # 3. Define text pipeline:
-    sb.dataio.dataset.add_dynamic_item(datasets, text_pipeline)
-
-    # 4. Set output:
-    sb.dataio.dataset.set_output_keys(datasets, 
-        ["id", "sig"] + [x for x in text_pipeline.provides]
-    )
-    return train_data, valid_data, test_data
-
+    return audio_pipeline
 
 def get_splits(splits, output_folder) -> {str, pd.DataFrame}:
     if splits is None:

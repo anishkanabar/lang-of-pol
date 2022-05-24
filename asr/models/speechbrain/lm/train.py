@@ -190,6 +190,8 @@ if __name__ == "__main__":
             "splits": hparams["splits"],
             "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
+            "ambiguity_strategy": hparams["ambiguity_strategy"],
+            "stratify": hparams["stratify"]
         },
     )
     train_data, valid_data, test_data, tokenizer = dataio_prepare(hparams)

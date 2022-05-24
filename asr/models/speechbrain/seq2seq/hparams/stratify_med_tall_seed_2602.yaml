@@ -10,7 +10,8 @@
 
 seed: 2602
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-output_folder: !ref results/seq2seq/stratify/med/seed_<seed>
+stratify: tall
+output_folder: !ref results/seq2seq/stratify/med_<stratify>/seed_<seed>
 cer_file: !ref <output_folder>/cer.txt
 wer_file: !ref <output_folder>/wer.txt
 save_folder: !ref <output_folder>/save
@@ -21,7 +22,7 @@ vocab_size: 1000
 # Speech recognizer and LM should use same tokenizer!
 tokenizer_file: '/project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt'
 # Speech recognizer and LM should use common validation + test sets!
-lm_file: '/project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/results/RNNLM/seed_2602/trial_5/save/CKPT+2022-05-22+19-05-36+00/model.ckpt'
+lm_file: '/project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/results/RNNLM/stratify/med_tall/seed_2602/save/CKPT+2022-05-23+21-16-45+00/model.ckpt'
 
 # Data files
 cluster: rcc
@@ -45,7 +46,7 @@ ckpt_interval_minutes: 15 # save checkpoint every N min
 # Training parameters
 number_of_epochs: 45 # first run 15, second 30
 number_of_ctc_epochs: 5
-batch_size: 8
+batch_size: 16
 lr: 1.0
 ctc_weight: 0.5
 sorting: ascending

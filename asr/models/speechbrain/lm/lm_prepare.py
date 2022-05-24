@@ -26,7 +26,7 @@ def dataio_prepare(hparams):
         tokens_eos = torch.LongTensor(tokens_list + [hparams["eos_index"]])
         yield tokens_eos
 
-    train_data, val_data, test_data = pipeline.dataio_prepare(hparams, text_pipeline)
+    train_data, val_data, test_data = pipeline.dataio_prepare(hparams, text_pipeline, False)
     return train_data, val_data, test_data, tokenizer
     
 
