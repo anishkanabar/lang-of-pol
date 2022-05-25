@@ -1,3 +1,4 @@
+import os
 import torch
 import logging
 import speechbrain as sb
@@ -27,7 +28,7 @@ def dataio_prepare(hparams):
         tokens = torch.LongTensor(tokens_list)
         yield tokens
 
-    train_data, val_data, test_data = pipeline.dataio_pipeline(hparams, text_pipeline)
+    train_data, val_data, test_data = pipeline.dataio_prepare(hparams, text_pipeline)
 
     lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
     special_labels = {

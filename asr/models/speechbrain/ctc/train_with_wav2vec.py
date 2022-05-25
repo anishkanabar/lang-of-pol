@@ -272,11 +272,13 @@ if __name__ == "__main__":
             "output_folder": hparams["output_folder"],
             "ambiguity_strategy": hparams['ambiguity_strategy'],
             "skip_prep": hparams["skip_prep"],
+            "seed": hparams["seed"],
+            "stratify": hparams["stratify"],
         },
     )
 
     # here we create the datasets objects as well as tokenization and encoding
-    train_data, valid_data, test_datasets, label_encoder = dataio_prepare(hparams)
+    train_data, valid_data, test_data, label_encoder = dataio_prepare(hparams)
 
     # Trainer initialization
     asr_brain = ASR(
@@ -304,10 +306,6 @@ if __name__ == "__main__":
     )
 
     # Testing
-    for k in test_datasets.keys():  # keys are test_clean, test_other etc
-        asr_brain.hparams.wer_file = os.path.join(
-            hparams["output_folder"], "wer_{}.txt".format(k)
-        )
-        asr_brain.evaluate(
-            test_datasets[k], test_loader_kwargs=hparams["test_dataloader_opts"]
-        )
+    asr_brain.evaluate(
+        test_data, test_loader_kwargs=hparams["test_dataloader_opts"]
+    )
