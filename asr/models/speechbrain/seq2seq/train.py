@@ -220,7 +220,8 @@ if __name__ == "__main__":
             "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
             "ambiguity_strategy": hparams["ambiguity_strategy"],
-            "stratify": hparams["stratify"]
+            "stratify": hparams["stratify"],
+            "seed": hparams["seed"]
         },
     )
 
