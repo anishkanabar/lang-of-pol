@@ -1,0 +1,874 @@
+2022-05-17 02:23:35,959 - speechbrain.core - INFO - Beginning experiment!
+2022-05-17 02:23:35,960 - speechbrain.core - INFO - Experiment folder: results/seq2seq/rnnlm/seed_2602/trial_1
+2022-05-17 02:23:36,406 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+ssh://git@github.com/UrbanResiliencyInitiative/lang-of-pol.git@176d325af2edc9005cdec14a3d0ed7e11cc90946#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+audioread==2.1.9
+brotlipy @ file:///home/conda/feedstock_root/build_artifacts/brotlipy_1648854175163/work
+certifi==2021.10.8
+cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1636046063618/work
+cfgv==3.3.1
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1644853463426/work
+click @ file:///home/conda/feedstock_root/build_artifacts/click_1651215152883/work
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography_1649035228992/work
+dataclasses @ file:///home/conda/feedstock_root/build_artifacts/dataclasses_1628958434797/work
+decorator==5.1.1
+distlib==0.3.4
+filelock==3.4.2
+flake8==3.7.9
+huggingface-hub==0.2.1
+HyperPyYAML==1.0.0
+identify==2.4.2
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1642433548627/work
+importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1648728286052/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1633637554808/work
+librosa==0.8.1
+llvmlite==0.38.0
+mkl-fft==1.3.1
+mkl-random==1.2.2
+mkl-service==2.4.0
+nodeenv==1.6.0
+numba==0.55.1
+numpy @ file:///opt/conda/conda-bld/numpy_and_numpy_base_1651563629415/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1637239678211/work
+pandas==1.4.2
+platformdirs==2.4.1
+pooch==1.5.2
+pre-commit==2.16.0
+pycodestyle==2.5.0
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+pydub==0.25.1
+pyflakes==2.1.1
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1643496850550/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1652235407899/work
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1648857275402/work
+PySoundFile==0.9.0.post1
+pytest==5.4.1
+python-dateutil==2.8.2
+pytz==2022.1
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1648757091578/work
+regex @ file:///home/conda/feedstock_root/build_artifacts/regex_1650839920269/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1641580202195/work
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses @ file:///home/conda/feedstock_root/build_artifacts/sacremoses_1651557636210/work
+scikit-learn==1.1.0
+scipy==1.8.0
+sentencepiece==0.1.96
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+SoundFile==0.10.3.post1
+# Editable install with no version control (speechbrain==0.5.11)
+-e /home/echandler/.conda/envs/audio/lib/python3.8/site-packages
+threadpoolctl==3.1.0
+tokenizers==0.10.3
+torch==1.10.1
+torchaudio==0.10.1
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1649051611147/work
+transformers @ file:///home/conda/feedstock_root/build_artifacts/transformers_1643665047793/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1650370875435/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1647489083693/work
+virtualenv==20.13.0
+yamllint==1.23.0
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1649012893348/work
+
+
+2022-05-17 02:23:36,425 - speechbrain.utils.superpowers - DEBUG - 176d325
+
+
+2022-05-17 02:23:36,986 - asr.etl - INFO - atczero-extracted dataset stats:
+2022-05-17 02:23:36,986 - asr.etl - INFO - 	Row count = 30436
+2022-05-17 02:23:36,986 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-17 02:23:36,987 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-17 02:23:36,987 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-17 02:23:36,988 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-17 02:23:36,989 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-17 02:23:37,001 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-17 02:23:37,355 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-17 02:23:37,358 - asr.etl - INFO - Writing utterance audio clips.
+2022-05-17 02:23:38,151 - asr.etl - INFO - Writing audio took 0:00:00.792984.
+2022-05-17 02:23:38,862 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-17 02:23:39,216 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-17 02:23:39,218 - asr.etl - INFO - atczero-transformed dataset stats:
+2022-05-17 02:23:39,219 - asr.etl - INFO - 	Row count = 30436
+2022-05-17 02:23:39,219 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-17 02:23:39,219 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-17 02:23:39,219 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-17 02:23:39,220 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-17 02:23:39,220 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-17 02:23:39,943 - asr.etl - DEBUG - Split train should get 184 rows
+2022-05-17 02:23:39,943 - asr.etl - DEBUG - Split dev should get 26 rows
+2022-05-17 02:23:39,943 - asr.etl - DEBUG - Split test should get 23 rows
+2022-05-17 02:23:39,944 - asr.etl - INFO - Discarding 30203 unsampled data
+2022-05-17 02:23:39,945 - asr.etl - DEBUG - Split data has 3 splits
+2022-05-17 02:23:39,946 - asr.etl - INFO - atczero-loaded dataset stats:
+2022-05-17 02:23:39,946 - asr.etl - INFO - 	Row count = 233
+2022-05-17 02:23:39,946 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-17 02:23:39,946 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-17 02:23:39,946 - asr.etl - INFO - 	Mean duration = 3.20 (sec)
+2022-05-17 02:23:39,946 - asr.etl - INFO - 	Stdev duration = 1.89 (sec)
+2022-05-17 02:23:39,947 - asr.etl - INFO - 	Total duration = 0 days 00:12:26.486900
+2022-05-17 02:23:39,948 - bpc_prepare - DEBUG - Loaded data has 3 splits
+2022-05-17 02:23:39,948 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/train.csv ...
+2022-05-17 02:23:40,095 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/dev.csv ...
+2022-05-17 02:23:40,233 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/test.csv ...
+2022-05-17 02:23:40,384 - asr.prepare.ctc - INFO - Filtered out 19 special characters
+2022-05-17 02:23:40,385 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-17 02:23:40,386 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-17 02:23:40,387 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 184 examples.
+2022-05-17 02:23:40,388 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 26 examples.
+2022-05-17 02:23:40,389 - asr.prepare.ctc - INFO - Discarding 1 bad MFCC ratios of 23 examples.
+2022-05-17 02:23:40,389 - asr.etl - INFO - train dataset stats:
+2022-05-17 02:23:40,390 - asr.etl - INFO - 	Row count = 184
+2022-05-17 02:23:40,390 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-17 02:23:40,390 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-17 02:23:40,390 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-17 02:23:40,390 - asr.etl - INFO - 	Stdev duration = 1.91 (sec)
+2022-05-17 02:23:40,391 - asr.etl - INFO - 	Total duration = 0 days 00:09:59.017370
+2022-05-17 02:23:40,391 - asr.etl - INFO - dev dataset stats:
+2022-05-17 02:23:40,391 - asr.etl - INFO - 	Row count = 26
+2022-05-17 02:23:40,391 - asr.etl - INFO - 	Min duration = 0.47 (sec)
+2022-05-17 02:23:40,391 - asr.etl - INFO - 	Max duration = 6.51 (sec)
+2022-05-17 02:23:40,391 - asr.etl - INFO - 	Mean duration = 2.90 (sec)
+2022-05-17 02:23:40,391 - asr.etl - INFO - 	Stdev duration = 1.44 (sec)
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Total duration = 0 days 00:01:15.520000
+2022-05-17 02:23:40,392 - asr.etl - INFO - test dataset stats:
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Row count = 22
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Min duration = 0.57 (sec)
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Max duration = 8.10 (sec)
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Stdev duration = 2.14 (sec)
+2022-05-17 02:23:40,392 - asr.etl - INFO - 	Total duration = 0 days 00:01:11.779530
+2022-05-17 02:23:40,398 - speechbrain.utils.parameter_transfer - DEBUG - Collecting files (or symlinks) for pretraining in results/seq2seq/rnnlm/seed_2602/trial_1/save.
+2022-05-17 02:23:40,398 - speechbrain.pretrained.fetching - INFO - Fetch lm.ckpt: Linking to local file in /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/lm.ckpt.
+2022-05-17 02:23:40,399 - speechbrain.pretrained.fetching - INFO - Fetch tokenizer.ckpt: Linking to local file in /project/graziul/ra/echandler/scratch/speechbrain/asr-crdnn-rnnlm-librispeech/speechbrain__asr-crdnn-rnnlm-librispeech.main.d9760a0bef6c6718d30ad1271f7d05980d435677/tokenizer.ckpt.
+2022-05-17 02:23:40,399 - speechbrain.utils.parameter_transfer - INFO - Loading pretrained files for: lm, tokenizer
+2022-05-17 02:23:43,298 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-05-17 02:23:43,470 - speechbrain.core - INFO - 173.0M trainable parameters in ASR
+2022-05-17 02:23:43,472 - speechbrain.utils.checkpoints - INFO - Would load a checkpoint here, but none found yet.
+2022-05-17 02:23:43,472 - speechbrain.utils.epoch_loop - INFO - Going into epoch 1
+2022-05-17 02:24:04,501 - speechbrain.utils.train_logger - INFO - epoch: 1, lr: 1.00e+00 - train loss: 11.50 - valid loss: 5.93, valid CER: 81.32, valid WER: 97.31
+2022-05-17 02:24:08,397 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-24-04+00
+2022-05-17 02:24:08,401 - speechbrain.utils.epoch_loop - INFO - Going into epoch 2
+2022-05-17 02:24:25,361 - speechbrain.utils.train_logger - INFO - epoch: 2, lr: 1.00e+00 - train loss: 7.74 - valid loss: 5.42, valid CER: 79.59, valid WER: 98.99
+2022-05-17 02:24:28,554 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-24-25+00
+2022-05-17 02:24:28,564 - speechbrain.utils.epoch_loop - INFO - Going into epoch 3
+2022-05-17 02:24:45,680 - speechbrain.nnet.schedulers - INFO - Changing lr from 1 to 0.8
+2022-05-17 02:24:45,680 - speechbrain.utils.train_logger - INFO - epoch: 3, lr: 1.00e+00 - train loss: 6.53 - valid loss: 5.39, valid CER: 80.76, valid WER: 1.01e+02
+2022-05-17 02:24:47,799 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-24-45+00
+2022-05-17 02:24:47,816 - speechbrain.utils.epoch_loop - INFO - Going into epoch 4
+2022-05-17 02:25:05,251 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.8 to 0.64
+2022-05-17 02:25:05,252 - speechbrain.utils.train_logger - INFO - epoch: 4, lr: 8.00e-01 - train loss: 5.63 - valid loss: 5.10, valid CER: 81.75, valid WER: 1.02e+02
+2022-05-17 02:25:08,688 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-25-05+00
+2022-05-17 02:25:08,714 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-24-45+00
+2022-05-17 02:25:08,714 - speechbrain.utils.epoch_loop - INFO - Going into epoch 5
+2022-05-17 02:25:25,995 - speechbrain.utils.train_logger - INFO - epoch: 5, lr: 6.40e-01 - train loss: 5.19 - valid loss: 4.94, valid CER: 81.32, valid WER: 1.01e+02
+2022-05-17 02:25:29,310 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-25-25+00
+2022-05-17 02:25:29,341 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-25-05+00
+2022-05-17 02:25:29,342 - speechbrain.utils.epoch_loop - INFO - Going into epoch 6
+2022-05-17 02:25:46,673 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.64 to 0.51
+2022-05-17 02:25:46,673 - speechbrain.utils.train_logger - INFO - epoch: 6, lr: 6.40e-01 - train loss: 4.52 - valid loss: 4.73, valid CER: 81.62, valid WER: 1.04e+02
+2022-05-17 02:25:49,593 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-25-46+00
+2022-05-17 02:25:49,628 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-25-25+00
+2022-05-17 02:25:49,628 - speechbrain.utils.epoch_loop - INFO - Going into epoch 7
+2022-05-17 02:26:07,046 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.51 to 0.41
+2022-05-17 02:26:07,046 - speechbrain.utils.train_logger - INFO - epoch: 7, lr: 5.12e-01 - train loss: 4.21 - valid loss: 4.56, valid CER: 82.79, valid WER: 1.07e+02
+2022-05-17 02:26:10,272 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-26-07+00
+2022-05-17 02:26:10,311 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-25-46+00
+2022-05-17 02:26:10,311 - speechbrain.utils.epoch_loop - INFO - Going into epoch 8
+2022-05-17 02:26:27,474 - speechbrain.utils.train_logger - INFO - epoch: 8, lr: 4.10e-01 - train loss: 4.02 - valid loss: 4.42, valid CER: 81.19, valid WER: 1.04e+02
+2022-05-17 02:26:30,488 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-26-27+00
+2022-05-17 02:26:30,530 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-26-07+00
+2022-05-17 02:26:30,530 - speechbrain.utils.epoch_loop - INFO - Going into epoch 9
+2022-05-17 02:26:47,746 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.41 to 0.33
+2022-05-17 02:26:47,746 - speechbrain.utils.train_logger - INFO - epoch: 9, lr: 4.10e-01 - train loss: 3.87 - valid loss: 4.35, valid CER: 81.38, valid WER: 1.04e+02
+2022-05-17 02:26:49,971 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-26-47+00
+2022-05-17 02:26:50,017 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-26-27+00
+2022-05-17 02:26:50,017 - speechbrain.utils.epoch_loop - INFO - Going into epoch 10
+2022-05-17 02:27:07,329 - speechbrain.utils.train_logger - INFO - epoch: 10, lr: 3.28e-01 - train loss: 3.74 - valid loss: 4.27, valid CER: 80.89, valid WER: 1.03e+02
+2022-05-17 02:27:09,343 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-27-07+00
+2022-05-17 02:27:09,393 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-26-47+00
+2022-05-17 02:27:09,394 - speechbrain.utils.epoch_loop - INFO - Going into epoch 11
+2022-05-17 02:27:26,862 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.33 to 0.26
+2022-05-17 02:27:26,862 - speechbrain.utils.train_logger - INFO - epoch: 11, lr: 3.28e-01 - train loss: 3.65 - valid loss: 4.21, valid CER: 82.18, valid WER: 1.05e+02
+2022-05-17 02:27:29,976 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-27-26+00
+2022-05-17 02:27:30,031 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-27-07+00
+2022-05-17 02:27:30,031 - speechbrain.utils.epoch_loop - INFO - Going into epoch 12
+2022-05-17 02:27:47,725 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.26 to 0.21
+2022-05-17 02:27:47,725 - speechbrain.utils.train_logger - INFO - epoch: 12, lr: 2.62e-01 - train loss: 3.54 - valid loss: 4.17, valid CER: 82.11, valid WER: 1.05e+02
+2022-05-17 02:27:49,951 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-27-47+00
+2022-05-17 02:27:50,010 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-27-26+00
+2022-05-17 02:27:50,010 - speechbrain.utils.epoch_loop - INFO - Going into epoch 13
+2022-05-17 02:28:07,538 - speechbrain.utils.train_logger - INFO - epoch: 13, lr: 2.10e-01 - train loss: 3.46 - valid loss: 4.14, valid CER: 81.62, valid WER: 1.04e+02
+2022-05-17 02:28:09,776 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-07+00
+2022-05-17 02:28:09,838 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-27-47+00
+2022-05-17 02:28:09,838 - speechbrain.utils.epoch_loop - INFO - Going into epoch 14
+2022-05-17 02:28:27,371 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.21 to 0.17
+2022-05-17 02:28:27,371 - speechbrain.utils.train_logger - INFO - epoch: 14, lr: 2.10e-01 - train loss: 3.41 - valid loss: 4.11, valid CER: 82.24, valid WER: 1.06e+02
+2022-05-17 02:28:31,195 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-27+00
+2022-05-17 02:28:31,263 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-07+00
+2022-05-17 02:28:31,263 - speechbrain.utils.epoch_loop - INFO - Going into epoch 15
+2022-05-17 02:28:49,014 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.17 to 0.13
+2022-05-17 02:28:49,014 - speechbrain.utils.train_logger - INFO - epoch: 15, lr: 1.68e-01 - train loss: 3.35 - valid loss: 4.07, valid CER: 84.94, valid WER: 1.09e+02
+2022-05-17 02:28:53,613 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-49+00
+2022-05-17 02:28:53,683 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-27+00
+2022-05-17 02:28:53,686 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-49+00
+2022-05-17 02:28:53,980 - root - DEBUG - SaveableDataLoader was requested to load a checkpoint, but the DataLoader has already been iterated. The DataLoader file will be ignored. This is normal in evaluation, when a checkpoint is loaded just to retrieve the best model.
+2022-05-17 02:28:55,242 - speechbrain.core - ERROR - Exception:
+Traceback (most recent call last):
+  File "seq2seq/train.py", line 254, in <module>
+    asr_brain.evaluate(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/speechbrain/core.py", line 1189, in evaluate
+    for batch in tqdm(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/tqdm/std.py", line 1195, in __iter__
+    for obj in iterable:
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+KeyError: 0
+2022-05-17 02:36:21,667 - speechbrain.core - INFO - Beginning experiment!
+2022-05-17 02:36:21,668 - speechbrain.core - INFO - Experiment folder: results/seq2seq/rnnlm/seed_2602/trial_1
+2022-05-17 02:36:22,367 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+ssh://git@github.com/UrbanResiliencyInitiative/lang-of-pol.git@176d325af2edc9005cdec14a3d0ed7e11cc90946#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+audioread==2.1.9
+brotlipy @ file:///home/conda/feedstock_root/build_artifacts/brotlipy_1648854175163/work
+certifi==2021.10.8
+cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1636046063618/work
+cfgv==3.3.1
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1644853463426/work
+click @ file:///home/conda/feedstock_root/build_artifacts/click_1651215152883/work
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography_1649035228992/work
+dataclasses @ file:///home/conda/feedstock_root/build_artifacts/dataclasses_1628958434797/work
+decorator==5.1.1
+distlib==0.3.4
+filelock==3.4.2
+flake8==3.7.9
+huggingface-hub==0.2.1
+HyperPyYAML==1.0.0
+identify==2.4.2
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1642433548627/work
+importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1648728286052/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1633637554808/work
+librosa==0.8.1
+llvmlite==0.38.0
+mkl-fft==1.3.1
+mkl-random==1.2.2
+mkl-service==2.4.0
+nodeenv==1.6.0
+numba==0.55.1
+numpy @ file:///opt/conda/conda-bld/numpy_and_numpy_base_1651563629415/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1637239678211/work
+pandas==1.4.2
+platformdirs==2.4.1
+pooch==1.5.2
+pre-commit==2.16.0
+pycodestyle==2.5.0
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+pydub==0.25.1
+pyflakes==2.1.1
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1643496850550/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1652235407899/work
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1648857275402/work
+PySoundFile==0.9.0.post1
+pytest==5.4.1
+python-dateutil==2.8.2
+pytz==2022.1
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1648757091578/work
+regex @ file:///home/conda/feedstock_root/build_artifacts/regex_1650839920269/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1641580202195/work
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses @ file:///home/conda/feedstock_root/build_artifacts/sacremoses_1651557636210/work
+scikit-learn==1.1.0
+scipy==1.8.0
+sentencepiece==0.1.96
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+SoundFile==0.10.3.post1
+# Editable install with no version control (speechbrain==0.5.11)
+-e /home/echandler/.conda/envs/audio/lib/python3.8/site-packages
+threadpoolctl==3.1.0
+tokenizers==0.10.3
+torch==1.10.1
+torchaudio==0.10.1
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1649051611147/work
+transformers @ file:///home/conda/feedstock_root/build_artifacts/transformers_1643665047793/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1650370875435/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1647489083693/work
+virtualenv==20.13.0
+yamllint==1.23.0
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1649012893348/work
+
+
+2022-05-17 02:36:22,388 - speechbrain.utils.superpowers - DEBUG - 176d325
+
+
+2022-05-17 02:36:24,944 - asr.etl - INFO - atczero-extracted dataset stats:
+2022-05-17 02:36:24,944 - asr.etl - INFO - 	Row count = 30436
+2022-05-17 02:36:24,945 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-17 02:36:24,945 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-17 02:36:24,945 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-17 02:36:24,946 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-17 02:36:24,946 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-17 02:36:24,958 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-17 02:36:25,327 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-17 02:36:25,331 - asr.etl - INFO - Writing utterance audio clips.
+2022-05-17 02:36:26,120 - asr.etl - INFO - Writing audio took 0:00:00.788345.
+2022-05-17 02:36:26,833 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-17 02:36:27,207 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-17 02:36:27,211 - asr.etl - INFO - atczero-transformed dataset stats:
+2022-05-17 02:36:27,211 - asr.etl - INFO - 	Row count = 30436
+2022-05-17 02:36:27,211 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-17 02:36:27,211 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-17 02:36:27,212 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-17 02:36:27,212 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-17 02:36:27,212 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-17 02:36:27,937 - asr.etl - DEBUG - Split train should get 184 rows
+2022-05-17 02:36:27,938 - asr.etl - DEBUG - Split dev should get 26 rows
+2022-05-17 02:36:27,938 - asr.etl - DEBUG - Split test should get 23 rows
+2022-05-17 02:36:27,940 - asr.etl - INFO - Discarding 30203 unsampled data
+2022-05-17 02:36:27,941 - asr.etl - DEBUG - Split data has 3 splits
+2022-05-17 02:36:27,942 - asr.etl - INFO - atczero-loaded dataset stats:
+2022-05-17 02:36:27,942 - asr.etl - INFO - 	Row count = 233
+2022-05-17 02:36:27,942 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-17 02:36:27,942 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-17 02:36:27,942 - asr.etl - INFO - 	Mean duration = 3.20 (sec)
+2022-05-17 02:36:27,942 - asr.etl - INFO - 	Stdev duration = 1.89 (sec)
+2022-05-17 02:36:27,943 - asr.etl - INFO - 	Total duration = 0 days 00:12:26.486900
+2022-05-17 02:36:27,944 - bpc_prepare - DEBUG - Loaded data has 3 splits
+2022-05-17 02:36:27,944 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/train.csv ...
+2022-05-17 02:36:27,949 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/dev.csv ...
+2022-05-17 02:36:27,951 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/test.csv ...
+2022-05-17 02:36:27,960 - asr.prepare.ctc - INFO - Filtered out 19 special characters
+2022-05-17 02:36:27,961 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-17 02:36:27,962 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-17 02:36:27,963 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 184 examples.
+2022-05-17 02:36:27,964 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 26 examples.
+2022-05-17 02:36:27,965 - asr.prepare.ctc - INFO - Discarding 1 bad MFCC ratios of 23 examples.
+2022-05-17 02:36:27,965 - asr.etl - INFO - train dataset stats:
+2022-05-17 02:36:27,965 - asr.etl - INFO - 	Row count = 184
+2022-05-17 02:36:27,965 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-17 02:36:27,966 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-17 02:36:27,966 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-17 02:36:27,966 - asr.etl - INFO - 	Stdev duration = 1.91 (sec)
+2022-05-17 02:36:27,966 - asr.etl - INFO - 	Total duration = 0 days 00:09:59.017370
+2022-05-17 02:36:27,966 - asr.etl - INFO - dev dataset stats:
+2022-05-17 02:36:27,966 - asr.etl - INFO - 	Row count = 26
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Min duration = 0.47 (sec)
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Max duration = 6.51 (sec)
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Mean duration = 2.90 (sec)
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Stdev duration = 1.44 (sec)
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Total duration = 0 days 00:01:15.520000
+2022-05-17 02:36:27,967 - asr.etl - INFO - test dataset stats:
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Row count = 22
+2022-05-17 02:36:27,967 - asr.etl - INFO - 	Min duration = 0.57 (sec)
+2022-05-17 02:36:27,968 - asr.etl - INFO - 	Max duration = 8.10 (sec)
+2022-05-17 02:36:27,968 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-17 02:36:27,968 - asr.etl - INFO - 	Stdev duration = 2.14 (sec)
+2022-05-17 02:36:27,968 - asr.etl - INFO - 	Total duration = 0 days 00:01:11.779530
+2022-05-17 02:36:27,975 - speechbrain.utils.parameter_transfer - DEBUG - Collecting files (or symlinks) for pretraining in results/seq2seq/rnnlm/seed_2602/trial_1/save.
+2022-05-17 02:36:27,975 - speechbrain.pretrained.fetching - INFO - Fetch lm.ckpt: Using existing file/symlink in results/seq2seq/rnnlm/seed_2602/trial_1/save/lm.ckpt.
+2022-05-17 02:36:27,976 - speechbrain.pretrained.fetching - INFO - Fetch tokenizer.ckpt: Using existing file/symlink in results/seq2seq/rnnlm/seed_2602/trial_1/save/tokenizer.ckpt.
+2022-05-17 02:36:27,976 - speechbrain.utils.parameter_transfer - INFO - Loading pretrained files for: lm, tokenizer
+2022-05-17 02:36:31,387 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-05-17 02:36:31,556 - speechbrain.core - INFO - 173.0M trainable parameters in ASR
+2022-05-17 02:36:31,560 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-49+00
+2022-05-17 02:36:42,110 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-49+00
+2022-05-17 02:36:43,454 - speechbrain.core - ERROR - Exception:
+Traceback (most recent call last):
+  File "seq2seq/train.py", line 254, in <module>
+    asr_brain.evaluate(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/speechbrain/core.py", line 1189, in evaluate
+    for batch in tqdm(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/tqdm/std.py", line 1195, in __iter__
+    for obj in iterable:
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+KeyError: 0
+2022-05-17 12:20:14,165 - speechbrain.core - INFO - Beginning experiment!
+2022-05-17 12:20:14,165 - speechbrain.core - INFO - Experiment folder: results/seq2seq/rnnlm/seed_2602/trial_1
+2022-05-17 12:20:15,382 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+ssh://git@github.com/UrbanResiliencyInitiative/lang-of-pol.git@176d325af2edc9005cdec14a3d0ed7e11cc90946#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+audioread==2.1.9
+brotlipy @ file:///home/conda/feedstock_root/build_artifacts/brotlipy_1648854175163/work
+certifi==2021.10.8
+cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1636046063618/work
+cfgv==3.3.1
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1644853463426/work
+click @ file:///home/conda/feedstock_root/build_artifacts/click_1651215152883/work
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography_1649035228992/work
+dataclasses @ file:///home/conda/feedstock_root/build_artifacts/dataclasses_1628958434797/work
+decorator==5.1.1
+distlib==0.3.4
+filelock==3.4.2
+flake8==3.7.9
+huggingface-hub==0.2.1
+HyperPyYAML==1.0.0
+identify==2.4.2
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1642433548627/work
+importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1648728286052/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1633637554808/work
+librosa==0.8.1
+llvmlite==0.38.0
+mkl-fft==1.3.1
+mkl-random==1.2.2
+mkl-service==2.4.0
+nodeenv==1.6.0
+numba==0.55.1
+numpy @ file:///opt/conda/conda-bld/numpy_and_numpy_base_1651563629415/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1637239678211/work
+pandas==1.4.2
+platformdirs==2.4.1
+pooch==1.5.2
+pre-commit==2.16.0
+pycodestyle==2.5.0
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+pydub==0.25.1
+pyflakes==2.1.1
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1643496850550/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1652235407899/work
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1648857275402/work
+PySoundFile==0.9.0.post1
+pytest==5.4.1
+python-dateutil==2.8.2
+pytz==2022.1
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1648757091578/work
+regex @ file:///home/conda/feedstock_root/build_artifacts/regex_1650839920269/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1641580202195/work
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses @ file:///home/conda/feedstock_root/build_artifacts/sacremoses_1651557636210/work
+scikit-learn==1.1.0
+scipy==1.8.0
+sentencepiece==0.1.96
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+SoundFile==0.10.3.post1
+# Editable install with no version control (speechbrain==0.5.11)
+-e /home/echandler/.conda/envs/audio/lib/python3.8/site-packages
+threadpoolctl==3.1.0
+tokenizers==0.10.3
+torch==1.10.1
+torchaudio==0.10.1
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1649051611147/work
+transformers @ file:///home/conda/feedstock_root/build_artifacts/transformers_1643665047793/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1650370875435/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1647489083693/work
+virtualenv==20.13.0
+yamllint==1.23.0
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1649012893348/work
+
+
+2022-05-17 12:20:15,402 - speechbrain.utils.superpowers - DEBUG - 176d325
+
+
+2022-05-17 12:20:26,464 - asr.etl - INFO - atczero-extracted dataset stats:
+2022-05-17 12:20:26,464 - asr.etl - INFO - 	Row count = 30436
+2022-05-17 12:20:26,465 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-17 12:20:26,465 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-17 12:20:26,465 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-17 12:20:26,466 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-17 12:20:26,466 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-17 12:20:26,479 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-17 12:20:26,843 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-17 12:20:26,847 - asr.etl - INFO - Writing utterance audio clips.
+2022-05-17 12:20:27,916 - asr.etl - INFO - Writing audio took 0:00:01.069275.
+2022-05-17 12:20:28,970 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-17 12:20:29,338 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-17 12:20:29,342 - asr.etl - INFO - atczero-transformed dataset stats:
+2022-05-17 12:20:29,342 - asr.etl - INFO - 	Row count = 30436
+2022-05-17 12:20:29,343 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-17 12:20:29,343 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-17 12:20:29,343 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-17 12:20:29,343 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-17 12:20:29,344 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-17 12:20:30,417 - asr.etl - DEBUG - Split train should get 184 rows
+2022-05-17 12:20:30,417 - asr.etl - DEBUG - Split dev should get 26 rows
+2022-05-17 12:20:30,417 - asr.etl - DEBUG - Split test should get 23 rows
+2022-05-17 12:20:30,419 - asr.etl - INFO - Discarding 30203 unsampled data
+2022-05-17 12:20:30,420 - asr.etl - DEBUG - Split data has 3 splits
+2022-05-17 12:20:30,421 - asr.etl - INFO - atczero-loaded dataset stats:
+2022-05-17 12:20:30,421 - asr.etl - INFO - 	Row count = 233
+2022-05-17 12:20:30,421 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-17 12:20:30,421 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-17 12:20:30,421 - asr.etl - INFO - 	Mean duration = 3.20 (sec)
+2022-05-17 12:20:30,421 - asr.etl - INFO - 	Stdev duration = 1.89 (sec)
+2022-05-17 12:20:30,422 - asr.etl - INFO - 	Total duration = 0 days 00:12:26.486900
+2022-05-17 12:20:30,423 - bpc_prepare - DEBUG - Loaded data has 3 splits
+2022-05-17 12:20:30,424 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/train.csv ...
+2022-05-17 12:20:30,428 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/dev.csv ...
+2022-05-17 12:20:30,431 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/test.csv ...
+2022-05-17 12:20:30,439 - asr.prepare.ctc - INFO - Filtered out 19 special characters
+2022-05-17 12:20:30,440 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-17 12:20:30,441 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-17 12:20:30,442 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 184 examples.
+2022-05-17 12:20:30,443 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 26 examples.
+2022-05-17 12:20:30,444 - asr.prepare.ctc - INFO - Discarding 1 bad MFCC ratios of 23 examples.
+2022-05-17 12:20:30,445 - asr.etl - INFO - train dataset stats:
+2022-05-17 12:20:30,445 - asr.etl - INFO - 	Row count = 184
+2022-05-17 12:20:30,445 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-17 12:20:30,445 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-17 12:20:30,445 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-17 12:20:30,445 - asr.etl - INFO - 	Stdev duration = 1.91 (sec)
+2022-05-17 12:20:30,446 - asr.etl - INFO - 	Total duration = 0 days 00:09:59.017370
+2022-05-17 12:20:30,446 - asr.etl - INFO - dev dataset stats:
+2022-05-17 12:20:30,446 - asr.etl - INFO - 	Row count = 26
+2022-05-17 12:20:30,446 - asr.etl - INFO - 	Min duration = 0.47 (sec)
+2022-05-17 12:20:30,446 - asr.etl - INFO - 	Max duration = 6.51 (sec)
+2022-05-17 12:20:30,446 - asr.etl - INFO - 	Mean duration = 2.90 (sec)
+2022-05-17 12:20:30,446 - asr.etl - INFO - 	Stdev duration = 1.44 (sec)
+2022-05-17 12:20:30,447 - asr.etl - INFO - 	Total duration = 0 days 00:01:15.520000
+2022-05-17 12:20:30,447 - asr.etl - INFO - test dataset stats:
+2022-05-17 12:20:30,447 - asr.etl - INFO - 	Row count = 22
+2022-05-17 12:20:30,447 - asr.etl - INFO - 	Min duration = 0.57 (sec)
+2022-05-17 12:20:30,447 - asr.etl - INFO - 	Max duration = 8.10 (sec)
+2022-05-17 12:20:30,447 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-17 12:20:30,447 - asr.etl - INFO - 	Stdev duration = 2.14 (sec)
+2022-05-17 12:20:30,448 - asr.etl - INFO - 	Total duration = 0 days 00:01:11.779530
+2022-05-17 12:20:30,453 - speechbrain.utils.parameter_transfer - DEBUG - Collecting files (or symlinks) for pretraining in results/seq2seq/rnnlm/seed_2602/trial_1/save.
+2022-05-17 12:20:30,453 - speechbrain.pretrained.fetching - INFO - Fetch lm.ckpt: Using existing file/symlink in results/seq2seq/rnnlm/seed_2602/trial_1/save/lm.ckpt.
+2022-05-17 12:20:30,453 - speechbrain.pretrained.fetching - INFO - Fetch tokenizer.ckpt: Using existing file/symlink in results/seq2seq/rnnlm/seed_2602/trial_1/save/tokenizer.ckpt.
+2022-05-17 12:20:30,454 - speechbrain.utils.parameter_transfer - INFO - Loading pretrained files for: lm, tokenizer
+2022-05-17 12:20:34,420 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-05-17 12:20:34,592 - speechbrain.core - INFO - 173.0M trainable parameters in ASR
+2022-05-17 12:20:34,595 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-49+00
+2022-05-17 12:20:50,660 - speechbrain.utils.epoch_loop - INFO - Going into epoch 16
+2022-05-17 12:21:12,139 - speechbrain.utils.train_logger - INFO - epoch: 16, lr: 1.34e-01 - train loss: 3.31 - valid loss: 4.06, valid CER: 84.70, valid WER: 1.10e+02
+2022-05-17 12:21:17,429 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-21-12+00
+2022-05-17 12:21:17,445 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+02-28-49+00
+2022-05-17 12:21:17,713 - speechbrain.utils.epoch_loop - INFO - Going into epoch 17
+2022-05-17 12:21:35,533 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.13 to 0.11
+2022-05-17 12:21:35,533 - speechbrain.utils.train_logger - INFO - epoch: 17, lr: 1.34e-01 - train loss: 3.26 - valid loss: 4.04, valid CER: 84.57, valid WER: 1.09e+02
+2022-05-17 12:21:39,154 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-21-35+00
+2022-05-17 12:21:39,173 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-21-12+00
+2022-05-17 12:21:39,173 - speechbrain.utils.epoch_loop - INFO - Going into epoch 18
+2022-05-17 12:21:56,639 - speechbrain.utils.train_logger - INFO - epoch: 18, lr: 1.07e-01 - train loss: 3.22 - valid loss: 4.02, valid CER: 83.22, valid WER: 1.07e+02
+2022-05-17 12:22:01,280 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-21-56+00
+2022-05-17 12:22:01,303 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-21-35+00
+2022-05-17 12:22:01,303 - speechbrain.utils.epoch_loop - INFO - Going into epoch 19
+2022-05-17 12:22:19,085 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.11 to 0.086
+2022-05-17 12:22:19,085 - speechbrain.utils.train_logger - INFO - epoch: 19, lr: 1.07e-01 - train loss: 3.20 - valid loss: 4.02, valid CER: 85.25, valid WER: 1.10e+02
+2022-05-17 12:22:23,432 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-22-19+00
+2022-05-17 12:22:23,460 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-21-56+00
+2022-05-17 12:22:23,460 - speechbrain.utils.epoch_loop - INFO - Going into epoch 20
+2022-05-17 12:22:41,052 - speechbrain.utils.train_logger - INFO - epoch: 20, lr: 8.59e-02 - train loss: 3.18 - valid loss: 4.00, valid CER: 83.53, valid WER: 1.06e+02
+2022-05-17 12:22:45,655 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-22-41+00
+2022-05-17 12:22:45,687 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-22-19+00
+2022-05-17 12:22:45,687 - speechbrain.utils.epoch_loop - INFO - Going into epoch 21
+2022-05-17 12:23:03,020 - speechbrain.utils.train_logger - INFO - epoch: 21, lr: 8.59e-02 - train loss: 3.13 - valid loss: 3.99, valid CER: 82.97, valid WER: 1.04e+02
+2022-05-17 12:23:08,320 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-23-03+00
+2022-05-17 12:23:08,356 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-22-41+00
+2022-05-17 12:23:08,356 - speechbrain.utils.epoch_loop - INFO - Going into epoch 22
+2022-05-17 12:23:25,451 - speechbrain.utils.train_logger - INFO - epoch: 22, lr: 8.59e-02 - train loss: 3.11 - valid loss: 3.98, valid CER: 82.67, valid WER: 1.03e+02
+2022-05-17 12:23:31,037 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-23-25+00
+2022-05-17 12:23:31,078 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-23-03+00
+2022-05-17 12:23:31,078 - speechbrain.utils.epoch_loop - INFO - Going into epoch 23
+2022-05-17 12:23:48,629 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.086 to 0.069
+2022-05-17 12:23:48,629 - speechbrain.utils.train_logger - INFO - epoch: 23, lr: 8.59e-02 - train loss: 3.10 - valid loss: 3.98, valid CER: 84.14, valid WER: 1.06e+02
+2022-05-17 12:23:57,081 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-23-48+00
+2022-05-17 12:23:57,157 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-23-25+00
+2022-05-17 12:23:57,158 - speechbrain.utils.epoch_loop - INFO - Going into epoch 24
+2022-05-17 12:24:14,042 - speechbrain.utils.train_logger - INFO - epoch: 24, lr: 6.87e-02 - train loss: 3.06 - valid loss: 3.96, valid CER: 82.11, valid WER: 1.01e+02
+2022-05-17 12:24:20,869 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-24-14+00
+2022-05-17 12:24:20,918 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-23-48+00
+2022-05-17 12:24:20,918 - speechbrain.utils.epoch_loop - INFO - Going into epoch 25
+2022-05-17 12:24:38,090 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.069 to 0.055
+2022-05-17 12:24:38,090 - speechbrain.utils.train_logger - INFO - epoch: 25, lr: 6.87e-02 - train loss: 3.06 - valid loss: 3.96, valid CER: 83.10, valid WER: 1.03e+02
+2022-05-17 12:24:44,857 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-24-38+00
+2022-05-17 12:24:44,909 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-24-14+00
+2022-05-17 12:24:44,910 - speechbrain.utils.epoch_loop - INFO - Going into epoch 26
+2022-05-17 12:25:01,571 - speechbrain.utils.train_logger - INFO - epoch: 26, lr: 5.50e-02 - train loss: 3.05 - valid loss: 3.94, valid CER: 81.56, valid WER: 1.00e+02
+2022-05-17 12:25:09,427 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-25-01+00
+2022-05-17 12:25:09,483 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-24-38+00
+2022-05-17 12:25:09,483 - speechbrain.utils.epoch_loop - INFO - Going into epoch 27
+2022-05-17 12:25:26,079 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.055 to 0.044
+2022-05-17 12:25:26,079 - speechbrain.utils.train_logger - INFO - epoch: 27, lr: 5.50e-02 - train loss: 3.02 - valid loss: 3.94, valid CER: 81.81, valid WER: 99.66
+2022-05-17 12:25:32,011 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-25-26+00
+2022-05-17 12:25:32,071 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-25-01+00
+2022-05-17 12:25:32,071 - speechbrain.utils.epoch_loop - INFO - Going into epoch 28
+2022-05-17 12:25:48,717 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.044 to 0.035
+2022-05-17 12:25:48,718 - speechbrain.utils.train_logger - INFO - epoch: 28, lr: 4.40e-02 - train loss: 3.01 - valid loss: 3.94, valid CER: 81.87, valid WER: 1.00e+02
+2022-05-17 12:25:54,169 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-25-48+00
+2022-05-17 12:25:54,235 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-25-26+00
+2022-05-17 12:25:54,236 - speechbrain.utils.epoch_loop - INFO - Going into epoch 29
+2022-05-17 12:26:10,831 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.035 to 0.028
+2022-05-17 12:26:10,832 - speechbrain.utils.train_logger - INFO - epoch: 29, lr: 3.52e-02 - train loss: 3.00 - valid loss: 3.94, valid CER: 81.75, valid WER: 1.00e+02
+2022-05-17 12:26:16,828 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-26-10+00
+2022-05-17 12:26:16,897 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-25-48+00
+2022-05-17 12:26:16,927 - speechbrain.utils.epoch_loop - INFO - Going into epoch 30
+2022-05-17 12:26:33,278 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.028 to 0.023
+2022-05-17 12:26:33,278 - speechbrain.utils.train_logger - INFO - epoch: 30, lr: 2.81e-02 - train loss: 2.99 - valid loss: 3.92, valid CER: 81.87, valid WER: 99.66
+2022-05-17 12:26:38,210 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-26-33+00
+2022-05-17 12:26:38,285 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-26-10+00
+2022-05-17 12:26:38,287 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-26-33+00
+2022-05-17 12:26:38,583 - root - DEBUG - SaveableDataLoader was requested to load a checkpoint, but the DataLoader has already been iterated. The DataLoader file will be ignored. This is normal in evaluation, when a checkpoint is loaded just to retrieve the best model.
+2022-05-17 12:26:39,548 - speechbrain.core - ERROR - Exception:
+Traceback (most recent call last):
+  File "seq2seq/train.py", line 254, in <module>
+    asr_brain.evaluate(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/speechbrain/core.py", line 1189, in evaluate
+    for batch in tqdm(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/tqdm/std.py", line 1195, in __iter__
+    for obj in iterable:
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+KeyError: 0
+2022-05-18 11:29:46,376 - speechbrain.core - INFO - Beginning experiment!
+2022-05-18 11:29:46,377 - speechbrain.core - INFO - Experiment folder: results/seq2seq/rnnlm/seed_2602/trial_1
+2022-05-18 11:29:46,964 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+ssh://git@github.com/UrbanResiliencyInitiative/lang-of-pol.git@176d325af2edc9005cdec14a3d0ed7e11cc90946#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+audioread==2.1.9
+brotlipy @ file:///home/conda/feedstock_root/build_artifacts/brotlipy_1648854175163/work
+certifi==2021.10.8
+cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1636046063618/work
+cfgv==3.3.1
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1644853463426/work
+click @ file:///home/conda/feedstock_root/build_artifacts/click_1651215152883/work
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography_1649035228992/work
+dataclasses @ file:///home/conda/feedstock_root/build_artifacts/dataclasses_1628958434797/work
+decorator==5.1.1
+distlib==0.3.4
+filelock==3.4.2
+flake8==3.7.9
+huggingface-hub==0.2.1
+HyperPyYAML==1.0.0
+identify==2.4.2
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1642433548627/work
+importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1648728286052/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1633637554808/work
+librosa==0.8.1
+llvmlite==0.38.0
+mkl-fft==1.3.1
+mkl-random==1.2.2
+mkl-service==2.4.0
+nodeenv==1.6.0
+numba==0.55.1
+numpy @ file:///opt/conda/conda-bld/numpy_and_numpy_base_1651563629415/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1637239678211/work
+pandas==1.4.2
+platformdirs==2.4.1
+pooch==1.5.2
+pre-commit==2.16.0
+pycodestyle==2.5.0
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+pydub==0.25.1
+pyflakes==2.1.1
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1643496850550/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1652235407899/work
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1648857275402/work
+PySoundFile==0.9.0.post1
+pytest==5.4.1
+python-dateutil==2.8.2
+pytz==2022.1
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1648757091578/work
+regex @ file:///home/conda/feedstock_root/build_artifacts/regex_1650839920269/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1641580202195/work
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses @ file:///home/conda/feedstock_root/build_artifacts/sacremoses_1651557636210/work
+scikit-learn==1.1.0
+scipy==1.8.0
+sentencepiece==0.1.96
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+SoundFile==0.10.3.post1
+# Editable install with no version control (speechbrain==0.5.11)
+-e /home/echandler/.conda/envs/audio/lib/python3.8/site-packages
+threadpoolctl==3.1.0
+tokenizers==0.10.3
+torch==1.10.1
+torchaudio==0.10.1
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1649051611147/work
+transformers @ file:///home/conda/feedstock_root/build_artifacts/transformers_1643665047793/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1650370875435/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1647489083693/work
+virtualenv==20.13.0
+yamllint==1.23.0
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1649012893348/work
+
+
+2022-05-18 11:29:46,983 - speechbrain.utils.superpowers - DEBUG - 176d325
+
+
+2022-05-18 11:29:49,597 - asr.etl - INFO - atczero-extracted dataset stats:
+2022-05-18 11:29:49,597 - asr.etl - INFO - 	Row count = 30436
+2022-05-18 11:29:49,597 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-18 11:29:49,598 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-18 11:29:49,598 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-18 11:29:49,598 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-18 11:29:49,599 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-18 11:29:49,611 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-18 11:29:49,980 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-18 11:29:49,983 - asr.etl - INFO - Writing utterance audio clips.
+2022-05-18 11:29:50,779 - asr.etl - INFO - Writing audio took 0:00:00.796056.
+2022-05-18 11:29:51,492 - asr.etl - INFO - Discarding 0 missing audios.
+2022-05-18 11:29:51,862 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-05-18 11:29:51,865 - asr.etl - INFO - atczero-transformed dataset stats:
+2022-05-18 11:29:51,865 - asr.etl - INFO - 	Row count = 30436
+2022-05-18 11:29:51,865 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-05-18 11:29:51,866 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-05-18 11:29:51,866 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-05-18 11:29:51,866 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-05-18 11:29:51,867 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-05-18 11:29:52,592 - asr.etl - DEBUG - Split train should get 184 rows
+2022-05-18 11:29:52,592 - asr.etl - DEBUG - Split dev should get 26 rows
+2022-05-18 11:29:52,592 - asr.etl - DEBUG - Split test should get 23 rows
+2022-05-18 11:29:52,594 - asr.etl - INFO - Discarding 30203 unsampled data
+2022-05-18 11:29:52,595 - asr.etl - DEBUG - Split data has 3 splits
+2022-05-18 11:29:52,596 - asr.etl - INFO - atczero-loaded dataset stats:
+2022-05-18 11:29:52,596 - asr.etl - INFO - 	Row count = 233
+2022-05-18 11:29:52,596 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-18 11:29:52,596 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-18 11:29:52,597 - asr.etl - INFO - 	Mean duration = 3.20 (sec)
+2022-05-18 11:29:52,597 - asr.etl - INFO - 	Stdev duration = 1.89 (sec)
+2022-05-18 11:29:52,597 - asr.etl - INFO - 	Total duration = 0 days 00:12:26.486900
+2022-05-18 11:29:52,598 - bpc_prepare - DEBUG - Loaded data has 3 splits
+2022-05-18 11:29:52,599 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/train.csv ...
+2022-05-18 11:29:52,603 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/dev.csv ...
+2022-05-18 11:29:52,605 - bpc_prepare - INFO - Preparing results/seq2seq/rnnlm/seed_2602/trial_1/test.csv ...
+2022-05-18 11:29:52,613 - asr.prepare.ctc - INFO - Filtered out 19 special characters
+2022-05-18 11:29:52,614 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-18 11:29:52,615 - asr.prepare.ctc - INFO - Filtered out 2 special characters
+2022-05-18 11:29:52,616 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 184 examples.
+2022-05-18 11:29:52,617 - asr.prepare.ctc - INFO - Discarding 0 bad MFCC ratios of 26 examples.
+2022-05-18 11:29:52,618 - asr.prepare.ctc - INFO - Discarding 1 bad MFCC ratios of 23 examples.
+2022-05-18 11:29:52,618 - asr.etl - INFO - train dataset stats:
+2022-05-18 11:29:52,619 - asr.etl - INFO - 	Row count = 184
+2022-05-18 11:29:52,619 - asr.etl - INFO - 	Min duration = 0.15 (sec)
+2022-05-18 11:29:52,619 - asr.etl - INFO - 	Max duration = 13.29 (sec)
+2022-05-18 11:29:52,619 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-18 11:29:52,619 - asr.etl - INFO - 	Stdev duration = 1.91 (sec)
+2022-05-18 11:29:52,619 - asr.etl - INFO - 	Total duration = 0 days 00:09:59.017370
+2022-05-18 11:29:52,620 - asr.etl - INFO - dev dataset stats:
+2022-05-18 11:29:52,620 - asr.etl - INFO - 	Row count = 26
+2022-05-18 11:29:52,620 - asr.etl - INFO - 	Min duration = 0.47 (sec)
+2022-05-18 11:29:52,620 - asr.etl - INFO - 	Max duration = 6.51 (sec)
+2022-05-18 11:29:52,620 - asr.etl - INFO - 	Mean duration = 2.90 (sec)
+2022-05-18 11:29:52,620 - asr.etl - INFO - 	Stdev duration = 1.44 (sec)
+2022-05-18 11:29:52,620 - asr.etl - INFO - 	Total duration = 0 days 00:01:15.520000
+2022-05-18 11:29:52,621 - asr.etl - INFO - test dataset stats:
+2022-05-18 11:29:52,621 - asr.etl - INFO - 	Row count = 22
+2022-05-18 11:29:52,621 - asr.etl - INFO - 	Min duration = 0.57 (sec)
+2022-05-18 11:29:52,621 - asr.etl - INFO - 	Max duration = 8.10 (sec)
+2022-05-18 11:29:52,621 - asr.etl - INFO - 	Mean duration = 3.26 (sec)
+2022-05-18 11:29:52,621 - asr.etl - INFO - 	Stdev duration = 2.14 (sec)
+2022-05-18 11:29:52,621 - asr.etl - INFO - 	Total duration = 0 days 00:01:11.779530
+2022-05-18 11:29:52,627 - speechbrain.utils.parameter_transfer - DEBUG - Collecting files (or symlinks) for pretraining in results/seq2seq/rnnlm/seed_2602/trial_1/save.
+2022-05-18 11:29:52,627 - speechbrain.pretrained.fetching - INFO - Fetch lm.ckpt: Using existing file/symlink in results/seq2seq/rnnlm/seed_2602/trial_1/save/lm.ckpt.
+2022-05-18 11:29:52,627 - speechbrain.pretrained.fetching - INFO - Fetch tokenizer.ckpt: Using existing file/symlink in results/seq2seq/rnnlm/seed_2602/trial_1/save/tokenizer.ckpt.
+2022-05-18 11:29:52,627 - speechbrain.utils.parameter_transfer - INFO - Loading pretrained files for: lm, tokenizer
+2022-05-18 11:29:55,719 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-05-18 11:29:55,887 - speechbrain.core - INFO - 173.0M trainable parameters in ASR
+2022-05-18 11:29:55,891 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-26-33+00
+2022-05-18 11:30:00,937 - speechbrain.utils.epoch_loop - INFO - Going into epoch 31
+2022-05-18 11:30:20,743 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.023 to 0.018
+2022-05-18 11:30:20,744 - speechbrain.utils.train_logger - INFO - epoch: 31, lr: 2.25e-02 - train loss: 3.00 - valid loss: 3.93, valid CER: 82.11, valid WER: 1.00e+02
+2022-05-18 11:30:34,651 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-30-20+00
+2022-05-18 11:30:34,688 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-17+12-26-33+00
+2022-05-18 11:30:34,688 - speechbrain.utils.epoch_loop - INFO - Going into epoch 32
+2022-05-18 11:30:51,088 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.018 to 0.014
+2022-05-18 11:30:51,090 - speechbrain.utils.train_logger - INFO - epoch: 32, lr: 1.80e-02 - train loss: 2.97 - valid loss: 3.92, valid CER: 82.05, valid WER: 99.66
+2022-05-18 11:31:03,417 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-30-51+00
+2022-05-18 11:31:03,441 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-30-20+00
+2022-05-18 11:31:03,442 - speechbrain.utils.epoch_loop - INFO - Going into epoch 33
+2022-05-18 11:31:19,856 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.014 to 0.012
+2022-05-18 11:31:19,856 - speechbrain.utils.train_logger - INFO - epoch: 33, lr: 1.44e-02 - train loss: 2.97 - valid loss: 3.91, valid CER: 81.99, valid WER: 99.66
+2022-05-18 11:31:33,274 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-31-19+00
+2022-05-18 11:31:33,302 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-30-51+00
+2022-05-18 11:31:33,303 - speechbrain.utils.epoch_loop - INFO - Going into epoch 34
+2022-05-18 11:31:49,828 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.012 to 0.0092
+2022-05-18 11:31:49,828 - speechbrain.utils.train_logger - INFO - epoch: 34, lr: 1.15e-02 - train loss: 2.97 - valid loss: 3.92, valid CER: 82.18, valid WER: 99.66
+2022-05-18 11:32:01,992 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-31-49+00
+2022-05-18 11:32:02,025 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-31-19+00
+2022-05-18 11:32:02,025 - speechbrain.utils.epoch_loop - INFO - Going into epoch 35
+2022-05-18 11:32:18,458 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0092 to 0.0074
+2022-05-18 11:32:18,458 - speechbrain.utils.train_logger - INFO - epoch: 35, lr: 9.22e-03 - train loss: 2.98 - valid loss: 3.91, valid CER: 82.30, valid WER: 98.99
+2022-05-18 11:32:32,640 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-32-18+00
+2022-05-18 11:32:32,678 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-31-49+00
+2022-05-18 11:32:32,678 - speechbrain.utils.epoch_loop - INFO - Going into epoch 36
+2022-05-18 11:32:49,125 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0074 to 0.0059
+2022-05-18 11:32:49,127 - speechbrain.utils.train_logger - INFO - epoch: 36, lr: 7.38e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.42, valid WER: 99.33
+2022-05-18 11:33:00,795 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-32-49+00
+2022-05-18 11:33:00,836 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-32-18+00
+2022-05-18 11:33:00,836 - speechbrain.utils.epoch_loop - INFO - Going into epoch 37
+2022-05-18 11:33:17,244 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0059 to 0.0047
+2022-05-18 11:33:17,244 - speechbrain.utils.train_logger - INFO - epoch: 37, lr: 5.90e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.36, valid WER: 99.66
+2022-05-18 11:33:28,985 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-33-17+00
+2022-05-18 11:33:29,031 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-32-49+00
+2022-05-18 11:33:29,033 - speechbrain.utils.epoch_loop - INFO - Going into epoch 38
+2022-05-18 11:33:45,476 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0047 to 0.0038
+2022-05-18 11:33:45,477 - speechbrain.utils.train_logger - INFO - epoch: 38, lr: 4.72e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.54, valid WER: 99.66
+2022-05-18 11:33:57,490 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-33-45+00
+2022-05-18 11:33:57,541 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-33-17+00
+2022-05-18 11:33:57,541 - speechbrain.utils.epoch_loop - INFO - Going into epoch 39
+2022-05-18 11:34:13,921 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0038 to 0.003
+2022-05-18 11:34:13,923 - speechbrain.utils.train_logger - INFO - epoch: 39, lr: 3.78e-03 - train loss: 2.94 - valid loss: 3.91, valid CER: 82.79, valid WER: 99.66
+2022-05-18 11:34:25,617 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-34-13+00
+2022-05-18 11:34:25,667 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-33-45+00
+2022-05-18 11:34:25,667 - speechbrain.utils.epoch_loop - INFO - Going into epoch 40
+2022-05-18 11:34:42,174 - speechbrain.utils.train_logger - INFO - epoch: 40, lr: 3.02e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.54, valid WER: 99.66
+2022-05-18 11:34:50,689 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-34-42+00
+2022-05-18 11:34:50,749 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-34-13+00
+2022-05-18 11:34:50,749 - speechbrain.utils.epoch_loop - INFO - Going into epoch 41
+2022-05-18 11:35:07,124 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.003 to 0.0024
+2022-05-18 11:35:07,125 - speechbrain.utils.train_logger - INFO - epoch: 41, lr: 3.02e-03 - train loss: 2.96 - valid loss: 3.91, valid CER: 82.61, valid WER: 99.66
+2022-05-18 11:35:20,322 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-35-07+00
+2022-05-18 11:35:20,386 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-34-42+00
+2022-05-18 11:35:20,386 - speechbrain.utils.epoch_loop - INFO - Going into epoch 42
+2022-05-18 11:35:36,848 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0024 to 0.0019
+2022-05-18 11:35:36,848 - speechbrain.utils.train_logger - INFO - epoch: 42, lr: 2.42e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.79, valid WER: 99.66
+2022-05-18 11:35:48,914 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-35-36+00
+2022-05-18 11:35:48,982 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-35-07+00
+2022-05-18 11:35:48,982 - speechbrain.utils.epoch_loop - INFO - Going into epoch 43
+2022-05-18 11:36:05,538 - speechbrain.utils.train_logger - INFO - epoch: 43, lr: 1.93e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.54, valid WER: 99.33
+2022-05-18 11:36:18,003 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-36-05+00
+2022-05-18 11:36:18,075 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-35-36+00
+2022-05-18 11:36:18,075 - speechbrain.utils.epoch_loop - INFO - Going into epoch 44
+2022-05-18 11:36:34,445 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0019 to 0.0015
+2022-05-18 11:36:34,445 - speechbrain.utils.train_logger - INFO - epoch: 44, lr: 1.93e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.42, valid WER: 99.33
+2022-05-18 11:36:46,523 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-36-34+00
+2022-05-18 11:36:46,594 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-36-05+00
+2022-05-18 11:36:46,595 - speechbrain.utils.epoch_loop - INFO - Going into epoch 45
+2022-05-18 11:37:02,857 - speechbrain.nnet.schedulers - INFO - Changing lr from 0.0015 to 0.0012
+2022-05-18 11:37:02,858 - speechbrain.utils.train_logger - INFO - epoch: 45, lr: 1.55e-03 - train loss: 2.95 - valid loss: 3.91, valid CER: 82.73, valid WER: 99.66
+2022-05-18 11:37:15,101 - speechbrain.utils.checkpoints - INFO - Saved an end-of-epoch checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-37-02+00
+2022-05-18 11:37:15,180 - speechbrain.utils.checkpoints - INFO - Deleted checkpoint in results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-36-34+00
+2022-05-18 11:37:15,183 - speechbrain.utils.checkpoints - INFO - Loading a checkpoint from results/seq2seq/rnnlm/seed_2602/trial_1/save/CKPT+2022-05-18+11-37-02+00
+2022-05-18 11:37:15,474 - root - DEBUG - SaveableDataLoader was requested to load a checkpoint, but the DataLoader has already been iterated. The DataLoader file will be ignored. This is normal in evaluation, when a checkpoint is loaded just to retrieve the best model.
+2022-05-18 11:37:16,447 - speechbrain.core - ERROR - Exception:
+Traceback (most recent call last):
+  File "seq2seq/train.py", line 254, in <module>
+    asr_brain.evaluate(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/speechbrain/core.py", line 1189, in evaluate
+    for batch in tqdm(
+  File "/home/echandler/.conda/envs/audio/lib/python3.8/site-packages/tqdm/std.py", line 1195, in __iter__
+    for obj in iterable:
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/echandler/.local/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 49, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+KeyError: 0

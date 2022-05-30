@@ -17,7 +17,7 @@ trial: 1
 vocab_size: 4096
 # Tokenizer trials are not necessarily in sync with this models trials
 tokenizer_file: results/tokenizer/bpe_4096/trial_1/4096_bpe.model
-output_folder: results/seq2seq/seed_1/trial_1
+output_folder: results/seq2seq/no_lm/seed_1/trial_1
 cer_file: results/seq2seq/seed_1/trial_1/cer.txt
 wer_file: results/seq2seq/seed_1/trial_1/wer.txt
 save_folder: results/seq2seq/seed_1/trial_1/save

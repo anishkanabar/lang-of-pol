@@ -31,11 +31,11 @@ if __name__ == "__main__":
     )
 
     # 1.  # Dataset prep (parsing timers-and-such)
-    from tok_prepare import prepare_bpc  # noqa
+    from tok_prepare import create_manifests  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
-        prepare_bpc,
+        create_manifests,
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],

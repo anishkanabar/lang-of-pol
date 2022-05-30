@@ -207,18 +207,21 @@ if __name__ == "__main__":
         overrides=overrides,
     )
 
-    # 1.  # Dataset prep (parsing Librispeech)
-    from seq_prepare import prepare_bpc, dataio_prepare  # noqa
+    # Dataset prep 
+    from seq_prepare import create_manifests, dataio_prepare  # noqa
 
     # multi-gpu (ddp) save data preparation
     run_on_main(
-        prepare_bpc,
+        create_manifests,
         kwargs={
             "cluster": hparams["cluster"],
             "dataset_name": hparams['dataset_name'],
             "splits": hparams["splits"],
             "output_folder": hparams["output_folder"],
             "skip_prep": hparams["skip_prep"],
+            "ambiguity_strategy": hparams["ambiguity_strategy"],
+            "stratify": hparams["stratify"],
+            "seed": hparams["seed"]
         },
     )
 

@@ -64,7 +64,8 @@ class ATCZeroETL(AsrETL):
 
     def load(self, 
             data: pd.DataFrame=None,
-            splits: dict=None) -> pd.DataFrame:
+            splits: dict=None,
+            seed: int=1234) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -74,7 +75,7 @@ class ATCZeroETL(AsrETL):
         if data is None:
             data = self._create_manifest()
         data = self._filter_exists(data, "audio", log=False)
-        data = self._sample_split(data, splits)
+        data = self._sample_split(data, splits, seed)
         self.describe(data, '-loaded')
         return data
                     

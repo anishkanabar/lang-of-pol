@@ -51,25 +51,25 @@ if __name__ == "__main__":
     )
 
     # Dataset prep (parsing Librispeech)
-    from ctc_prepare import prepare_bpc, dataio_prepare  # noqa
+    from ctc_prepare import create_manifests, dataio_prepare  # noqa
 
     # multi-gpu (ddp) save data preparation
-    run_on_main(
-        prepare_bpc,
-        kwargs={
-            "cluster": hparams["cluster"],
-            "dataset_name": hparams['dataset_name'],
-            "num_train": hparams["num_train"],
-            "num_sec": hparams["num_sec"],
-            "split_ratios": hparams["split_ratios"],
-            "output_folder": hparams["output_folder"],
-            "skip_prep": hparams["skip_prep"],
-            "seed": hparams["seed"],
-        },
-    )
+    #run_on_main(
+    #    create_manifests,
+    #    kwargs={
+    #        "cluster": hparams["cluster"],
+    #        "dataset_name": hparams['dataset_name'],
+    #        "splits": hparams["splits"],
+    #        "output_folder": hparams["output_folder"],
+    #        "ambiguity_strategy": hparams['ambiguity_strategy'],
+    #        "skip_prep": hparams["skip_prep"],
+    #        "seed": hparams["seed"],
+    #        "stratify": hparams["stratify"],
+    #    },
+    #)
 
     # here we create the datasets objects as well as tokenization and encoding
-    train_data, valid_data, test_datasets, label_encoder = dataio_prepare(
+    train_data, valid_data, test_data, label_encoder = dataio_prepare(
         hparams
     )
 
@@ -93,10 +93,6 @@ if __name__ == "__main__":
     devices = [torch.cuda.get_device_name(d) for d in range(torch.cuda.device_count())]
     logger.info(f'Running on devices {";".join(devices)}')
 
-    for k in test_datasets.keys():  # keys are test_clean, test_other etc
-        asr_brain.hparams.wer_file = os.path.join(
-            hparams["output_folder"], "wer_{}.txt".format(k)
-        )
-        asr_brain.evaluate(
-            test_datasets[k], test_loader_kwargs=hparams["test_dataloader_opts"]
-        )
+    asr_brain.evaluate(
+        test_data, test_loader_kwargs=hparams["test_dataloader_opts"]
+    )

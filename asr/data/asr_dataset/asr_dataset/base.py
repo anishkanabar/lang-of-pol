@@ -68,7 +68,9 @@ class AsrETL(abc.ABC):
 
     @abc.abstractmethod
     def load(self, 
-            data: pd.DataFrame=None) -> pd.DataFrame:
+            data: pd.DataFrame=None, 
+            data: pd.DataFrame=None,
+            **kwargs) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
 
@@ -77,17 +79,32 @@ class AsrETL(abc.ABC):
         pass
     
 
-    def _sample_split(self, data: pd.DataFrame, splits=None):
+    def _sample_split(self, data: pd.DataFrame, splits=None, seed=1234, stratify=None):
         """
         Randomly sample and assign to subsets.
         Params:
             - splits: dictionary of split name -> number of seconds
+            - seed: random seed
         """
         data = data.assign(split='all')
         if splits is None:
             return data
 
-        data = data.sample(frac=1, random_state=1234)  # random shuffle
+        data = data.sample(frac=1, random_state=seed)  # random shuffle
+
+        # XXX: only really used for term project experiment
+        if stratify == 'tall':  # encourages getting multiple transcribers per file
+            keys = data["original_audio"].drop_duplicates()
+            ordering = keys.index.to_series() \
+                           .sample(frac=1, random_state=seed) \
+                           .reset_index(drop=True)
+            file_order = pd.DataFrame({"original_audio": keys, "ordering": ordering})
+            data = data.merge(file_order, on="original_audio").sort_values(by="ordering")
+        elif stratify == 'wide':  # encourages getting one transcriber per file
+            transcribers = data[["original_audio", "transcriber"]].drop_duplicates()
+            pick = transcribers.groupby("original_audio").sample(n=1,random_state=seed)
+            data = data.merge(transcribers, how="inner")
+
         cum_sec = data['duration'].cumsum()
         prev_idx = 0
         prev_sec = 0
@@ -95,13 +112,18 @@ class AsrETL(abc.ABC):
         for split, sec in splits.items():
             split_idx = cum_sec.searchsorted(prev_sec + sec)
             data.iloc[prev_idx:split_idx, split_col_idx] = split
-            logger.debug(f'Split {split} should get {split_idx-prev_idx} rows')
             prev_sec += sec
             prev_idx = split_idx
         is_sampled = data['split'].isin(splits.keys())  # discard unsampled data
         logger.info(f'Discarding {len(data) - is_sampled.sum()} unsampled data')
         data = data.loc[is_sampled]
         logger.debug(f'Split data has {data["split"].nunique()} splits')
+        nwavs = data['original_audio'].nunique()
+        ntrans = data['transcriber'].nunique()
+        nwavtrans = data[['original_audio', 'transcriber']].drop_duplicates().shape[0]
+        logger.debug(f"Stratified data has {nwavs} wavs")
+        logger.debug(f"Stratified data has {ntrans} scribers")
+        logger.debug(f"Stratified data has {nwavtrans} wav-scribers")
         return data
         
 

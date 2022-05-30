@@ -33,14 +33,14 @@ class BpcETL(AsrETL):
                 filter_inaudible=True,
                 filter_uncertain=True,
                 filter_numeric=True,
-                ambiguity=AmbiguityStrategy.RANDOM):
+                ambiguity: str='RANDOM'):
         super().__init__('police')
         self.transcripts_dir = DATASET_DIRS[cluster]['police_transcripts']
         self.mp3s_dir = DATASET_DIRS[cluster]['police_mp3s']
         self.filter_inaudible = filter_inaudible
         self.filter_uncertain = filter_uncertain
         self.filter_numeric = filter_numeric
-        self.ambiguity_strategy = ambiguity
+        self.ambiguity_strategy = AmbiguityStrategy[ambiguity.upper()]
         
 
     def extract(self) -> pd.DataFrame:
@@ -70,7 +70,7 @@ class BpcETL(AsrETL):
         unfiltered_data = data
         data = self._filter_exists(data, "original_audio")
         data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "original_audio")
+        # data = self._filter_corrupt(data, "original_audio")
         # Filter out missing transcripts
         missing = (data['text'].isna()) | (data['text'].str.len() == 0)
         logger.info(f'Discarding {missing.sum()} transcripts with no text.')
@@ -104,7 +104,9 @@ class BpcETL(AsrETL):
     
     def load(self,
             data: pd.DataFrame=None,
-            splits: dict=None) -> pd.DataFrame:
+            splits: dict=None,
+            seed: int=1234,
+            stratify: bool=False) -> pd.DataFrame:
         """
         Collect info on the transformed audio files and transcripts.
         Does NOT load waveforms into memory.
@@ -114,7 +116,7 @@ class BpcETL(AsrETL):
         if data is None:
             data = self._create_manifest()
         data = self._filter_exists(data, "audio", log=False)
-        data = self._sample_split(data, splits)
+        data = self._sample_split(data, splits, seed, stratify)
         self.describe(data, '-loaded')
         return data 
         
@@ -253,9 +255,7 @@ class BpcETL(AsrETL):
             ts_dir: Location of folder with transcripts csvs
         """
         ts_dir_files = os.listdir(ts_dir)
-        pattern = "transcripts\d{4}_\d{2}_\d{2}.csv"
-        # USE THIS ASAP!
-        # pattern = "transcripts2022_02_06.csv"
+        pattern = "transcripts2022_02_06.csv"
         ts_names = [x for x in ts_dir_files if re.match(pattern, x)]
         ts_paths = [os.path.join(ts_dir, x) for x in ts_names]
         audio_dfs = [self._parse_csv(x) for x in ts_paths]

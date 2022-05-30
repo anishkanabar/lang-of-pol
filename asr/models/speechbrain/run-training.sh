@@ -72,8 +72,16 @@ if [ "$CLUSTER" = "rcc" ]; then
 fi
 
 if [ "$CLUSTER" = "rcc" ]; then
+    # Stuff for URI team database
+    SCRIPT_PARENT=asr/models/speechbrain
+    TEAM_DB_INPUT=/project/graziul/ra/`whoami`/Input
+    CSV_LINE="`date`,$SCRIPT_PARENT/$TRAINPY,$SCRIPT_PARENT/$HPARAMS\n" 
+    echo $CSV_LINE >> $TEAM_DB_INPUT/hyperparameters.csv
+    
+    # Now run the job on cluster
     # this node is friendly --nodelist "midway3-0277" \
     # this node is friendly --nodelist "midway3-0286" \
+    # this node is friendly --nodelist "midway3-0279" \
     # run with --nonfinite_patience=0 as last arg to shortcut
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
@@ -82,6 +90,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
+            --nodelist "midway3-0286" \
             --gpus $GPUS \
             --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
@@ -96,11 +105,9 @@ elif [ "$CLUSTER" = "ai" ]; then
             --partition "$PARTITION" \
             --nodes $NODES \
             --gpus $GPUS \
-            --ntasks $NTASKS \
-            --gpus-per-task $GPU_TASKS \
-            --mem-per-cpu "$MEM_PER_CPU" \
+            --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
-            python "$TRAINPY" "$HPARAMS"
+            python "$TRAINPY" "$HPARAMS" --data_parallel_backend
 elif [ "$CLUSTER" = "ttic" ]; then
     srun -c "$GPUS" \
             --job-name "$JOB_NAME" \
