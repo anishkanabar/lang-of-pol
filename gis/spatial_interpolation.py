@@ -106,26 +106,6 @@ def blockgroups_to_beats(data,variables={},source_geo=None):
 
     return output
 
-# for popweighted variables: 
-# (1) calculate population of each fragment as an extensive variable
-# (2) multiply FAKE_mean_income by population of each fragment ("total_FAKE_mean_income")
-# (3) aggregate as above
-# (4) divide total_FAKE_mean_income of each beat by population of each beat
-
-# for margins of error:
-# (1) square to get variance
-# (2) aggregate as above
-# (3) take square root to return to margin of error
-# (Var(A+B)=Var(A)+Var(B)+2*Cov(A,B) and assume Cov(A,B) are uncorrelated for sampling error)
-
-# Matrix approach for extensive variables:
-# 1. Convert to array (sorted_block_groups x variables, contents = variable per block group)
-# (add NAs for missing block groups)
-# 2. Load crosswalk as array (sorted_beats x sorted_block_groups, contents = bg_frac)
-# (bg_frac = overlap area / block group area)
-# 3. Matrix multiplication: (sorted_beats x sorted_block_groups)*(sorted_block_groups x variables)= (sorted_beats x variables), contents = variable summed across block groups, weighted by fraction of each block group in beat
-
-# Comprehensive matrix approach:
 # 0. Square margins of error, multiply by weighting variable
 # 1. Convert to array (sorted_block_groups x variables, contents = variable per block group) (add NAs for missing block groups)
 # 2. Load crosswalk as array (sorted_beats x sorted_block_groups, contents = bg_frac)
