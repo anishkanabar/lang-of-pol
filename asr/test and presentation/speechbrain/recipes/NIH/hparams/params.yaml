@@ -1,0 +1,8 @@
+# ############################################################################
+# Environmental and Experiment parameters
+# ############################################################################
+
+cluster: rcc  # 'ai' or 'rcc'
+dataset_name: atc0  # 'librispeech' or 'radio' or 'atczero'
+num_train: 1028
+
