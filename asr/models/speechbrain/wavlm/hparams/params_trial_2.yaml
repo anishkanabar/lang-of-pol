@@ -1,0 +1,92 @@
+# ################################
+# Model: wav2vec2 + DNN + CTC
+# Augmentation: SpecAugment
+# Authors: Sung-Lin Yeh 2021
+#          Eric Chandler 2022
+# ################################
+
+# Seed needs to be set at top of yaml, before objects with parameters are made
+seed: 1987
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+trial: 2
+output_folder: !ref results/train_wavLM_transf/seed_<seed>/trial_<trial>
+save_folder: !ref <output_folder>/save
+train_log: !ref <output_folder>/train_log.txt
+ambiguity_strategy: ALL
+
+# Data files
+cluster: rcc  # 'ai' or 'rcc' or 'ttic'
+scratch_dir: /project/graziul/ra/pshroff/scratch
+dataset_name: police  #'librispeech' or 'police' or 'atczero'
+data_sample_rate: 22050
+splits:  # 1h / 10m / 10m
+    train: 3600
+    dev: 600
+    test: 600
+    
+#num_train: null
+#num_sec: 45000  # =10 training hours + no disambig
+skip_prep: False
+ckpt_interval_minutes: 25 # save checkpoint every N min
+
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv: !ref <output_folder>/test.csv
+
+wer_file: !ref <output_folder>/wer.txt
+wavlm_name: patrickvonplaten/wavlm-libri-clearn-100h-large
+wavlm_revision: models--partrickvonplaten--wavlm-libri-clean-100h-large/snapshots/e70e3a062ec399c46008ee55d1fb52c7ba338d5c/
+wavlm_hub: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
+model_sample_rate: 16000
+
+# Model Arguments 
+model_args:
+  model_name_or_path: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
+  cache_dir: !ref <output_folder>
+  freeze_feature_encoder: True 
+  hidden_dropout: 0.3
+  attention_dropout: 0.2
+
+# DataTrainingArguments 
+data_train_args:
+  dataset_name: police_asr
+  train_split_name: train+evaluation
+  test_split_name: test
+  overwrite_cache: True
+  audio_column_name: wav
+  text_column_name: wrd
+  preprocessing_num_workers: 20
+  max_duration_in_seconds: 10
+  min_duration_in_seconds: 0
+
+# Training Arguments
+training_args:
+  output_dir: !ref <output_folder>
+  overwrite_output_dir: True
+  group_by_length: True
+  per_device_train_batch_size: 8
+  evaluation_strategy: steps
+  num_train_epochs: 50
+  log_level: info
+  logging_dir: !ref <output_folder>
+  fp16: True
+  gradient_checkpointing: True
+  gradient_accumulation_steps: 5
+  save_steps: 300
+  eval_steps: 300
+  logging_steps: 300 
+  learning_rate: 0.05
+  weight_decay: 0.00001
+  warmup_steps: 1000
+  save_total_limit: 1
+  do_train: True
+  do_eval: True
+  lr_scheduler_type: polynomial
+  optim: adamw_torch
+  length_column_name: input_length
+
+sorting: ascending
+auto_mix_prec: False
+group_by_length: True
+evaluation_strategy: steps
+
