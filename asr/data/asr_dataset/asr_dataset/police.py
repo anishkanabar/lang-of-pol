@@ -14,6 +14,7 @@ from numbers import Real
 from numpy.random import default_rng
 from asr_dataset.base import AsrETL
 from asr_dataset.constants import DATASET_DIRS, Cluster
+import sys
 
 logger = logging.getLogger('asr.etl.bpc')
 
@@ -98,7 +99,10 @@ class BpcETL(AsrETL):
         # Filter out bad audio again after writing
         data = self._filter_exists(data, "audio")
         data = self._filter_empty(data, sample_rate)
-        data = self._filter_corrupt(data, "audio")
+        print("Filtered out exits and empty")
+        # if during training, it throws an error for invalid data or something, uncomment filter_corrupt
+        #data = self._filter_corrupt(data, "audio") 
+
         return data
 
     

@@ -11,7 +11,7 @@ usage() {
     echo "sh run-training.sh <path/to/train.py> <path/to/params.yaml> " >&2
     echo "Overrides are named args matching a hparam key" >&2
 }
-
+ 
 # Validate command line args: cluster
 if [[ `hostname` == *"midway3"* ]]; then
     CLUSTER="rcc"
@@ -33,7 +33,7 @@ fi
 # Define cluster-specific params
 if [ "$CLUSTER" = "rcc" ]; then
     OUTPUT_DIR="/project/graziul/ra/`whoami`/slurm_output"
-    TIMEOUT="06:00:00"
+    TIMEOUT="13:00:00"
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS
@@ -82,7 +82,9 @@ if [ "$CLUSTER" = "rcc" ]; then
     # this node is friendly --nodelist "midway3-0277" \
     # this node is friendly --nodelist "midway3-0286" \
     # this node is friendly --nodelist "midway3-0279" \
+    # this node is friendly --nodelist "midway3-0284" \
     # run with --nonfinite_patience=0 as last arg to shortcut
+    
     srun --job-name "$JOB_NAME" \
             --mail-user $MAIL_USER \
             --mail-type $MAIL_TYPE \
@@ -90,7 +92,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --nodelist "midway3-0286" \
+            --nodelist "midway3-0278" \
             --gpus $GPUS \
             --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \

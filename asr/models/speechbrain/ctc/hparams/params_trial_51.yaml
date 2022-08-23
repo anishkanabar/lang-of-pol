@@ -17,30 +17,34 @@ train_log: !ref <output_folder>/train_log.txt
 
 # Data files
 cluster: rcc  # 'ai' or 'rcc' or 'ttic'
-scratch_dir: /project/graziul/ra/echandler/scratch
+scratch_dir: /project/graziul/ra/pshroff/scratch
 dataset_name: police  #'librispeech' or 'police' or 'atczero'
 data_sample_rate: 22050
-num_train: null
-num_sec: 45000  # =10 training hours + no disambig
+splits:  # 1h / 10m / 10m
+    train: 3600
+    dev: 600
+    test: 600
+#num_train: null
+#num_sec: 45000  # =10 training hours + no disambig
 skip_prep: False
 ckpt_interval_minutes: 25 # save checkpoint every N min
-split_ratios:
-    train: .8
-    dev: .1
-    test: .1
-train_splits: ["train"]
-dev_splits: ["dev"]
-test_splits: ["test"]
+#split_ratios:
+#    train: .8
+#    dev: .1
+#    test: .1
+#train_splits: ["train"]
+#dev_splits: ["dev"]
+#test_splits: ["test"]
 train_csv: !ref <output_folder>/train.csv
 valid_csv: !ref <output_folder>/dev.csv
-test_csv: 
-    - !ref <output_folder>/test.csv
+test_csv: !ref <output_folder>/test.csv
+ambiguity_strategy: ALL
 
 # URL for the biggest Fairseq english wav2vec2 model.
 # Using pre-downladed version because compute nodes firewalled...
 # Downloaded via huggingface_hub.snapshot_download() (see fetch_model.py for example)
 wav2vec2_name: facebook/wav2vec2-large-960h-lv60-self
-wav2vec2_revision: facebook--wav2vec2-large-960h-lv60-self.main.6f0b7949d197194ee1f3659def27831054cfc06f
+wav2vec2_revision: facebook__wav2vec2-large-960h-lv60-self.main.54074b1c16f4de6a5ad59affb4caa8f2ea03a119
 wav2vec2_hub: !ref <scratch_dir>/<wav2vec2_name>/<wav2vec2_revision>
 model_sample_rate: 16000
 
