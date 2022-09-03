@@ -97,7 +97,7 @@ def create_basic_manifests(cluster: str,
     else:
         raise NotImplementedError('dataset ' + dataset_name)
 
-    data = etl.etl(splits=splits, seed=seed, stratify=stratify)
+    data = etl.etl(splits=splits, seed=seed) #stratify=stratify
     logger.debug(f'Loaded data has {data["split"].nunique()} splits')
 
     # Write separate df csv per split

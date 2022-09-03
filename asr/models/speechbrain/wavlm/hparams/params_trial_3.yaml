@@ -9,7 +9,7 @@
 seed: 1987
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 trial: 3
-output_folder: !ref results/train_wavLM_transf/seed_<seed>/trial_<trial>
+output_folder: !ref results/train_wavLM/seed_<seed>/trial_<trial>
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 ambiguity_strategy: ALL
@@ -37,12 +37,9 @@ wer_file: !ref <output_folder>/wer.txt
 # URL for the biggest Fairseq english wav2vec2 model.
 # Using pre-downladed version because compute nodes firewalled...
 # Downloaded via huggingface_hub.snapshot_download() (see fetch_model.py for example)
-#wavlm_name: microsoft/wavlm-large
-#wavlm_revision: models--microsoft--wavlm-large/snapshots/c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c/
-#wavlm_hub: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
-wavlm_name: patrickvonplaten/wavlm-libri-clearn-100h-large
-wavlm_revision: models--partrickvonplaten--wavlm-libri-clean-100h-large/snapshots/e70e3a062ec399c46008ee55d1fb52c7ba338d5c/
-wavlm_hub: !ref <scratch_dir>/<wavlm_hub>/<wavlm_revision>
+wavlm_name: microsoft/wavlm-large
+wavlm_revision: models--microsoft--wavlm-large/snapshots/c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c/
+wavlm_hub: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
 model_sample_rate: 16000
 
 # Model Arguments 
@@ -52,6 +49,8 @@ model_args:
   freeze_feature_encoder: True 
   hidden_dropout: 0.3
   attention_dropout: 0.2
+  feat_extract_activation: relu
+  hidden_act: relu
 
 # DataTrainingArguments 
 data_train_args:
