@@ -8,8 +8,8 @@
 # Seed needs to be set at top of yaml, before objects with parameters are made
 seed: 1987
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
-trial: 2
-output_folder: !ref results/train_wavLM_transf/seed_<seed>/trial_<trial>
+trial: 5
+output_folder: !ref results/train_wavLM/seed_<seed>/trial_<trial>
 save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 ambiguity_strategy: ALL
@@ -20,9 +20,9 @@ scratch_dir: /project/graziul/ra/pshroff/scratch
 dataset_name: police  #'librispeech' or 'police' or 'atczero'
 data_sample_rate: 22050
 splits:  # 1h / 10m / 10m
-    train: 4200
-    dev: 600
-    test: 600
+    train: 36000
+    dev: 4500
+    test: 4500
     
 #num_train: null
 #num_sec: 45000  # =10 training hours + no disambig
@@ -34,6 +34,9 @@ valid_csv: !ref <output_folder>/dev.csv
 test_csv: !ref <output_folder>/test.csv
 
 wer_file: !ref <output_folder>/wer.txt
+# URL for the biggest Fairseq english wav2vec2 model.
+# Using pre-downladed version because compute nodes firewalled...
+# Downloaded via huggingface_hub.snapshot_download() (see fetch_model.py for example)
 wavlm_name: microsoft/wavlm-large
 wavlm_revision: models--microsoft--wavlm-large/snapshots/c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c/
 wavlm_hub: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
@@ -44,8 +47,10 @@ model_args:
   model_name_or_path: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
   cache_dir: !ref <output_folder>
   freeze_feature_encoder: True 
-  hidden_dropout: 0.3
-  attention_dropout: 0.2
+  hidden_dropout: 0.25
+  attention_dropout: 0.15
+  feat_extract_activation: relu
+  hidden_act: relu
 
 # DataTrainingArguments 
 data_train_args:
@@ -64,20 +69,22 @@ training_args:
   output_dir: !ref <output_folder>
   overwrite_output_dir: True
   group_by_length: True
-  per_device_train_batch_size: 3
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
   evaluation_strategy: steps
-  num_train_epochs: 25
+  num_train_epochs: 3
   log_level: info
   logging_dir: !ref <output_folder>
   fp16: True
   gradient_checkpointing: True
-  gradient_accumulation_steps: 3
-  save_steps: 100
-  eval_steps: 100
-  logging_steps: 100 
-  learning_rate: 0.03
-  weight_decay: 0.00002
-  warmup_steps: 1000
+  gradient_accumulation_steps: 2
+  save_steps: 300
+  eval_steps: 300
+  logging_steps: 300 
+  learning_rate: 0.0004
+  weight_decay: 0.00003
+  warmup_steps: 500
+  layerdrop: 0.0
   save_total_limit: 1
   do_train: True
   do_eval: True

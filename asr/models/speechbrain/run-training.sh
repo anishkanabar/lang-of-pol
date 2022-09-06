@@ -33,7 +33,7 @@ fi
 # Define cluster-specific params
 if [ "$CLUSTER" = "rcc" ]; then
     OUTPUT_DIR="/project/graziul/ra/`whoami`/slurm_output"
-    TIMEOUT="13:00:00"
+    TIMEOUT="36:00:00"
     PARTITION="gpu"
     ACCOUNT="pi-graziul"
     # Trying nodes in order in case some have weird cuda BS
@@ -92,7 +92,7 @@ if [ "$CLUSTER" = "rcc" ]; then
             --error "$ERROR" \
             --partition "$PARTITION" \
             --nodes "$NODES" \
-            --nodelist "midway3-0278" \
+            --nodelist "midway3-0277" \
             --gpus $GPUS \
             --mem-per-gpu "$MEM_PER_GPU" \
             --time "$TIMEOUT" \
