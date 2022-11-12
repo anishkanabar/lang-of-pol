@@ -1,0 +1,255 @@
+# Generated 2022-05-13 from:
+# /project/graziul/ra/echandler/repos/uri/asr/models/speechbrain/seq2seq/hparams/params_trial_1.yaml
+# yamllint disable
+# ############################################################################
+# Model: E2E ASR with attention-based ASR
+# Encoder: CRDNN model
+# Decoder: GRU + beamsearch + RNNLM
+# Tokens: BPE with unigram
+# losses: CTC+ NLL
+# Training: BPC
+# ############################################################################
+
+seed: 1
+__set_seed: !apply:torch.manual_seed [1]
+trial: 1
+# Vocab size should match tokenizer config
+vocab_size: 4096
+# Tokenizer trials are not necessarily in sync with this models trials
+tokenizer_file: results/tokenizer/bpe_4096/trial_1/4096_bpe.model
+output_folder: results/seq2seq/no_lm/seed_1/trial_1
+cer_file: results/seq2seq/seed_1/trial_1/cer.txt
+wer_file: results/seq2seq/seed_1/trial_1/wer.txt
+save_folder: results/seq2seq/seed_1/trial_1/save
+train_log: results/seq2seq/seed_1/trial_1/train_log.txt
+
+# Data files
+cluster: rcc
+scratch_dir: /project/graziul/ra/echandler/scratch
+dataset_name: atczero
+data_sample_rate: 8000
+num_train:
+num_sec:
+split_ratios:
+  train: .8
+  dev: .1
+  test: .1
+train_csv: results/seq2seq/seed_1/trial_1/train.csv
+valid_csv: results/seq2seq/seed_1/trial_1/dev.csv
+test_csv:
+- results/seq2seq/seed_1/trial_1/test.csv
+
+# rirs data downloaded here if needed
+data_folder_rirs: /project/graziul/ra/echandler/scratch/rirs
+skip_prep: false
+ckpt_interval_minutes: 15 # save checkpoint every N min
+
+# Training parameters
+number_of_epochs: 40
+number_of_ctc_epochs: 10
+batch_size: 3
+lr: 0.0003
+ctc_weight: 0.5
+sorting: ascending
+dynamic_batching: true
+
+dynamic_batch_sampler:
+  feats_hop_size: 0.01
+  max_batch_len: 4000  # in terms of frames
+  left_bucket_len: 200
+  multiplier: 1.1
+  shuffle: false  # if true re-creates batches at each epoch shuffling examples.
+
+# Feature parameters
+model_sample_rate: 16000
+n_fft: 400
+n_mels: 40
+
+opt_class: !name:torch.optim.Adam
+  lr: 0.0003
+
+# Dataloader options
+train_dataloader_opts:
+  batch_size: 3
+
+valid_dataloader_opts:
+  batch_size: 3
+
+test_dataloader_opts:
+  batch_size: 3
+
+# Model parameters
+activation: &id001 !name:torch.nn.LeakyReLU
+dropout: 0.15
+cnn_blocks: 2
+cnn_channels: (128, 256)
+inter_layer_pooling_size: (2, 2)
+cnn_kernelsize: (3, 3)
+time_pooling_size: 4
+rnn_class: &id002 !name:speechbrain.nnet.RNN.LSTM
+rnn_layers: 4
+rnn_neurons: 1024
+rnn_bidirectional: true
+dnn_blocks: 2
+dnn_neurons: 512
+emb_size: 128
+dec_neurons: 1024
+output_neurons: 4096               # Number of tokens
+blank_index: 0
+bos_index: 0
+eos_index: 0
+unk_index: 0
+
+# Decoding parameters
+min_decode_ratio: 0.0
+max_decode_ratio: 1.0
+beam_size: 80
+eos_threshold: 1.5
+using_max_attn_shift: true
+max_attn_shift: 240
+ctc_weight_decode: 0.0
+coverage_penalty: 1.5
+temperature: 1.25
+
+epoch_counter: &id012 !new:speechbrain.utils.epoch_loop.EpochCounter
+
+  limit: 40
+
+normalize: &id008 !new:speechbrain.processing.features.InputNormalization
+   # commented out because having trouble loading rirs
+   # env_corrupt: !ref <env_corrupt>
+   #lm_model: !ref <lm_model>
+
+  norm_type: global
+
+compute_features: !new:speechbrain.lobes.features.Fbank
+  sample_rate: 16000
+  n_fft: 400
+  n_mels: 40
+
+env_corrupt: !new:speechbrain.lobes.augment.EnvCorrupt
+  openrir_folder: /project/graziul/ra/echandler/scratch/rirs
+  babble_prob: 0.0
+  reverb_prob: 0.0
+  noise_prob: 1.0
+  noise_snr_low: 0
+  noise_snr_high: 15
+
+augmentation: !new:speechbrain.lobes.augment.TimeDomainSpecAugment
+  sample_rate: 16000
+  speeds: [95, 100, 105]
+
+enc: &id003 !new:speechbrain.lobes.models.CRDNN.CRDNN
+  input_shape: [null, null, 40]
+  activation: *id001
+  dropout: 0.15
+  cnn_blocks: 2
+  cnn_channels: (128, 256)
+  cnn_kernelsize: (3, 3)
+  inter_layer_pooling_size: (2, 2)
+  time_pooling: true
+  using_2d_pooling: false
+  time_pooling_size: 4
+  rnn_class: *id002
+  rnn_layers: 4
+  rnn_neurons: 1024
+  rnn_bidirectional: true
+  rnn_re_init: true
+  dnn_blocks: 2
+  dnn_neurons: 512
+  use_rnnp: false
+
+emb: &id004 !new:speechbrain.nnet.embedding.Embedding
+  num_embeddings: 4096
+  embedding_dim: 128
+
+dec: &id005 !new:speechbrain.nnet.RNN.AttentionalRNNDecoder
+  enc_dim: 512
+  input_size: 128
+  rnn_type: gru
+  attn_type: location
+  hidden_size: 1024
+  attn_dim: 1024
+  num_layers: 1
+  scaling: 1.0
+  channels: 10
+  kernel_size: 100
+  re_init: true
+  dropout: 0.15
+
+ctc_lin: &id006 !new:speechbrain.nnet.linear.Linear
+  input_size: 512
+  n_neurons: 4096
+
+seq_lin: &id007 !new:speechbrain.nnet.linear.Linear
+  input_size: 1024
+  n_neurons: 4096
+
+log_softmax: !new:speechbrain.nnet.activations.Softmax
+  apply_log: true
+
+ctc_cost: !name:speechbrain.nnet.losses.ctc_loss
+  blank_index: 0
+
+seq_cost: !name:speechbrain.nnet.losses.nll_loss
+  label_smoothing: 0.1
+
+# Models
+modules:
+  enc: *id003
+  emb: *id004
+  dec: *id005
+  ctc_lin: *id006
+  seq_lin: *id007
+  normalize: *id008
+model: &id010 !new:torch.nn.ModuleList
+- [*id003, *id004, *id005, *id006, *id007]
+tokenizer: &id009 !new:sentencepiece.SentencePieceProcessor
+
+pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
+  collect_in: results/seq2seq/seed_1/trial_1/save/tokenizer
+  loadables:
+    tokenizer: *id009
+  paths:
+    tokenizer: results/tokenizer/bpe_4096/trial_1/4096_bpe.model
+
+beam_search: !new:speechbrain.decoders.S2SRNNBeamSearcher
+  embedding: *id004
+  decoder: *id005
+  linear: *id007
+  ctc_linear: *id006
+  bos_index: 0
+  eos_index: 0
+  blank_index: 0
+  min_decode_ratio: 0.0
+  max_decode_ratio: 1.0
+  beam_size: 80
+  eos_threshold: 1.5
+  using_max_attn_shift: true
+  max_attn_shift: 240
+  coverage_penalty: 1.5
+  temperature: 1.25
+
+lr_annealing: &id011 !new:speechbrain.nnet.schedulers.NewBobScheduler
+  initial_value: 0.0003
+  improvement_threshold: 0.0025
+  annealing_factor: 0.8
+  patient: 0
+
+checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
+  checkpoints_dir: results/seq2seq/seed_1/trial_1/save
+  recoverables:
+    model: *id010
+    scheduler: *id011
+    normalizer: *id008
+    counter: *id012
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+  save_file: results/seq2seq/seed_1/trial_1/train_log.txt
+
+remove_spaces: false
+split_tokens: &id013 !apply:operator.not_ [false]
+
+wer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+
+cer_computer: !name:speechbrain.utils.metric_stats.ErrorRateStats
+  split_tokens: *id013

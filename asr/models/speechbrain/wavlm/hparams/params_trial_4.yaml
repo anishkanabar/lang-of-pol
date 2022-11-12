@@ -1,0 +1,97 @@
+# ################################
+# Model: wav2vec2 + DNN + CTC
+# Augmentation: SpecAugment
+# Authors: Sung-Lin Yeh 2021
+#          Eric Chandler 2022
+# ################################
+
+# Seed needs to be set at top of yaml, before objects with parameters are made
+seed: 1987
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+trial: 4
+output_folder: !ref results/train_wavLM/seed_<seed>/trial_<trial>
+save_folder: !ref <output_folder>/save
+train_log: !ref <output_folder>/train_log.txt
+ambiguity_strategy: ALL
+
+# Data files
+cluster: rcc  # 'ai' or 'rcc' or 'ttic'
+scratch_dir: /project/graziul/ra/pshroff/scratch
+dataset_name: librispeech  #'librispeech' or 'police' or 'atczero'
+data_sample_rate: 16000
+splits:  # 1h / 10m / 10m
+    train: 42000
+    dev: 4500
+    test: 4500
+    
+#num_train: null
+#num_sec: 45000  # =10 training hours + no disambig
+skip_prep: False
+ckpt_interval_minutes: 25 # save checkpoint every N min
+
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev.csv
+test_csv: !ref <output_folder>/test.csv
+
+wer_file: !ref <output_folder>/wer.txt
+# URL for the biggest Fairseq english wav2vec2 model.
+# Using pre-downladed version because compute nodes firewalled...
+# Downloaded via huggingface_hub.snapshot_download() (see fetch_model.py for example)
+wavlm_name: microsoft/wavlm-large
+wavlm_revision: models--microsoft--wavlm-large/snapshots/c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c/
+wavlm_hub: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
+model_sample_rate: 16000
+
+# Model Arguments 
+model_args:
+  model_name_or_path: !ref <scratch_dir>/<wavlm_name>/<wavlm_revision>
+  cache_dir: !ref <output_folder>
+  freeze_feature_encoder: True 
+  hidden_dropout: 0.3
+  attention_dropout: 0.2
+
+# DataTrainingArguments 
+data_train_args:
+  dataset_name: police_asr
+  train_split_name: train+evaluation
+  test_split_name: test
+  overwrite_cache: True
+  audio_column_name: wav
+  text_column_name: wrd
+  preprocessing_num_workers: 20
+  max_duration_in_seconds: 20
+  min_duration_in_seconds: 0
+
+# Training Arguments
+training_args:
+  output_dir: !ref <output_folder>
+  overwrite_output_dir: True
+  group_by_length: True
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  evaluation_strategy: steps
+  num_train_epochs: 10
+  log_level: info
+  logging_dir: !ref <output_folder>
+  fp16: True
+  gradient_checkpointing: True
+  gradient_accumulation_steps: 2
+  save_steps: 150
+  eval_steps: 150
+  logging_steps: 150 
+  learning_rate: 0.0003
+  weight_decay: 0.00001
+  warmup_steps: 500
+  save_total_limit: 1
+  layerdrop: 0.0
+  do_train: True
+  do_eval: True
+  lr_scheduler_type: polynomial
+  optim: adamw_torch
+  length_column_name: input_length
+
+sorting: ascending
+auto_mix_prec: False
+group_by_length: True
+evaluation_strategy: steps
+

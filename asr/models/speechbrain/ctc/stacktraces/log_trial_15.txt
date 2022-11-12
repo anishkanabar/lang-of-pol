@@ -1,0 +1,342 @@
+2022-02-19 02:29:48,975 - speechbrain.core - INFO - Beginning experiment!
+2022-02-19 02:29:48,975 - speechbrain.core - INFO - Experiment folder: results/train_wav2vec2_char/seed_1986/trial_15
+2022-02-19 02:29:50,397 - speechbrain.utils.superpowers - DEBUG - appdirs==1.4.4
+-e git+ssh://git@github.com/UrbanResiliencyInitiative/lang-of-pol.git@3750bd110afc792cec4ca86b7720f608b7cda5f4#egg=asr_dataset&subdirectory=asr/data/asr_dataset
+attrs==21.4.0
+audioread==2.1.9
+black==19.10b0
+certifi==2021.10.8
+cffi==1.15.0
+cfgv==3.3.1
+charset-normalizer==2.0.12
+click==8.0.4
+decorator==5.1.1
+distlib==0.3.4
+entrypoints==0.3
+filelock==3.6.0
+flake8==3.7.9
+huggingface-hub==0.4.0
+HyperPyYAML==1.0.0
+identify==2.4.10
+idna==3.3
+joblib==1.1.0
+librosa==0.9.1
+llvmlite==0.38.0
+mccabe==0.6.1
+more-itertools==8.12.0
+nodeenv==1.6.0
+numba==0.55.1
+numpy==1.21.5
+packaging==21.3
+pandas==1.4.1
+pathspec==0.9.0
+platformdirs==2.5.0
+pluggy==0.13.1
+pooch==1.6.0
+pre-commit==2.17.0
+py==1.11.0
+pycodestyle==2.5.0
+pycparser==2.21
+pyflakes==2.1.1
+pyparsing==3.0.7
+pytest==5.4.1
+python-dateutil==2.8.2
+pytz==2021.3
+PyYAML==6.0
+regex==2022.1.18
+requests==2.27.1
+resampy==0.2.2
+ruamel.yaml==0.17.21
+ruamel.yaml.clib==0.2.6
+sacremoses==0.0.47
+scikit-learn==1.0.2
+scipy==1.8.0
+sentencepiece==0.1.96
+six==1.16.0
+SoundFile==0.10.3.post1
+-e git+ssh://git@github.com/UrbanResiliencyInitiative/lang-of-pol.git@3750bd110afc792cec4ca86b7720f608b7cda5f4#egg=speechbrain&subdirectory=asr/models/speechbrain
+threadpoolctl==3.1.0
+tokenizers==0.11.5
+toml==0.10.2
+torch==1.10.0
+torchaudio==0.10.0
+tqdm==4.62.3
+transformers==4.16.2
+typed-ast==1.5.2
+typing_extensions==4.1.1
+urllib3==1.26.8
+virtualenv==20.13.1
+wcwidth==0.2.5
+yamllint==1.23.0
+
+
+2022-02-19 02:29:50,471 - speechbrain.utils.superpowers - DEBUG - 3750bd1
+
+
+2022-02-19 02:29:52,349 - asr.etl - INFO - atczero-extracted dataset stats:
+2022-02-19 02:29:52,349 - asr.etl - INFO - 	Row count = 30436
+2022-02-19 02:29:52,350 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-02-19 02:29:52,350 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-02-19 02:29:52,350 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-02-19 02:29:52,351 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-02-19 02:29:52,351 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-02-19 02:29:52,377 - asr.etl - INFO - Discarding 0 missing audios.
+2022-02-19 02:29:52,992 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-02-19 02:30:06,582 - asr.etl - INFO - Discarding 0 corrupted mp3s
+2022-02-19 02:30:06,589 - asr.etl - INFO - Writing utterance audio clips.
+2022-02-19 02:30:06,592 - asr.etl - DEBUG - Writing file 0 of 52
+2022-02-19 02:30:06,957 - asr.etl - DEBUG - Writing file 1 of 52
+2022-02-19 02:30:07,078 - asr.etl - DEBUG - Writing file 2 of 52
+2022-02-19 02:30:07,236 - asr.etl - DEBUG - Writing file 3 of 52
+2022-02-19 02:30:07,411 - asr.etl - DEBUG - Writing file 4 of 52
+2022-02-19 02:30:07,528 - asr.etl - DEBUG - Writing file 5 of 52
+2022-02-19 02:30:07,628 - asr.etl - DEBUG - Writing file 6 of 52
+2022-02-19 02:30:07,821 - asr.etl - DEBUG - Writing file 7 of 52
+2022-02-19 02:30:08,376 - asr.etl - DEBUG - Writing file 8 of 52
+2022-02-19 02:30:08,597 - asr.etl - DEBUG - Writing file 9 of 52
+2022-02-19 02:30:08,723 - asr.etl - DEBUG - Writing file 10 of 52
+2022-02-19 02:30:08,941 - asr.etl - DEBUG - Writing file 11 of 52
+2022-02-19 02:30:09,090 - asr.etl - DEBUG - Writing file 12 of 52
+2022-02-19 02:30:09,259 - asr.etl - DEBUG - Writing file 13 of 52
+2022-02-19 02:30:09,544 - asr.etl - DEBUG - Writing file 14 of 52
+2022-02-19 02:30:09,622 - asr.etl - DEBUG - Writing file 15 of 52
+2022-02-19 02:30:09,753 - asr.etl - DEBUG - Writing file 16 of 52
+2022-02-19 02:30:09,965 - asr.etl - DEBUG - Writing file 17 of 52
+2022-02-19 02:30:10,097 - asr.etl - DEBUG - Writing file 18 of 52
+2022-02-19 02:30:10,278 - asr.etl - DEBUG - Writing file 19 of 52
+2022-02-19 02:30:10,430 - asr.etl - DEBUG - Writing file 20 of 52
+2022-02-19 02:30:10,542 - asr.etl - DEBUG - Writing file 21 of 52
+2022-02-19 02:30:10,638 - asr.etl - DEBUG - Writing file 22 of 52
+2022-02-19 02:30:10,900 - asr.etl - DEBUG - Writing file 23 of 52
+2022-02-19 02:30:11,035 - asr.etl - DEBUG - Writing file 24 of 52
+2022-02-19 02:30:11,105 - asr.etl - DEBUG - Writing file 25 of 52
+2022-02-19 02:30:11,211 - asr.etl - DEBUG - Writing file 26 of 52
+2022-02-19 02:30:11,361 - asr.etl - DEBUG - Writing file 27 of 52
+2022-02-19 02:30:11,466 - asr.etl - DEBUG - Writing file 28 of 52
+2022-02-19 02:30:11,554 - asr.etl - DEBUG - Writing file 29 of 52
+2022-02-19 02:30:11,775 - asr.etl - DEBUG - Writing file 30 of 52
+2022-02-19 02:30:11,863 - asr.etl - DEBUG - Writing file 31 of 52
+2022-02-19 02:30:12,033 - asr.etl - DEBUG - Writing file 32 of 52
+2022-02-19 02:30:12,088 - asr.etl - DEBUG - Writing file 33 of 52
+2022-02-19 02:30:12,181 - asr.etl - DEBUG - Writing file 34 of 52
+2022-02-19 02:30:12,267 - asr.etl - DEBUG - Writing file 35 of 52
+2022-02-19 02:30:12,330 - asr.etl - DEBUG - Writing file 36 of 52
+2022-02-19 02:30:12,413 - asr.etl - DEBUG - Writing file 37 of 52
+2022-02-19 02:30:12,498 - asr.etl - DEBUG - Writing file 38 of 52
+2022-02-19 02:30:12,592 - asr.etl - DEBUG - Writing file 39 of 52
+2022-02-19 02:30:12,746 - asr.etl - DEBUG - Writing file 40 of 52
+2022-02-19 02:30:12,821 - asr.etl - DEBUG - Writing file 41 of 52
+2022-02-19 02:30:12,884 - asr.etl - DEBUG - Writing file 42 of 52
+2022-02-19 02:30:13,072 - asr.etl - DEBUG - Writing file 43 of 52
+2022-02-19 02:30:13,141 - asr.etl - DEBUG - Writing file 44 of 52
+2022-02-19 02:30:13,251 - asr.etl - DEBUG - Writing file 45 of 52
+2022-02-19 02:30:13,380 - asr.etl - DEBUG - Writing file 46 of 52
+2022-02-19 02:30:13,589 - asr.etl - DEBUG - Writing file 47 of 52
+2022-02-19 02:30:13,679 - asr.etl - DEBUG - Writing file 48 of 52
+2022-02-19 02:30:13,807 - asr.etl - DEBUG - Writing file 49 of 52
+2022-02-19 02:30:13,928 - asr.etl - DEBUG - Writing file 50 of 52
+2022-02-19 02:30:14,007 - asr.etl - DEBUG - Writing file 51 of 52
+2022-02-19 02:30:14,104 - asr.etl - INFO - Writing audio took 0:00:07.514881.
+2022-02-19 02:30:14,297 - asr.etl - INFO - Discarding 0 missing audios.
+2022-02-19 02:30:14,809 - asr.etl - INFO - Discarding 0 too_short mp3s.
+2022-02-19 02:30:48,500 - asr.etl - INFO - Discarding 0 corrupted mp3s
+2022-02-19 02:30:48,509 - asr.etl - INFO - atczero-transformed dataset stats:
+2022-02-19 02:30:48,509 - asr.etl - INFO - 	Row count = 30436
+2022-02-19 02:30:48,510 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-02-19 02:30:48,510 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-02-19 02:30:48,510 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-02-19 02:30:48,511 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-02-19 02:30:48,511 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-02-19 02:30:48,809 - asr.etl - INFO - atczero-loaded dataset stats:
+2022-02-19 02:30:48,809 - asr.etl - INFO - 	Row count = 30436
+2022-02-19 02:30:48,810 - asr.etl - INFO - 	Min duration = 0.12 (sec)
+2022-02-19 02:30:48,810 - asr.etl - INFO - 	Max duration = 111.98 (sec)
+2022-02-19 02:30:48,810 - asr.etl - INFO - 	Mean duration = 3.10 (sec)
+2022-02-19 02:30:48,811 - asr.etl - INFO - 	Stdev duration = 1.99 (sec)
+2022-02-19 02:30:48,811 - asr.etl - INFO - 	Total duration = 1 days 02:11:15.222770
+2022-02-19 02:30:48,828 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1986/trial_15/train.csv...
+2022-02-19 02:30:49,119 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1986/trial_15/dev.csv...
+2022-02-19 02:30:49,155 - bpc_prepare - INFO - Preparing results/train_wav2vec2_char/seed_1986/trial_15/test.csv...
+2022-02-19 02:30:49,246 - asr.prepare.ctc - INFO - Filtering out 3955 audio < 1.5 sec
+2022-02-19 02:30:49,405 - asr.prepare.ctc - INFO - Filtering out 482 audio < 1.5 sec
+2022-02-19 02:30:49,436 - asr.prepare.ctc - INFO - Filtering out 485 audio < 1.5 sec
+2022-02-19 02:30:49,733 - speechbrain.dataio.encoder - DEBUG - Would load categorical encoding from results/train_wav2vec2_char/seed_1986/trial_15/save/label_encoder.txt, but file doesn't exist yet.
+2022-02-19 02:30:50,081 - speechbrain.dataio.encoder - INFO - Moving label 'T' from index 0, because '<blank>' was put at its place.
+2022-02-19 02:30:50,081 - speechbrain.dataio.encoder - INFO - Moving label 'W' from index 1, because '<bos>' was put at its place.
+2022-02-19 02:30:50,081 - speechbrain.dataio.encoder - INFO - Moving label 'O' from index 2, because '<eos>' was put at its place.
+2022-02-19 02:30:50,083 - speechbrain.dataio.encoder - INFO - Load called, but CTCTextEncoder is not empty. Loaded data will overwrite everything. This is normal if there is e.g. an unk label defined at init.
+2022-02-19 02:30:50,084 - speechbrain.dataio.encoder - DEBUG - Loaded categorical encoding from results/train_wav2vec2_char/seed_1986/trial_15/save/label_encoder.txt
+2022-02-19 02:30:50,084 - speechbrain.core - INFO - Info: auto_mix_prec arg overridden by command line input
+2022-02-19 02:30:50,084 - speechbrain.core - INFO - Info: ckpt_interval_minutes arg from hparam file is used
+2022-02-19 02:30:54,619 - speechbrain.core - INFO - 317.6M trainable parameters in ASR
+2022-02-19 02:30:54,622 - speechbrain.utils.checkpoints - INFO - Would load a checkpoint here, but none found yet.
+2022-02-19 02:30:54,623 - speechbrain.utils.epoch_loop - INFO - Going into epoch 1
+2022-02-19 02:30:54,803 - speechbrain.core - WARNING - Loss is nan.
+2022-02-19 02:30:54,852 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,853 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,854 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,855 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,856 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,857 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+        nan, nan, nan, nan, nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,857 - speechbrain.core - WARNING - Patience not yet exhausted, ignoring this batch.
+2022-02-19 02:30:54,892 - speechbrain.core - WARNING - Loss is nan.
+2022-02-19 02:30:54,939 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,940 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,941 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,942 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,943 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,944 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+        nan, nan, nan, nan, nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:54,944 - speechbrain.core - WARNING - Patience not yet exhausted, ignoring this batch.
+2022-02-19 02:30:54,983 - speechbrain.core - WARNING - Loss is nan.
+2022-02-19 02:30:55,035 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,036 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,037 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,038 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,039 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,040 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+        nan, nan, nan, nan, nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,040 - speechbrain.core - WARNING - Patience not yet exhausted, ignoring this batch.
+2022-02-19 02:30:55,082 - speechbrain.core - WARNING - Loss is nan.
+2022-02-19 02:30:55,136 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,137 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,138 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,139 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan,  ..., nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,140 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,141 - speechbrain.core - WARNING - Parameter is not finite: Parameter containing:
+tensor([nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+        nan, nan, nan, nan, nan, nan, nan], device='cuda:0',
+       requires_grad=True)
+2022-02-19 02:30:55,142 - speechbrain.core - ERROR - Exception:
+Traceback (most recent call last):
+  File "/share/data/speech/Data/echandler/repos/uri/asr/models/speechbrain/recipes/BPC/ctc/train_with_wav2vec.py", line 342, in <module>
+    asr_brain.fit(
+  File "/share/data/speech/Data/echandler/repos/uri/asr/models/speechbrain/speechbrain/core.py", line 1030, in fit
+    loss = self.fit_batch(batch)
+  File "/share/data/speech/Data/echandler/repos/uri/asr/models/speechbrain/recipes/BPC/ctc/train_with_wav2vec.py", line 104, in fit_batch
+    if self.check_gradients(loss):
+  File "/share/data/speech/Data/echandler/repos/uri/asr/models/speechbrain/speechbrain/core.py", line 886, in check_gradients
+    raise ValueError(
+ValueError: Loss is not finite and patience is exhausted. To debug, wrap `fit()` with autograd's `detect_anomaly()`, e.g.
+
+with torch.autograd.detect_anomaly():
+	brain.fit(...)

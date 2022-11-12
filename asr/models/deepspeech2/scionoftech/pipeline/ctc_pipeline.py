@@ -1,0 +1,345 @@
+import os
+import logging
+from typing import List
+import numpy as np
+import random
+import tensorflow as tf
+from tensorflow import keras
+import pandas as pd
+from concurrent.futures import ThreadPoolExecutor, wait
+# from tensorflow.keras.layers import *
+from tensorflow.keras.models import Model
+import sys
+
+sys.path.append("..")
+from deepasr.pipeline import Pipeline
+from deepasr.augmentation import Augmentation
+from deepasr.decoder import Decoder
+from deepasr.features import FeaturesExtractor
+from deepasr.vocab import Alphabet
+from deepasr.utils import read_audio, save_data
+from deepasr.model import compile_model
+
+logger = logging.getLogger('asr.pipeline')
+
+
+class CTCPipeline(Pipeline):
+    """
+    The pipeline is responsible for connecting a neural network model with
+    all non-differential transformations (features extraction or decoding),
+    and dependencies. Components are independent.
+    """
+
+    def __init__(self,
+                 alphabet: Alphabet,
+                 features_extractor: FeaturesExtractor,
+                 model: keras.Model,
+                 optimizer: keras.optimizers.Optimizer,
+                 decoder: Decoder,
+                 sample_rate: int,
+                 mono: True,
+                 label_len: int = 0,
+                 multi_gpu: bool = True,
+                 temp_model: keras.Model = None):
+        self._alphabet = alphabet
+        self._optimizer = optimizer
+        self._decoder = decoder
+        self._features_extractor = features_extractor
+        self.sample_rate = sample_rate
+        self.mono = mono
+        self.label_len = label_len
+        self.multi_gpu = multi_gpu
+        self._model = self._compile_model(model, optimizer, multi_gpu)
+        self.temp_model = temp_model if temp_model else self._model
+
+    @property
+    def alphabet(self) -> Alphabet:
+        return self._alphabet
+
+    @property
+    def features_extractor(self) -> FeaturesExtractor:
+        return self._features_extractor
+
+    @property
+    def model(self) -> keras.Model:
+        return self.temp_model
+
+    @property
+    def decoder(self) -> Decoder:
+        return self._decoder
+
+    def preprocess(self,
+                   data: List[np.ndarray],
+                   is_extracted: bool,
+                   augmentation: Augmentation) -> np.ndarray:
+        """ Preprocess batch data to format understandable to a model. """
+
+        if is_extracted:  # then just align features
+            features = FeaturesExtractor.align(data)
+        else:
+            features = self._features_extractor(data)
+        features = augmentation(features) if augmentation else features
+        # labels = self._alphabet.get_batch_labels(transcripts)
+        return features
+
+    def fit_iter(self,
+                 train_dataset: pd.DataFrame,
+                 augmentation: Augmentation = None,
+                 prepared_features: bool = False,
+                 iter_num: int = 1000,
+                 batch_size: int = 32,
+                 epochs: int = 3,
+                 checkpoint: str = None,
+                 **kwargs) -> keras.callbacks.History:
+        """ Get ready data and train a model. """
+
+        history = keras.callbacks.History()
+
+        audios = train_dataset['path'].to_list()
+
+        labels = self._alphabet.get_batch_labels(train_dataset['transcripts'].to_list())
+
+        transcripts = train_dataset['transcripts'].to_list()
+
+        train_len_ = len(transcripts)
+
+        self.label_len = labels.shape[1]
+
+        self._model.summary()
+
+        for i in range(iter_num):
+            train_index = random.sample(range(train_len_ - 25), batch_size)
+
+            x_train = [audios[i] for i in train_index]
+
+            y_train = [labels[i] for i in train_index]
+
+            y_trans = [transcripts[i] for i in train_index]
+
+            train_inputs = self.wrap_preprocess(x_train,
+                                                y_train,
+                                                y_trans, 
+                                                augmentation, 
+                                                prepared_features)
+
+            outputs = {'ctc': np.zeros([batch_size])}
+
+            # print(train_inputs['the_input'].shape)
+            # print(train_inputs['the_labels'].shape)
+            # print(train_inputs['input_length'].shape)
+            # print(train_inputs['label_length'].shape)
+            # print(train_inputs['input_length'])
+            # print(train_inputs['label_length'])
+
+            if i % 100 == 0:
+                print("iter:", i)
+                print("input features: ", train_inputs['the_input'].shape)
+                print("input labels: ", train_inputs['the_labels'].shape)
+                history = self._model.fit(train_inputs, outputs,
+                                          batch_size=batch_size,
+                                          epochs=epochs,
+                                          verbose=1, **kwargs)
+                if checkpoint:
+                    self.save(checkpoint)
+                    print("Pipeline Saved at", checkpoint)
+            else:
+                history = self._model.fit(train_inputs, outputs,
+                                          batch_size=batch_size,
+                                          epochs=epochs,
+                                          verbose=0, **kwargs)
+
+        return history
+
+    def fit(self,
+            train_dataset: pd.DataFrame,
+            augmentation: Augmentation = None,
+            prepared_features: bool = False,
+            batch_size: int = 32,
+            epochs: int = 3,
+            checkpoint: str = None,
+            **kwargs) -> keras.callbacks.History:
+        """ Get ready data and train a model. """
+
+        audios = train_dataset['path'].to_list()
+
+        labels = self._alphabet.get_batch_labels(train_dataset['transcripts'].to_list())
+
+        transcripts = train_dataset['transcripts'].to_list()
+
+        self.label_len = labels.shape[1]
+
+        self._model.summary()
+
+        logger.info("Feature Extraction in progress...")
+        train_inputs = self.wrap_preprocess(audios,
+                                            list(labels),
+                                            transcripts, 
+                                            augmentation, 
+                                            prepared_features)
+
+        outputs = {'ctc': np.zeros([len(audios)])}
+
+        logger.info("Feature Extraction completed.")
+
+        logger.info(f"input features: {train_inputs['the_input'].shape}")
+        logger.info(f"input labels: {train_inputs['the_labels'].shape}")
+
+        logger.info("Model training initiated...")
+
+        history = self._model.fit(train_inputs, outputs,
+                                  batch_size=batch_size,
+                                  epochs=epochs,
+                                  verbose=1, **kwargs)
+
+        return history
+
+    def fit_generator(self, train_dataset: pd.DataFrame,
+                      shuffle: bool = True,
+                      augmentation: Augmentation = None,
+                      prepared_features: bool = False,
+                      batch_size: int = 32,
+                      epochs: int = 3,
+                      verbose: int = 1,
+                      **kwargs) -> keras.callbacks.History:
+
+        """ Get ready data and train a model. """
+
+        audios = train_dataset['path'].to_list()
+
+        labels = self._alphabet.get_batch_labels(train_dataset['transcripts'].to_list())
+
+        transcripts = train_dataset['transcripts'].to_list()
+
+        train_len_ = len(transcripts)
+
+        self.label_len = labels.shape[1]
+
+        self._model.summary()
+
+        train_gen = self.get_generator(audios, labels, transcripts,
+                                       batch_size, shuffle, augmentation, prepared_features)
+
+        return self._model.fit(train_gen, epochs=epochs,
+                               steps_per_epoch=train_len_ // batch_size, verbose=verbose, **kwargs)
+
+    def get_generator(self, 
+                      audio_paths: List[str], 
+                      texts: np.array, 
+                      transcripts: List[str], 
+                      batch_size: int = 32,
+                      shuffle: bool = True, 
+                      augmentation: Augmentation = None,
+                      prepared_features: bool = False):
+        """ Data Generator """
+
+        def generator():
+            num_samples = len(audio_paths)
+            while True:
+                temp = list(zip(audio_paths, texts, transcripts))
+                if shuffle:
+                    random.Random(123).shuffle(temp)
+                x, y, z = list(zip(*temp))
+
+                pool = ThreadPoolExecutor(1)  # Run a single I/O thread in parallel
+                for offset in range(0, num_samples, batch_size):
+                    logger.debug(f'Feature extraction batch nbr {offset//batch_size}.') 
+                    future = pool.submit(self.wrap_preprocess,
+                                         x[offset: offset + batch_size],
+                                         y[offset: offset + batch_size], 
+                                         z[offset:offset + batch_size],
+                                         augmentation, 
+                                         prepared_features)
+                    wait([future])
+                    batch = future.result()
+                    yield batch, {'ctc': np.zeros([batch_size])}
+
+        return generator()
+
+    def wrap_preprocess(self, 
+                        audios: List[str], 
+                        the_labels: List[np.array], 
+                        transcripts: List[str],
+                        augmentation: Augmentation = None, 
+                        prepared_features: bool = False):
+        """ Build training data """
+        # the_input = np.array(the_input) / 100
+        # the_input = x3/np.max(the_input)
+
+        audio_arrays = []
+        for audio in audios:
+            audio_arrays.append(read_audio(audio, sample_rate=self.sample_rate, mono=self.mono))
+            
+        logger.info(f'Audio size is {sum(map(len, audio_arrays))*4/1e6:.1f}MB')
+        logger.info(f'Min audio size is {min(map(len, audio_arrays))} samples')
+        the_input = self.preprocess(audio_arrays, prepared_features, augmentation)
+        freq_size = lambda v: len(v)
+        spec_size = lambda m: sum(map(freq_size, m))
+        feature_size = sum(map(spec_size, the_input))
+        logger.info(f'Spectrogram size is {feature_size*4/1e6:.1f}MB')
+
+        the_labels = np.array(the_labels)
+
+        label_len = [len(trans) for trans in transcripts]  # length of each transcription
+        label_lengths = np.array(label_len).reshape(-1, 1)  # reshape to 1d
+
+        input_lengths = np.ones((the_labels.shape[0], 1)) * the_labels.shape[1]
+        for i in range(the_input.shape[0]):
+            input_lengths[i] = the_labels.shape[1]  # num of features from labels
+
+        return {
+            'the_input': the_input,
+            'the_labels': the_labels,
+            'input_length': np.asarray(input_lengths),
+            'label_length': np.asarray(label_lengths)
+        }
+
+    def predict(self, audio: str, **kwargs) -> List[str]:
+        """ Get ready features, and make a prediction. """
+        # get audio features
+        features = self.features_extractor.make_features(
+            read_audio(audio, sample_rate=self.sample_rate, mono=self.mono))
+        in_features = self.features_extractor.align([features], self.features_extractor.features_shape)
+
+        pred_model = Model(inputs=self._model.get_layer('the_input').output,
+                           outputs=self._model.get_layer('the_output').output)
+        batch_logits = pred_model.predict(in_features, **kwargs)
+        decoded_labels = self._decoder(batch_logits, self.label_len)
+        predictions = self._alphabet.get_batch_transcripts(decoded_labels)
+        return predictions
+
+    def save(self, directory: str):
+        """ Save each component of the CTC pipeline. """
+        self.temp_model.save(os.path.join(directory, 'network.h5'))
+        self._model.save_weights(os.path.join(directory, 'model_weights.h5'))
+        # XXX: UNCOMMENT! when find workaround for pickling keras objects
+        # Due to error: AttributeError: Can't pickle local object 'make_gradient_clipnorm_fn.<locals>.<lambda>'
+        # Relevant threads: https://github.com/NREL/phygnn/issues/16
+        #   https://github.com/tensorflow/tensorflow/issues/34697
+        save_data(self._optimizer, os.path.join(directory, 'optimizer.bin'))
+        save_data(self._alphabet, os.path.join(directory, 'alphabet.bin'))
+        save_data(self._decoder, os.path.join(directory, 'decoder.bin'))
+        save_data(self.multi_gpu, os.path.join(directory, 'multi_gpu_flag.bin'))
+        save_data(self.sample_rate, os.path.join(directory, 'sample_rate.bin'))
+        save_data(self.mono, os.path.join(directory, 'mono.bin'))
+        save_data(self.label_len, os.path.join(directory, 'label_len.bin'))
+        save_data(self._features_extractor,
+                  os.path.join(directory, 'feature_extractor.bin'))
+
+    @staticmethod
+    def _compile_model(model: keras.Model, 
+                       optimizer: keras.optimizers.Optimizer,
+                       multi_gpu: bool) -> keras.Model:
+        """Compiles and Replicates a model on different GPUs. """
+        if not multi_gpu:
+            model_ = compile_model(model, optimizer)
+            logger.info("Training using multiple GPUs")
+        else:
+            try:
+                strategy = tf.distribute.MirroredStrategy()
+                with strategy.scope():
+                    model_ = compile_model(model, optimizer)
+                logger.info("Training using multiple GPUs")
+            except ValueError:
+                model_ = compile_model(model, optimizer)
+                logger.info("Training using single GPU or CPU")
+        return model_

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#
+# USAGE:
+# From the terminal, run:
+# sbatch run-training.job
+#
+
+#
+#OPIONS FOR JOB ID:
+#SBATCH --job-name=train-asr
+#SBATCH --mail-user=%u@uchicago.edu
+#SBATCH --mail-type=ALL
+#
+#OPTIONS FOR EMAIL:
+#SBATCH --output=/net/projects/uri/ra/%u/slurm_output/%j.%N.stdout
+#SBATCH --error=/net/projects/uri/ra/%u/slurm_output/%j.%N.stderr
+#
+#OPTIONS FOR JOB SIZE:
+#SBATCH --partition=general
+# Always set ntasks==gpus and gpus-per-task=1
+#SBATCH --nodes=1
+#SBATCH --gpus=1
+#SBATCH --ntasks=1
+#SBATCH --gpus-per-task=1
+#SBATCH --mem-per-cpu=24G
+#SBATCH --time=03:59:00
+#
+
+# Listing gpu devices for sanity check
+python tf_devices.py
+
+output_dir="/net/projects/uri/ra/`whoami`"
+python train.py 'police' 'ai' "$output_dir"
+

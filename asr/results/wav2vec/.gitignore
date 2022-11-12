@@ -1,0 +1,8 @@
+# Model Input
+train.csv
+test.csv
+dev.csv
+
+# Model Output
+cer.txt
+wer_test.txt

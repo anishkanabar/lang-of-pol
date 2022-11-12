@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#
+# USAGE:
+# From the terminal, run:
+# sbatch run-training.job <path_to_conda_env>
+#
+
+#
+#OPIONS FOR JOB ID:
+#SBATCH --job-name=train-asr
+#
+#OPTIONS FOR EMAIL:
+#SBATCH --output=/project/graziul/ra/%u/slurm_output/%j.%N.stdout
+#SBATCH --error=/project/graziul/ra/%u/slurm_output/%j.%N.stderr
+#
+#OPTIONS FOR PARTITION:
+#SBATCH --account=pi-graziul
+#
+#OPTIONS FOR JOB SIZE:
+#SBATCH --partition=gpu
+# Always set ntasks==gpus and ntasks-per-gpu=1
+#SBATCH --nodes=1
+#SBATCH --gpus=4
+#SBATCH --ntasks=4
+#SBATCH --ntasks-per-gpu=1
+#SBATCH --mem-per-cpu=24G
+#SBATCH --time=18:00:00
+#
+
+# Listing gpu devices for sanity check
+python tf_devices.py
+# Run DeepSpeech2
+output_dir="/project/graziul/ra/`whoami`"
+python train.py 'police' 'rcc' "$output_dir"
+
